@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+<div class="librecores-searchbar">
+<div class="container">
+  <div class="pull-left">{% block pagepath %}Home &raquo; About{% endblock %}</div>
+  <div class="pull-right">
+    <form class="form-inline">
+      <input type="text" class="form-control"  placeholder="What are you looking for?">
+      <button class="btn btn-default text-uppercase" type="submit">
+        <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+        Find IP Core
+      </button>
+    </form>
+  </div>
+</div>
+</div>
+
+<div class="container" id="maincontent">
+  {% block content %}{% endblock %}
+</div>
+{% endblock %}

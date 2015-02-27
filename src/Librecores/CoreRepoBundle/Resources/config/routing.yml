@@ -1,0 +1,7 @@
+librecores_core_repo_homepage:
+    path:     /
+    defaults: { _controller: LibrecoresCoreRepoBundle:Default:index }
+
+librecores_core_repo_viewcore:
+    path:     /{vendor}/{name}
+    defaults: { _controller: LibrecoresCoreRepoBundle:Default:viewCore }

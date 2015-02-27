@@ -1,0 +1,181 @@
+@CHARSET "UTF-8";
+
+/*
+Colors:
+TODO: define colors and logo
+*/
+
+body {
+  background: none repeat scroll 0 0 #fff;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  
+  /* move content below header */
+  padding-top: 50px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Open Sans', sans-serif;
+}
+
+h1 {
+	padding-top:30px;
+  color: #484235;
+  font-weight: 300;
+  /*text-shadow: 0 1px 0 #FFFFFF;*/
+}
+h2 {
+  /*color: #419EDA;*/
+  color: #484235;
+  font-weight: 400;
+  text-shadow: 0 1px 0 #FFFFFF;
+}
+h3 {
+  color: #F04C5C;
+  font-weight: 400;
+  text-shadow: 0 1px 0 #FFFFFF;
+}
+h4 {
+  font-weight: 600;
+  text-shadow: 0 1px 0 #FFFFFF;
+}
+pre, code {
+  border-radius: 3px 3px 3px 3px;
+  color: #000000;
+  font-family: "Source Code Pro",Menlo,monospace;
+  font-size: 14px;
+}
+pre {
+  background: none repeat scroll 0 0 rgba(0, 0, 0, 0.05);
+  border: medium none;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.075) inset;
+}
+code {
+  background: none repeat scroll 0 0 rgba(0, 0, 0, 0.03);
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.075) inset;
+  display: inline-block;
+}
+pre code {
+  background: none repeat scroll 0 0 transparent;
+  box-shadow: none;
+}
+
+a, a:visited, a:hover, a:focus {
+	color: #6486b2;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* top navigation bar */
+.librecores-nav {
+  /*background: none repeat scroll 0 0 #484235;*/
+  background: #fff;
+  /*box-shadow: 0 0 3px rgba(153, 153, 153, 0.75);*/
+  font-size: 18px;
+  font-weight: 400;
+  color: #484235;
+}
+
+.librecores-nav a {
+	color: #484235;
+}
+
+.librecores-nav .navbar-brand {
+  background: url("../img/logo_small.png") no-repeat scroll left center transparent;
+  margin-left: 0;
+  padding-left: 170px;
+  display: inline-block;
+  font-size: 25px;
+}
+
+.librecores-nav .nav > li > a:focus, 
+.librecores-nav .nav > li > a:hover {
+	background-color: #fff;
+	color: #6486b2;
+}
+
+.navbar-toggle {
+  border-color: #AAAAAA;
+}
+.navbar-toggle .icon-bar {
+  background-color: #AAAAAA;
+}
+
+.wordmark {
+  color: #333333;
+  text-shadow: 0 1px 0 white;
+}
+
+/* search bar, also including quicknav */
+.librecores-searchbar {
+	background-color:#bfb8a8;
+  color: #484235; 
+  vertical-align: middle; 
+  line-height: 32px; 
+  padding:10px;
+}
+
+.librecores-searchbar button {
+	background-color: #484235; 
+	color:#fff; 
+	font-variant:small-caps;
+	font-weight:600;
+  text-shadow: none;
+}
+
+/* claim (on homepage) */
+.librecores-home-claim {
+	background-color: #89773d;
+}
+
+.librecores-home-claim .container {
+  background: url("../img/claim_top.png") no-repeat scroll left top #89773d;
+  padding-left: 350px;
+  height: 200px;
+}
+
+.librecores-home-claim .container,
+.librecores-home-claim .container h1 {
+  color: #dab948;
+}
+
+.librecores-home-claim .container .lead {
+	color: #484235;
+}
+
+/* search bar (on homepage) */
+.librecores-home-search {
+	font-size: 1.3em;
+	background-color: #bfb8a8;
+}
+
+.librecores-home-search .container {
+  background: url("../img/claim_bottom.png") no-repeat scroll left top #bfb8a8;
+	padding-top: 30px; 
+	padding-bottom: 30px; 
+}
+
+.librecores-home-search form {
+	 width:700px;
+}
+
+.librecores-home-search label {
+	padding-right: 10px;
+}
+
+.librecores-home-search button {
+  font-weight: bold;
+}
+
+/* footer */
+.librecores-footer {
+  color: rgba(77, 77, 77, 0.75);
+  font-weight: 300;
+  text-align: center;
+}
+
+

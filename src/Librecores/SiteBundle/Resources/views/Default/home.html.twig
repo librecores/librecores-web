@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}LibreCores &middot; Free and Open Source IP Cores{% endblock %}
+
+{% block body %}
+<!-- "claim" -->
+<div class="librecores-home-claim">
+  <div class="container">
+    <h1>Free and Open Source IP Cores</h1>
+    <p class="lead">LibreCores is a community creating high quality IP cores.</p>
+  </div>
+</div>
+
+<!-- search -->
+<div class="librecores-home-search">
+<div class="container">
+  <form class="form-inline center-block">
+  <label>What are you looking for?</label>
+  <input type="text" class="form-control" >
+  <button class="btn btn-default" type="submit">
+    <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+    FIND IP CORE
+  </button>
+</form>
+</div>
+</div>
+</div>
+
+<!-- 3 columns with main messages -->
+<div class="container" style="padding-top: 30px;">
+  <div class="row">
+    <div class="col-md-4">
+      <h2>What is an IP Core?</h2>
+      <p>An IP Core is a building block of any modern chip. It's like a library
+      in software programming, just for hardware.</p>
+      <!--<p><a class="btn btn-default" href="docs">get started documentation &raquo;</a></p>-->
+    </div>
+    <div class="col-md-4">
+      <h2>What is LibreCores?</h2>
+      <p>LibreCores is a loose community of people with a common goal: create free, high-quality IP cores.</p>
+      <p><a class="btn btn-default" href="{{ path('librecores_site_page', {'page': 'about'}) }}">Learn more about LibreCores &raquo;</a></p>
+    </div>
+    <div class="col-md-4">
+      <h2>Get involved</h2>
+      <p>Sounds interesting? Get involved! </p>
+      <p><a class="btn btn-default" href="{{ path('librecores_site_page', {'page': 'contribute'}) }}">Upload an IP Core &raquo;</a></p>
+    </div>
+  </div>
+</div>
+{% endblock %}

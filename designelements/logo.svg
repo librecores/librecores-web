@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="210mm"
+   height="297mm"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.5 r10040"
+   sodipodi:docname="logo.svg">
+  <defs
+     id="defs4" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.4491948"
+     inkscape:cx="315.32936"
+     inkscape:cy="611.76565"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1920"
+     inkscape:window-height="1153"
+     inkscape:window-x="-2"
+     inkscape:window-y="-3"
+     inkscape:window-maximized="1"
+     showguides="true"
+     inkscape:guide-bbox="true" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Ebene 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       style="fill:#bfb8a8;fill-opacity:1;stroke:none"
+       id="rect3832"
+       width="643.11578"
+       height="206.32147"
+       x="619.13965"
+       y="232.84529" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#484235;fill-opacity:1;stroke:none"
+       id="path3001"
+       sodipodi:cx="292.67856"
+       sodipodi:cy="368.96933"
+       sodipodi:rx="46.607143"
+       sodipodi:ry="46.607143"
+       d="m 339.2857,368.96933 a 46.607143,46.607143 0 1 1 -93.21429,0 46.607143,46.607143 0 1 1 93.21429,0 z"
+       transform="translate(-156.66101,-40.417719)"
+       inkscape:export-filename="/home/philipp/workspace/librecores/web/img/logo_small.png"
+       inkscape:export-xdpi="28.965515"
+       inkscape:export-ydpi="28.965515" />
+    <text
+       xml:space="preserve"
+       style="font-size:70px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#dab948;fill-opacity:1;stroke:none;font-family:Arial;-inkscape-font-specification:Arial"
+       x="136.11195"
+       y="349.69391"
+       id="text2985"
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="/home/philipp/workspace/librecores/web/img/logo_small.png"
+       inkscape:export-xdpi="28.965515"
+       inkscape:export-ydpi="28.965515"><tspan
+         sodipodi:role="line"
+         id="tspan2987"
+         x="136.11195"
+         y="349.69391"
+         style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;text-anchor:middle;fill:#dab948;fill-opacity:1;font-family:BrushScriptX;-inkscape-font-specification:BrushScriptX Bold Italic">lc</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:12.09879875px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#484235;fill-opacity:1;stroke:none;font-family:Arial;-inkscape-font-specification:Arial"
+       x="357.89694"
+       y="473.3298"
+       id="text3003"
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="/home/philipp/workspace/librecores/web/img/logo_small.png"
+       inkscape:export-xdpi="28.965515"
+       inkscape:export-ydpi="28.965515"><tspan
+         sodipodi:role="line"
+         x="357.89694"
+         y="473.3298"
+         style="font-size:19.96301842px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#484235;fill-opacity:1;font-family:Frutiger LT 57 Cn;-inkscape-font-specification:Frutiger LT 57 Cn"
+         id="tspan3781">Free and Open Source IP Cores</tspan><tspan
+         sodipodi:role="line"
+         x="357.89694"
+         y="498.28357"
+         id="tspan3007"
+         style="font-size:19.96301842px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#484235;fill-opacity:1;font-family:Frutiger LT 57 Cn;-inkscape-font-specification:Frutiger LT 57 Cn" /></text>
+    <text
+       xml:space="preserve"
+       style="font-size:19.54756737px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#484235;fill-opacity:1;stroke:none;font-family:Arial;-inkscape-font-specification:Arial"
+       x="198.18126"
+       y="355.75714"
+       id="text3777"
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="/home/philipp/workspace/librecores/web/img/logo_small.png"
+       inkscape:export-xdpi="28.965515"
+       inkscape:export-ydpi="28.965515"><tspan
+         sodipodi:role="line"
+         id="tspan3779"
+         x="198.18126"
+         y="355.75714"
+         style="font-size:78.19026947px;fill:#484235;fill-opacity:1;font-family:Frutiger LT 55 Roman;-inkscape-font-specification:Frutiger LT 55 Roman">LibreCores</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial;-inkscape-font-specification:Arial"
+       x="155.162"
+       y="542.47449"
+       id="text3806"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3808"
+         x="155.162"
+         y="542.47449"
+         style="font-size:15px">Farben</tspan></text>
+    <rect
+       style="fill:#bfb8a8;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+       id="rect3810"
+       width="156.62579"
+       height="142.96373"
+       x="155.162"
+       y="559.55206" />
+    <rect
+       y="559.55206"
+       x="327.8895"
+       height="142.96373"
+       width="156.62579"
+       id="rect3812"
+       style="fill:#5a6a80;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0" />
+    <rect
+       style="fill:#ac4c4c;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+       id="rect3814"
+       width="156.62579"
+       height="142.96373"
+       x="499.64114"
+       y="559.55206" />
+    <rect
+       style="fill:#8b985a;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+       id="rect3816"
+       width="156.62579"
+       height="142.96373"
+       x="153.99982"
+       y="719.64093" />
+    <rect
+       y="716.8808"
+       x="327.8895"
+       height="142.96373"
+       width="156.62579"
+       id="rect3818"
+       style="fill:#dab948;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0" />
+    <rect
+       y="718.95087"
+       x="500.87122"
+       height="142.96373"
+       width="156.62579"
+       id="rect3820"
+       style="fill:#484235;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0" />
+    <rect
+       y="880.13403"
+       x="155.162"
+       height="142.96373"
+       width="156.62579"
+       id="rect3824"
+       style="fill:#f7f7f7;fill-opacity:1;stroke:none" />
+    <rect
+       style="fill:#6486b2;fill-opacity:1;stroke:none"
+       id="rect3834"
+       width="156.62579"
+       height="142.96373"
+       x="327.8895"
+       y="882.56226" />
+  </g>
+</svg>

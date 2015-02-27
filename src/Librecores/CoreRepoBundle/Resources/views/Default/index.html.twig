@@ -1,0 +1,16 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}IP Core Repository - LibreCores{% endblock %}
+
+{% block content %}
+<h1>Welcome at the core repo.</h1>
+
+<p>
+add some "featured" cores here, currently updated cores, list of cores, search
+</p>
+
+<p>
+sample core listing
+<a href="{{ path('librecores_core_repo_viewcore', {'vendor': 'philipp', 'name': 'test'}) }}">philipp/test IP Core</a>
+</p>
+{% endblock %}

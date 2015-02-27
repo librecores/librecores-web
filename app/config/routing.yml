@@ -1,0 +1,7 @@
+librecores_core_repo:
+    resource: "@LibrecoresCoreRepoBundle/Resources/config/routing.yml"
+    prefix:   /cores
+
+librecores_site:
+    resource: "@LibrecoresSiteBundle/Resources/config/routing.yml"
+    prefix:   /

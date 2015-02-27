@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>{% block title %}{% endblock %}</title>
+
+  <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+
+  {% block stylesheets %}
+    {% stylesheets 'css/*' filter='cssrewrite' %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+  {% endblock %}
+
+  <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!--[if lt IE 9]>
+    {% javascripts '@js_iecompat' %}
+      <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+  <![endif]-->
+
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+  <link href="http://fonts.googleapis.com/css?family=Source+Code+Pro:400,500,600,700" rel="stylesheet" type="text/css">
+</head>
+<body>
+  <!-- top navigation bar -->
+  <nav class="navbar navbar-fixed-top librecores-nav" role="navigation">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="{{ path('librecores_site_page') }}" alt="LibreCores"><span class="wordmark"></span></a>
+      </div>
+      <div class="navbar-collapse collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="{{ path('librecores_core_repo_homepage') }}">Browse IP Cores</a></li>
+          <li><a href="{{ path('librecores_site_page', {'page': 'contribute'}) }}">Get involved</a></li>
+          <li><a href="{{ path('librecores_site_page', {'page': 'about'}) }}">About LibreCores</a></li>
+          <li><a href="/blog">Blog</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  {% block body %}{% endblock %}
+
+  <!-- footer -->
+  <hr>
+  <footer class="librecores-footer">
+    <p>
+      Presented to you by the LibreCores Foundation &middot;
+      <a href="{{ path('librecores_site_page', {'page': 'imprint'}) }}">Imprint</a>
+    </p>
+  </footer>
+
+  {% block javascripts %}
+    {% javascripts '@js_bootstrap' %}
+      <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+  {% endblock %}
+</body>
+</html>
