@@ -3,22 +3,25 @@ LibreCores Web Site
 
 The page is written in PHP and uses the Symfony framework.
 
+Development
+-----------
+The easiest way to development is using the provided Vagrant environment.
 
+- Install VirtualBox, if you don't already have it installed.
+- Install Ansible.
+- Install Vagrant. It's fast and simple: http://www.vagrantup.com/downloads
+- `cd vagrant; vagrant up`. This might take a while.
+- Take your web browser to http://192.168.33.10 and you should see the LibreCores web site.
 
-3rd-party libraries and helpers
--------------------------------
+On Ubuntu 14.04, this all boils down to
 
-web/js/respond.min.js
-  URL: https://raw.githubusercontent.com/scottjehl/Respond/master/dest/respond.min.js
-  License: MIT
-
-web/js/bootstrap.min.js
-web/css/bootstrap.min.css
-web/css/bootstrap-theme.min.css
-  URL: http://getbootstrap.com
-  License: MIT
-
-web/js/html5shiv.min.js
-  URL: https://raw.githubusercontent.com/aFarkas/html5shiv/master/dist/html5shiv.min.js
-  License: dual MIT/GPLv2
+```
+$> sudo apt-get install virtualbox ansible
+$> wget https://dl.bintray.com/mitchellh/vagrant/vagrant_1.7.2_x86_64.deb
+$> sudo dpkg -i vagrant_1.7.2_x86_64.deb
+$> cd vagrant
+$> vagrant up
+# get a cup of coffee
+$> firefox http://192.168.33.10
+```
 

@@ -1,0 +1,23 @@
+3rd-party libraries and helpers
+-------------------------------
+
+web/js/respond.min.js
+  URL: https://raw.githubusercontent.com/scottjehl/Respond/master/dest/respond.min.js
+  License: MIT
+
+web/js/bootstrap.min.js
+web/css/bootstrap.min.css
+web/css/bootstrap-theme.min.css
+  URL: http://getbootstrap.com
+  License: MIT
+
+web/js/html5shiv.min.js
+  URL: https://raw.githubusercontent.com/aFarkas/html5shiv/master/dist/html5shiv.min.js
+  License: dual MIT/GPLv2
+
+
+vagrant/
+  https://github.com/kleiram/vagrant-symfony.git
+  revision: d1f5a4d216a8f3afa0263ab2ade95900b04a037a
+  only to setup the vagrant development environment; not in production
+  contains some local changes

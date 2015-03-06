@@ -1,0 +1,17 @@
+---
+- name: Create librecores MySQL database
+  command: mysql -u root -e "CREATE DATABASE IF NOT EXISTS librecores CHARACTER SET = utf8 COLLATE utf8_general_ci;"
+
+- name: Add librecores user from anywhere to MySQL
+  command: mysql -u root -e "GRANT ALL PRIVILEGES ON librecores.* TO 'librecores'@'%'; FLUSH PRIVILEGES;"
+
+- name: Create Symfony configuration
+  template: src=parameters.yml dest=/var/www/app/config/parameters.yml
+
+- name: Let doctrine generate DB contents
+  command: php app/console doctrine:schema:update --force
+  args:
+    chdir: /var/www
+
+- name: Import LibreCores development DB Dump
+  shell: mysql -u librecores librecores < /var/www/dev_fixtures.sql
