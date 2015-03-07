@@ -8,6 +8,11 @@
 - name: Create Symfony configuration
   template: src=parameters.yml dest=/var/www/app/config/parameters.yml
 
+- name: Install dependencies through composer
+  command: composer install
+  args:
+    chdir: /var/www
+
 - name: Let doctrine generate DB contents
   command: php app/console doctrine:schema:update --force
   args:
