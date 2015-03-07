@@ -1,13 +1,23 @@
 ---
-  - name: Install nginx
-    sudo: yes
-    apt:  pkg=nginx state=latest
+- name: Install nginx
+  sudo: yes
+  apt:  pkg=nginx state=latest
 
-  - name: Ensure nginx log directory exists
-    file: dest=/var/log/nginx/symfony state=directory
+- name: Ensure nginx log directory exists
+  file: dest=/var/log/nginx/librecores state=directory
 
-  - name: Change default nginx site
-    sudo: yes
-    template: src=default.tpl dest=/etc/nginx/sites-available/default
-    notify: restart nginx
+- name: Ensure nginx log directory exists
+  file: dest=/var/log/nginx/librecores-blog state=directory
 
+- name: Change default nginx site
+  sudo: yes
+  template: src=librecores.tpl dest=/etc/nginx/sites-available/default
+  notify: restart nginx
+
+- name: Change nginx blog site
+  sudo: yes
+  template: src=librecores-blog.tpl dest=/etc/nginx/sites-available/librecores-blog
+  notify: restart nginx
+
+- name: Enable blog site in nginx
+  file: src=/etc/nginx/sites-available/librecores-blog dest=/etc/nginx/sites-enabled/librecores-blog state=link

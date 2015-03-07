@@ -2,7 +2,6 @@
 - hosts: all
   sudo:  true
   vars:
-    doc_root: /var/www/web
     sys_packages:
       - mcrypt
     php_packages:

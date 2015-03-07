@@ -25,6 +25,17 @@ Vagrant.configure("2") do |config|
     #config.vm.synced_folder ".",  "/vagrant", id: "vagrant-root"
     #config.vm.synced_folder "..", "/var/www", id: "application"
 
+    # Configure hostmanager
+    config.hostmanager.enabled = true
+    config.hostmanager.manage_host = true
+    config.hostmanager.ignore_private_ip = false
+    config.hostmanager.include_offline = true
+    config.vm.define 'librecores' do |node|
+        node.vm.hostname = 'librecores.devel'
+        node.vm.network :private_network, ip: '192.168.33.10'
+        node.hostmanager.aliases = %w(www.librecores.devel blog.librecores.devel)
+    end
+
 
     # Configure VirtualBox environment
     config.vm.provider :virtualbox do |v|

@@ -12,9 +12,10 @@ The easiest way to development is using the provided Vagrant environment.
 - Install the NFS server packages. If you don't want to, see the note on NFS
   below.
 - Install Vagrant. It's fast and simple: http://www.vagrantup.com/downloads
+- Install vagrant-hostmanager: `vagrant plugin install vagrant-hostmanager`
 - `cd vagrant; vagrant up`. This might take a while.
-- Take your web browser to http://192.168.33.10 and you should see the
-  LibreCores web site.
+- Take your web browser to http://librecores.devel and you should see the
+  LibreCores web site. At http://blog.librecores.devel you'll find the blog.
 
 On Ubuntu 14.04, this all boils down to
 
@@ -22,10 +23,11 @@ On Ubuntu 14.04, this all boils down to
 $> sudo apt-get install virtualbox ansible nfs-kernel-server
 $> wget https://dl.bintray.com/mitchellh/vagrant/vagrant_1.7.2_$(uname -m).deb
 $> sudo dpkg -i vagrant_1.7.2_$(uname -m).deb
+$> vagrant plugin install vagrant-hostmanager
 $> cd vagrant
 $> vagrant up
 # get a cup of coffee
-$> firefox http://192.168.33.10
+$> firefox http://librecores.devel
 ```
 
 ### A Note on NFS
