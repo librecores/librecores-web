@@ -6,6 +6,13 @@ The page is written in PHP and uses the Symfony framework.
 Development
 -----------
 The easiest way to development is using the provided Vagrant environment.
+Simply run
+```
+./bootstrap-dev.sh
+```
+to install all dependencies (see below) and get started.
+
+### Manually installing the development environment
 
 - Install VirtualBox, if you don't already have it installed.
 - Install Ansible.
@@ -16,19 +23,6 @@ The easiest way to development is using the provided Vagrant environment.
 - `cd vagrant; vagrant up`. This might take a while.
 - Take your web browser to http://librecores.devel and you should see the
   LibreCores web site. At http://blog.librecores.devel you'll find the blog.
-
-On Ubuntu 14.04, this all boils down to
-
-```
-$> sudo apt-get install virtualbox ansible nfs-kernel-server
-$> wget https://dl.bintray.com/mitchellh/vagrant/vagrant_1.7.2_$(uname -m).deb
-$> sudo dpkg -i vagrant_1.7.2_$(uname -m).deb
-$> vagrant plugin install vagrant-hostmanager
-$> cd vagrant
-$> vagrant up
-# get a cup of coffee
-$> firefox http://librecores.devel
-```
 
 ### A Note on NFS
 NFS is used by Vagrant for sharing the development files between your host and
