@@ -19,6 +19,7 @@ class AppKernel extends Kernel
             new Knp\Bundle\MarkdownBundle\KnpMarkdownBundle(),
             new Librecores\CoreRepoBundle\LibrecoresCoreRepoBundle(),
             new Librecores\SiteBundle\LibrecoresSiteBundle(),
+            new Fkr\SimplePieBundle\FkrSimplePieBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

@@ -81,3 +81,11 @@ swiftmailer:
     username:  "%mailer_user%"
     password:  "%mailer_password%"
     spool:     { type: memory }
+
+
+# SimplePie (RSS/Atom Parser) Configuration
+# Docs: http://simplepie.org/wiki/faq/how_does_simplepie_s_caching_http_conditional_get_system_work
+fkr_simple_pie:
+    cache_enabled: true
+    cache_dir: %kernel.cache_dir%/rss
+    cache_duration: 3600

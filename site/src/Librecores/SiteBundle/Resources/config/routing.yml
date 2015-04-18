@@ -1,6 +1,9 @@
 librecores_site_page:
+    path:     /
+    defaults: { _controller: LibrecoresSiteBundle:Default:home }
+
     path:     /{page}
-    defaults: { _controller: LibrecoresSiteBundle:Default:page, page: "home" }
+    defaults: { _controller: LibrecoresSiteBundle:Default:page }
     requirements:
-        # allow / inside path 
+        # allow / inside path
         page: .+
