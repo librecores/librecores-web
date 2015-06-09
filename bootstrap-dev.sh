@@ -34,14 +34,14 @@ DLDIR=$(mktemp -d)
 echo Installing dependencies. You may be prompted for a password by sudo.
 case $(lsb_release -is) in
   Ubuntu)
-    sudo apt-get install virtualbox ansible nfs-kernel-server
+    sudo apt-get install virtualbox ansible nfs-kernel-server curl
     if [ $INSTALL_VAGRANT = 1 ]; then
       curl -L https://dl.bintray.com/mitchellh/vagrant/vagrant_${VAGRANT_VERSION}_$(uname -m).deb > "$DLDIR/vagrant.deb"
       sudo dpkg -i "$DLDIR/vagrant.deb"
     fi
     ;;
   *openSUSE*)
-    sudo zypper install virtualbox ansible nfs-kernel-server
+    sudo zypper install virtualbox ansible nfs-kernel-server curl
     if [ $INSTALL_VAGRANT = 1 ]; then
       curl -L https://dl.bintray.com/mitchellh/vagrant/vagrant_${VAGRANT_VERSION}_$(uname -m).rpm > "$DLDIR/vagrant.rpm"
       sudo rpm -Uhv --oldpackage "$DLDIR/vagrant.rpm"
