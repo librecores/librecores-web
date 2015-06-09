@@ -1,0 +1,44 @@
+Connect to the VM
+=================
+host$> cd vagrant
+host$> vagrant ssh
+
+
+Rebuild ORM (Doctrine) Entity
+=============================
+vm$> cd /var/www/site
+
+# for only one class
+vm$> ./app/console doctrine:generate:entities LibrecoresProjectRepoBundle:Project
+
+# for all classes
+vm$> ./app/console doctrine:generate:entities LibrecoresProjectRepoBundle
+
+# finally, update the MySQL DB
+vm$> ./app/console doctrine:schema:update --force
+
+
+Asynchronous Processing
+=======================
+
+Run the consumer
+-------------------------
+vm$> cd /var/www/site
+vm$> ./app/console rabbitmq:consumer -m 1 update_project_info
+
+Test the producer: update one project
+-------------------------------------
+# update the project information of project 1 (needs the consumer!)
+vm$> echo 1 | ./app/console rabbitmq:stdin-producer update_project_info
+
+
+Clean the Symfony caches
+========================
+vm$> ./app/console cache:clear
+
+
+Access the MySQL database
+=========================
+
+vm$> mysql -uroot librecores
+
