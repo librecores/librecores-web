@@ -37,7 +37,7 @@
       </div>
       <div class="navbar-collapse collapse">
         <ul class="nav navbar-nav navbar-right">
-          <li><a href="{{ path('librecores_core_repo_homepage') }}">Browse IP Cores</a></li>
+          <li><a href="{{ path('librecores_project_repo_homepage') }}">Browse projects</a></li>
           <li><a href="{{ path('librecores_site_page', {'page': 'contribute'}) }}">Get involved</a></li>
           <li><a href="{{ path('librecores_site_page', {'page': 'about'}) }}">About LibreCores</a></li>
           <li><a href="//blog.{{ app.request.httpHost }}">Blog</a></li>
@@ -58,6 +58,10 @@
   </footer>
 
   {% block javascripts %}
+    {% javascripts '@js_jquery' %}
+      <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
     {% javascripts '@js_bootstrap' %}
       <script src="{{ asset_url }}"></script>
     {% endjavascripts %}

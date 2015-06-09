@@ -1,0 +1,7 @@
+librecores_project_repo_homepage:
+    path:     /
+    defaults: { _controller: LibrecoresProjectRepoBundle:Default:index }
+
+librecores_project_repo_viewproject:
+    path:     /{parent}/{project}
+    defaults: { _controller: LibrecoresProjectRepoBundle:Default:viewProject }

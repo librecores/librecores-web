@@ -4,6 +4,8 @@
   vars:
     sys_packages:
       - mcrypt
+      # required for pod2markdown utility
+      - libpod-markdown-perl
     php_packages:
       - { name: dev, package: php5-dev }
       - { name: pear, package: php-pear }

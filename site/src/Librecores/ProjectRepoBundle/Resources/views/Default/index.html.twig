@@ -1,0 +1,16 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}Project Repository - LibreCores{% endblock %}
+
+{% block content %}
+<h1>Welcome at the project repo.</h1>
+
+<p>
+add some "featured" projects here, currently updated projects, list of cores, search
+</p>
+
+<p>
+sample project listing
+<a href="{{ path('librecores_project_repo_viewproject', {'parent': 'openrisc', 'project': 'mor1kx'}) }}">opencores/mor1kx IP Core</a>
+</p>
+{% endblock %}

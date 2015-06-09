@@ -179,3 +179,17 @@ a:hover {
 }
 
 
+
+/* CORE REPOSITORY CSS */
+.tab-pane {
+  border-bottom: 1px solid #DDD; 
+  border-left: 1px solid #DDD; 
+  border-right: 1px solid #DDD; 
+  padding: 10px; 
+  font-size: 100%;
+}
+
+.tab-pane h1:first-of-type {
+	margin-top: 0;
+	padding-top: 0;
+}

@@ -1,6 +1,6 @@
 <?php
 
-namespace Librecores\CoreRepoBundle\DependencyInjection;
+namespace Librecores\ProjectRepoBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
@@ -12,7 +12,7 @@ use Symfony\Component\DependencyInjection\Loader;
  *
  * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html}
  */
-class LibrecoresCoreRepoExtension extends Extension
+class LibrecoresProjectRepoExtension extends Extension
 {
     /**
      * {@inheritdoc}

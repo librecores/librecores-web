@@ -45,6 +45,9 @@ assetic:
         #yui_css:
         #    jar: "%kernel.root_dir%/Resources/java/yuicompressor-2.4.7.jar"
     assets:
+        js_jquery:
+            inputs:
+                - "js/jquery.min.js"
         js_bootstrap:
             inputs:
                 - "js/bootstrap.min.js"
