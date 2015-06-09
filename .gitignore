@@ -1,1 +1,7 @@
 *~
+
+# Eclipse project files
+.buildpath
+.project
+.settings
+
