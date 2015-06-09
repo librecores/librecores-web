@@ -28,7 +28,7 @@ if hash vagrant 2>/dev/null; then
 fi
 
 
-# distribution-dependant steps
+# distribution-dependent steps
 DLDIR=$(mktemp -d)
 
 echo Installing dependencies. You may be prompted for a password by sudo.
@@ -83,3 +83,4 @@ case $yn in
 esac
 
 echo Done!
+
