@@ -35,7 +35,7 @@
     - curl
 #    - sqlite
     - wget
+    - rabbitmq
     - librecores-devenv
-#    - rabbitmq
 #    - redis
 #    - memcached

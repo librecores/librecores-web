@@ -1,4 +1,11 @@
 services:
+    update_project_info_service:
+        class: Librecores\ProjectRepoBundle\Consumer\UpdateProjectInformation
+        arguments:
+            - @logger
+            - @doctrine
+            - @markdown.parser
+
 #    librecores_project_repo.example:
 #        class: Librecores\ProjectRepoBundle\Example
 #        arguments: [@service_id, "plain_value", %parameter%]

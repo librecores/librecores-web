@@ -40,3 +40,11 @@ If you don't use NFS, ...
 - Open the file `vagrant/Vagrantfile` and uncomment the corresponding lines of
   configuration.
 
+
+### Installed Tools in the VM
+
+- RabbitMQ management plugin:
+  http://librecores.devel:15672
+  Username: admin
+  Password: password
+

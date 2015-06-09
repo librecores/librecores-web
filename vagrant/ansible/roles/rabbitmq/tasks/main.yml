@@ -36,3 +36,11 @@
   shell: rabbitmqctl delete_user guest
   notify: restart rabbitmq
   ignore_errors: true
+
+- name: Add librecores user
+  shell: rabbitmqctl add_user librecores lc-password
+  ignore_errors: true
+
+- name: Set admin user permissions
+  shell: rabbitmqctl set_permissions -p / librecores ".*" ".*" ".*"
+  ignore_errors: true
