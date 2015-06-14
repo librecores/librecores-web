@@ -1,9 +1,10 @@
-librecores_site_page:
+librecores_site_home:
     path:     /
     defaults: { _controller: LibrecoresSiteBundle:Default:home }
 
+librecores_site_page:
     path:     /{page}
-    defaults: { _controller: LibrecoresSiteBundle:Default:page }
+    defaults: { _controller: LibrecoresSiteBundle:Default:page, page: home }
     requirements:
         # allow / inside path
         page: .+
