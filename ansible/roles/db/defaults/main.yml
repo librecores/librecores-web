@@ -1,0 +1,4 @@
+---
+mysql_root_password: "undefined"
+blog_mysql_password: "undefined"
+site_mysql_password: "undefined"

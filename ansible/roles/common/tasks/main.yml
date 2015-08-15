@@ -1,0 +1,48 @@
+---
+# Common plays to be run on all nodes.
+
+- name: check if we are running in the development environment
+  stat: path=/var/www
+  register: srcrepo_dir
+
+- name: Install ntp
+  apt: pkg=ntp state=installed
+  tags: ntp
+
+- name: Configure ntp file
+  template: src=ntp.conf dest=/etc/ntp.conf
+  tags: ntp
+  notify: restart ntp
+
+- name: Start the ntp service
+  service: name=ntp state=started enabled=yes
+  tags: ntp
+
+- name: Install common system packages
+  sudo: yes
+  apt:  pkg={{ item }} state=installed
+  with_items:
+    - curl
+    - wget
+    - git
+    # required for ansible
+    - python-mysqldb
+
+# get source code (on non-development machines only)
+- name: Send deployment SSH key to remote machine (non-development only)
+  copy: dest=/src-librecores-web.key
+        content="{{ src_deployment_key }}"
+  when: srcrepo_dir.stat.exists == False
+
+- name: "Setup source repository (non-development only)"
+  git: repo="{{ src_repo_url }}"
+       dest=/var/www
+       accept_hostkey=yes
+       key_file=/src-librecores-web.key
+       depth=1
+       version="{{ src_version }}"
+  when: srcrepo_dir.stat.exists == False
+
+- name: "Delete deployment key again (non-development only)"
+  file: path=/src-librecores-web.key state=absent
+  when: srcrepo_dir.stat.exists == False

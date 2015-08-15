@@ -1,0 +1,5 @@
+---
+# Install nginx web server
+- name: Install nginx
+  sudo: yes
+  apt:  pkg=nginx state=installed

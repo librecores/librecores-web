@@ -1,0 +1,24 @@
+parameters:
+    database_driver:   pdo_mysql
+    database_host:     127.0.0.1
+    database_port:     ~
+    database_name:     librecores
+    database_user:     librecores
+    database_password: {{ site_mysql_password }}
+
+    mailer_transport:  smtp
+    mailer_host:       127.0.0.1
+    mailer_user:       ~
+    mailer_password:   ~
+
+    locale:            en
+
+    # A secret key that's used to generate certain security-related tokens
+    secret:            {{ site_symfony_secret_token }}
+
+    # RabbitMQ configuration
+    rabbitmq_host:     localhost
+    rabbitmq_port:     5672
+    rabbitmq_user:     librecores
+    rabbitmq_password: {{ site_rabbitmq_password }}
+

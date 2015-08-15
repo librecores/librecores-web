@@ -1,0 +1,9 @@
+---
+- name: Create librecores MySQL database
+  mysql_db: name=librecores state=present collation=utf8_general_ci encoding=utf8
+
+- name: Add librecores@localhost user to MySQL
+  mysql_user: name=librecores password={{ site_mysql_password }} priv=librecores.*:ALL host='localhost' state=present
+
+- name: Add librecores@% user to MySQL
+  mysql_user: name=librecores password={{ site_mysql_password }} priv=librecores.*:ALL host='%' state=present

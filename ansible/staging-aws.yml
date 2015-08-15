@@ -1,0 +1,15 @@
+---
+# Staging environment on AWS
+- name: Deploy stage.librecores.org on AWS
+  hosts: tag_group_librecores_staging
+  gather_facts: true
+  user: ubuntu
+  sudo: yes
+  roles:
+    - staging-aws
+  vars_files:
+    - [ "staging-aws.secrets.yml" ]
+  vars:
+    - librecores_domain: "stage.librecores.org"
+    - web_user: "www-data"
+    - mysql_host: "localhost"

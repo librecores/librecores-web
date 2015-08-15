@@ -1,0 +1,16 @@
+---
+# general site
+- name: Create Symfony configuration
+  template: src=parameters.yml.j2 dest=/var/www/site/app/config/parameters.yml
+
+- name: Install dependencies through composer
+  command: composer install
+  args:
+    chdir: /var/www/site
+
+- name: Ensure nginx log directory exists
+  file: dest=/var/log/nginx/librecores state=directory
+
+- name: Change default nginx site
+  template: src=nginx/librecores.tpl dest=/etc/nginx/sites-available/default
+  notify: restart nginx

@@ -5,3 +5,5 @@
 .project
 .settings
 
+# secrets of all kinds
+/aws-secrets.include

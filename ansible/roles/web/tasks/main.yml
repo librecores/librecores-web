@@ -1,0 +1,7 @@
+---
+- include: system.yml
+- include: nginx.yml
+- include: php.yml
+- include: rabbitmq.yml
+- include: librecores-site.yml
+- include: librecores-blog.yml

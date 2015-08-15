@@ -1,0 +1,12 @@
+---
+# Install librecores-blog web
+- name: Ensure nginx log directory exists
+  file: dest=/var/log/nginx/librecores-blog state=directory
+
+- name: Configure nginx blog site in nginx
+  sudo: yes
+  template: src=nginx/librecores-blog.tpl dest=/etc/nginx/sites-available/librecores-blog
+  notify: restart nginx
+
+- name: Enable blog site in nginx
+  file: src=/etc/nginx/sites-available/librecores-blog dest=/etc/nginx/sites-enabled/librecores-blog state=link

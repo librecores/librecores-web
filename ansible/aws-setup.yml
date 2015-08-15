@@ -1,0 +1,72 @@
+---
+# Initial setup of AWS environment to host all LibreCores instances
+- name: Create AWS initial setup
+  hosts: localhost
+  connection: local
+  gather_facts: False
+
+  tasks:
+    - name: "Create EC2 security group"
+      ec2_group:
+        name: librecores-web
+        description: "Librecores web security group"
+        region: "{{ aws_region }}"
+        rules:
+          # allow incoming traffic for HTTP(S) and SSH
+          - proto: tcp
+            from_port: 80
+            to_port: 80
+            cidr_ip: 0.0.0.0/0
+          - proto: tcp
+            from_port: 22
+            to_port: 22
+            cidr_ip: 0.0.0.0/0
+          - proto: tcp
+            from_port: 443
+            to_port: 443
+            cidr_ip: 0.0.0.0/0
+        rules_egress:
+          # allow all outgoing traffic
+          - proto: -1
+            from_port: 0
+            to_port: 0
+            cidr_ip: 0.0.0.0/0
+
+    - name: "Staging: Provision EC2 instance"
+      ec2:
+         instance_type: t2.micro
+         region: "{{ aws_region }}"
+         image: "{{ ami_id }}"
+         # XXX: replace this with a shared key for the ubuntu user
+         key_name: "philipp"
+         group: librecores-web
+         wait: true
+         exact_count: 1
+         count_tag:
+            group: librecores-staging
+         instance_tags:
+            group: librecores-staging
+      register: instance_staging_ec2_web
+
+    - name: "Staging: Assign Elastic IP (public)"
+      ec2_eip:
+        region: "{{ aws_region }}"
+        public_ip: "{{ ip_staging }}"
+        reuse_existing_ip_allowed: yes
+        state: present
+        instance_id: "{{ instance_staging_ec2_web.tagged_instances[0].id }}"
+
+
+#    name: Add all instance public IPs to host group
+#      add_host: hostname={{ item.public_ip }} groups=librecores-staging
+#      with_items: ec2.instances
+  vars:
+    # get current AMI ID from http://cloud-images.ubuntu.com/locator/ec2/
+    # search for trusty amd64 hvm:ebs eu-west-1
+    - ami_id: "ami-a11dbfd2"
+    - aws_region: "eu-west-1"
+
+    # Public IPs (EC2 Elastic IPs)
+    # Make sure to update the DNS entries with those IPs as well!
+    # stage.librecores.org
+    - ip_staging: "52.19.183.36"
