@@ -1,17 +1,42 @@
 3rd-party libraries and helpers
 -------------------------------
 
-web/js/respond.min.js
-  URL: https://raw.githubusercontent.com/scottjehl/Respond/master/dest/respond.min.js
-  License: MIT
-
-web/js/bootstrap.min.js
-web/css/bootstrap.min.css
-web/css/bootstrap-theme.min.css
+Bootstrap
   URL: http://getbootstrap.com
   License: MIT
+  Files:
+    web/js/bootstrap.min.js
+    web/css/bootstrap.min.css
+    web/css/bootstrap-theme.min.css
 
-web/js/html5shiv.min.js
+Social Buttons for Bootstrap
+  Description: CSS to display buttons "Sign in with XXX"
+  URL: http://lipis.github.io/bootstrap-social
+  License: MIT
+  Files:
+    web/css/bootstrap-social.css
+
+Bootstrap Markdown
+  URL: http://www.codingdrama.com/bootstrap-markdown/
+  License: Apache 2
+
+markdown-js
+  URL: https://github.com/evilstreak/markdown-js/
+  License: MIT
+
+html5shiv
   URL: https://raw.githubusercontent.com/aFarkas/html5shiv/master/dist/html5shiv.min.js
   License: dual MIT/GPLv2
+  Files:
+    web/js/html5shiv.min.js
+
+respond.js
+  URL: https://raw.githubusercontent.com/scottjehl/Respond/master/dest/respond.min.js
+  License: MIT
+  Files:
+    web/js/respond.min.js
+
+FontAwesome
+  URL: http://fontawesome.io/
+  License: SIL OFL 1.1 and MIT
 

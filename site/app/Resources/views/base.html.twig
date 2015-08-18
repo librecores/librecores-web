@@ -65,6 +65,14 @@
     {% javascripts '@js_bootstrap' %}
       <script src="{{ asset_url }}"></script>
     {% endjavascripts %}
+
+    {% javascripts '@js_bootstrapmarkdown' %}
+      <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
+    <script type="text/javascript">
+      {% block pagejs %}{% endblock %}
+    </script>
   {% endblock %}
 </body>
 </html>

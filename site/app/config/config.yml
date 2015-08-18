@@ -31,6 +31,9 @@ twig:
     strict_variables: "%kernel.debug%"
     paths:
         "%kernel.root_dir%/../sitecontent": site_content
+    form:
+        # Use Bootstrap Form styling by default
+        resources: ['bootstrap_3_layout.html.twig']
 
 # Assetic Configuration
 assetic:
@@ -55,6 +58,10 @@ assetic:
             inputs:
                 - "js/respond.min.js"
                 - "js/html5shiv.min.js"
+        js_bootstrapmarkdown:
+            inputs:
+                - "js/bootstrap-markdown.js"
+                - "js/markdown.min.js"
 
 # Doctrine Configuration
 doctrine:
