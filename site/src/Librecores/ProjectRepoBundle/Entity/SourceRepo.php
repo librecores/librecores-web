@@ -4,11 +4,12 @@ namespace Librecores\ProjectRepoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * A source code repository
  *
- * Currently only git repositories are supported.
+ * Currently only git and subversion (svn) repositories are supported.
  *
  * @ORM\Table()
  * @ORM\Entity
@@ -16,6 +17,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 class SourceRepo
 {
     const REPO_TYPE_GIT = 'git';
+    const REPO_TYPE_SVN = 'svn';
 
     /**
      * @var integer
@@ -27,30 +29,43 @@ class SourceRepo
     private $id;
 
     /**
-     * @var string
+     * The repository type.
      *
+     * @var string One of the REPO_TYPE_* constants
+     *
+     * @Assert\Choice(choices = {"git", "svn"})
      * @ORM\Column(type="string")
      */
     private $type;
 
     /**
+     * The URL to clone/checkout the repository.
+     *
      * @var string
      *
-     * @ORM\Column(type="string")
+     * @Assert\Length(max = 255)
+     * @ORM\Column(type="string", length=255)
      */
     private $url;
 
     /**
+     * Statistics about this souce code repository.
+     *
      * @var SourceStats
+     *
      * @ORM\OneToOne(targetEntity="SourceStats")
      */
     private $stats;
 
     /**
+     * Projects using this source code repository.
+     *
      * @var ArrayCollection
+     *
      * @ORM\OneToMany(targetEntity="Project", mappedBy="sourceRepo")
      */
     private $projects;
+
     /**
      * Constructor
      */
@@ -62,7 +77,7 @@ class SourceRepo
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -85,7 +100,7 @@ class SourceRepo
     /**
      * Get type
      *
-     * @return string 
+     * @return string
      */
     public function getType()
     {
@@ -108,7 +123,7 @@ class SourceRepo
     /**
      * Get url
      *
-     * @return string 
+     * @return string
      */
     public function getUrl()
     {
@@ -131,7 +146,7 @@ class SourceRepo
     /**
      * Get stats
      *
-     * @return \Librecores\ProjectRepoBundle\Entity\SourceStats 
+     * @return \Librecores\ProjectRepoBundle\Entity\SourceStats
      */
     public function getStats()
     {
@@ -164,7 +179,7 @@ class SourceRepo
     /**
      * Get projects
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getProjects()
     {

@@ -2,6 +2,18 @@ librecores_project_repo_homepage:
     path:     /
     defaults: { _controller: LibrecoresProjectRepoBundle:Default:index }
 
-librecores_project_repo_viewproject:
-    path:     /{parent}/{project}
-    defaults: { _controller: LibrecoresProjectRepoBundle:Default:viewProject }
+librecores_project_repo_project_new:
+    path:     /new
+    defaults: { _controller: LibrecoresProjectRepoBundle:Default:projectNew }
+
+librecores_project_repo_project_view:
+    path:     /{parentName}/{projectName}
+    defaults: { _controller: LibrecoresProjectRepoBundle:Default:projectView }
+
+librecores_project_repo_project_settings:
+    path:     /{parentName}/{projectName}/settings
+    defaults: { _controller: LibrecoresProjectRepoBundle:Default:projectSettings }
+
+librecores_project_repo_project_settings_team:
+    path:     /{parentName}/{projectName}/settings/team
+    defaults: { _controller: LibrecoresProjectRepoBundle:Default:projectSettingsTeam }

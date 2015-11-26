@@ -1,0 +1,98 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}
+{{ project.getFullName() }} @ LibreCores: Settings
+{% endblock %}
+
+{% block pagepath %}Home &raquo; Projects &raquo; {{ project.getFullName() }} &raquo; Settings{% endblock %}
+
+{% block content %}
+<h1 style="margin-bottom:5px">{{ project.getFullName() }}: Settings</h1>
+
+<div class="row">
+<div class="col-md-2">
+  <ul class="list-group">
+    <li class="list-group-item"><a href="#"><i class="fa fa-cog fa-fw"></i>&nbsp; Settings</a></li>
+    <li class="list-group-item"><a href="{{ path('librecores_project_repo_project_settings_team', {'parentName': 'openrisc', 'projectName': 'mor1kx'}) }}"><i class="fa fa-users fa-fw"></i>&nbsp; Team</a></li>
+  </ul>
+</div>
+<div class="col-md-10">
+
+{{ form_start(form) }}
+  {{ form_errors(form) }}
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">Description</h3>
+    </div>
+    <div class="panel-body">
+      {{  form_row(form.descriptionTextAutoUpdate, {'label': false}) }}
+      <div id="descriptionText_div"
+           style="padding-left: 15px; display: {% if form.vars.value.descriptionTextAutoUpdate %}none{% else %}block{% endif %};">
+        {{ form_row(form.descriptionText, {'attr': {'data-provide': 'markdown'}}) }}
+      </div>
+    </div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">Resources</h3>
+    </div>
+    <div class="panel-body">
+      {{ form_row(form.projectUrl) }}
+      {{ form_row(form.issueTracker) }}
+    </div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">Source Code Repository</h3>
+    </div>
+    <div class="panel-body">
+      {{ form_row(form.sourceRepo, {'label': false}) }}
+    </div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">License</h3>
+    </div>
+    <div class="panel-body">
+      {{ form_row(form.licenseName) }}
+
+      {{ form_row(form.licenseTextAutoUpdate) }}
+      <div id="licenseText_div" style="padding-left: 15px; display: {% if  form.vars.value.licenseTextAutoUpdate %}none{% else %}block{% endif %};">
+        {{ form_row(form.licenseText, {'attr': {'data-provide': 'markdown'}}) }}
+      </div>
+    </div>
+  </div>
+{{ form_end(form) }}
+{% endblock %}
+
+{% block pagejs %}
+$(document).ready(function(){
+  /* toggle text boxes in respect to the auto update settings */
+  $('#{{ form.descriptionTextAutoUpdate.vars.id }}').on('change', function() {
+  	 // XXX: change this back if expanded = true is restored
+	   //var au = $('input[name="{{ form.descriptionTextAutoUpdate.vars.full_name }}"]:checked').val() == '1';
+	   var au = $('#{{ form.descriptionTextAutoUpdate.vars.id }}').val() == '0'
+	   var el = $('#descriptionText_div');
+	   if (au) {
+	     el.hide();
+	   } else {
+	     el.show();
+	   }
+  });
+  $('#{{ form.licenseTextAutoUpdate.vars.id }}').on('change', function() {
+   	 // XXX: change this back if expanded = true is restored
+	   //var au = $('input[name="{{ form.licenseTextAutoUpdate.vars.full_name }}"]:checked').val() == '1';
+	   var au = $('#{{ form.licenseTextAutoUpdate.vars.id }}').val() == '0'
+	   var el = $('#licenseText_div');
+	   if (au) {
+	     el.hide();
+	   } else {
+	     el.show();
+	   }
+  });
+});
+{% endblock %}

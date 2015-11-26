@@ -5,12 +5,15 @@
 {% block content %}
 <h1>Welcome at the project repo.</h1>
 
+<h2>Olof's Pick of the Week</h2>
+
+<img src="{{ asset('img/olof.jpg') }}" width="100" size="100">
 <p>
 add some "featured" projects here, currently updated projects, list of cores, search
 </p>
 
 <p>
 sample project listing
-<a href="{{ path('librecores_project_repo_viewproject', {'parent': 'openrisc', 'project': 'mor1kx'}) }}">opencores/mor1kx IP Core</a>
+<a href="{{ path('librecores_project_repo_project_view', {'parentName': 'openrisc', 'projectName': 'mor1kx'}) }}">opencores/mor1kx IP Core</a>
 </p>
 {% endblock %}

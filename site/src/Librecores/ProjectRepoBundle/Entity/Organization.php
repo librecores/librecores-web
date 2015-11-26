@@ -17,6 +17,8 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class Organization
 {
+    const SPECIAL_UNASSIGNED_ID = 1;
+
     /**
      * @var integer
      *
@@ -49,7 +51,7 @@ class Organization
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -72,7 +74,7 @@ class Organization
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -105,7 +107,7 @@ class Organization
     /**
      * Get projects
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getProjects()
     {
