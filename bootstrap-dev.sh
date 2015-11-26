@@ -40,7 +40,7 @@ case $(lsb_release -is) in
       sudo dpkg -i "$DLDIR/vagrant.deb"
     fi
     ;;
-  *openSUSE*)
+  *SUSE*)
     sudo zypper install virtualbox ansible nfs-kernel-server curl
     if [ $INSTALL_VAGRANT = 1 ]; then
       curl -L https://dl.bintray.com/mitchellh/vagrant/vagrant_${VAGRANT_VERSION}_$(uname -m).rpm > "$DLDIR/vagrant.rpm"
