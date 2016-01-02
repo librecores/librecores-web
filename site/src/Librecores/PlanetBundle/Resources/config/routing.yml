@@ -1,0 +1,3 @@
+librecores_planet_homepage:
+    path:     /
+    defaults: { _controller: LibrecoresPlanetBundle:Default:index }

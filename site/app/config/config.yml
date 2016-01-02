@@ -49,20 +49,21 @@ assetic:
         #yui_css:
         #    jar: "%kernel.root_dir%/Resources/java/yuicompressor-2.4.7.jar"
     assets:
-        js_jquery:
-            inputs:
-                - "js/jquery.min.js"
-        js_bootstrap:
-            inputs:
-                - "js/bootstrap.min.js"
-        js_iecompat:
+        # JavaScript files loaded inside <head> (only for special cases)
+        js_head:
             inputs:
                 - "js/respond.min.js"
                 - "js/html5shiv.min.js"
-        js_bootstrapmarkdown:
+
+        # JavaScript files loaded at the bottom of <body> (preferred)
+        js_body_end:
             inputs:
+                - "js/jquery.min.js"
+                - "js/bootstrap.min.js"
                 - "js/bootstrap-markdown.js"
                 - "js/markdown.min.js"
+                - "js/moment.min.js"
+                - "js/livestamp.js"
 
 # Doctrine Configuration
 doctrine:
@@ -140,7 +141,7 @@ fos_user:
 
 # HWI OAuth Configuration
 hwi_oauth:
-    connect:        
+    connect:
         confirmation: true
         account_connector: librecores_user_provider
     firewall_name: main
@@ -168,3 +169,4 @@ hwi_oauth:
             options:
 #                access_type:     offline
                 display:         popup
+

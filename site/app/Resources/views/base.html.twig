@@ -14,13 +14,15 @@
 
   <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!--[if lt IE 9]>
-    {% javascripts '@js_iecompat' %}
+    {% javascripts '@js_head' %}
       <script src="{{ asset_url }}"></script>
     {% endjavascripts %}
   <![endif]-->
 
   <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
   <link href="http://fonts.googleapis.com/css?family=Source+Code+Pro:400,500,600,700" rel="stylesheet" type="text/css">
+
+  {% block head_additional %}{% endblock %}
 </head>
 <body>
   <!-- top navigation bar -->
@@ -58,15 +60,7 @@
   </footer>
 
   {% block javascripts %}
-    {% javascripts '@js_jquery' %}
-      <script src="{{ asset_url }}"></script>
-    {% endjavascripts %}
-
-    {% javascripts '@js_bootstrap' %}
-      <script src="{{ asset_url }}"></script>
-    {% endjavascripts %}
-
-    {% javascripts '@js_bootstrapmarkdown' %}
+    {% javascripts '@js_body_end' %}
       <script src="{{ asset_url }}"></script>
     {% endjavascripts %}
 

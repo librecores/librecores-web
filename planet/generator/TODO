@@ -1,0 +1,7 @@
+TODO
+====
+
+  * Allow display normalisation to specified timezone
+
+    Some Planet admins would like their feed to be displayed in the local
+    timezone, instead of UTC.

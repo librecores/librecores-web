@@ -23,6 +23,7 @@ class AppKernel extends Kernel
             new OldSound\RabbitMqBundle\OldSoundRabbitMqBundle(),
             new FOS\UserBundle\FOSUserBundle(),
             new HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
+            new Librecores\PlanetBundle\LibrecoresPlanetBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

@@ -11,7 +11,7 @@ body {
   font-size: 16px;
   font-weight: 400;
   line-height: 24px;
-  
+
   /* move content below header */
   padding-top: 50px;
 }
@@ -21,7 +21,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h1 {
-	padding-top:30px;
+  padding-top:30px;
   color: #484235;
   font-weight: 300;
   /*text-shadow: 0 1px 0 #FFFFFF;*/
@@ -63,7 +63,7 @@ pre code {
 }
 
 a, a:visited, a:hover, a:focus {
-	color: #6486b2;
+  color: #6486b2;
 }
 
 a:hover {
@@ -81,7 +81,7 @@ a:hover {
 }
 
 .librecores-nav a {
-	color: #484235;
+  color: #484235;
 }
 
 .librecores-nav .navbar-brand {
@@ -92,10 +92,10 @@ a:hover {
   font-size: 25px;
 }
 
-.librecores-nav .nav > li > a:focus, 
+.librecores-nav .nav > li > a:focus,
 .librecores-nav .nav > li > a:hover {
-	background-color: #fff;
-	color: #6486b2;
+  background-color: #fff;
+  color: #6486b2;
 }
 
 .navbar-toggle {
@@ -112,30 +112,28 @@ a:hover {
 
 /* search bar, also including quicknav */
 .librecores-searchbar {
-	background-color:#bfb8a8;
-  color: #484235; 
-  vertical-align: middle; 
-  line-height: 32px; 
+  background-color:#bfb8a8;
+  color: #484235;
+  vertical-align: middle;
+  line-height: 32px;
   padding:10px;
 }
 
 .librecores-searchbar button {
-	background-color: #484235; 
-	color:#fff; 
-	font-variant:small-caps;
-	font-weight:600;
+  background-color: #484235;
+  color:#fff;
+  font-variant:small-caps;
+  font-weight:600;
   text-shadow: none;
 }
 
 /* claim (on homepage) */
 .librecores-home-claim {
-	background-color: #89773d;
+  background-color: #89773d;
 }
 
 .librecores-home-claim .container {
-  background: url("../img/claim_top.png") no-repeat scroll left top #89773d;
-  padding-left: 350px;
-  height: 200px;
+  background-color: #89773d;
 }
 
 .librecores-home-claim .container,
@@ -144,31 +142,46 @@ a:hover {
 }
 
 .librecores-home-claim .container .lead {
-	color: #484235;
+  color: #484235;
 }
 
 /* search bar (on homepage) */
 .librecores-home-search {
-	font-size: 1.3em;
-	background-color: #bfb8a8;
+  font-size: 1.3em;
+  background-color: #bfb8a8;
 }
 
 .librecores-home-search .container {
-  background: url("../img/claim_bottom.png") no-repeat scroll left top #bfb8a8;
-	padding-top: 30px; 
-	padding-bottom: 30px; 
+  background-color: #bfb8a8;
+  padding-top: 30px;
+  padding-bottom: 30px;
 }
 
-.librecores-home-search form {
-	 width:700px;
+@media (min-width: 992px) {
+  .librecores-home-search form {
+     width: 700px;
+  }
 }
 
 .librecores-home-search label {
-	padding-right: 10px;
+  padding-right: 10px;
 }
 
 .librecores-home-search button {
   font-weight: bold;
+}
+
+/* lc image: only for wider devices */
+@media (min-width: 992px) {
+  .librecores-home-claim .container {
+    background: url("../img/claim_top.png") no-repeat scroll left top #89773d;
+    padding-left: 350px;
+    height: 200px;
+  }
+
+  .librecores-home-search .container {
+    background: url("../img/claim_bottom.png") no-repeat scroll left top;
+  }
 }
 
 /* footer */
@@ -182,16 +195,16 @@ a:hover {
 
 /* CORE REPOSITORY CSS */
 .tab-pane {
-  border-bottom: 1px solid #DDD; 
-  border-left: 1px solid #DDD; 
-  border-right: 1px solid #DDD; 
-  padding: 10px; 
+  border-bottom: 1px solid #DDD;
+  border-left: 1px solid #DDD;
+  border-right: 1px solid #DDD;
+  padding: 10px;
   font-size: 100%;
 }
 
 .tab-pane h1:first-of-type {
-	margin-top: 0;
-	padding-top: 0;
+  margin-top: 0;
+  padding-top: 0;
 }
 
 
@@ -215,4 +228,33 @@ a:hover {
   position:relative;
   padding:10px;
   background-color:#fff;
+}
+
+/* PLANET */
+.librecores-planet-infocol {
+   font-size: 0.8em;
+}
+
+.librecores-planet-post h3 {
+  margin-bottom: 0px;
+}
+
+.librecores-planet-author {
+  color: gray;
+  font-size: 0.8em;
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+
+.librecores-planet-teaser {
+  padding-top: 10px;
+  padding-bottom: 20px;
+}
+
+.librecores-planet-teaser img {
+  float: left;
+  padding-right: 10px;
+  padding-bottom: 10px;
+  max-width: 90px;
+  max-height:90px;
 }

@@ -2,18 +2,18 @@
 hwi_oauth_security:
     resource: "@HWIOAuthBundle/Resources/config/routing/login.xml"
     prefix: /connect
- 
+
 hwi_oauth_redirect:
     resource: "@HWIOAuthBundle/Resources/config/routing/redirect.xml"
     prefix:   /connect
 
-hwi_oauth_connect: 
+hwi_oauth_connect:
      resource: "@HWIOAuthBundle/Resources/config/routing/connect.xml"
      prefix: /connect
-    
+
 github_login:
     pattern: /connect/check-github
- 
+
 google_login:
     pattern: /connect/check-google
 
@@ -21,11 +21,11 @@ google_login:
 fos_user_security:
     resource: "@FOSUserBundle/Resources/config/routing/security.xml"
     prefix:   /
- 
+
 fos_user_register:
     resource: "@FOSUserBundle/Resources/config/routing/registration.xml"
     prefix: /register
- 
+
 fos_user_resetting:
     resource: "@FOSUserBundle/Resources/config/routing/resetting.xml"
     prefix: /resetting
@@ -38,6 +38,11 @@ fos_user_change_password:
 librecores_project_repo:
     resource: "@LibrecoresProjectRepoBundle/Resources/config/routing.yml"
     prefix:   /projects
+
+# Planet routes
+librecores_planet:
+    resource: "@LibrecoresPlanetBundle/Resources/config/routing.yml"
+    prefix:   /planet
 
 # Site routes ("static content")
 librecores_site:

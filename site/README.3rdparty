@@ -40,3 +40,14 @@ FontAwesome
   URL: http://fontawesome.io/
   License: SIL OFL 1.1 and MIT
 
+moment.js
+  URL: http://momentjs.com/
+  License: MIT
+  Files:
+    web/js/moment.min.js
+
+Livestamp.js (modified)
+  URL: http://mattbradley.github.io/livestampjs/
+  License: MIT
+  Files:
+    web/js/livestamp.js (modified from upstream)
