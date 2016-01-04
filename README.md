@@ -32,6 +32,7 @@ setup.
 If you use NFS, ...
 - Install the NFS server on the host machine. Usually the package is named
   nfs-kernel-server.
+- Make sure that the daemon runs (sudo sytemctl status nfs-server)
 - Disable any firewall rules preventing access from vboxnet devices to the NFS
   ports. On openSUSE, by default the "ext" firewall rule is applied, preventing
   access. The easiest way is to disable the firewall completely.
