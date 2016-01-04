@@ -11,9 +11,9 @@
 	},
 	"require" : {
 		"php" : ">=5.5",
-		"symfony/symfony" : "2.7.*",
-		"symfony/console" : "2.7.*",
-		"symfony/process" : "2.7.*",
+		"symfony/symfony" : "2.8.*",
+		"symfony/console" : "2.8.*",
+		"symfony/process" : "2.8.*",
 		"symfony/assetic-bundle" : "~2.3",
 		"symfony/swiftmailer-bundle" : "~2.3",
 		"symfony/monolog-bundle" : "~2.4",
@@ -62,7 +62,7 @@
 			"file" : "app/config/parameters.yml"
 		},
 		"branch-alias" : {
-			"dev-master" : "2.7-dev"
+			"dev-master" : "2.8-dev"
 		}
 	}
 }
