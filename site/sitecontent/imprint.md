@@ -1,5 +1,10 @@
 # Imprint
 
-TODO: add legally required stuff here
+LibreCores is a project of the Free and Open Source Silicon Foundation.
 
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+The Free and Open Source Silicon Foundation C.i.C.<br/>
+71-75 Shelton Street<br/>
+London, WC2H 9JQ
+
+[info@fossi-foundation.org](mailto:info@fossi-foundation.org)
+
