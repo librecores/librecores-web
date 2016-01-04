@@ -28,6 +28,10 @@ Vagrant.configure("2") do |config|
     config.vm.provider :virtualbox do |v|
         v.name = (0...8).map { (65 + rand(26)).chr }.join
         v.customize [ "modifyvm", :id, "--memory", 1024 ]
+ 
+        # Create swap file and mount it.
+        # Large amounts of memory are needed e.g. for composer update
+        v.provision "bash", path: "create_swapfile.sh"
     end
 
     # Provision the box
