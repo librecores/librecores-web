@@ -1,7 +1,3 @@
-upstream php {
-    server unix:/var/run/php5-fpm.sock;
-}
-
 server {
     listen 80;
 
@@ -34,7 +30,7 @@ server {
         #NOTE: You should have "cgi.fix_pathinfo = 0;" in php.ini
         include                 fastcgi_params;
         fastcgi_intercept_errors on;
-        fastcgi_pass unix:/var/run/php5-fpm.sock;
+        fastcgi_pass            php7.0;
     }
 
     location ~* \.(js|css|png|jpg|jpeg|gif|ico)$ {

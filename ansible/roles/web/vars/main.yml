@@ -1,13 +1,22 @@
 ---
-php_packages:
-  - { name: dev, package: php5-dev }
-  - { name: pear, package: php-pear }
-  - { name: xdebug, package: php5-xdebug }
-  - { name: curl, package: php5-curl }
-  - { name: mcrypt, package: php5-mcrypt }
-  - { name: mysql, package: php5-mysql }
-  - { name: apc, package: php-apc }
+# PHP extensions, installed from OS packages (preferred)
+php_extensions_packaged:
+  - { name: dev, package: php7.0-dev }
+# XXX: What do we need that for? Composer is taking over
+#  - { name: pear, package: php-pear }
+# Currently not available as release for PHP 7
+#  - { name: xdebug, package: php5-xdebug }
+  - { name: curl, package: php7.0-curl }
+  - { name: mcrypt, package: php7.0-mcrypt }
+  - { name: mysql, package: php7.0-mysql }
+# Currently not available for PHP 7 (not needed anyways?)
+#  - { name: apc, package: php-apc }
 
-php_extensions:
-  - { name: "jsmin", package: "pecl.php.net/jsmin-beta" }
+# PHP extensions, installed through PEAR (if not available through OS packages)
+php_extensions_pecl: []
+# Currently not available for PHP 7
+#  - { name: "jsmin", package: "pecl.php.net/jsmin-beta" }
 #  - { name: "xhprof", package: "pecl.php.net/xhprof-beta" }
+
+# PHP FPM socket (for web servers)
+php_fpm_sock: /var/run/php/php7.0-fpm.sock

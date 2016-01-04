@@ -1,43 +1,53 @@
 ---
 # Install PHP for the web server
 - name: Add PHP ppa repository
-  apt_repository: repo='ppa:ondrej/php5-5.6'
+  apt_repository: repo='ppa:ondrej/php-7.0'
 
-- name: Install PHP5-FPM
+- name: Install PHP FPM
   sudo: yes
-  apt:  package=php5-fpm state=installed
+  apt:  package=php7.0-fpm state=installed
 
-- name: Install PHP5-CLI
+- name: Setup support for PHP in nginx
   sudo: yes
-  apt:  package=php5-cli state=installed
+  template: src=nginx/upstream_php7.0.conf.tpl dest=/etc/nginx/conf.d/upstream_php7.0.conf
+  notify: restart nginx
 
-- name: Install PHP packages
+- name: Install PHP CLI
+  sudo: yes
+  apt:  package=php7.0-cli state=installed
+
+# OS packaged PHP extensions
+- name: Install packaged PHP extensions
   sudo: yes
   apt:  package={{ item.package }} state=installed
-  with_items: php_packages
+  with_items: php_extensions_packaged
 
-- name: Enable PHP packages
+- name: Enable packaged PHP extensions for all SAPIs
   sudo: yes
-  command: /usr/sbin/php5enmod {{ item.name }} creates=/etc/php5/cli/conf.d/20-{{ item.name }}.ini
-  with_items: php_packages
-  notify: restart php5-fpm
+  # creates= only accepts one file; phpenmod also creates the fpm symlink
+  command: /usr/sbin/phpenmod -s ALL {{ item.name }} creates=/etc/php/7.0/cli/conf.d/20-{{ item.name }}.ini
+  with_items: php_extensions_packaged
+  notify: restart php7.0-fpm
 
-- name: Install PHP extensions
+# PHP extensions from PECL
+- name: Install PECL-installed PHP extensions
   sudo: yes
-  shell: echo "\n" | /usr/bin/pecl install {{ item.package }} creates=/usr/lib/php5/20131226/{{ item.name }}.so
-  with_items: php_extensions
+  shell: echo "\n" | /usr/bin/pecl install {{ item.package }} creates=/usr/lib/php/20151012/{{ item.name }}.so
+  with_items: php_extensions_pecl
 
-- name: Configure PHP extensions
+- name: Configure PECL-installed PHP extensions
   sudo: yes
-  template: src=php_extension.tpl dest=/etc/php5/mods-available/{{ item.name }}.ini
-  with_items: php_extensions
+  template: src=php_extension.tpl dest=/etc/php/mods-available/{{ item.name }}.ini
+  with_items: php_extensions_pecl
 
-- name: Enable PHP extensions
+- name: Enable PECL-installed PHP extensions for all SAPIs (through PECL)
   sudo: yes
-  command: /usr/sbin/php5enmod {{ item.name }} creates=/etc/php5/cli/conf.d/20-{{ item.name }}.ini
-  with_items: php_extensions
-  notify: restart php5-fpm
+  # creates= only accepts one file; phpenmod also creates the fpm symlink
+  command: /usr/sbin/phpenmod -s ALL {{ item.name }} creates=/etc/php/7.0/cli/conf.d/20-{{ item.name }}.ini
+  with_items: php_extensions_pecl
+  notify: restart php7.0-fpm
 
+# Composer
 - name:  Install Composer
   shell: curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer
   args:
