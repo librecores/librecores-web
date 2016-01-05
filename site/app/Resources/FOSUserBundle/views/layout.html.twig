@@ -1,0 +1,10 @@
+{#
+Base layout used for all user auth pages (login, logout, etc.)
+#}
+{% extends '::layout.html.twig' %}
+
+{% block title %}LibreCores{% endblock %}
+
+{% block content %}
+  {% block fos_user_content %}{% endblock %}
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends "FOSUserBundle::layout.html.twig" %}
+
+{% trans_default_domain 'FOSUserBundle' %}
+
+{% block fos_user_content %}
+
+
+<div class="center-block" style="width:280px; margin-top:40px">
+  <div class="panel panel-default">
+    <div class="panel-heading"><h3 class="panel-title">Register an account (it's free!)</h3></div>
+    <div class="panel-body">
+      <form action="{{ path('fos_user_registration_register') }}" {{ form_enctype(form) }} method="POST" class="fos_user_registration_register">
+        {{ form_widget(form) }}
+        <button class="btn btn-success btn-block" type="submit" id="_submit" name="_submit">Create account</button>
+      </form>
+
+      <div class="or-container">
+        <hr class="or-hr" />
+        <div id="or">or</div>
+      </div>
+
+      <a class="btn btn-block btn-social btn-github" href="{{ hwi_oauth_login_url("github") }}">
+        <i class="fa fa-github"></i> Sign in with GitHub
+      </a>
+      <a class="btn btn-block btn-social btn-google" href="{{ hwi_oauth_login_url("google") }}">
+        <i class="fa fa-google"></i> Sign in with Google
+      </a>
+
+      <hr/>
+
+      <div class="text-center">
+        <small>Already have an account?<br/><a href="/login">Log in.</a></small>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock fos_user_content %}

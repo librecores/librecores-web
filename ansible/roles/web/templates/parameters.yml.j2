@@ -22,3 +22,13 @@ parameters:
     rabbitmq_user:     librecores
     rabbitmq_password: {{ site_rabbitmq_password }}
 
+    # OAuth configuration: GitHub
+    # Register at https://github.com/settings/applications
+    github_app_id:     {{ site_github_app_id }}
+    github_app_secret: {{ site_github_app_secret }}
+
+    # OAuth configuration: Google
+    # Register at https://console.developers.google.com/
+    # https://console.developers.google.com/project/librecores/apiui/credential/oauthclient
+    google_app_id:     {{ site_google_app_id }}
+    google_app_secret: {{ site_github_app_secret }}

@@ -1,3 +1,7 @@
+parameters:
+    librecores_user_provider.class: Librecores\ProjectRepoBundle\Security\Core\User\FOSUBUserProvider
+    librecores_user_manager.class: Librecores\ProjectRepoBundle\Doctrine\UserManager
+
 services:
     update_project_info_service:
         class: Librecores\ProjectRepoBundle\Consumer\UpdateProjectInformation
@@ -5,6 +9,20 @@ services:
             - @logger
             - @doctrine
             - @markdown.parser
+
+    app.form.type.project:
+        class: Librecores\ProjectRepoBundle\Form\Type\ProjectType
+        tags:
+            - { name: form.type, alias: project }
+
+    librecores_user_manager:
+        class: Librecores\ProjectRepoBundle\Doctrine\UserManager
+        arguments: [@security.encoder_factory, @fos_user.util.username_canonicalizer, @fos_user.util.email_canonicalizer, @fos_user.entity_manager, %fos_user.model.user.class%]
+
+    librecores_user_provider:
+        class: "%librecores_user_provider.class%"
+        #this is the place where the properties are passed to the UserProvider - see config.yml
+        arguments: [@fos_user.user_manager, {github: oauth_user_id, google: oauth_user_id}]
 
 #    librecores_project_repo.example:
 #        class: Librecores\ProjectRepoBundle\Example

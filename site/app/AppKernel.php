@@ -21,6 +21,8 @@ class AppKernel extends Kernel
             new Librecores\SiteBundle\LibrecoresSiteBundle(),
             new Fkr\SimplePieBundle\FkrSimplePieBundle(),
             new OldSound\RabbitMqBundle\OldSoundRabbitMqBundle(),
+            new FOS\UserBundle\FOSUserBundle(),
+            new HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

@@ -5,7 +5,9 @@ imports:
 
 framework:
     #esi:             ~
-    #translator:      { fallbacks: ["%locale%"] }
+    default_locale:  "%locale%"
+    #translator:      { fallback: en }
+    translator:      { fallbacks: ["%locale%"] }
     secret:          "%secret%"
     router:
         resource: "%kernel.root_dir%/config/routing.yml"
@@ -16,7 +18,6 @@ framework:
     templating:
         engines: ['twig']
         #assets_version: SomeVersionScheme
-    default_locale:  "%locale%"
     trusted_hosts:   ~
     trusted_proxies: ~
     session:
@@ -128,3 +129,42 @@ old_sound_rabbit_mq:
             exchange_options: {name: 'update-project-info', type: direct}
             queue_options:    {name: 'update-project-info'}
             callback:         update_project_info_service
+
+# FOSUser Configuration
+fos_user:
+    db_driver: orm
+    firewall_name: main
+    user_class: Librecores\ProjectRepoBundle\Entity\User
+    service:
+        user_manager: librecores_user_manager
+
+# HWI OAuth Configuration
+hwi_oauth:
+    connect:        
+        confirmation: true
+        account_connector: librecores_user_provider
+    firewall_name: main
+    fosub:
+        username_iterations: 30
+        properties:
+            github: oauth_user_id
+            google: oauth_user_id
+    resource_owners:
+        github:
+            type:                github
+            client_id:           "%github_app_id%"
+            client_secret:       "%github_app_secret%"
+            scope:               "user:email"
+            options:
+                csrf:            true
+        google:
+            type:                google
+            client_id:           "%google_app_id%"
+            client_secret:       "%google_app_secret%"
+            scope:               "https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile"
+#            paths:
+#                email:           email
+#                profilepicture:  picture
+            options:
+#                access_type:     offline
+                display:         popup
