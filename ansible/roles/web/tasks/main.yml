@@ -5,4 +5,3 @@
 - include: rabbitmq.yml
 - include: librecores-site.yml
 - include: librecores-blog.yml
-- include: librecores-planet.yml

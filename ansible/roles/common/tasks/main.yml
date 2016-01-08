@@ -2,8 +2,8 @@
 # Common plays to be run on all nodes.
 
 - name: check if we are running in the development environment
-  stat: path=/var/www
-  register: srcrepo_dir
+  stat: path=/vagrant
+  register: vagrant_dir
 
 - name: Install ntp
   apt: pkg=ntp state=installed
@@ -32,7 +32,8 @@
 - name: Send deployment SSH key to remote machine (non-development only)
   copy: dest=/src-librecores-web.key
         content="{{ src_deployment_key }}"
-  when: srcrepo_dir.stat.exists == False
+        mode=0400
+  when: vagrant_dir.stat.exists == False
 
 - name: "Setup source repository (non-development only)"
   git: repo="{{ src_repo_url }}"
@@ -41,8 +42,8 @@
        key_file=/src-librecores-web.key
        depth=1
        version="{{ src_version }}"
-  when: srcrepo_dir.stat.exists == False
+  when: vagrant_dir.stat.exists == False
 
 - name: "Delete deployment key again (non-development only)"
   file: path=/src-librecores-web.key state=absent
-  when: srcrepo_dir.stat.exists == False
+  when: vagrant_dir.stat.exists == False

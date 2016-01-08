@@ -1,0 +1,28 @@
+---
+- copy: src=../files/drop_all_tables.sql dest=/tmp
+- name: Drop all tables from librecores database
+  mysql_db: >
+    name=librecores
+    state=import
+    target=/tmp/drop_all_tables.sql
+- file: path=/tmp/drop_all_tables.sql state=absent
+
+- name: Let doctrine generate DB contents
+  command: php app/console doctrine:schema:update --force
+  args:
+    chdir: /var/www/site
+
+- name: Import LibreCores development DB Dump
+  mysql_db: >
+    name=librecores
+    login_user=librecores
+    login_password={{ site_mysql_password }}
+    state=import
+    target=/var/www/sql/dev_fixtures_site.sql
+
+- name: Run planet generator for the first time
+  sudo: yes
+  sudo_user: "{{ web_user }}"
+  shell: /var/www/planet/generate.sh
+  args:
+    chdir: /var/www/planet

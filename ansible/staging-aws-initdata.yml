@@ -1,5 +1,5 @@
 ---
-# Staging environment on AWS
+# Staging environment on AWS: initialize data from fixtures
 - name: Deploy stage.librecores.org on AWS
 #  hosts: tag_group_librecores_staging
   hosts: staging
@@ -7,7 +7,7 @@
   user: ubuntu
   sudo: yes
   roles:
-    - staging-aws
+    - initdata
   vars_files:
     - [ "staging-aws.secrets.yml" ]
   vars:

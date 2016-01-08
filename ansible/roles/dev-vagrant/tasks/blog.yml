@@ -1,4 +1,0 @@
----
-# wordpress blog development environment
-- name: Import LibreCores development DB Dump
-  shell: mysql -u librecores-blog librecores-blog < /var/www/sql/dev_fixtures_blog.sql

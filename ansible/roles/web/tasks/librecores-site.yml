@@ -8,9 +8,32 @@
   args:
     chdir: /var/www/site
 
+- name: Ensure directory permissions of Symfony log and cache directories
+  command: chown -R {{ web_user }} /var/www/site/app/{{ item }}
+  with_items:
+    - logs
+    - cache
+
 - name: Ensure nginx log directory exists
   file: dest=/var/log/nginx/librecores state=directory
 
 - name: Change default nginx site
   template: src=nginx/librecores.tpl dest=/etc/nginx/sites-available/default
   notify: restart nginx
+
+# Install librecores planet generator
+- name: Install extra packages for librecores-planet
+  apt:  pkg={{ item }} state=installed
+  with_items:
+    - python-libxslt1
+
+- name: Update planet every 30 minutes through cronjob
+  cron:
+    minute="*/30" hour="*" weekday="*"
+    name="Update Planet LibreCores"
+    cron_file="librecores-planet-update"
+    user="{{ web_user }}"
+    job="/var/www/planet/generate.sh"
+
+- name: Ensure directory permissions of web-accessible planet output directory
+  command: chown -R {{ web_user }} /var/www/site/web/planet
