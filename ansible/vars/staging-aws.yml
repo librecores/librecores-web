@@ -1,0 +1,14 @@
+---
+# get current AMI ID from http://cloud-images.ubuntu.com/locator/ec2/
+# search for trusty amd64 hvm:ebs eu-west-1
+ami_id: "ami-a11dbfd2"
+aws_region: "eu-west-1"
+
+# Public IPs (EC2 Elastic IPs)
+# Make sure to update the DNS entries with those IPs as well!
+# stage.librecores.org
+ip_public: "52.19.183.36"
+
+librecores_domain: "stage.librecores.org"
+web_user: "www-data"
+mysql_host: "localhost"

@@ -1,0 +1,12 @@
+---
+librecores_domain: "librecores.devel"
+mysql_host: "localhost"
+web_user: "{{ ansible_ssh_user }}"
+
+# all secrets have dummy values for the local development setup
+rabbitmq_admin_password: "password"
+site_mysql_password: "password"
+site_symfony_secret_token: "ThisTokenIsNotSoSecretChangeIt"
+site_rabbitmq_password: "password"
+blog_mysql_password: "password"
+mysql_root_password: "password"
