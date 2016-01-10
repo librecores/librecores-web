@@ -35,5 +35,8 @@
     user="{{ web_user }}"
     job="/var/www/planet/generate.sh"
 
+- name: Ensure directory permissions of planet cache directories
+  command: chown -R {{ web_user }} /var/www/planet/cache
+
 - name: Ensure directory permissions of web-accessible planet output directory
   command: chown -R {{ web_user }} /var/www/site/web/planet
