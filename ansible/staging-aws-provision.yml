@@ -8,7 +8,7 @@
   tasks:
     - name: "Create EC2 security group"
       ec2_group:
-        name: librecores-web
+        name: librecores-staging-web
         description: "Librecores web security group"
         region: "{{ aws_region }}"
         rules:
@@ -25,6 +25,10 @@
             from_port: 443
             to_port: 443
             cidr_ip: 0.0.0.0/0
+          - proto: tcp
+            from_port: 3306
+            to_port: 3306
+            cidr_ip: 0.0.0.0/0
         rules_egress:
           # allow all outgoing traffic
           - proto: -1
@@ -32,14 +36,20 @@
             to_port: 0
             cidr_ip: 0.0.0.0/0
 
+    - name: "Staging: Create SSH key"
+      ec2_key:
+        region: "{{ aws_region }}"
+        name: librecores-staging
+        key_material: "{{ ssh_key_staging_pub }}"
+        wait: true
+
     - name: "Staging: Provision EC2 instance"
       ec2:
          instance_type: t2.micro
          region: "{{ aws_region }}"
          image: "{{ ami_id }}"
-         # XXX: replace this with a shared key for the ubuntu user
-         key_name: "philipp"
-         group: librecores-web
+         key_name: librecores-staging
+         group: librecores-staging-web
          wait: true
          exact_count: 1
          count_tag:
@@ -51,22 +61,11 @@
     - name: "Staging: Assign Elastic IP (public)"
       ec2_eip:
         region: "{{ aws_region }}"
-        public_ip: "{{ ip_staging }}"
+        public_ip: "{{ ip_public }}"
         reuse_existing_ip_allowed: yes
         state: present
         instance_id: "{{ instance_staging_ec2_web.tagged_instances[0].id }}"
 
-
-#    name: Add all instance public IPs to host group
-#      add_host: hostname={{ item.public_ip }} groups=librecores-staging
-#      with_items: ec2.instances
-  vars:
-    # get current AMI ID from http://cloud-images.ubuntu.com/locator/ec2/
-    # search for trusty amd64 hvm:ebs eu-west-1
-    - ami_id: "ami-a11dbfd2"
-    - aws_region: "eu-west-1"
-
-    # Public IPs (EC2 Elastic IPs)
-    # Make sure to update the DNS entries with those IPs as well!
-    # stage.librecores.org
-    - ip_staging: "52.19.183.36"
+  vars_files:
+    - vars/staging-aws.yml
+    - secrets/staging-aws-sshkeys.secrets.yml

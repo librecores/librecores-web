@@ -1,0 +1,27 @@
+---
+- name: Configure local SSH for AWS staging
+  hosts: localhost
+  connection: local
+  gather_facts: False
+  sudo: false
+  vars:
+    local_home: "{{ lookup('env','HOME') }}"
+    local_user: "{{ lookup('env','USER') }}"
+  tasks:
+    - name: Create private key
+      template: src=templates/var_to_file
+        dest="{{local_home}}/.ssh/librecores-staging"
+        mode=0600
+        owner="{{local_user}}"
+      with_items:
+        - "{{ ssh_key_staging_private }}"
+
+    - name: Create public key
+      template: src=templates/var_to_file
+        dest="{{local_home}}/.ssh/librecores-staging.pub"
+        mode=0644
+        owner="{{local_user}}"
+      with_items:
+        - "{{ ssh_key_staging_pub }}"
+  vars_files:
+    - secrets/staging-aws-sshkeys.secrets.yml

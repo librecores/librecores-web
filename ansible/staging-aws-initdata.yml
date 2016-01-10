@@ -9,8 +9,5 @@
   roles:
     - initdata
   vars_files:
-    - [ "staging-aws.secrets.yml" ]
-  vars:
-    - librecores_domain: "stage.librecores.org"
-    - web_user: "www-data"
-    - mysql_host: "localhost"
+    - "vars/staging-aws.yml"
+    - "secrets/staging-aws.secrets.yml"
