@@ -17,6 +17,7 @@
 <!-- search -->
 <div class="librecores-home-search">
 <div class="container">
+{# disabled until it's functional
 <form class="form-inline center-block">
   <label>What are you looking for?</label>
   <input type="text" class="form-control" >
@@ -25,6 +26,7 @@
     Find Project
   </button>
 </form>
+#}
 </div>
 </div>
 </div>
@@ -32,21 +34,23 @@
 <!-- 3 columns with main messages -->
 <div class="container" style="padding-top: 30px;">
   <div class="row">
-    <div class="col-md-4">
-      <h2>What is an IP Core?</h2>
-      <p>An IP Core is a building block of any modern chip. It's like a library
-      in software programming, just for hardware.</p>
-      <!--<p><a class="btn btn-default" href="docs">get started documentation &raquo;</a></p>-->
+    <div class="col-md-6">
+      <h2>What is Digital Hardware?</h2>
+      <p>Digital hardware is what's inside your electronic chips.
+      At LibreCores, we look at how to build such chips together using Free and Open Source tools and processes.
+      Have you ever heard of Verilog or VHDL? That's languages you use to describe digital hardware.
+      Or have you heard of FPGAs? That's an "execution platform" for your digital hardware code.
+      To learn more about all of that, and what you need to try our your own chip design, read our
+      <p><a class="btn btn-default" href="docs">Getting Started documentation &raquo;</a></p>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-6">
       <h2>What is LibreCores?</h2>
-      <p>LibreCores is a loose community of people with a common goal: create free, high-quality IP cores.</p>
+      <p>LibreCores tries to be like a good neighborhood pub, just for digital hardware design.
+      It's a place you go to to see what's going on in the community and to
+      interact with its people. It's a place to learn about new ideas and
+      &mdash;most importantly&mdash; find solutions (like IP Cores) and people
+      to help you solve your problems.</p>
       <p><a class="btn btn-default" href="{{ path('librecores_site_page', {'page': 'about'}) }}">Learn more about LibreCores &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-      <h2>Get involved</h2>
-      <p>Sounds interesting? Get involved! </p>
-      <p><a class="btn btn-default" href="{{ path('librecores_site_page', {'page': 'contribute'}) }}">Upload an IP Core &raquo;</a></p>
     </div>
   </div>
 </div>
@@ -54,21 +58,29 @@
 <!-- community activity -->
 <div class="container" style="padding-top: 30px;">
   <div class="row">
-    <div class="col-md-4">
-      <h2>Recent Blog Posts</h2>
+    <div class="col-md-6">
+      <h2>Feel the pulse</h2>
+      <p>What's going on in the digital hardware design community?
+      <a href="{{ path('librecores_planet_homepage') }}">Planet Librecores</a> collects blog posts from different
+      community members. Subscribe to it in your feed reader,
+      or <a href="{{ path('librecores_planet_homepage') }}">read it online</a>.</p>
+
+      <p><a class="btn btn-default" href="{{ path('librecores_planet_homepage') }}">Read Planet LibreCores &raquo;</a></p>
+
+      {#
       {% for post in blogposts %}
           <p>
-            <div><b>{{ post.author }}: {{ post.title }}</b></div>
+            <div><a rel="nofollow" href="{{ post.url }}"><b>{{ post.author }}: {{ post.title }}</b></a></div>
             <div>{{ post.teaser }}</div>
           </p>
       {% endfor %}
+      #}
     </div>
-    <div class="col-md-4">
-      <h2>Recent Tweets</h2>
-      <a class="twitter-timeline" href="https://twitter.com/hashtag/openrisc" data-widget-id="575061873160249344">#openrisc-Tweets</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
-    </div>
-    <div class="col-md-4">
-      <h2>Recent Mailing List threads</h2>
+    <div class="col-md-6">
+      <h2>Be part of it</h2>
+      <p>Getting started with digital hardware design has never been easier. You can do it!</p>
+      <p>Our Community Hub collects a range of information for you to get started. Where to get answers? How to publish existing code? What are the restrictions of using code?
+      <p><a class="btn btn-default" href="{{ path('librecores_site_page', {'page': 'community-hub'}) }}">Visit the Community Hub now &raquo;</a></p>
     </div>
   </div>
 </div>
