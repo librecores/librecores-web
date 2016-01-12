@@ -27,7 +27,7 @@ class DefaultController extends Controller
      */
     private function getBlogPosts()
     {
-        $blogUrl = 'http://blog.'.$_SERVER['HTTP_HOST'].'/?feed=rss2';
+        $blogUrl = $this->get('kernel')->getRootDir().'/../web/planet/atom.xml';
 
         $feed = $this->get('fkr_simple_pie.rss');
 
@@ -36,7 +36,7 @@ class DefaultController extends Controller
         $feed->init();
 
         $blogPosts = array();
-        foreach ($feed->get_items(0, 5) as $item) {
+        foreach ($feed->get_items(0, 3) as $item) {
             $blogPosts[] = array(
                 'author' => $item->get_author()->get_name(),
                 'date' => $item->get_date('U'),
@@ -77,14 +77,30 @@ class DefaultController extends Controller
     // see http://symfony.com/doc/current/bundles/SensioFrameworkExtraBundle/annotations/cache.html
     public function pageAction($page)
     {
+        $siteContentRoot = $this->get('kernel')->getRootDir().'/../sitecontent';
+
         // $page can contain anything, sanitize it by stripping all unknown
         // characters out
         $page = preg_replace('|[^a-zA-Z0-9_/-]|i', '', $page);
 
-        // everything else goes through markdown and the default content template
+        // strip trailing slash
+        if (substr($page, -1) == '/') {
+            $page = substr($page, 0, -1);
+        }
+
+        // resolve directories and index pages
+        if (is_dir($siteContentRoot.'/'.$page)) {
+            $page .= '/index';
+        }
+
+        if (!file_exists("$siteContentRoot/$page.md")) {
+            throw $this->createNotFoundException('Page not found.');
+        }
+
+        // show the page
         return $this->render(
             'LibrecoresSiteBundle:Default:contentwrapper.html.twig',
-            array('page' => '@site_content/'.$page.'.md')
+            array('page' => "@site_content/$page.md")
         );
     }
 }
