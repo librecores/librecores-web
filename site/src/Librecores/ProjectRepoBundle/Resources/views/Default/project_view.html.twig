@@ -1,0 +1,64 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}
+{{ project.getFullName() }} @ LibreCores
+{% endblock %}
+
+{% block pagepath %}Home &raquo; Projects &raquo; {{ project.getFullName() }}{% endblock %}
+
+{% block content %}
+<h1 style="margin-bottom:5px">{{ project.getFullName() }}</h1>
+{% if project.isAssigned() %}
+  {% if project.getParentOrganization() != null %}
+    <p>by {{ project.getParentOrganization().getName() }}
+  {% else %}
+    <p>by {{ project.getParentUser().getUsername() }}
+  {% endif %}
+{% else %}
+  <p><i>This project is currently not claimed by anyone. <a href="#">Is it yours?</a></i></p>
+{% endif %}
+
+<div class="row">
+<div class="col-md-9">
+
+<p style="margin-top:20px; margin-bottom:20px;">This is a short description of an awesome project.</p>
+
+
+<ul class="nav nav-tabs">
+  <li role="presentation" class="active">
+    <a href="#README" aria-controls="settings" role="tab" data-toggle="tab">README</a>
+  </li>
+  <li role="presentation">
+    <a href="#LICENSE" aria-controls="settings" role="tab" data-toggle="tab">LICENSE</a>
+  </li>
+</ul>
+
+<div class="tab-content">
+  <div role="tabpanel" class="tab-pane active" id="README">
+  {{  project.getDescriptionText()|raw }}
+  </div>
+  <div role="tabpanel" class="tab-pane" id="LICENSE">
+  {{  project.getLicenseText()|raw }}
+  </div>
+</div>
+
+</div>
+<div class="col-md-3">
+  <div class="librecores-project-infobox" style="background-color: #f7f7f7; padding: 10px; border-radius: 3px;">
+    <p><b>Data Sheet</b></p>
+    <p>License: {{ project.getLicenseName() }}<br/>
+	  Last update: 1.2.2015<br/>
+	  {{ project.getSourceRepo.getType() }}: {{ project.getSourceRepo().getUrl() }}<br/>
+      <a href="{{ project.getIssueTracker() }}">Issue Tracker</a><br/>
+      <a href="{{ project.getProjectUrl() }}">Project Web Site</a>
+    </p>
+  </div>
+
+  <div class="librecores-project-infobox" style="background-color: #f7f7f7; padding: 10px; border-radius: 3px;">
+    <p><b>Tags</b></p>
+    <p>CPU, some, tag, what, else</p>
+  </div>
+</div>
+
+</div>
+{% endblock %}
