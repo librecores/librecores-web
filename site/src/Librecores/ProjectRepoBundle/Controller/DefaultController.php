@@ -3,10 +3,13 @@
 namespace Librecores\ProjectRepoBundle\Controller;
 
 use Librecores\ProjectRepoBundle\Entity\Project;
+use Librecores\ProjectRepoBundle\Form\Type\ProjectType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Librecores\ProjectRepoBundle\Form\Type\SourceRepoType;
 use Symfony\Component\Validator\Exception\ValidatorException;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class DefaultController extends Controller
 {
@@ -28,16 +31,17 @@ class DefaultController extends Controller
         $p = new Project();
 
         // XXX: make this dynamic
-        $parentChoices = array('o_opencores' => 'openrisc', 'u_imphil' => 'imphil');
+        $parentChoices = array('openrisc' => 'o_opencores', 'imphil' => 'u_imphil');
         $form = $this->createFormBuilder($p)
-            ->add('parentName', 'choice', array(
+            ->add('parentName', ChoiceType::class, array(
                 'mapped' => false,
                 'choices' => $parentChoices,
+                'choices_as_values' => true,
                 'multiple' => false,
             ))
             ->add('name')
-            ->add('sourceRepo', new SourceRepoType())
-            ->add('save', 'submit', array('label' => 'Create Project'))
+            ->add('sourceRepo', SourceRepoType::class)
+            ->add('save', SubmitType::class, array('label' => 'Create Project'))
             ->getForm();
 
         // parent selection
@@ -121,7 +125,7 @@ class DefaultController extends Controller
             throw $this->createNotFoundException('No project found with that name.');
         }
 
-        $form = $this->createForm('project', $p);
+        $form = $this->createForm(ProjectType::class, $p);
         $form->handleRequest($request);
 
         if ($form->isValid()) {

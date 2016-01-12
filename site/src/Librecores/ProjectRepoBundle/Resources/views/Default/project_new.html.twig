@@ -4,8 +4,41 @@
 Add your project to LibreCores
 {% endblock %}
 
-{% block pagepath %}Home &raquo; Add Project{% endblock %}
+{% block pagepath %}Home &raquo; Add Project to LibreCores{% endblock %}
 
 {% block content %}
+<h1>Add your project to LibreCores</h1>
+
+<p>Adding your project to LibreCores is easy: just give us the name of your
+project and the location of the source code, and we'll take care of
+the rest.</p>
+
+{{ form_start(form) }}
+  <div class="form-group">
+    {{ form_label(form.name, "What's the name of your project?") }}
+
+    {{ form_errors(form.parentName) }}
+    {{ form_errors(form.name) }}
+
+    <div class="form-inline">
+      {{ form_label(form.parentName, null, {'label_attr': {'class': 'sr-only'}}) }}
+      {{ form_widget(form.parentName) }} /
+      {{ form_widget(form.name, {'attr': {'placeholder': 'project name'}}) }}
+    </div>
+  </div>
+
+  <div class="form-group">
+    {{ form_label(form.sourceRepo.url, "Where can we find the source code of your project?") }}
+    {{ form_errors(form.sourceRepo) }}
+
+    <div class="form-inline">
+      {{ form_label(form.sourceRepo.type, null, {'label_attr': {'class': 'sr-only'}}) }}
+      {{ form_widget(form.sourceRepo.type) }}
+      {{ form_widget(form.sourceRepo.url, {'attr': {'style': 'width:500px', 'placeholder': 'URL, e.g. https://github.com/yourname/project'}}) }}
+    </div>
+  </div>
+
+  {{ form_row(form.save) }}
+{{ form_end(form) }}
 
 {% endblock %}

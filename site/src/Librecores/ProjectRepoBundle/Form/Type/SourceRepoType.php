@@ -5,6 +5,8 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Librecores\ProjectRepoBundle\Entity\SourceRepo;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\UrlType;
 
 /**
  * Form to edit the details of a source code repository.
@@ -17,7 +19,7 @@ class SourceRepoType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('type', 'choice', array(
+            ->add('type', ChoiceType::class, array(
                 'choices' => array(
                     'Git' => SourceRepo::REPO_TYPE_GIT,
                     'Subversion (SVN)' => SourceRepo::REPO_TYPE_SVN,
@@ -26,13 +28,8 @@ class SourceRepoType extends AbstractType
                 'label' => 'Repository Type',
                 'expanded' => false,
                 'multiple' => false))
-            ->add('url', 'url', array('label' => 'URL', 'required' => true))
+            ->add('url', UrlType::class, array('label' => 'URL', 'required' => true))
         ;
-    }
-
-    public function getName()
-    {
-        return 'source_repo';
     }
 
     public function configureOptions(OptionsResolver $resolver)
