@@ -51,8 +51,8 @@ Available ACTIONs:
     This overwrites all existing data!
 
 Environment variables:
-  ANSIBLE_EXTRA_ARGS
-    Additional command line arguments passed to ansible-playbook.
+  ANSIBLE_VAULT_PASSWORD_FILE
+    Path to a password file used to decrypt the Ansible Vault.
 EOF
 }
 
