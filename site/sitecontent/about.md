@@ -7,5 +7,5 @@ Towards this goal, LibreCores provides you
 - means to assess the quality of those components, and
 - documentation to learn more about the use and contribution to free and open source digital designs.
 
-LibreCores is a project of the [Free and Open Source Silicon Foundation](http://www.fossi-foundation.org), short FOSSI.
+LibreCores is a project of the [Free and Open Source Silicon Foundation](http://www.fossi-foundation.org), short FOSSi.
 
