@@ -94,11 +94,77 @@ you involving the community from early on.
 
 ## Licensing
 
-TODO: put in short license text and link to [](licenses.html)
+Another important aspect is to add a license to your code. The license
+defines how people can use your code and what obligations they have.
 
-## Community
+The first question is how your code can be used. That answer is
+actually simple: By downloading it. There are no further restrictions,
+thats the idea of open source. So, despite we can understand the idea
+behind adding a non-commercial clause or a non-military clause, we
+highly encourage you to add any such clauses to your licenses. They
+are against the definition of open source (see
+[Open Source Initiative, crit. 6](opensource.org/osd): "No
+Discrimination Against Fields of Endeavor - The license must not
+restrict anyone from making use of the program in a specific field of
+endeavor. For example, it may not restrict the program from being used
+in a business, or from being used for genetic research.").
 
-TODO, probably remove
+There are more options when it comes to obligations and open source
+licenses vary in the *permissiveness* they give the user to deploy and
+release the work derived from your code. The permissiveness of the
+license is a matter for the licensor (the author, copyright owner) and
+often depends on their position regarding reuse of the design. The
+[more permissive](https://en.wikipedia.org/wiki/Permissive_free_software_licence)
+the license, the less requirements on future users and developers of
+the IP. Less permissive licenses have more restrictions, which
+generally ensure the derivative works remain as free and open as the
+original work. These less permissive licenses, also known as
+[copyleft](https://en.wikipedia.org/wiki/Copyleft) licenses for how
+they enforce the work’s openness, vary greatly from
+[weak to strong copyleft](https://en.wikipedia.org/wiki/Copyleft#Strong_and_weak_copyleft)
+and primarily indicate how a derivative work may be licensed - whether
+it must be entirely released under an equivalently open license
+(strong copyleft,
+[reciprocal licenses](https://en.wikipedia.org/wiki/Viral_license)) or
+not.
+
+Almost all strong copyleft licenses have been written to apply to
+software, and the mechanisms they specify (binary linking, for
+example) that qualify a derivative work to be released under the same
+terms and conditions - guaranteeing the IP remain open and free to be
+reused - are problematic attempting to apply them a HDL design.
+
+Once you come to a decision what kind of license you want to use,
+there are a few licenses that are FOSSi-compatbile in our opinion and
+that you should consider using:
+
+ * *Permissive* licenses have two popular candidates in the software
+   world: [MIT license](https://opensource.org/licenses/MIT) and
+   [BSD license](https://opensource.org/licenses/BSD-3-Clause). They
+   are simple and compatible with FOSSi. If you plan to add a patent
+   clause, the
+   [Apache license](https://opensource.org/licenses/Apache-2.0) is the
+   choice in the software world and there is an adoption for hardware
+   as the [Solderpad license](http://solderpad.org/licenses/).
+
+ * The most popular *weak copyleft* license in the software world is
+   the [LGPL](https://opensource.org/licenses/lgpl-license). The
+   problem with the usage of it is the question what "linkage" means
+   in the context of FOSSi. There is one adoption for hardware as the
+   [OHDL](http://juliusbaxter.net/ohdl/) that defines linkage on file
+   level.
+
+ * For *strong copyleft* licenses the
+   [GPL](http://opensource.org/licenses/gpl-license) is very popular
+   in the software world. While the 2nd version of it caused many
+   discussions around applying it to hardware, GPLv3 actually is
+   written in a hardware-friendly language. Nevertheless, there is an
+   ongoing discussion around the implications of it for hardware
+   implementations.
+
+
+
+
 
 
 
