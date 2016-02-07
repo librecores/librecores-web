@@ -9,14 +9,27 @@ server {
 
     rewrite     ^/(app|app_dev)\.php/?(.*)$ /$1 permanent;
 
+    {% if symfony_devel %}
     location / {
         index       app_dev.php;
         try_files   $uri @rewriteapp;
     }
 
+
     location @rewriteapp {
         rewrite     ^(.*)$ /app_dev.php/$1 last;
     }
+    {% else %}
+    location / {
+        index       app.php;
+        try_files   $uri @rewriteapp;
+    }
+
+
+    location @rewriteapp {
+        rewrite     ^(.*)$ /app.php/$1 last;
+    }
+    {% endif %}
 
     location ~ ^/(app|app_dev|config)\.php(/|$) {
         fastcgi_pass            php7.0;
