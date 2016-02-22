@@ -5,6 +5,9 @@
   stat: path=/vagrant
   register: vagrant_dir
 
+- name: Update apt cache
+  apt:  update_cache=yes
+
 - name: Install ntp
   apt: pkg=ntp state=installed
   tags: ntp
