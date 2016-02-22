@@ -5,6 +5,8 @@
   stat: path=/vagrant
   register: vagrant_dir
 
+- set_fact: is_vagrant_environment={{ vagrant_dir.stat.exists }}
+
 - name: Update apt cache
   apt:  update_cache=yes
 
@@ -36,7 +38,7 @@
   copy: dest=/src-librecores-web.key
         content="{{ src_deployment_key }}"
         mode=0400
-  when: vagrant_dir.stat.exists == False
+  when: not is_vagrant_environment
 
 - name: "Setup source repository (non-development only)"
   git: repo="{{ src_repo_url }}"
@@ -45,8 +47,8 @@
        key_file=/src-librecores-web.key
        depth=1
        version="{{ src_version }}"
-  when: vagrant_dir.stat.exists == False
+  when: not is_vagrant_environment
 
 - name: "Delete deployment key again (non-development only)"
   file: path=/src-librecores-web.key state=absent
-  when: vagrant_dir.stat.exists == False
+  when: not is_vagrant_environment

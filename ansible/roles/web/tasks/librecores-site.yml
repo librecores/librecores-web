@@ -13,6 +13,7 @@
   with_items:
     - logs
     - cache
+  when: not is_vagrant_environment
 
 - name: Ensure nginx log directory exists
   file: dest=/var/log/nginx/librecores state=directory
@@ -37,6 +38,8 @@
 
 - name: Ensure directory permissions of planet cache directories
   command: chown -R {{ web_user }} /var/www/planet/cache
+  when: not is_vagrant_environment
 
 - name: Ensure directory permissions of web-accessible planet output directory
   command: chown -R {{ web_user }} /var/www/site/web/planet
+  when: not is_vagrant_environment
