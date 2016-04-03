@@ -1,14 +1,17 @@
 ---
 # PHP extensions, installed from OS packages (preferred)
 php_extensions_packaged:
-  - { name: dev, package: php7.0-dev }
+  - { name: dev, package: php-dev }
 # XXX: What do we need that for? Composer is taking over
 #  - { name: pear, package: php-pear }
 # Currently not available as release for PHP 7
 #  - { name: xdebug, package: php5-xdebug }
-  - { name: curl, package: php7.0-curl }
-  - { name: mcrypt, package: php7.0-mcrypt }
-  - { name: mysql, package: php7.0-mysql }
+  - { name: curl, package: php-curl }
+  - { name: mcrypt, package: php-mcrypt }
+  - { name: mysql, package: php-mysql }
+# Needed by videlalvaro/php-amqplib
+  - { name: bcmath, package: php-bcmath }
+  - { name: mbstring, package: php-mbstring }
 # Currently not available for PHP 7 (not needed anyways?)
 #  - { name: apc, package: php-apc }
 
