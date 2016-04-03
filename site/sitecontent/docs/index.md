@@ -1,5 +1,7 @@
 # LibreCores Documentation
 
+<img src="/img/freepik/clipboard-sketch.png" align="right" hspace="25" vspace="10" />
+
 If you are a developer of a LibreCore you are probably a good
 developer of HDL designs. You are planning this very cool small
 functional block that makes life so much easier for other programmers?
@@ -27,6 +29,8 @@ platforms, just to name a few benefits.
 
 ### Where to host your code?
 
+<img src="/img/freepik/upload-to-internet-cloud-sketch.png" align="right" hspace="25" vspace="10" />
+
 While LibreCores.org will be the community hub to publish your work or
 find cores, we will not be a hosting site. There are free services
 that can do this way better! Most known is
@@ -53,6 +57,8 @@ platforms. Just to give you an idea about what you do there:
 * You can even create a static website that is published on a short
   URL
 
+<img src="/img/freepik/rocket-sketch.png" align="right" hspace="25" vspace="10" />
+
 You may now think: "So why should I ever come back to LibreCores.org?"
 Fair question as we are still in the process of building the core of
 our platform. But just to give you an idea what LibreCores.org is
@@ -76,6 +82,8 @@ think people may actually pick it up and build a chip from it. Of
 course they should carefully test it, but you should highlight the
 state of your core honestly.
 
+<img src="/img/freepik/halloween-october-31-calendar-page-sketch.png" align="right" hspace="25" vspace="10" />
+
 In our opinion it is good to start with publishing your code early. It
 gives the community the chance to learn about your code and contribute
 at early stages. That helps you and helps the community in being able
@@ -96,6 +104,8 @@ you involving the community from early on.
 
 Another important aspect is to add a license to your code. The license
 defines how people can use your code and what obligations they have.
+
+<img src="/img/freepik/certificate-of-education-hand-drawn.png" align="right" hspace="25" vspace="10" />
 
 The first question is how your code can be used. That answer is
 actually simple: By downloading it. There are no further restrictions,
