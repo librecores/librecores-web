@@ -45,6 +45,14 @@ case $(lsb_release -is) in
     if [ $INSTALL_VAGRANT = 1 ]; then
       curl -L https://releases.hashicorp.com/vagrant/${VAGRANT_VERSION}/vagrant_${VAGRANT_VERSION}_$(uname -m).rpm > "$DLDIR/vagrant.rpm"
       sudo rpm -Uhv --oldpackage "$DLDIR/vagrant.rpm"
+
+      echo Disable the firewall in Yast or configure it otherwise to enable
+      echo NFS access through the VirtualBox network device.
+      echo Otherwise the booting of the VM will stop at \"Mounting NFS shared folders...\"
+
+      # ensure the NFS server is started on boot and start now
+      sudo systemctl enable nfs-server
+      sudo systemctl start nfs-server
     fi
     ;;
   *)
