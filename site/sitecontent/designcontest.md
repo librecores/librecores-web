@@ -4,12 +4,13 @@ The
 [Free and Open Source Silicon Foundation (FOSSi)](http://fossi-foundation.org)
 looks for submissions for the LibreCores Student Design contest. Our
 goal is to encourage students to contribute to open hardware and
-actively participate in the community. This is your chance to be one
-of the pioneers of Open Hardware movement.
+actively participate in the community. This is *your* chance to be one
+of the pioneers of the Open Hardware movement!
 
 Submissions will be presented as posters during
 [ORCONF](http://orconf.org) 2016 on October 7-9 in Bologna,
-Italy. Best contributions will be awarded during the Conference. There
+Italy. The best contributions will receive the LibreCores
+Student Design Award  during the conference. There
 will be a limited number of travel grants available for eligible
 students.
 
@@ -25,10 +26,10 @@ students.
 * Contrbutions to the EDA ecosystem (synthesis, packaging software,
   libraries that could be used for HW design).
 
-The work must be created *within the last 12 months* and published
-under an established Open Source license. You may submit work that you
-created for other purposes, such as an implementation you did as part
-of your bachelor or master thesis or a student project.
+The work must be created after ORCONF 2015, that is after October 2015
+and published under an established Open Source license. You may submit
+work that you created for other purposes, such as an implementation
+you did as part of your bachelor or master thesis or a student project.
 
 ## Evaluation Criteria
 
@@ -48,7 +49,9 @@ three criteria listed in order of importance:
   Open Source hardware design? Something that was not there before?
 
 Librecores prepared a general [guide](/docs) on building a Librecore
-that can help you in getting your project to the public.
+that can help you in getting your project to the public. There is also
+a [helpful mailing list](mailto:discussion@librecores.org) if you have
+any questions.
 
 ## Who can participate?
 
@@ -57,19 +60,20 @@ October 2015 (date of last ORCONF) are invited to send their
 contributions. It is not necessary that you are a enrolled as a
 student at one of the universities where the organizers are from.
 
-## What you can win
+## Why participate?
 
-<img src="/img/freepik/cup.png" align="right" hspace="25" vspace="10" />
+<img src="/img/designcontest/bologna.jpg" alt="Image credit: Luca Volpi via Wikipedia (CC BY-SA 3.0)" title="Image credit: Luca Volpi via Wikipedia (CC BY-SA 3.0)" align="right" hspace="25" vspace="10" />
 
 This year we will not be offering a million dollars in prize money, so
-if you are in this for the money, we cannot offer you much. But you
+if you are in this for the money, we cannot offer you much. Instead, you
 will get to present your work among the leaders of Free and Open
 Source Silicon and promote your work. You will get the recognition in
 the community and will act as a model for future competitions. We
 believe that Open Hardware is a community effort, and taking part in
 such activities will be a rewarding experience in itself.
 
-We are working on securing sponsorships for a limited number of
+In addition, you might travel to ORCONF in beautiful Bologna, Italy
+for free! We are working on securing sponsorships for a limited number of
 students for their travel arrangements. A travel grant committee will
 distribute available travel grants among high-quality submissions with
 limited own funding. Students will display their projects on Saturday,
