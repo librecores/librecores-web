@@ -16,10 +16,14 @@ Everybody has questions. Let's find answers!
   [documentation pages](/docs) for an overview of available topics.
 * You couldn't find the answer? Let's talk to real people!
 
-  A good place to start is the discussion mailing list of the FOSSi foundation.
-  Simply write an email to
-  [discussion@fossi-foundation.org](mailto:discussion@fossi-foundation.org)
-  and ask your question.
+  A good place to start is the discussion mailing list at 
+  [discussion@lists.librecores.org](mailto:discussion@lists.librecores.org).
+  You can subscribe to the mailing list in the 
+  [web interface](https://lists.librecores.org/listinfo/discussion), which 
+  also hosts the archives.
 
   Some questions are better suited for real-time chat. Most people use IRC for
   that, and you can find many people hanging out on the #fossi channel on freenode.
+  You can connect either with a IRC client like [XChat](http://xchat.org/download/), 
+  or use a [web interface](https://webchat.freenode.net/#fossi) to connect 
+  directly from your browser.

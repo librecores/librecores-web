@@ -50,7 +50,7 @@ three criteria listed in order of importance:
 
 Librecores prepared a general [guide](/docs) on building a Librecore
 that can help you in getting your project to the public. There is also
-a [helpful mailing list](mailto:discussion@librecores.org) if you have
+a [helpful mailing list](mailto:discussion@lists.librecores.org) if you have
 any questions.
 
 ## Who can participate?
@@ -86,9 +86,17 @@ decide the winning entries on Sunday.
 * Notification: mid-september
 * ORCONF: Oct. 7-9 2016
 
-## How to register, discussion group
+## How to submit your work and ask questions
 
-To be announced
+To submit your contest entry
+please send an email to the public LibreCores Discussion mailing list 
+at [discussion@lists.librecores.org](mailto:discussion@lists.librecores.org) 
+([subscribe here](https://lists.librecores.org/pipermail/discussion/)).
+You can use the same mailing list to ask questions regarding the contest or 
+your design.
+
+If you prefer to contact the organizers privately,  you can reach out to 
+the FOSSi foundation at [info@fossi-foundation.org](mailto:info@fossi-foundation.org).
 
 ## Contest Jury
 
