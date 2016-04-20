@@ -35,10 +35,10 @@
 
 <div class="tab-content">
   <div role="tabpanel" class="tab-pane active" id="README">
-  {{  project.getDescriptionText()|raw }}
+  {{  project.getDescriptionText()|markdown }}
   </div>
   <div role="tabpanel" class="tab-pane" id="LICENSE">
-  {{  project.getLicenseText()|raw }}
+  {{  project.getLicenseText()|markdown }}
   </div>
 </div>
 

@@ -98,7 +98,7 @@ class Project
     private $licenseName;
 
     /**
-     * Full license text
+     * Full license text in Markdown format
      *
      * @var string
      *
@@ -116,7 +116,7 @@ class Project
     private $licenseTextAutoUpdate = true;
 
     /**
-     * Project description
+     * Project description in Markdown format
      *
      * @var string
      *
@@ -281,52 +281,6 @@ class Project
     public function getIssueTracker()
     {
         return $this->issueTracker;
-    }
-
-    /**
-     * Set licenseFileContent
-     *
-     * @param string $licenseFileContent
-     * @return Project
-     */
-    public function setLicenseFileContent($licenseFileContent)
-    {
-        $this->licenseFileContent = $licenseFileContent;
-
-        return $this;
-    }
-
-    /**
-     * Get licenseFileContent
-     *
-     * @return string
-     */
-    public function getLicenseFileContent()
-    {
-        return $this->licenseFileContent;
-    }
-
-    /**
-     * Set readmeFileContent
-     *
-     * @param string $readmeFileContent
-     * @return Project
-     */
-    public function setReadmeFileContent($readmeFileContent)
-    {
-        $this->readmeFileContent = $readmeFileContent;
-
-        return $this;
-    }
-
-    /**
-     * Get readmeFileContent
-     *
-     * @return string
-     */
-    public function getReadmeFileContent()
-    {
-        return $this->readmeFileContent;
     }
 
     /**

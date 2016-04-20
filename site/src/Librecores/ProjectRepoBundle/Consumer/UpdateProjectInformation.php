@@ -60,7 +60,7 @@ class UpdateProjectInformation implements ConsumerInterface
         $process = new Process($cmd);
         $process->run();
         if (!$process->isSuccessful()) {
-            throw new \RuntimeException("Unable to create temporary direcotry: ".$process->getErrorOutput());
+            throw new \RuntimeException("Unable to create temporary directory: ".$process->getErrorOutput());
         }
         $clonedir = trim($process->getOutput());
 
@@ -75,25 +75,33 @@ class UpdateProjectInformation implements ConsumerInterface
         $this->logger->debug('Repository cloned');
 
         // extract LICENSE file contents
-        $licenseFiles = array('LICENSE', 'COPYING');
-        $licenseFile = $this->findFile($clonedir, $licenseFiles);
-        if ($licenseFile === false) {
-            $project->setLicenseFileContent(null);
-        } else {
-            $html = $this->convertToHtml($licenseFile['file'],
-                $licenseFile['type']);
-            $project->setLicenseFileContent($html);
+        if ($project->getLicenseTextAutoUpdate()) {
+            $licenseFiles = array('LICENSE', 'COPYING');
+            $licenseFile = $this->findFile($clonedir, $licenseFiles);
+            if ($licenseFile === false) {
+                $this->logger->debug('Found no LICENSE file');
+                $project->setLicenseText(null);
+            } else {
+                $this->logger->debug('Using file '.$licenseFile['file'].' as LICENSE');
+                $md = $this->convertToMarkdown($licenseFile['file'],
+                    $licenseFile['type']);
+                $project->setLicenseText($md);
+            }
         }
 
         // extract README file contents
-        $readmeFiles = array('README');
-        $readmeFile = $this->findFile($clonedir, $readmeFiles);
-        if ($readmeFile === false) {
-            $project->setReadmeFileContent(null);
-        } else {
-            $html = $this->convertToHtml($readmeFile['file'],
-                $readmeFile['type']);
-            $project->setReadmeFileContent($html);
+        if ($project->getDescriptionTextAutoUpdate()) {
+            $readmeFiles = array('README');
+            $readmeFile = $this->findFile($clonedir, $readmeFiles);
+            if ($readmeFile === false) {
+                $this->logger->debug('Found no README file');
+                $project->setReadmeFileContent(null);
+            } else {
+                $this->logger->debug('Using file '.$readmeFile['file'].' as README');
+                $md = $this->convertToMarkdown($readmeFile['file'],
+                    $readmeFile['type']);
+                $project->setDescriptionText($md);
+            }
         }
 
         // get git statistics
@@ -131,25 +139,25 @@ class UpdateProjectInformation implements ConsumerInterface
     }
 
     /**
-     * Convert a file's contents to HTML
+     * Convert a file's contents to Markdown
      *
      * @param string $filename
      * @param string $type one of the TYPE_* constants
      * @throws \RuntimeException
      */
-    protected function convertToHtml($filename, $type)
+    protected function convertToMarkdown($filename, $type)
     {
         $raw = file_get_contents($filename);
 
         switch ($type) {
             case self::TYPE_MARKDOWN:
-                $this->convertMarkdownToHtml($raw);
+                return $raw;
                 break;
             case self::TYPE_PLAINTEXT:
-                return $this->convertTextToHtml($raw);
+                return $this->convertTextToMarkdown($raw);
                 break;
             case self::TYPE_POD:
-                return $this->convertPodToHtml($raw);
+                return $this->convertPodToMarkdown($raw);
                 break;
             default:
                 throw new \RuntimeException("Invalid type: $type");
@@ -157,39 +165,27 @@ class UpdateProjectInformation implements ConsumerInterface
     }
 
     /**
-     * Convert Plain Old Documentation format (POD) to HTML
+     * Convert Plain Old Documentation format (POD) to Markdown
      *
      * @param string $pod
      */
-    protected function convertPodToHtml($pod)
+    protected function convertPodToMarkdown($pod)
     {
         $cmd = 'pod2markdown';
         $process = new Process($cmd);
         $process->setInput($pod);
         $process->mustRun();
-        $markdown = $process->getOutput();
-
-        return $this->convertMarkdownToHtml($markdown);
+        return $process->getOutput();
     }
 
     /**
-     * Convert Markdown to HTML
-     *
-     * @param string $md
-     */
-    protected function convertMarkdownToHtml($md)
-    {
-        return $this->mdparser->transformMarkdown($md);
-    }
-
-    /**
-     * Convert plaintext to HTML
+     * Convert plaintext to Markdown
      *
      * @param string $text
      */
-    protected function convertTextToHtml($text)
+    protected function convertTextToMarkdown($text)
     {
-        return '<pre>'.htmlentities($text, ENT_HTML5).'</pre>';
+        return "~~~\n".$text."\n~~~";
     }
 
     /**
@@ -272,7 +268,8 @@ class UpdateProjectInformation implements ConsumerInterface
             $this->stats['authors'][$email] = array(
                 'commits' => 0,
                 'insertations' => 0,
-                'deletions' => 0
+                'deletions' => 0,
+                'filesChanged' => 0,
             );
         }
 
@@ -283,6 +280,7 @@ class UpdateProjectInformation implements ConsumerInterface
         $this->stats['authors'][$email]['commits']++;
         $this->stats['authors'][$email]['insertations'] += $insertations;
         $this->stats['authors'][$email]['deletions'] += $deletions;
+        $this->stats['authors'][$email]['filesChanged'] += $filesChanged;
 
         // commit frequency histogram (month buckets)
         $d = date('Ym', strtotime($cDate));
