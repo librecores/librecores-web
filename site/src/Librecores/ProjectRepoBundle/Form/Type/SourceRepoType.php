@@ -22,7 +22,8 @@ class SourceRepoType extends AbstractType
             ->add('type', ChoiceType::class, array(
                 'choices' => array(
                     'Git' => SourceRepo::REPO_TYPE_GIT,
-                    'Subversion (SVN)' => SourceRepo::REPO_TYPE_SVN,
+                    // SVN is not supported currently
+                    //'Subversion (SVN)' => SourceRepo::REPO_TYPE_SVN,
                 ),
                 'choices_as_values' => true,
                 'label' => 'Repository Type',
