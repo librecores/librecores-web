@@ -5,3 +5,10 @@
     - mcrypt
     # required for pod2markdown utility
     - libpod-markdown-perl
+    - supervisor
+
+- name: Stop unused supervisord
+  command: /etc/init.d/supervisor stop
+
+- name: Disable supervisord starting by default
+  command: /usr/sbin/update-rc.d -f supervisor  remove

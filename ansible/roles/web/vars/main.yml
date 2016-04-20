@@ -10,7 +10,6 @@ php_extensions_packaged:
   - { name: mcrypt, package: php-mcrypt }
   - { name: mysql, package: php-mysql }
   - { name: xml, package: php-xml }
-# Needed by videlalvaro/php-amqplib
   - { name: bcmath, package: php-bcmath }
   - { name: mbstring, package: php-mbstring }
   - { name: zip, package: php-zip }

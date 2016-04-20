@@ -44,12 +44,40 @@
     chdir: /var/www/site
   when: not symfony_devel
 
+- name: (Re-)build supervisord for RabbitMQ (development)
+  command: php app/console rabbitmq-supervisor:rebuild
+  sudo: true
+  sudo_user: "{{ web_user }}"
+  args:
+    chdir: /var/www/site
+  when: symfony_devel
+
+- name: (Re-)build supervisord for RabbitMQ (production)
+  command: php app/console rabbitmq-supervisor:rebuild --env=prod --no-debug
+  sudo: true
+  sudo_user: "{{ web_user }}"
+  args:
+    chdir: /var/www/site
+  when: not symfony_devel
+
+- name: Add init script for RabbitMQ supervisord
+  template:
+    src: librecores-rabbitmq-supervisor
+    dest: /etc/init.d
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Enable init script librecores-rabbitmq-supervisor
+  command: /usr/sbin/update-rc.d librecores-rabbitmq-supervisor defaults
+
 # run this last to ensure all deployment-created directories are covered
 - name: Ensure directory permissions of Symfony log and cache directories
   command: chown -R {{ web_user }} /var/www/site/app/{{ item }}
   with_items:
     - logs
     - cache
+    - supervisor
   when: not is_vagrant_environment
 
 

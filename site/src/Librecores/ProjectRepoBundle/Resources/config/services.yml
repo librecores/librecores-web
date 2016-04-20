@@ -17,7 +17,7 @@ services:
 
     librecores_user_manager:
         class: Librecores\ProjectRepoBundle\Doctrine\UserManager
-        arguments: [@security.encoder_factory, @fos_user.util.username_canonicalizer, @fos_user.util.email_canonicalizer, @fos_user.entity_manager, %fos_user.model.user.class%]
+        arguments: [@security.encoder_factory, @fos_user.util.username_canonicalizer, @fos_user.util.email_canonicalizer, @fos_user.object_manager, %fos_user.model.user.class%]
 
     librecores_user_provider:
         class: "%librecores_user_provider.class%"
