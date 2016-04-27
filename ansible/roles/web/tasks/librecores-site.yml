@@ -1,13 +1,44 @@
 ---
 # general site
+# web server
+- name: Ensure nginx log directory exists
+  file: dest=/var/log/nginx/librecores state=directory
+
+- name: Change default nginx site
+  template: src=nginx/librecores.tpl dest=/etc/nginx/sites-available/default
+  notify: restart nginx
+
+# symfony (main application)
 - name: Create Symfony configuration
   template: src=parameters.yml.j2 dest=/var/www/site/app/config/parameters.yml
 
-- name: Install dependencies through composer
+- name: Install dependencies through composer (development)
   command: composer install
   args:
     chdir: /var/www/site
+  when: symfony_devel
 
+- name: Install dependencies through composer (production)
+  command: composer install --no-dev --optimize-autoloader
+  environment:
+    SYMFONY_ENV: prod
+  args:
+    chdir: /var/www/site
+  when: not symfony_devel
+
+- name: Clear symfony cache (production)
+  command: php app/console cache:clear --env=prod --no-debug
+  args:
+    chdir: /var/www/site
+  when: not symfony_devel
+
+- name: Dump assetic assets (production)
+  command: php app/console assetic:dump --env=prod --no-debug
+  args:
+    chdir: /var/www/site
+  when: not symfony_devel
+
+# run this last to ensure all deployment-created directories are covered
 - name: Ensure directory permissions of Symfony log and cache directories
   command: chown -R {{ web_user }} /var/www/site/app/{{ item }}
   with_items:
@@ -15,12 +46,6 @@
     - cache
   when: not is_vagrant_environment
 
-- name: Ensure nginx log directory exists
-  file: dest=/var/log/nginx/librecores state=directory
-
-- name: Change default nginx site
-  template: src=nginx/librecores.tpl dest=/etc/nginx/sites-available/default
-  notify: restart nginx
 
 # Install librecores planet generator
 - name: Install extra packages for librecores-planet
