@@ -13,6 +13,7 @@ php_extensions_packaged:
 # Needed by videlalvaro/php-amqplib
   - { name: bcmath, package: php-bcmath }
   - { name: mbstring, package: php-mbstring }
+  - { name: zip, package: php-zip }
 # Currently not available for PHP 7 (not needed anyways?)
 #  - { name: apc, package: php-apc }
 

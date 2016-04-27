@@ -30,6 +30,7 @@
     - curl
     - wget
     - git
+    - unzip
     # required for ansible
     - python-mysqldb
 
