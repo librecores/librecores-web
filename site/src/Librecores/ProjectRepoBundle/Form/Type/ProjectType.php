@@ -14,8 +14,6 @@ class ProjectType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        // XXX: Set expanded=true below as soon as symfony bug #14712 is fixed
-        //      Also restore JS code in project_settings.html.twig
         $builder
             ->add('descriptionTextAutoUpdate', ChoiceType::class, array(
                 'choices' => array(
@@ -24,7 +22,7 @@ class ProjectType extends AbstractType
                 ),
                 'choices_as_values' => true,
                 'label' => 'Project Description',
-                'expanded' => false, /* XXX see above */
+                'expanded' => true,
                 'multiple' => false))
             ->add('descriptionText', TextareaType::class, array('label' => false, 'required' => false))
             ->add('projectUrl', UrlType::class, array('label' => 'Project URL', 'required' => false))
@@ -38,7 +36,7 @@ class ProjectType extends AbstractType
                 ),
                 'choices_as_values' => true,
                 'label' => 'Full License Text',
-                'expanded' => false, /* XXX see above */
+                'expanded' => true,
                 'multiple' => false))
             ->add('licenseText', TextareaType::class, array('label' => false, 'required' => false))
             ->add('save', SubmitType::class, array('label' => 'Update Project'))

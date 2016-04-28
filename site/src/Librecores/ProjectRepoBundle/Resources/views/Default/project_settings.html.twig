@@ -73,26 +73,14 @@
 $(document).ready(function(){
   /* toggle text boxes in respect to the auto update settings */
   $('#{{ form.descriptionTextAutoUpdate.vars.id }}').on('change', function() {
-  	 // XXX: change this back if expanded = true is restored
-	   //var au = $('input[name="{{ form.descriptionTextAutoUpdate.vars.full_name }}"]:checked').val() == '1';
-	   var au = $('#{{ form.descriptionTextAutoUpdate.vars.id }}').val() == '0'
-	   var el = $('#descriptionText_div');
-	   if (au) {
-	     el.hide();
-	   } else {
-	     el.show();
-	   }
+    var au = $('input[name="{{ form.descriptionTextAutoUpdate.vars.full_name }}"]:checked').val() == '1';
+    var el = $('#descriptionText_div');
+    au ? el.hide() : el.show();
   });
   $('#{{ form.licenseTextAutoUpdate.vars.id }}').on('change', function() {
-   	 // XXX: change this back if expanded = true is restored
-	   //var au = $('input[name="{{ form.licenseTextAutoUpdate.vars.full_name }}"]:checked').val() == '1';
-	   var au = $('#{{ form.licenseTextAutoUpdate.vars.id }}').val() == '0'
-	   var el = $('#licenseText_div');
-	   if (au) {
-	     el.hide();
-	   } else {
-	     el.show();
-	   }
+    var au = $('input[name="{{ form.licenseTextAutoUpdate.vars.full_name }}"]:checked').val() == '1';
+    var el = $('#licenseText_div');
+    au ? el.hide() : el.show();
   });
 });
 {% endblock %}
