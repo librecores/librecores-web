@@ -133,6 +133,16 @@ class Project
      */
     private $descriptionTextAutoUpdate = true;
 
+    /**
+     * The project's data is currently being processed
+     *
+     * @var boolean
+     *
+     * @ORM\Column(type="boolean", nullable=false)
+     */
+    private $inProcessing = false;
+
+
 
     /**
      * Set the project status
@@ -457,5 +467,28 @@ class Project
     public function getDescriptionTextAutoUpdate()
     {
         return $this->descriptionTextAutoUpdate;
+    }
+
+    /**
+     * Set inProcessing
+     *
+     * @param boolean $inProcessing
+     * @return Project
+     */
+    public function setInProcessing($inProcessing)
+    {
+        $this->inProcessing = $inProcessing;
+
+        return $this;
+    }
+
+    /**
+     * Get inProcessing
+     *
+     * @return boolean 
+     */
+    public function getInProcessing()
+    {
+        return $this->inProcessing;
     }
 }

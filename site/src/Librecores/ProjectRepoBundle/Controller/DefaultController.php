@@ -2,6 +2,7 @@
 
 namespace Librecores\ProjectRepoBundle\Controller;
 
+use Symfony\Component\HttpFoundation\Response;
 use Librecores\ProjectRepoBundle\Entity\Project;
 use Librecores\ProjectRepoBundle\Form\Type\ProjectType;
 use Symfony\Component\HttpFoundation\Request;
@@ -31,7 +32,8 @@ class DefaultController extends Controller
         $p = new Project();
 
         // XXX: make this dynamic
-        $parentChoices = array('openrisc' => 'o_opencores', 'imphil' => 'u_imphil');
+        $username = $this->getUser()->getUsername();
+        $parentChoices = array($username => 'u_'.$username);
         $form = $this->createFormBuilder($p)
             ->add('parentName', ChoiceType::class, array(
                 'mapped' => false,
@@ -44,22 +46,18 @@ class DefaultController extends Controller
             ->add('save', SubmitType::class, array('label' => 'Create Project'))
             ->getForm();
 
-        // parent selection
-        //$form->get('parentName')->setData('u_imphil');
-
         $form->handleRequest($request);
 
         // save project and redirect to project page
         if ($form->isValid()) {
             // set parent (extract from string selection box)
             $formParent = $form->get('parentName')->getData();
-            if (!preg_match('/^[up]_.+$/', $formParent)) {
+            if (!preg_match('/^[uo]_.+$/', $formParent)) {
                 throw new \Exception("form manipulated");
             }
             list($formParentType, $formParentName) = explode('_', $formParent, 2);
             if ($formParentType == 'u') {
                 $userManager = $this->container->get('fos_user.user_manager');
-                //$user = $userManager->findUserBy(array('username_' => $username))
                 $user = $userManager->findUserByUsername($formParentName);
                 if (null === $user) {
                     throw new \Exception("form manipulated");
@@ -72,9 +70,19 @@ class DefaultController extends Controller
 
             $p->setStatus(Project::STATUS_ASSIGNED);
 
+            // Mark the project as "in processing". This shows the wait page
+            // until the update task has been ran from the RabbitMQ queue
+            $p->setInProcessing(true);
+
             $em = $this->getDoctrine()->getManager();
             $em->persist($p);
             $em->flush();
+
+            // queue data collection from repository
+            $this->get('old_sound_rabbit_mq.update_project_info_producer')
+                ->publish(serialize($p->getId()));
+
+            // redirect user to "view project" page
             return $this->redirectToRoute(
                 'librecores_project_repo_project_view',
                 array(
@@ -104,6 +112,17 @@ class DefaultController extends Controller
             throw $this->createNotFoundException('No project found with that name.');
         }
 
+        // redirect to wait page until processing is done
+        if ($p->getInProcessing()) {
+            $waitTemplate = 'LibrecoresProjectRepoBundle:Default:project_wait_processing.html.twig';
+            $response = new Response(
+                $this->renderView($waitTemplate, array('project' => $p)),
+                Response::HTTP_OK);
+            $response->headers->set('refresh', '5;url='.$this->getRequest()->getUri());
+            return $response;
+        }
+
+        // the actual project page
         return $this->render('LibrecoresProjectRepoBundle:Default:project_view.html.twig',
             array('project' => $p));
     }

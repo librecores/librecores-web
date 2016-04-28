@@ -51,6 +51,8 @@ class UpdateProjectInformation implements ConsumerInterface
             $project->getSourceRepo()->getType() != SourceRepo::REPO_TYPE_GIT) {
             $this->logger->error("Unable to update project with ID $project: ".
                 "no valid source repository associated.");
+
+            $this->markInProcessing($project, false);
             return true; /* don't requeue */
         }
         $sourceRepo = $project->getSourceRepo();
@@ -107,11 +109,21 @@ class UpdateProjectInformation implements ConsumerInterface
         // get git statistics
         $this->collectGitStatistics($clonedir);
 
+        // mark project as "done processing"
+        // we don't use markInProcessing() to avoid the double DB flush
+        $project->setInProcessing(false);
+
         // persist to DB
         $this->orm->getManager()->flush();
 
         // remove event from queue
         return true;
+    }
+
+    private function markInProcessing($project, $isInProcessing = true)
+    {
+        $project->setInProcessing($isInProcessing);
+        $this->orm->getManager()->flush();
     }
 
     protected function findFile($basedir, $basenames)
