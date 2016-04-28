@@ -119,11 +119,11 @@ class UpdateProjectInformation implements ConsumerInterface
         // extensions to the file name that we are looking for
         // Order matters here! Put the highest priority file types at the top.
         $extensions = array(
-            '' => self::TYPE_PLAINTEXT,
-            '.txt' => self::TYPE_PLAINTEXT,
             '.md' => self::TYPE_MARKDOWN,
             '.markdown' => self::TYPE_MARKDOWN,
-            '.pod' => self::TYPE_POD
+            '.pod' => self::TYPE_POD,
+            '.txt' => self::TYPE_PLAINTEXT,
+            '' => self::TYPE_PLAINTEXT,
         );
 
         foreach ($basenames as $basename) {
