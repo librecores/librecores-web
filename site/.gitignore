@@ -5,6 +5,11 @@
 /app/logs/*
 !app/cache/.gitkeep
 !app/logs/.gitkeep
+/web/css/
+/web/js/
+!web/js/.gitkeep
+!web/css/.gitkeep
+/web/assetic
 /app/phpunit.xml
 /build/
 /vendor/
