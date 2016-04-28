@@ -15,6 +15,7 @@ class ProjectType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('tagline', TextType::class, array('label' => 'Tagline', 'required' => false))
             ->add('descriptionTextAutoUpdate', ChoiceType::class, array(
                 'choices' => array(
                     'Extract the project description out of the README file in the source code.' => true,

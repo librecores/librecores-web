@@ -58,12 +58,26 @@ class Project
      */
     private $name;
 
+
+    /**
+     * The tagline of the project
+     *
+     * A tagline is a short and to the point description of what the project does.
+     *
+     * @var string
+     *
+     * @Assert\Length(max = 140)
+     * @ORM\Column(name="tagline", type="string", length=140, nullable=true)
+     */
+    private $tagline;
+
     /**
      * Project web site URL
      *
      * @var string
      *
      * @Assert\Length(max = 255)
+     * @Assert\Url
      * @ORM\Column(name="projectUrl", type="string", length=255, nullable=true)
      */
     private $projectUrl;
@@ -74,6 +88,7 @@ class Project
      * @var string
      *
      * @Assert\Length(max = 255)
+     * @Assert\Url
      * @ORM\Column(name="issueTracker", type="string", length=255, nullable=true)
      */
     private $issueTracker;
@@ -485,10 +500,33 @@ class Project
     /**
      * Get inProcessing
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getInProcessing()
     {
         return $this->inProcessing;
+    }
+
+    /**
+     * Set tagline
+     *
+     * @param string $tagline
+     * @return Project
+     */
+    public function setTagline($tagline)
+    {
+        $this->tagline = $tagline;
+
+        return $this;
+    }
+
+    /**
+     * Get tagline
+     *
+     * @return string
+     */
+    public function getTagline()
+    {
+        return $this->tagline;
     }
 }

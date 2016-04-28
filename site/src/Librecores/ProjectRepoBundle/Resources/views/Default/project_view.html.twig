@@ -19,17 +19,28 @@
 {% endif %}
 
 <div class="row">
-<div class="col-md-9">
+<div class="col-md-8">
 
-<p style="margin-top:20px; margin-bottom:20px;">This is a short description of an awesome project.</p>
+
+{% if project.getTagline() %}
+<p style="margin-top:20px; margin-bottom:20px;">
+  {{ project.getTagline() }}
+</p>
+{% endif %}
 
 
 <ul class="nav nav-tabs">
   <li role="presentation" class="active">
-    <a href="#README" aria-controls="settings" role="tab" data-toggle="tab">README</a>
+    <a href="#README" aria-controls="settings" role="tab" data-toggle="tab">
+      <i class="fa fa-book" aria-hidden="true"></i>
+      README
+    </a>
   </li>
   <li role="presentation">
-    <a href="#LICENSE" aria-controls="settings" role="tab" data-toggle="tab">LICENSE</a>
+    <a href="#LICENSE" aria-controls="settings" role="tab" data-toggle="tab">
+      <i class="fa fa-copyright" aria-hidden="true"></i>
+      LICENSE
+    </a>
   </li>
 </ul>
 
@@ -43,21 +54,46 @@
 </div>
 
 </div>
-<div class="col-md-3">
+<div class="col-md-4">
   <div class="librecores-project-infobox" style="background-color: #f7f7f7; padding: 10px; border-radius: 3px;">
     <p><b>Data Sheet</b></p>
-    <p>License: {{ project.getLicenseName() }}<br/>
-	  Last update: 1.2.2015<br/>
-	  {{ project.getSourceRepo.getType() }}: {{ project.getSourceRepo().getUrl() }}<br/>
-      <a href="{{ project.getIssueTracker() }}">Issue Tracker</a><br/>
-      <a href="{{ project.getProjectUrl() }}">Project Web Site</a>
+    <p>
+      {% if project.getProjectUrl() %}
+      <i class="fa fa-home" aria-hidden="true"></i>
+      <a href="{{ project.getProjectUrl()|escape('html_attr') }}">Project Web Site</a>
+      <br/>
+      {% endif %}
+
+      {% if project.getSourceRepo().getUrl() %}
+      {% if project.getSourceRepo.getType() == 'git'  %}
+        <i class="fa fa-git-square" aria-hidden="true"></i>
+      {% else %}
+        {{ project.getSourceRepo.getType() }}:
+      {% endif %}
+      {{ project.getSourceRepo().getUrl() }}
+      <br/>
+      {% endif %}
+
+      {% if project.getLicenseName() %}
+      <i class="fa fa-copyright" aria-hidden="true"></i>
+      {{ project.getLicenseName() }}
+      <br/>
+      {% endif %}
+
+      {% if project.getIssueTracker() %}
+      <i class="fa fa-bug" aria-hidden="true"></i>
+      <a href="{{ project.getIssueTracker()|escape('html_attr') }}">Issue Tracker</a>
+      <br/>
+      {% endif %}
     </p>
   </div>
 
+  {# XXX: Tags are not yet supported
   <div class="librecores-project-infobox" style="background-color: #f7f7f7; padding: 10px; border-radius: 3px;">
     <p><b>Tags</b></p>
     <p>CPU, some, tag, what, else</p>
   </div>
+  #}
 </div>
 
 </div>
