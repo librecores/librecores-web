@@ -9,8 +9,14 @@
   notify: restart nginx
 
 # symfony (main application)
-- name: Create Symfony configuration
-  template: src=parameters.yml.j2 dest=/var/www/site/app/config/parameters.yml
+
+# we need to work around ansible trying to chown a file on NFS, which
+# is not possible. See https://github.com/ansible/ansible/issues/7372
+- name: Create Symfony configuration (part I, populate template in temp folder)
+  template: src=parameters.yml.j2 dest=/tmp/parameters.yml
+
+- name: Create symfony configuration (part II, move to destination)
+  command: mv /tmp/parameters.yml /var/www/site/app/config/parameters.yml
 
 - name: Install dependencies through composer (development)
   command: composer install
