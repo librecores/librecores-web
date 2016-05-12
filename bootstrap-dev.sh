@@ -65,6 +65,19 @@ rm -rf $DLDIR 2>/dev/null
 
 # setup vagrant
 vagrant plugin install vagrant-hostmanager
+echo -e "\n\n"
+
+# make sure the development secrets are present
+if [ ! -e ansible/secrets/dev-vagrant.secrets.yml ]; then
+    echo "Error: Development secrets file ansible/secrets/dev-vagrant.secrets.yml not found"
+    echo
+    echo "Please create this file by copying the template from "
+    echo "ansible/secrets.dist/dev-vagrant.secrets.yml and modify it to your needs."
+    echo "Note: You do not need to enter the OAuth API tokens if you do not plan to"
+    echo "test the OAuth login (e.g. GitHub or Google)."
+    
+    exit 1
+fi
 
 echo Installation of all prerequisites finished.
 read -p "Start the development VM now? [yN] " yn

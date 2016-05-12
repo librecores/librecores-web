@@ -8,6 +8,10 @@ Development
 The easiest way to development is using the provided Vagrant environment.
 Simply run
 ```
+cp ansible/secrets.dist/dev-vagrant.secrets.yml ansible/secrets/dev-vagrant.secrets.yml
+# You can enter OAuth tokens into the secrets files if you want to. Get
+# them directly from the OAuth provider.
+#edit ansible/secrets/dev-vagrant.secrets.yml
 ./bootstrap-dev.sh
 ```
 to install all dependencies (see below) and get started.
@@ -20,6 +24,8 @@ to install all dependencies (see below) and get started.
   below.
 - Install Vagrant. It's fast and simple: http://www.vagrantup.com/downloads
 - Install vagrant-hostmanager: `vagrant plugin install vagrant-hostmanager`
+- Create the secrets file `ansible/secrets/dev-vagrant.secrets.yml`. A 
+  template is available in `ansible/secrets.dist/dev-vagrant.secrets.yml`
 - `cd vagrant; vagrant up`. This might take a while.
 - Take your web browser to http://librecores.devel and you should see the
   LibreCores web site. At http://blog.librecores.devel you'll find the blog.
