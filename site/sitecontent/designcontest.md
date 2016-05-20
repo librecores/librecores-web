@@ -100,7 +100,12 @@ the FOSSi foundation at [info@fossi-foundation.org](mailto:info@fossi-foundation
 
 ## Contest Jury
 
-To be announced
+* Antti Lukats, Trenz Electronic
+* Cathal McCabe, Xilinx
+* Clifford Wolf, Yosys and Project Icestorm
+* Richard Herveille, Roa Logic
+* TBD, Digilent
+* TBD, Cadence
 
 ## Organization Committee
 
