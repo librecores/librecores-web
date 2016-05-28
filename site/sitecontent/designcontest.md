@@ -31,6 +31,14 @@ and published under an established Open Source license. You may submit
 work that you created for other purposes, such as an implementation
 you did as part of your bachelor or master thesis or a student project.
 
+#### Special: Yosys and Arachne-pnr Designs
+
+There is a special travel grant for designs using the free and open
+ synthesis and implementation toolflow based on
+ [Yosys](http://www.clifford.at/yosys/) and
+ [Arachne-pnr](https://github.com/cseed/arachne-pnr), sponsored by
+ [icoBoard.org](http://icoboard.org/).
+
 ## Evaluation Criteria
 
 Our design expert jury will judge your work based on the following
