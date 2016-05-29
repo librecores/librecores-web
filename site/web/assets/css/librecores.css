@@ -85,7 +85,7 @@ a:hover {
 }
 
 .librecores-nav .navbar-brand {
-  background: url("../img/logo_small.png") no-repeat scroll left center transparent;
+  background: url("/img/logo_small.png") no-repeat scroll left center transparent;
   margin-left: 0;
   padding-left: 170px;
   display: inline-block;
@@ -174,13 +174,13 @@ a:hover {
 /* lc image: only for wider devices */
 @media (min-width: 992px) {
   .librecores-home-claim .container {
-    background: url("../img/claim_top.png") no-repeat scroll left top #89773d;
+    background: url("/img/claim_top.png") no-repeat scroll left top #89773d;
     padding-left: 350px;
     height: 200px;
   }
 
   .librecores-home-search .container {
-    background: url("../img/claim_bottom.png") no-repeat scroll left top;
+    background: url("/img/claim_bottom.png") no-repeat scroll left top;
   }
 }
 
