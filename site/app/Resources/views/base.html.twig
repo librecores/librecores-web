@@ -38,11 +38,41 @@
         <a class="navbar-brand" href="{{ path('librecores_site_page') }}" alt="LibreCores"><span class="wordmark"></span></a>
       </div>
       <div class="navbar-collapse collapse">
-        <ul class="nav navbar-nav navbar-right">
+        <ul class="nav navbar-nav navbar-left">
           <li><a href="{{ path('librecores_project_repo_homepage') }}">Browse Projects</a></li>
           <li><a href="{{ path('librecores_site_page', {'page': 'community-hub'}) }}">Community Hub</a></li>
           <li><a href="{{ path('librecores_site_page', {'page': 'designcontest'}) }}">Student Design Contest</a></li>
           <li><a href="{{ path('librecores_site_page', {'page': 'about'}) }}">About LibreCores</a></li>
+        </ul>
+
+        <ul class="nav navbar-nav navbar-right">
+          {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+              {{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }}
+              <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+              <li>
+                <a href="{{ path('fos_user_profile_edit') }}">
+                  Profile settings
+                </a>
+              </li>
+              <li role="separator" class="divider"></li>
+              <li>
+                <a href="{{ path('fos_user_security_logout') }}">
+                  {{ 'layout.logout'|trans({}, 'FOSUserBundle') }}
+                </a>
+              </li>
+              </ul>
+          {% else %}
+            <li>
+              <a href="{{ path('fos_user_registration_register') }}">{{ 'layout.register'|trans({}, 'FOSUserBundle') }}</a>
+            </li>
+            <li>
+              <a href="{{ path('fos_user_security_login') }}">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a>
+            </li>
+          {% endif %}
         </ul>
       </div>
     </div>
