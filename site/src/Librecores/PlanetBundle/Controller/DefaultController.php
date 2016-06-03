@@ -64,6 +64,7 @@ class DefaultController extends Controller
      */
     private function extractTeaserImage($content)
     {
+        $matches = array();
         $rv = preg_match('/<img[^>]+src=(["\'])([^">]+)\1/i', $content, $matches);
         if (!$rv) {
           return null;
