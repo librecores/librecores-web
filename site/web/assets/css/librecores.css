@@ -8,7 +8,7 @@ TODO: define colors and logo
 body {
   background: none repeat scroll 0 0 #fff;
   font-family: 'Open Sans', sans-serif;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 400;
   line-height: 24px;
 
@@ -21,25 +21,27 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h1 {
-  padding-top:30px;
   color: #484235;
   font-weight: 300;
-  /*text-shadow: 0 1px 0 #FFFFFF;*/
+  font-size: 30px;
 }
 h2 {
   /*color: #419EDA;*/
   color: #484235;
   font-weight: 400;
   text-shadow: 0 1px 0 #FFFFFF;
+  font-size: 26px;
 }
 h3 {
   color: #F04C5C;
   font-weight: 400;
   text-shadow: 0 1px 0 #FFFFFF;
+  font-size: 24px;
 }
 h4 {
   font-weight: 600;
   text-shadow: 0 1px 0 #FFFFFF;
+  font-size: 20px;
 }
 pre, code {
   border-radius: 3px 3px 3px 3px;
