@@ -6,11 +6,11 @@
   shell: echo 'deb http://www.rabbitmq.com/debian/ testing main' > /etc/apt/sources.list.d/rabbitmq.list creates=/etc/apt/sources.list.d/rabbitmq.list
 
 - name: Download RabbitMQ key
-  get_url: url=http://www.rabbitmq.com/rabbitmq-signing-key-public.asc dest=/tmp/rabbitmq-signing-key-public.asc
+  get_url: url=https://www.rabbitmq.com/rabbitmq-release-signing-key.asc dest=/tmp/rabbitmq-release-signing-key.asc
 
 - name: Add RabbitMQ key
   sudo: yes
-  command: apt-key add /tmp/rabbitmq-signing-key-public.asc
+  command: apt-key add /tmp/rabbitmq-release-signing-key.asc
 
 - name: Update apt again
   sudo: yes
