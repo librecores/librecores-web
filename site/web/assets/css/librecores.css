@@ -86,12 +86,23 @@ a:hover {
   color: #484235;
 }
 
+.librecores-nav {
+ font-size: 15px;
+}
+
 .librecores-nav .navbar-brand {
-  background: url("/img/logo_small.png") no-repeat scroll left center transparent;
+  background: no-repeat scroll left center transparent;
+  background-image: url("/img/logo_small.png");
   margin-left: 0;
   padding-left: 170px;
   display: inline-block;
-  font-size: 25px;
+  width: 157px;
+  background-size: 157px 30px;
+}
+@media print, only screen and (-webkit-min-device-pixel-ratio: 1.5), screen and (min-resolution: 144dpi), screen and (min-resolution: 144dppx) {
+  .librecores-nav .navbar-brand {
+    background-image: url('/img/logo_small@2x.png')
+  }
 }
 
 .librecores-nav .nav > li > a:focus,
