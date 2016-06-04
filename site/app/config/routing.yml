@@ -37,7 +37,7 @@ fos_user_change_password:
 # Project Repository Routes
 librecores_project_repo:
     resource: "@LibrecoresProjectRepoBundle/Resources/config/routing.yml"
-    prefix:   /projects
+    prefix:   /p
 
 # Planet routes
 librecores_planet:
