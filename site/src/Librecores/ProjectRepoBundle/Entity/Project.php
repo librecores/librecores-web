@@ -158,6 +158,26 @@ class Project
     private $inProcessing = false;
 
 
+    /**
+     * Get the name of the "parent" of this project
+     *
+     * A parent can either be a user or an organization. Use this for display
+     * purposes only.
+     *
+     * @return string the parent name
+     *
+     * @see getParentOrganization()
+     * @see getParentUser()
+     */
+    public function getParentName()
+    {
+        if ($this->parentUser !== null) {
+            return $this->parentUser->getUsername();
+        } else {
+            return $this->parentOrganization->getName();
+        }
+    }
+
 
     /**
      * Set the project status

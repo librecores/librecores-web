@@ -7,13 +7,15 @@
 {% block pagepath %}Home &raquo; Projects &raquo; {{ project.getFullName() }} &raquo; Settings{% endblock %}
 
 {% block content %}
-<h1 style="margin-bottom:5px">{{ project.getFullName() }}: Settings</h1>
+<h1 class="projectname"><a href="{{ path('librecores_project_repo_project_view', {'parentName':
+  project.getParentName(), 'projectName': project.getName()}) }}">{{ project.getFullName() }}</a>: Settings</h1>
 
 <div class="row">
 <div class="col-md-2">
   <ul class="list-group">
-    <li class="list-group-item"><a href="#"><i class="fa fa-cog fa-fw"></i>&nbsp; Settings</a></li>
-    <li class="list-group-item"><a href="{{ path('librecores_project_repo_project_settings_team', {'parentName': 'openrisc', 'projectName': 'mor1kx'}) }}"><i class="fa fa-users fa-fw"></i>&nbsp; Team</a></li>
+    <li class="list-group-item"><a href="{{ path('librecores_project_repo_project_view', {'parentName':
+  project.getParentName(), 'projectName': project.getName()}) }}"><i class="fa fa-bookmark fa-fw"></i>Project</a></li>
+    <li class="list-group-item" class="active"><a href="#"><i class="fa fa-cogs fa-fw"></i>Settings</a></li>
   </ul>
 </div>
 <div class="col-md-10">

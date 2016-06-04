@@ -42,6 +42,15 @@
       LICENSE
     </a>
   </li>
+  {% if is_granted("edit", project) %}
+  <li>
+    <a href="{{ path('librecores_project_repo_project_settings', {'parentName':
+  project.getParentName(), 'projectName': project.getName()}) }}" aria-controls="settings" role="tab">
+      <i class="fa fa-cogs fa-fw" aria-hidden="true"></i>
+      Settings
+    </a>
+  </li>
+  {% endif %}
 </ul>
 
 <div class="tab-content">

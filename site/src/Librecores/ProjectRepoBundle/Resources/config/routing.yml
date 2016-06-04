@@ -6,6 +6,10 @@ librecores_project_repo_project_new:
     path:     /new
     defaults: { _controller: LibrecoresProjectRepoBundle:Default:projectNew }
 
+librecores_project_repo_user_org_view:
+    path:     /{userOrOrganization}
+    defaults: { _controller: LibrecoresProjectRepoBundle:Default:userOrgView }
+
 librecores_project_repo_project_view:
     path:     /{parentName}/{projectName}
     defaults: { _controller: LibrecoresProjectRepoBundle:Default:projectView }

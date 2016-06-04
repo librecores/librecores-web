@@ -209,6 +209,14 @@ a:hover {
   padding-top: 0;
 }
 
+.projectname {
+  margin-bottom: 20px;
+}
+
+.projectname a {
+  color: #484235;
+}
+
 
 /* LOGIN CSS */
 .or-container {

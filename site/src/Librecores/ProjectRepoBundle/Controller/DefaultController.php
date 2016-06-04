@@ -11,6 +11,8 @@ use Librecores\ProjectRepoBundle\Form\Type\SourceRepoType;
 use Symfony\Component\Validator\Exception\ValidatorException;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Librecores\ProjectRepoBundle\Entity\Organization;
+use Librecores\ProjectRepoBundle\Entity\User;
 
 class DefaultController extends Controller
 {
@@ -20,6 +22,54 @@ class DefaultController extends Controller
     public function indexAction()
     {
         return $this->render('LibrecoresProjectRepoBundle:Default:index.html.twig');
+    }
+
+    /**
+     * Display a user or an organization
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function userOrgViewAction($userOrOrganization)
+    {
+        // try user first
+        $user = $this->getDoctrine()
+            ->getRepository('LibrecoresProjectRepoBundle:User')
+            ->findOneByUsername($userOrOrganization);
+
+        return $this->userViewAction($user);
+
+        // then organization
+        $org = $this->getDoctrine()
+            ->getRepository('LibrecoresProjectRepoBundle:Organization')
+            ->findOneByName($userOrOrganization);
+        return $this->organizationViewAction($org);
+
+        // and 404 if it's neither
+        throw $this->createNotFoundException('User or organization not found.');
+    }
+
+    /**
+     * View a user's profile
+     *
+     * @param User $user
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function userViewAction(User $user)
+    {
+        return $this->render('LibrecoresProjectRepoBundle:Default:user_view.html.twig',
+            array('user' => $user));
+    }
+
+    /**
+     * View an organization profile
+     *
+     * @param Organization $org
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function organizationViewAction(Organization $org)
+    {
+        return $this->render('LibrecoresProjectRepoBundle:Default:organization_view.html.twig',
+            array('org' => $org));
     }
 
     /**
@@ -144,6 +194,10 @@ class DefaultController extends Controller
             throw $this->createNotFoundException('No project found with that name.');
         }
 
+        // check permissions
+        $this->denyAccessUnlessGranted('edit', $p);
+
+        // create and show form
         $form = $this->createForm(ProjectType::class, $p);
         $form->handleRequest($request);
 
