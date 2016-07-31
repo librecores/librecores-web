@@ -14,6 +14,10 @@ Student Design Award  during the conference. There
 will be a limited number of travel grants available for eligible
 students.
 
+<div class="alert alert-warning" role="alert">Submit your work <a
+		href="https://goo.gl/forms/X9XduyY6A4HUK0nX2"
+		class="alert-link">here</a></div>
+
 ## What work can I submit?
 
 <img src="/img/freepik/paper.png" align="right" hspace="25" vspace="10" />
