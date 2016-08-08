@@ -116,7 +116,7 @@ the FOSSi foundation at [info@fossi-foundation.org](mailto:info@fossi-foundation
 * Cathal McCabe, Xilinx
 * Clifford Wolf, Yosys and Project Icestorm
 * Richard Herveille, Roa Logic
-* TBD, Digilent
+* Ciprian Hegbeli, Digilent
 * TBD, Cadence
 
 ## Organization Committee
