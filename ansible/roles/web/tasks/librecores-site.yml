@@ -59,6 +59,8 @@
   args:
     chdir: /var/www/site
   when: not symfony_devel
+  # XXX: Avoid failure for now if no RabbitMQ is used
+  ignore_errors: yes
 
 - name: Add init script for RabbitMQ supervisord
   template:
@@ -79,6 +81,8 @@
     - cache
     - supervisor
   when: not is_vagrant_environment
+  # XXX: Avoid failure for now if no RabbitMQ is used
+  ignore_errors: yes
 
 
 # Install librecores planet generator

@@ -1,0 +1,27 @@
+---
+- name: Configure local SSH for AWS production
+  hosts: localhost
+  connection: local
+  gather_facts: False
+  sudo: false
+  vars:
+    local_home: "{{ lookup('env','HOME') }}"
+    local_user: "{{ lookup('env','USER') }}"
+  tasks:
+    - name: Create private key
+      template: src=templates/var_to_file
+        dest="{{local_home}}/.ssh/librecores-production"
+        mode=0600
+        owner="{{local_user}}"
+      with_items:
+        - "{{ ssh_key_production_private }}"
+
+    - name: Create public key
+      template: src=templates/var_to_file
+        dest="{{local_home}}/.ssh/librecores-production.pub"
+        mode=0644
+        owner="{{local_user}}"
+      with_items:
+        - "{{ ssh_key_production_pub }}"
+  vars_files:
+    - secrets/production-aws-sshkeys.secrets.yml

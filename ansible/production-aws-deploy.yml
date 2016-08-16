@@ -1,0 +1,13 @@
+---
+# Staging environment on AWS
+- name: Deploy librecores.org on AWS
+#  hosts: tag_group_librecores_staging
+  hosts: production
+  gather_facts: true
+  user: ubuntu
+  sudo: yes
+  roles:
+    - production-aws
+  vars_files:
+    - "vars/production-aws.yml"
+    - "secrets/production-aws.secrets.yml"

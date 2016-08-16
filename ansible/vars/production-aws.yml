@@ -6,10 +6,10 @@ aws_region: "eu-west-1"
 
 # Public IPs (EC2 Elastic IPs)
 # Make sure to update the DNS entries with those IPs as well!
-# stage.librecores.org
-ip_public: "52.209.114.159"
+# www.librecores.org
+ip_public: "52.19.183.36"
 
-librecores_domain: "stage.librecores.org"
+librecores_domain: "www.librecores.org"
 web_user: "www-data"
 mysql_host: "localhost"
 symfony_devel: false

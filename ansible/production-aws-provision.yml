@@ -1,0 +1,67 @@
+---
+# Initial setup of AWS environment to host all LibreCores instances
+- name: Create AWS initial setup
+  hosts: localhost
+  connection: local
+  gather_facts: False
+
+  tasks:
+    - name: "Create EC2 security group"
+      ec2_group:
+        name: librecores-production-web
+        description: "Librecores web security group"
+        region: "{{ aws_region }}"
+        rules:
+          # allow incoming traffic for HTTP(S) and SSH
+          - proto: tcp
+            from_port: 80
+            to_port: 80
+            cidr_ip: 0.0.0.0/0
+          - proto: tcp
+            from_port: 22
+            to_port: 22
+            cidr_ip: 0.0.0.0/0
+          - proto: tcp
+            from_port: 443
+            to_port: 443
+            cidr_ip: 0.0.0.0/0
+        rules_egress:
+          # allow all outgoing traffic
+          - proto: -1
+            from_port: 0
+            to_port: 0
+            cidr_ip: 0.0.0.0/0
+
+    - name: "Production: Create SSH key"
+      ec2_key:
+        region: "{{ aws_region }}"
+        name: librecores-production
+        key_material: "{{ ssh_key_production_pub }}"
+        wait: true
+
+    - name: "Production: Provision EC2 instance"
+      ec2:
+         instance_type: t2.micro
+         region: "{{ aws_region }}"
+         image: "{{ ami_id }}"
+         key_name: librecores-production
+         group: librecores-production-web
+         wait: true
+         exact_count: 1
+         count_tag:
+            group: librecores-production
+         instance_tags:
+            group: librecores-production
+      register: instance_production_ec2_web
+
+    - name: "Production: Assign Elastic IP (public)"
+      ec2_eip:
+        region: "{{ aws_region }}"
+        public_ip: "{{ ip_public }}"
+        reuse_existing_ip_allowed: yes
+        state: present
+        instance_id: "{{ instance_production_ec2_web.tagged_instances[0].id }}"
+
+  vars_files:
+    - vars/production-aws.yml
+    - secrets/production-aws-sshkeys.secrets.yml
