@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <title>{% block title %}{% endblock %}</title>
 
   <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+  <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}" sizes="32x32">
 
   {% block stylesheets %}
     {% stylesheets 'assets/css/*' filter='cssrewrite' %}
@@ -35,13 +36,14 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="{{ path('librecores_site_page') }}" alt="LibreCores"><span class="wordmark"></span></a>
+        <a class="navbar-brand" href="{{ path('librecores_site_page') }}" alt="LibreCores">
+          <span class="wordmark">LibreCores</span>
+        </a>
       </div>
       <div class="navbar-collapse collapse">
-        <ul class="nav navbar-nav navbar-left">
+        <ul class="nav navbar-nav">
           <li><a href="{{ path('librecores_project_repo_homepage') }}">Browse Projects</a></li>
           <li><a href="{{ path('librecores_site_page', {'page': 'community-hub'}) }}">Community Hub</a></li>
-          <li><a href="{{ path('librecores_site_page', {'page': 'designcontest'}) }}">Student Design Contest</a></li>
           <li><a href="{{ path('librecores_site_page', {'page': 'about'}) }}">About LibreCores</a></li>
         </ul>
 

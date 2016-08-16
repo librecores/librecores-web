@@ -4,10 +4,9 @@
 
 {% block fos_user_content %}
 
-
-<div class="center-block" style="width:280px; margin-top:40px">
+<div class="center-block librecores-user-signupin-panel">
   <div class="panel panel-default">
-    <div class="panel-heading"><h3 class="panel-title">Register an account (it's free!)</h3></div>
+    <div class="panel-heading"><h3 class="panel-title">Register account</h3></div>
     <div class="panel-body">
       <form action="{{ path('fos_user_registration_register') }}" {{ form_enctype(form) }} method="POST" class="fos_user_registration_register">
         {{ form_widget(form) }}
@@ -29,9 +28,11 @@
       <hr/>
 
       <div class="text-center">
-        <small>Already have an account?<br/><a href="/login">Log in.</a></small>
+        Already have an account?<br/>
+        <a href="/login" style="font-weight: bold">Log in</a>
       </div>
     </div>
   </div>
+</div>
 </div>
 {% endblock fos_user_content %}

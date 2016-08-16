@@ -1,9 +1,8 @@
 @CHARSET "UTF-8";
 
-/*
-Colors:
-TODO: define colors and logo
-*/
+html, body {
+  height: 100%;
+}
 
 body {
   background: none repeat scroll 0 0 #fff;
@@ -12,8 +11,8 @@ body {
   font-weight: 400;
   line-height: 24px;
 
-  /* move content below header */
-  padding-top: 50px;
+  /* move content below top navbar */
+  padding-top: 60px;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -21,19 +20,19 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h1 {
-  color: #484235;
-  font-weight: 300;
-  font-size: 30px;
+  color: #3fb0ac;
+  font-weight: 600;
+  font-size: 40px;
+  padding-top: 10px;
+  padding-bottom: 20px;
 }
 h2 {
-  /*color: #419EDA;*/
-  color: #484235;
-  font-weight: 400;
+  color: #3fb0ac;
   text-shadow: 0 1px 0 #FFFFFF;
   font-size: 26px;
 }
 h3 {
-  color: #F04C5C;
+  color: #3fb0ac;
   font-weight: 400;
   text-shadow: 0 1px 0 #FFFFFF;
   font-size: 24px;
@@ -64,51 +63,46 @@ pre code {
   box-shadow: none;
 }
 
-a, a:visited, a:hover, a:focus {
-  color: #6486b2;
+a:not(.btn), a:not(.btn):visited, a:not(.btn):hover, a:not(.btn):focus {
+  color: #3fb0ac;
 }
 
 a:hover {
   text-decoration: underline;
+  color: #173e43;
 }
 
 /* top navigation bar */
 .librecores-nav {
-  /*background: none repeat scroll 0 0 #484235;*/
-  background: #fff;
-  /*box-shadow: 0 0 3px rgba(153, 153, 153, 0.75);*/
-  font-size: 18px;
-  font-weight: 400;
-  color: #484235;
-}
-
-.librecores-nav a {
-  color: #484235;
-}
-
-.librecores-nav {
- font-size: 15px;
+  background-color: #fff;
+  box-shadow: 0 0 3px rgba(153, 153, 153, 0.75);
+  
+  color: #777;
+  border-bottom: 1px solid #cccccc;
+  
+  /* remember to adjust body padding-top as well */
+  padding-top: 5px;
+  padding-bottom: 5px;  
+  min-height: 60px; 
 }
 
 .librecores-nav .navbar-brand {
   background: no-repeat scroll left center transparent;
-  background-image: url("/img/logo_small.png");
+  background-image: url("/img/logo_small.svg");
   margin-left: 0;
-  padding-left: 170px;
+  padding-left: 40px;
   display: inline-block;
-  width: 157px;
-  background-size: 157px 30px;
-}
-@media print, only screen and (-webkit-min-device-pixel-ratio: 1.5), screen and (min-resolution: 144dpi), screen and (min-resolution: 144dppx) {
-  .librecores-nav .navbar-brand {
-    background-image: url('/img/logo_small@2x.png')
-  }
+  background-size: 30px 30px;
 }
 
-.librecores-nav .nav > li > a:focus,
-.librecores-nav .nav > li > a:hover {
+.librecores-nav .nav > li a {
+  color: #777;
+}
+
+.librecores-nav .nav > li a:focus,
+.librecores-nav .nav > li a:hover {
   background-color: #fff;
-  color: #6486b2;
+  color: #3fb0ac;
 }
 
 .navbar-toggle {
@@ -119,17 +113,18 @@ a:hover {
 }
 
 .wordmark {
-  color: #333333;
+  color: #666666;
   text-shadow: 0 1px 0 white;
+  font-size: 25px;
 }
 
 /* search bar, also including quicknav */
 .librecores-searchbar {
-  background-color:#bfb8a8;
-  color: #484235;
+  background-color: #dddfd4;
+  color: #173e43;
   vertical-align: middle;
   line-height: 32px;
-  padding:10px;
+  padding: 10px;
 }
 
 .librecores-searchbar button {
@@ -140,62 +135,101 @@ a:hover {
   text-shadow: none;
 }
 
-/* claim (on homepage) */
-.librecores-home-claim {
-  background-color: #89773d;
+/* home page */
+.librecores-home-startpane {
+  height: 100%; 
+  background-color: #dddfd4; 
+  padding-top: 50px;
+}
+.librecores-home-banner {
+  background-color: #173e43;
+  opacity: 0.75;
+  filter: alpha(opacity=75); /* For IE8 and earlier */
+  text-align:center;
 }
 
-.librecores-home-claim .container {
-  background-color: #89773d;
+.librecores-home-banner > .container {
+  padding-top: 40px;
+  padding-bottom: 40px;
 }
 
-.librecores-home-claim .container,
-.librecores-home-claim .container h1 {
-  color: #dab948;
+.librecores-home-banner-wordmark {
+  font-size: 50px; 
+  line-height: normal; 
+  color: #3fb0ac;
 }
 
-.librecores-home-claim .container .lead {
-  color: #484235;
+.librecores-home-banner-claim {
+   font-size: 30px; 
+   line-height: normal; 
+   color: #c0c4b0; 
+   margin-left: 40px;
 }
 
-/* search bar (on homepage) */
-.librecores-home-search {
-  font-size: 1.3em;
-  background-color: #bfb8a8;
+.librecores-home-banner-search {
+   margin-top: 20px;
 }
 
-.librecores-home-search .container {
-  background-color: #bfb8a8;
-  padding-top: 30px;
-  padding-bottom: 30px;
+.librecores-home-banner-search input {
+  font-size: 20px; 
+  height: 40px; 
+  min-width: 50%;
 }
 
-@media (min-width: 992px) {
-  .librecores-home-search form {
-     width: 700px;
-  }
+.librecores-home-banner-search button {
+  margin-left: 20px; 
+  background-color: #e62739;
 }
 
-.librecores-home-search label {
-  padding-right: 10px;
+.librecores-home-showcase {
+  background-color: #dddfd4; 
+  margin-top: 30px;
+  color: #173e43;
+  padding-bottom: 20px;
 }
 
-.librecores-home-search button {
+.librecores-home-showcase > div.container > div {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.librecores-home-showcase > div.container > div > img {
+  width: 100%;
+  display: block;
+}
+
+.librecores-home-showcase-keyword {
+  font-weight: bold; 
+  font-size: 20px; 
+  text-align: center;
+}
+
+.librecores-home-showcase-desc {
+  text-align: center; 
+  padding-top: 10px; 
+  padding-left: 5px; 
+  padding-right: 5px; 
+  font-size: 16px;
+  line-height: 1.4em;
+}
+
+.librecores-home-showcase-btn {
+  margin-top: 10px;
+  display: block;
   font-weight: bold;
 }
 
-/* lc image: only for wider devices */
-@media (min-width: 992px) {
-  .librecores-home-claim .container {
-    background: url("/img/claim_top.png") no-repeat scroll left top #89773d;
-    padding-left: 350px;
-    height: 200px;
-  }
-
-  .librecores-home-search .container {
-    background: url("/img/claim_bottom.png") no-repeat scroll left top;
-  }
+.librecores-home-showcase-btn:hover,
+.librecores-home-showcase-btn:focus,
+.librecores-home-showcase-btn:visited {
+  color: #3fb0ac;
 }
+
+.librecores-home-showcase-desc-middle-claim {
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
 
 /* footer */
 .librecores-footer {
@@ -228,8 +262,29 @@ a:hover {
   color: #484235;
 }
 
+/*.panel-default > .panel-heading {
+  font-weight: 600;
+  font-size: 20px;
+  background-image: linear-gradient(to bottom,#173e43 0,#173e43 100%);
+  color: #3fb0ac;
+  text-shadow: none !important;
+}*/
 
-/* LOGIN CSS */
+.panel-title {
+  text-shadow: none;
+  /*color: #3fb0ac;*/
+  font-weight: bold;
+  font-size: 1.2em;
+  line-height: normal;
+  
+}
+
+/* LOGIN/SIGNUP CSS */
+.librecores-user-signupin-panel {
+  width: 280px; 
+  margin-top: 40px;
+}
+
 .or-container {
   text-align:center;
   margin-top:20px;

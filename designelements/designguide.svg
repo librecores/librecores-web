@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 744.09448819 1052.3622047"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="designguide.svg">
+  <defs
+     id="defs4" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.98994949"
+     inkscape:cx="181.45842"
+     inkscape:cy="546.92499"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="2560"
+     inkscape:window-height="1358"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid4188" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Ebene 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <text
+       sodipodi:linespacing="125%"
+       id="text4162"
+       y="89.01461"
+       x="77.414101"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       xml:space="preserve"><tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:50px;font-family:'Open Sans';-inkscape-font-specification:'Open Sans'"
+         y="89.01461"
+         x="77.414101"
+         id="tspan4164"
+         sodipodi:role="line">LibreCores Design Guide</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:40px;line-height:125%;font-family:'Open Sans';-inkscape-font-specification:'Open Sans';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="32.928932"
+       y="323.36365"
+       id="text4190"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4192"
+         x="32.928932"
+         y="323.36365"
+         style="font-size:25px">Font</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:40px;line-height:125%;font-family:'Open Sans';-inkscape-font-specification:'Open Sans';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="34.949238"
+       y="346.72659"
+       id="text4194"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4196"
+         x="34.949238"
+         y="346.72659"
+         style="font-size:15px">We use the Open Sans font. </tspan><tspan
+         sodipodi:role="line"
+         x="34.949238"
+         y="365.47659"
+         style="font-size:15px"
+         id="tspan4208">It's freely available in light, regular and bold versions with many glyphs for different scripts.</tspan></text>
+    <text
+       sodipodi:linespacing="125%"
+       id="text4198"
+       y="415.5116"
+       x="35.786076"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:40px;line-height:125%;font-family:'Open Sans';-inkscape-font-specification:'Open Sans';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       xml:space="preserve"><tspan
+         style="font-size:25px"
+         y="415.5116"
+         x="35.786076"
+         id="tspan4200"
+         sodipodi:role="line">Colors</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:40px;line-height:125%;font-family:'Open Sans';-inkscape-font-specification:'Open Sans';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="32.928932"
+       y="489.3876"
+       id="text4204"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4206"
+         x="32.928932"
+         y="489.3876"
+         style="font-size:20px">Primary Color</tspan></text>
+    <rect
+       y="505.93362"
+       x="33.673962"
+       height="124.28572"
+       width="124.28572"
+       id="rect4210"
+       style="fill:#3fb0ac;fill-opacity:1;stroke:none" />
+    <text
+       sodipodi:linespacing="125%"
+       id="text4216"
+       y="675.81622"
+       x="32.928932"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:40px;line-height:125%;font-family:'Open Sans';-inkscape-font-specification:'Open Sans';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       xml:space="preserve"><tspan
+         style="font-size:20px"
+         y="675.81622"
+         x="32.928932"
+         id="tspan4218"
+         sodipodi:role="line">Secondary Colors</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:40px;line-height:125%;font-family:'Open Sans';-inkscape-font-specification:'Open Sans';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="32.928932"
+       y="865.81622"
+       id="text4220"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4222"
+         x="32.928932"
+         y="865.81622"
+         style="font-size:20px">Accent Colors</tspan></text>
+    <rect
+       y="690.21936"
+       x="331.28943"
+       height="123.46493"
+       width="123.46493"
+       id="rect4232"
+       style="fill:#173e43;fill-opacity:1;stroke:none" />
+    <text
+       sodipodi:linespacing="125%"
+       id="text4236"
+       y="148.78206"
+       x="32.928932"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:40px;line-height:125%;font-family:'Open Sans';-inkscape-font-specification:'Open Sans';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       xml:space="preserve"><tspan
+         style="font-size:25px"
+         y="148.78206"
+         x="32.928932"
+         id="tspan4238"
+         sodipodi:role="line">Logo</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="33.571423"
+       y="884.50513"
+       id="text4388"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4390"
+         x="33.571423"
+         y="884.50513"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.5px;font-family:'Open Sans';-inkscape-font-specification:'Open Sans'">Bright colors for buttons, headlines, and other highlights.</tspan></text>
+    <rect
+       style="fill:#fae596;fill-opacity:1;stroke:none"
+       id="rect4230"
+       width="123.46493"
+       height="123.46493"
+       x="181.40727"
+       y="692.36218" />
+    <rect
+       y="694.50513"
+       x="35.810818"
+       height="123.46493"
+       width="123.46493"
+       id="rect4228"
+       style="fill:#dddfd4;fill-opacity:1;stroke:none" />
+    <text
+       inkscape:export-ydpi="50.059093"
+       inkscape:export-xdpi="50.059093"
+       inkscape:export-filename="/home/philipp/src/librecores-web/designelements/logo_options_v3.png"
+       sodipodi:linespacing="125%"
+       id="text4276"
+       y="253.65993"
+       x="165.84557"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.46016121px;line-height:125%;font-family:Arial;-inkscape-font-specification:Arial;letter-spacing:0px;word-spacing:0px;fill:#666666;fill-opacity:1;stroke:none"
+       xml:space="preserve"><tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:82.0236969px;font-family:'Open Sans';-inkscape-font-specification:'Open Sans';fill:#666666;fill-opacity:1"
+         y="253.65993"
+         x="165.84557"
+         id="tspan4278"
+         sodipodi:role="line">LibreCores</tspan></text>
+    <circle
+       style="fill:none;fill-opacity:1;stroke:#3fb0ac;stroke-width:3.43082166;stroke-opacity:1"
+       id="circle4280"
+       inkscape:export-filename="/home/philipp/workspace/librecores/web/img/logo_small.png"
+       inkscape:export-xdpi="28.965515"
+       inkscape:export-ydpi="28.965515"
+       cx="88.054733"
+       cy="223.78207"
+       r="51.462322" />
+    <rect
+       transform="matrix(0.99999659,-0.00261225,-0.33984647,0.94048093,0,0)"
+       y="249.83723"
+       x="139.12489"
+       height="16.272287"
+       width="15.31839"
+       id="rect4282"
+       style="fill:#3fb0ac;fill-opacity:1;stroke:none" />
+    <rect
+       transform="matrix(0.999932,-0.01166134,-0.3322461,0.94319273,0,0)"
+       style="fill:#3fb0ac;fill-opacity:1;stroke:none"
+       id="rect4284"
+       width="15.369052"
+       height="16.224447"
+       x="156.57303"
+       y="250.74239" />
+    <rect
+       transform="matrix(0.99982397,-0.01876248,-0.32619874,0.94530121,0,0)"
+       y="230.78018"
+       x="136.31635"
+       height="16.186478"
+       width="15.409037"
+       id="rect4286"
+       style="fill:#3fb0ac;fill-opacity:1;stroke:none" />
+    <rect
+       transform="matrix(0.99996514,-0.00834998,-0.33504095,0.94220357,0,0)"
+       style="fill:#3fb0ac;fill-opacity:1;stroke:none"
+       id="rect4288"
+       width="15.350475"
+       height="16.242022"
+       x="138.33372"
+       y="209.66051" />
+    <rect
+       transform="matrix(1,0,-0.34201885,0.93969309,0,0)"
+       style="fill:#3fb0ac;fill-opacity:1;stroke:none"
+       id="rect4290"
+       width="15.303828"
+       height="16.285986"
+       x="179.02676"
+       y="208.73793" />
+    <rect
+       transform="matrix(1,0,-0.34201885,0.93969309,0,0)"
+       style="fill:#3fb0ac;fill-opacity:1;stroke:none"
+       id="rect4292"
+       width="15.303828"
+       height="16.285986"
+       x="179.02689"
+       y="229.09547" />
+    <rect
+       transform="matrix(1,0,-0.34201885,0.93969309,0,0)"
+       y="249.45302"
+       x="179.02676"
+       height="16.285986"
+       width="15.303828"
+       id="rect4294"
+       style="fill:#3fb0ac;fill-opacity:1;stroke:none" />
+    <rect
+       transform="matrix(1,0,-0.34201885,0.93969309,0,0)"
+       style="fill:#3fb0ac;fill-opacity:1;stroke:none"
+       id="rect4296"
+       width="15.303828"
+       height="16.285986"
+       x="198.15659"
+       y="249.45302" />
+    <rect
+       y="208.73793"
+       x="197.82803"
+       height="16.285986"
+       width="15.303828"
+       id="rect4298"
+       style="fill:#3fb0ac;fill-opacity:1;stroke:none"
+       transform="matrix(1,0,-0.34201885,0.93969309,0,0)" />
+    <rect
+       y="904.61157"
+       x="37.142876"
+       height="123.46493"
+       width="123.46493"
+       id="rect4214"
+       style="fill:#e62739;fill-opacity:1;stroke:none" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="35.714287"
+       y="438.77191"
+       id="text4492"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4494"
+         x="35.714287"
+         y="438.77191"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15px;font-family:'Open Sans';-inkscape-font-specification:'Open Sans'">We use mostly muted colors pretending we are a serious business.</tspan></text>
+  </g>
+</svg>

@@ -2,9 +2,9 @@
 
 {% block body %}
 
-<div class="librecores-searchbar">
+{#<div class="librecores-searchbar">
 <div class="container">
-  <div class="pull-left">{% block pagepath %}{% endblock %}</div>
+  <div class="pull-left">something -> something -> asdf{% block pagepath %}{% endblock %}</div>
   <div class="pull-right">
     <form class="form-inline">
       <input type="text" class="form-control"  placeholder="What are you looking for?">
@@ -15,9 +15,10 @@
     </form>
   </div>
 </div>
-</div>
+</div>#}
 
 <div class="container" id="maincontent">
+  {# flash messages, i.e. "user account has been created" #}
   {% if app.request.hasPreviousSession %}
     {% for type, messages in app.session.flashbag.all() %}
       {% for message in messages %}
@@ -28,6 +29,7 @@
     {% endfor %}
   {% endif %}
 
+  {# the main content #}
   {% block content %}{% endblock %}
 </div>
 {% endblock %}
