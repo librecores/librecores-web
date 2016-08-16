@@ -26,6 +26,7 @@ class User extends BaseUser
      */
     protected $id;
 
+
     // OAuth-related entries
     /**
      * Name of the OAuth service provider
@@ -57,12 +58,23 @@ class User extends BaseUser
      */
     protected $oAuthAccessToken;
 
+    // associations
     /**
      * @var ArrayCollection
      * @ORM\OneToMany(targetEntity="Project", mappedBy="parentUser")
      */
     protected $projects;
 
+    // profile data
+    /**
+     * Full (real) name of the user
+     *
+     * @var string $name
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    protected $name;
+
+    // metadata
     /**
      * When was this user created?
      *
@@ -235,7 +247,7 @@ class User extends BaseUser
     /**
      * Get createdAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getCreatedAt()
     {
@@ -258,10 +270,33 @@ class User extends BaseUser
     /**
      * Get updatedAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getUpdatedAt()
     {
         return $this->updatedAt;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     * @return User
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 }

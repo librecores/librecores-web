@@ -35,14 +35,17 @@ class DefaultController extends Controller
         $user = $this->getDoctrine()
             ->getRepository('LibrecoresProjectRepoBundle:User')
             ->findOneByUsername($userOrOrganization);
-
-        return $this->userViewAction($user);
+        if ($user !== null) {
+            return $this->userViewAction($user);
+        }
 
         // then organization
         $org = $this->getDoctrine()
             ->getRepository('LibrecoresProjectRepoBundle:Organization')
             ->findOneByName($userOrOrganization);
-        return $this->organizationViewAction($org);
+        if ($org !== null) {
+            return $this->organizationViewAction($org);
+        }
 
         // and 404 if it's neither
         throw $this->createNotFoundException('User or organization not found.');

@@ -1,0 +1,25 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}
+{{ user.getUsername() }} {% if user.getName() %}({{ user.getName() }}){% endif %}@ LibreCores
+{% endblock %}
+
+{% block pagepath %}Home &raquo; Projects &raquo; {{ user.getUsername() }}{% endblock %}
+
+{% block content %}
+<h1 class="projectname">{{ user.getUsername() }}</h1>
+
+{{ user.getUsername() }} joined LibreCores
+<time datetime="{{ user.getCreatedAt()|date("c", "UTC") }}"
+      data-livestamp="{{ user.getCreatedAt()|date("c", "UTC") }}">
+  on {{ user.getCreatedAt()|date("d F Y H:i", "UTC") }} UTC
+</time>.
+
+<h2>Projects</h2>
+{% for project in user.getProjects() %}
+  <h3>{{ project.getName() }}</h3>
+  {{ project.getTagline() }}
+{% else %}
+  {{ user.getUsername() }} has not yet created a project.
+{% endfor %}
+{% endblock %}
