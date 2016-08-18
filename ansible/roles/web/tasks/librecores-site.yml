@@ -12,6 +12,13 @@
 
 # we need to work around ansible trying to chown a file on NFS, which
 # is not possible. See https://github.com/ansible/ansible/issues/7372
+
+- name: Create Symfony environment shell file (part I, populate template in temp folder)
+  template: src=symfony-env.sh.j2 dest=/tmp/symfony-env.sh
+
+- name: Create Symfony environment shell file (part II, move to destination)
+  command: mv /tmp/symfony-env.sh /var/www/site/app/config/symfony-env.sh
+
 - name: Create Symfony configuration (part I, populate template in temp folder)
   template: src=parameters.yml.j2 dest=/tmp/parameters.yml
 
@@ -44,24 +51,6 @@
     chdir: /var/www/site
   when: not symfony_devel
 
-- name: (Re-)build supervisord for RabbitMQ (development)
-  command: php app/console rabbitmq-supervisor:rebuild
-  sudo: true
-  sudo_user: "{{ web_user }}"
-  args:
-    chdir: /var/www/site
-  when: symfony_devel
-
-- name: (Re-)build supervisord for RabbitMQ (production)
-  command: php app/console rabbitmq-supervisor:rebuild --env=prod --no-debug
-  sudo: true
-  sudo_user: "{{ web_user }}"
-  args:
-    chdir: /var/www/site
-  when: not symfony_devel
-  # XXX: Avoid failure for now if no RabbitMQ is used
-  ignore_errors: yes
-
 - name: Add init script for RabbitMQ supervisord
   template:
     src: librecores-rabbitmq-supervisor
@@ -75,15 +64,41 @@
 
 # run this last to ensure all deployment-created directories are covered
 - name: Ensure directory permissions of Symfony log and cache directories
-  command: chown -R {{ web_user }} /var/www/site/app/{{ item }}
+  file:
+    path: "/var/www/site/app/{{ item }}"
+    owner: "{{ web_user }}"
+    recurse: yes
   with_items:
     - logs
     - cache
-    - supervisor
   when: not is_vagrant_environment
+
+- name: Prepare directory for supervisord for RabbitMQ
+  file:
+    path: /var/www/site/app/supervisor
+    owner: "{{ web_user }}"
+    state: directory
+
+- name: (Re-)build supervisord for RabbitMQ (development)
+  command: php app/console rabbitmq-supervisor:rebuild
+  sudo: true
+  sudo_user: "{{ web_user }}"
+  args:
+    chdir: /var/www/site
+  when: symfony_devel
+
+- name: Run supervisord for RabbitMQ
+  command: /etc/init.d/librecores-rabbitmq-supervisor start
+
+- name: (Re-)build supervisord for RabbitMQ (production)
+  command: php app/console rabbitmq-supervisor:rebuild --env=prod --no-debug
+  sudo: true
+  sudo_user: "{{ web_user }}"
+  args:
+    chdir: /var/www/site
+  when: not symfony_devel
   # XXX: Avoid failure for now if no RabbitMQ is used
   ignore_errors: yes
-
 
 # Install librecores planet generator
 - name: Install extra packages for librecores-planet
