@@ -94,20 +94,20 @@ decide the winning entries on Sunday.
 
 ## Important Dates
 
-* Submission deadline: August 31, 2016
+* Submission deadline: ~~August 31, 2016~~ September 9, 2016
 * Notification: mid-september
 * ORCONF: Oct. 7-9 2016
 
 ## How to submit your work and ask questions
 
 To submit your contest entry
-please send an email to the public LibreCores Discussion mailing list 
-at [discussion@lists.librecores.org](mailto:discussion@lists.librecores.org) 
+please send an email to the public LibreCores Discussion mailing list
+at [discussion@lists.librecores.org](mailto:discussion@lists.librecores.org)
 ([subscribe here](https://lists.librecores.org/pipermail/discussion/)).
-You can use the same mailing list to ask questions regarding the contest or 
+You can use the same mailing list to ask questions regarding the contest or
 your design.
 
-If you prefer to contact the organizers privately,  you can reach out to 
+If you prefer to contact the organizers privately,  you can reach out to
 the FOSSi foundation at [info@fossi-foundation.org](mailto:info@fossi-foundation.org).
 
 ## Contest Jury
@@ -117,7 +117,7 @@ the FOSSi foundation at [info@fossi-foundation.org](mailto:info@fossi-foundation
 * Clifford Wolf, Yosys and Project Icestorm
 * Richard Herveille, Roa Logic
 * Ciprian Hegbeli, Digilent
-* TBD, Cadence
+* Günther Schröder, Cadence
 
 ## Organization Committee
 
