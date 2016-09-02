@@ -26,7 +26,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="2.8"
-     inkscape:cx="-8.3506657"
+     inkscape:cx="-142.81495"
      inkscape:cy="59.996211"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
@@ -54,7 +54,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -77,20 +77,16 @@
        width="80"
        id="rect5230-8"
        style="fill:#c0c4b0;fill-opacity:1;stroke:none;stroke-opacity:1" />
-    <text
-       inkscape:transform-center-y="-42.035325"
+    <g
        inkscape:transform-center-x="3.1925246"
-       xml:space="preserve"
+       inkscape:transform-center-y="-42.035325"
        style="font-style:normal;font-weight:normal;font-size:65.18255615px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;opacity:1;fill:#3fb0ac;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="427.05078"
-       y="180.58569"
-       id="text5234-1"
-       sodipodi:linespacing="125%"><tspan
-         sodipodi:role="line"
-         id="tspan5236-8"
-         x="427.05078"
-         y="180.58569"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:FontAwesome;-inkscape-font-specification:FontAwesome;fill:#3fb0ac;fill-opacity:1"></tspan></text>
+       id="text5234-1">
+      <path
+         d="m 468.95385,154.97826 c 0,8.98443 -7.31121,16.29564 -16.29564,16.29564 -8.98442,0 -16.29564,-7.31121 -16.29564,-16.29564 0,-8.98443 7.31122,-16.29564 16.29564,-16.29564 8.98443,0 16.29564,7.31121 16.29564,16.29564 z m 18.62359,30.26333 c 0,-1.23672 -0.50924,-2.43707 -1.34584,-3.27368 l -12.47635,-12.47635 c 2.94631,-4.25578 4.5104,-9.34816 4.5104,-14.5133 0,-14.14956 -11.45787,-25.60743 -25.60744,-25.60743 -14.14956,0 -25.60743,11.45787 -25.60743,25.60743 0,14.14956 11.45787,25.60743 25.60743,25.60743 5.16514,0 10.25753,-1.56409 14.51331,-4.5104 l 12.47635,12.43998 c 0.8366,0.87298 2.03695,1.38222 3.27367,1.38222 2.5462,0 4.6559,-2.10971 4.6559,-4.6559 z"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:FontAwesome;-inkscape-font-specification:FontAwesome;fill:#3fb0ac;fill-opacity:1"
+         id="path6065" />
+    </g>
     <path
        inkscape:connector-curvature="0"
        id="path5268-8"
