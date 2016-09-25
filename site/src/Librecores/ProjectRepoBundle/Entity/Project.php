@@ -595,4 +595,50 @@ class Project
     {
         return $this->tagline;
     }
+
+    /**
+     * Set dateAdded
+     *
+     * @param \DateTime $dateAdded
+     * @return Project
+     */
+    public function setDateAdded($dateAdded)
+    {
+        $this->dateAdded = $dateAdded;
+
+        return $this;
+    }
+
+    /**
+     * Get dateAdded
+     *
+     * @return \DateTime 
+     */
+    public function getDateAdded()
+    {
+        return $this->dateAdded;
+    }
+
+    /**
+     * Set dateLastModified
+     *
+     * @param \DateTime $dateLastModified
+     * @return Project
+     */
+    public function setDateLastModified($dateLastModified)
+    {
+        $this->dateLastModified = $dateLastModified;
+
+        return $this;
+    }
+
+    /**
+     * Get dateLastModified
+     *
+     * @return \DateTime 
+     */
+    public function getDateLastModified()
+    {
+        return $this->dateLastModified;
+    }
 }
