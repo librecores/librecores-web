@@ -21,7 +21,6 @@ class AppKernel extends Kernel
             new Librecores\SiteBundle\LibrecoresSiteBundle(),
             new Fkr\SimplePieBundle\FkrSimplePieBundle(),
             new OldSound\RabbitMqBundle\OldSoundRabbitMqBundle(),
-            new Phobetor\RabbitMqSupervisorBundle\RabbitMqSupervisorBundle(),
             new FOS\UserBundle\FOSUserBundle(),
             new HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
             new Librecores\PlanetBundle\LibrecoresPlanetBundle(),

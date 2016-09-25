@@ -57,16 +57,19 @@
     chdir: /var/www/lc/site
   when: not symfony_devel
 
-- name: Add init script for RabbitMQ supervisord
+- name: Add systemd service for RabbitMQ
   template:
-    src: librecores-rabbitmq-supervisor
-    dest: /etc/init.d
+    src: librecores-rabbitmq.service.j2
+    dest: /etc/systemd/system/librecores-rabbitmq.service
     owner: root
     group: root
-    mode: 0755
+    mode: 0644
 
-- name: Enable init script librecores-rabbitmq-supervisor
-  command: /usr/sbin/update-rc.d librecores-rabbitmq-supervisor defaults
+- name: Enable librecores-rabbitmq service
+  service:
+    name: librecores-rabbitmq
+    enabled: yes
+    state: started
 
 # run this last to ensure all deployment-created directories are covered
 - name: Ensure directory permissions of Symfony log and cache directories
@@ -78,36 +81,6 @@
     - logs
     - cache
   when: not is_vagrant_environment
-
-- name: Prepare directory for supervisord for RabbitMQ
-  file:
-    path: /var/www/lc/site/app/supervisor
-    state: directory
-
-- name: Prepare directory for supervisord for RabbitMQ (Part II, set owner)
-  command: "chown {{ web_user }} /var/www/lc/site/app/supervisor"
-  when: not is_vagrant_environment
-
-- name: (Re-)build supervisord for RabbitMQ (development)
-  command: php app/console rabbitmq-supervisor:rebuild
-  sudo: true
-  sudo_user: "{{ web_user }}"
-  args:
-    chdir: /var/www/lc/site
-  when: symfony_devel
-
-- name: Run supervisord for RabbitMQ
-  command: /etc/init.d/librecores-rabbitmq-supervisor start
-
-- name: (Re-)build supervisord for RabbitMQ (production)
-  command: php app/console rabbitmq-supervisor:rebuild --env=prod --no-debug
-  sudo: true
-  sudo_user: "{{ web_user }}"
-  args:
-    chdir: /var/www/lc/site
-  when: not symfony_devel
-  # XXX: Avoid failure for now if no RabbitMQ is used
-  ignore_errors: yes
 
 # Install librecores planet generator
 - name: Install extra packages for librecores-planet
