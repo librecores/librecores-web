@@ -64,12 +64,7 @@
     owner: root
     group: root
     mode: 0644
-
-- name: Enable librecores-rabbitmq service
-  service:
-    name: librecores-rabbitmq
-    enabled: yes
-    state: started
+  notify: restart librecores-rabbitmq
 
 # run this last to ensure all deployment-created directories are covered
 - name: Ensure directory permissions of Symfony log and cache directories
