@@ -19,7 +19,7 @@ to install all dependencies (see below) and get started.
 ### Manually installing the development environment
 
 - Install VirtualBox, if you don't already have it installed.
-- Install Ansible.
+- Install Ansible >= 2.0
 - Install the NFS server packages. If you don't want to, see the note on NFS
   below.
 - Install Vagrant. It's fast and simple: http://www.vagrantup.com/downloads

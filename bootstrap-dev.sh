@@ -27,6 +27,20 @@ if hash vagrant 2>/dev/null; then
   fi
 fi
 
+# check if we need to install Ansible
+INSTALL_ANSIBLE=0
+if hash ansible 2>/dev/null; then
+  INSTALLED_ANSIBLE_VERSION=$(ansible --version | head -n1)
+  INSTALLED_ANSIBLE_VERSION=${INSTALLED_ANSIBLE_VERSION##ansible }
+  if [ $(echo $INSTALLED_ANSIBLE_VERSION | grep -q '^2.') ]; then
+    INSTALL_ANSIBLE=0
+  else
+    echo "Re-installing Ansible because we need version >= 2.0."
+  fi
+fi
+
+echo install_ansible is $INSTALL_ANSIBLE
+
 
 # distribution-dependent steps
 DLDIR=$(mktemp -d)
@@ -34,14 +48,24 @@ DLDIR=$(mktemp -d)
 echo Installing dependencies. You may be prompted for a password by sudo.
 case $(lsb_release -is) in
   Ubuntu)
-    sudo apt-get install virtualbox ansible nfs-kernel-server curl
+    sudo apt-get install virtualbox nfs-kernel-server curl
+
     if [ $INSTALL_VAGRANT = 1 ]; then
       curl -L https://releases.hashicorp.com/vagrant/${VAGRANT_VERSION}/vagrant_${VAGRANT_VERSION}_$(uname -m).deb > "$DLDIR/vagrant.deb"
       sudo dpkg -i "$DLDIR/vagrant.deb"
     fi
+
+    if [ $INSTALL_ANSIBLE = 1 ]; then
+      if [ $(lsb_release -cs) == "trusty" ]; then
+        sudo add-apt-repository ppa:ansible/ansible
+        sudo apt-get update
+      fi
+      sudo apt-get -y install ansible
+    fi
     ;;
   *SUSE*)
-    sudo zypper install virtualbox ansible nfs-kernel-server curl
+    sudo zypper install virtualbox nfs-kernel-server curl
+
     if [ $INSTALL_VAGRANT = 1 ]; then
       curl -L https://releases.hashicorp.com/vagrant/${VAGRANT_VERSION}/vagrant_${VAGRANT_VERSION}_$(uname -m).rpm > "$DLDIR/vagrant.rpm"
       sudo rpm -Uhv --oldpackage "$DLDIR/vagrant.rpm"
@@ -53,6 +77,11 @@ case $(lsb_release -is) in
       # ensure the NFS server is started on boot and start now
       sudo systemctl enable nfs-server
       sudo systemctl start nfs-server
+    fi
+
+    if [ $INSTALL_ANSIBLE = 1 ]; then
+      sudo zypper ar http://download.opensuse.org/repositories/systemsmanagement/openSUSE_Leap_42.1/systemsmanagement.repo
+      sudo zypper install ansible
     fi
     ;;
   *)
