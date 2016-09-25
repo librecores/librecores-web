@@ -45,6 +45,12 @@
     chdir: /var/www/lc/site
   when: not symfony_devel
 
+- name: Clear symfony cache (development)
+  command: php app/console cache:clear --env=dev
+  args:
+    chdir: /var/www/lc/site
+  when: symfony_devel
+
 - name: Dump assetic assets (production)
   command: php app/console assetic:dump --env=prod --no-debug
   args:
