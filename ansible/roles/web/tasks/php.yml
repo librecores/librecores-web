@@ -20,31 +20,31 @@
 - name: Install packaged PHP extensions
   sudo: yes
   apt:  package={{ item.package }} state=installed
-  with_items: php_extensions_packaged
+  with_items: "{{ php_extensions_packaged }}"
 
 - name: Enable packaged PHP extensions for all SAPIs
   sudo: yes
   # creates= only accepts one file; phpenmod also creates the fpm symlink
   command: /usr/sbin/phpenmod -s ALL {{ item.name }} creates=/etc/php/7.0/cli/conf.d/20-{{ item.name }}.ini
-  with_items: php_extensions_packaged
+  with_items: "{{ php_extensions_packaged }}"
   notify: restart php7.0-fpm
 
 # PHP extensions from PECL
 - name: Install PECL-installed PHP extensions
   sudo: yes
   shell: echo "\n" | /usr/bin/pecl install {{ item.package }} creates=/usr/lib/php/20151012/{{ item.name }}.so
-  with_items: php_extensions_pecl
+  with_items: "{{ php_extensions_pecl }}"
 
 - name: Configure PECL-installed PHP extensions
   sudo: yes
   template: src=php_extension.tpl dest=/etc/php/mods-available/{{ item.name }}.ini
-  with_items: php_extensions_pecl
+  with_items: "{{ php_extensions_pecl }}"
 
 - name: Enable PECL-installed PHP extensions for all SAPIs (through PECL)
   sudo: yes
   # creates= only accepts one file; phpenmod also creates the fpm symlink
   command: /usr/sbin/phpenmod -s ALL {{ item.name }} creates=/etc/php/7.0/cli/conf.d/20-{{ item.name }}.ini
-  with_items: php_extensions_pecl
+  with_items: "{{ php_extensions_pecl }}"
   notify: restart php7.0-fpm
 
 # Composer
