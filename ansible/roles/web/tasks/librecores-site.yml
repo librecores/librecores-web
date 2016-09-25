@@ -76,8 +76,11 @@
 - name: Prepare directory for supervisord for RabbitMQ
   file:
     path: /var/www/lc/site/app/supervisor
-    owner: "{{ web_user }}"
     state: directory
+
+- name: Prepare directory for supervisord for RabbitMQ (Part II, set owner)
+  command: "chown {{ web_user }} /var/www/lc/site/app/supervisor"
+  when: not is_vagrant_environment
 
 - name: (Re-)build supervisord for RabbitMQ (development)
   command: php app/console rabbitmq-supervisor:rebuild
