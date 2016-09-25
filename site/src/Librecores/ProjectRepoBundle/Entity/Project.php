@@ -13,6 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="Librecores\ProjectRepoBundle\Entity\ProjectRepository")
+ * @ORM\HasLifecycleCallbacks
  */
 class Project
 {
@@ -57,7 +58,6 @@ class Project
      * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
-
 
     /**
      * The tagline of the project
@@ -157,6 +157,52 @@ class Project
      */
     private $inProcessing = false;
 
+    /**
+     * The date when this project was added to LibreCores
+     *
+     * @var DateTime date/time in UTC
+     *
+     * @see __construct()
+     *
+     * @ORM\Column(type="datetime", nullable=false)
+     */
+    private $dateAdded = false;
+
+    /**
+     * The date when the metadata of this project (i.e. the fields in this
+     * entity) were last modified.
+     *
+     * This field is updated automatically when saving this entity.
+     *
+     * @see __construct()
+     * @see updateDateLastModified()
+     *
+     * @var DateTime date/time in UTC
+     *
+     * @ORM\Column(type="datetime", nullable=false)
+     */
+    private $dateLastModified = false;
+
+    /**
+     * Constructor
+     */
+    public function __construct() {
+        // record the date/time of the project creation
+        $this->setDateAdded(new \DateTime());
+        $this->setDateLastModified(new \DateTime());
+    }
+
+    /**
+     * Update $dateLastModified
+     *
+     * This is called automatically by Doctrine.
+     *
+     * @ORM\PrePersist()
+     * @ORM\PreUpdate()
+     */
+    public function updateDateLastModified() {
+        $this->setDateLastModified(new \DateTime());
+    }
 
     /**
      * Get the name of the "parent" of this project
