@@ -1,6 +1,6 @@
 Vagrant.configure("2") do |config|
     # Configure the box to use
-    config.vm.box       = 'ubuntu/trusty64'
+    config.vm.box       = 'bento/ubuntu-16.04'
 
     # Configure shared folders
     # uncomment either one of the two versions below. See README.md in the
