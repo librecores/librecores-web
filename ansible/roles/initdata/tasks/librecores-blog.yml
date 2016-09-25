@@ -14,4 +14,4 @@
     login_user=librecores-blog
     login_password={{ blog_mysql_password }}
     state=import
-    target=/var/www/sql/dev_fixtures_blog.sql
+    target=/var/www/lc/sql/dev_fixtures_blog.sql

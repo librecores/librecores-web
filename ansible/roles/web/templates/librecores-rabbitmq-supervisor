@@ -11,9 +11,9 @@
 
 . /lib/lsb/init-functions
 
-. /var/www/site/app/config/symfony-env.sh
+. /var/www/lc/site/app/config/symfony-env.sh
 
-WEBDIR=/var/www/site
+WEBDIR=/var/www/lc/site
 USER="{{web_user }}"
 CTRL_CMD="$WEBDIR/app/console rabbitmq-supervisor:control"
 

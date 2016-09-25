@@ -43,7 +43,7 @@
 
 - name: "Setup source repository (non-development only)"
   git: repo="{{ src_repo_url }}"
-       dest=/var/www
+       dest=/var/www/lc
        accept_hostkey=yes
        key_file=/src-librecores-web.key
        depth=1

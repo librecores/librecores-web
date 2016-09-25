@@ -7,11 +7,11 @@ Vagrant.configure("2") do |config|
     # top-level folder for details.
     # WITH NFS
     config.vm.synced_folder ".",  "/vagrant", id: "vagrant-root",type: 'nfs', map_uid: Process.uid, map_gid: Process.gid
-    config.vm.synced_folder "..", "/var/www", id: "application", type: 'nfs', map_uid: Process.uid, map_gid: Process.gid
+    config.vm.synced_folder "..", "/var/www/lc", id: "application", type: 'nfs', map_uid: Process.uid, map_gid: Process.gid
 
     # WITHOUT NFS
     #config.vm.synced_folder ".",  "/vagrant", id: "vagrant-root"
-    #config.vm.synced_folder "..", "/var/www", id: "application"
+    #config.vm.synced_folder "..", "/var/www/lc", id: "application"
 
     # Configure networking (requires hostmanager plugin)
     config.hostmanager.enabled = true

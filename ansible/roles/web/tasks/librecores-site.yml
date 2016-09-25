@@ -17,18 +17,18 @@
   template: src=symfony-env.sh.j2 dest=/tmp/symfony-env.sh
 
 - name: Create Symfony environment shell file (part II, move to destination)
-  command: mv /tmp/symfony-env.sh /var/www/site/app/config/symfony-env.sh
+  command: mv /tmp/symfony-env.sh /var/www/lc/site/app/config/symfony-env.sh
 
 - name: Create Symfony configuration (part I, populate template in temp folder)
   template: src=parameters.yml.j2 dest=/tmp/parameters.yml
 
 - name: Create symfony configuration (part II, move to destination)
-  command: mv /tmp/parameters.yml /var/www/site/app/config/parameters.yml
+  command: mv /tmp/parameters.yml /var/www/lc/site/app/config/parameters.yml
 
 - name: Install dependencies through composer (development)
   command: composer install
   args:
-    chdir: /var/www/site
+    chdir: /var/www/lc/site
   when: symfony_devel
 
 - name: Install dependencies through composer (production)
@@ -36,19 +36,19 @@
   environment:
     SYMFONY_ENV: prod
   args:
-    chdir: /var/www/site
+    chdir: /var/www/lc/site
   when: not symfony_devel
 
 - name: Clear symfony cache (production)
   command: php app/console cache:clear --env=prod --no-debug
   args:
-    chdir: /var/www/site
+    chdir: /var/www/lc/site
   when: not symfony_devel
 
 - name: Dump assetic assets (production)
   command: php app/console assetic:dump --env=prod --no-debug
   args:
-    chdir: /var/www/site
+    chdir: /var/www/lc/site
   when: not symfony_devel
 
 - name: Add init script for RabbitMQ supervisord
@@ -65,7 +65,7 @@
 # run this last to ensure all deployment-created directories are covered
 - name: Ensure directory permissions of Symfony log and cache directories
   file:
-    path: "/var/www/site/app/{{ item }}"
+    path: "/var/www/lc/site/app/{{ item }}"
     owner: "{{ web_user }}"
     recurse: yes
   with_items:
@@ -75,7 +75,7 @@
 
 - name: Prepare directory for supervisord for RabbitMQ
   file:
-    path: /var/www/site/app/supervisor
+    path: /var/www/lc/site/app/supervisor
     owner: "{{ web_user }}"
     state: directory
 
@@ -84,7 +84,7 @@
   sudo: true
   sudo_user: "{{ web_user }}"
   args:
-    chdir: /var/www/site
+    chdir: /var/www/lc/site
   when: symfony_devel
 
 - name: Run supervisord for RabbitMQ
@@ -95,7 +95,7 @@
   sudo: true
   sudo_user: "{{ web_user }}"
   args:
-    chdir: /var/www/site
+    chdir: /var/www/lc/site
   when: not symfony_devel
   # XXX: Avoid failure for now if no RabbitMQ is used
   ignore_errors: yes
@@ -112,12 +112,12 @@
     name="Update Planet LibreCores"
     cron_file="librecores-planet-update"
     user="{{ web_user }}"
-    job="/var/www/planet/generate.sh"
+    job="/var/www/lc/planet/generate.sh"
 
 - name: Ensure directory permissions of planet cache directories
-  command: chown -R {{ web_user }} /var/www/planet/cache
+  command: chown -R {{ web_user }} /var/www/lc/planet/cache
   when: not is_vagrant_environment
 
 - name: Ensure directory permissions of web-accessible planet output directory
-  command: chown -R {{ web_user }} /var/www/site/web/planet
+  command: chown -R {{ web_user }} /var/www/lc/site/web/planet
   when: not is_vagrant_environment

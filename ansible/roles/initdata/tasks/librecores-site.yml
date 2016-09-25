@@ -10,7 +10,7 @@
 - name: Let doctrine generate DB contents
   command: php app/console doctrine:schema:update --force
   args:
-    chdir: /var/www/site
+    chdir: /var/www/lc/site
 
 - name: Import LibreCores development DB Dump
   mysql_db: >
@@ -18,11 +18,11 @@
     login_user=librecores
     login_password={{ site_mysql_password }}
     state=import
-    target=/var/www/sql/dev_fixtures_site.sql
+    target=/var/www/lc/sql/dev_fixtures_site.sql
 
 - name: Run planet generator for the first time
   sudo: yes
   sudo_user: "{{ web_user }}"
-  shell: /var/www/planet/generate.sh
+  shell: /var/www/lc/planet/generate.sh
   args:
-    chdir: /var/www/planet
+    chdir: /var/www/lc/planet

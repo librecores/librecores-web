@@ -2,7 +2,7 @@ server {
     listen 80;
 
     server_name blog.{{ librecores_domain }};
-    root        /var/www/blog;
+    root        /var/www/lc/blog;
 
     index index.php;
 

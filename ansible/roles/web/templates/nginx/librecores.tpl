@@ -2,7 +2,7 @@ server {
     listen 80;
 
     server_name www.{{ librecores_domain }} {{ librecores_domain }};
-    root        /var/www/site/web;
+    root        /var/www/lc/site/web;
 
     error_log   /var/log/nginx/librecores/error.log;
     access_log  /var/log/nginx/librecores/access.log;
