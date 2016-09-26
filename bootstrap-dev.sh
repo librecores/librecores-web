@@ -6,7 +6,7 @@
 # runs Vagrant to display the site in a browser.
 #
 
-set -e
+set -ex
 
 # Version of vagrant we depend on
 VAGRANT_VERSION=1.8.5
@@ -28,19 +28,16 @@ if hash vagrant 2>/dev/null; then
 fi
 
 # check if we need to install Ansible
-INSTALL_ANSIBLE=0
+INSTALL_ANSIBLE=1
 if hash ansible 2>/dev/null; then
   INSTALLED_ANSIBLE_VERSION=$(ansible --version | head -n1)
   INSTALLED_ANSIBLE_VERSION=${INSTALLED_ANSIBLE_VERSION##ansible }
-  if [ $(echo $INSTALLED_ANSIBLE_VERSION | grep -q '^2.') ]; then
+  if [ $(echo $INSTALLED_ANSIBLE_VERSION | grep -q '^2.'; echo $?) -eq 0 ]; then
     INSTALL_ANSIBLE=0
   else
     echo "Re-installing Ansible because we need version >= 2.0."
   fi
 fi
-
-echo install_ansible is $INSTALL_ANSIBLE
-
 
 # distribution-dependent steps
 DLDIR=$(mktemp -d)
@@ -57,6 +54,7 @@ case $(lsb_release -is) in
 
     if [ $INSTALL_ANSIBLE = 1 ]; then
       if [ $(lsb_release -cs) == "trusty" ]; then
+        sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 6125E2A8C77F2818FB7BD15B93C4A3FD7BB9C367
         sudo add-apt-repository ppa:ansible/ansible
         sudo apt-get update
       fi
