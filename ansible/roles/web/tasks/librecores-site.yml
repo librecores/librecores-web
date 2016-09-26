@@ -25,6 +25,13 @@
 - name: Create symfony configuration (part II, move to destination)
   command: mv /tmp/parameters.yml /var/www/lc/site/app/config/parameters.yml
 
+- name: "Create composer configuration directory for user {{ web_user }}"
+  file:
+    path: "{{ web_user_home }}/.config/composer"
+    state: directory
+    recurse: yes
+    owner: "{{ web_user }}"
+
 - name: Copy composer configuration for deployment user
   copy:
     src: roles/web/templates/composer-config.json
