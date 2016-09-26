@@ -24,7 +24,7 @@ to install all dependencies (see below) and get started.
   below.
 - Install Vagrant. It's fast and simple: http://www.vagrantup.com/downloads
 - Install vagrant-hostmanager: `vagrant plugin install vagrant-hostmanager`
-- Create the secrets file `ansible/secrets/dev-vagrant.secrets.yml`. A 
+- Create the secrets file `ansible/secrets/dev-vagrant.secrets.yml`. A
   template is available in `ansible/secrets.dist/dev-vagrant.secrets.yml`
 - `cd vagrant; vagrant up`. This might take a while.
 - Take your web browser to http://librecores.devel and you should see the
@@ -55,3 +55,8 @@ If you don't use NFS, ...
   Username: admin
   Password: password
 
+
+Contributing
+------------
+Please refer to our [CONTRIBUTING](CONTRIBUTING.md) for more information on how to
+submit patches.
