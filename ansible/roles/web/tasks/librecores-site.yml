@@ -25,6 +25,13 @@
 - name: Create symfony configuration (part II, move to destination)
   command: mv /tmp/parameters.yml /var/www/lc/site/app/config/parameters.yml
 
+- name: Copy composer configuration for deployment user
+  copy:
+    src: roles/web/templates/composer-config.json
+    dest: "{{ web_user_home }}/.config/composer/config.json"
+    owner: "{{ web_user }}"
+    mode: 0644
+
 - name: Install dependencies through composer (development)
   command: composer install
   args:
