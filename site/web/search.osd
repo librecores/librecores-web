@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">
+    <ShortName>LibreCores</ShortName>
+    <LongName>LibreCores Project Search</LongName>
+    <Description>Use LibreCores.org to search for free and open digital hardware projects.</Description>
+    <Tags>librecores fossi</Tags>
+    <Contact>info@fossi-foundation.org</Contact>
+    <Url type="text/html" template="https://www.librecores.org/p/search/?q={searchTerms}"/>
+    <Language>en-us</Language>
+    <OutputEncoding>UTF-8</OutputEncoding>
+    <InputEncoding>UTF-8</InputEncoding>
+    <Image height="16" width="16" type="image/vnd.microsoft.icon">https://www.librecores.org/favicon.ico</Image>
+    <Image height="32" width="32" type="image/png">https://www.librecores.org/favicon.png</Image>
+</OpenSearchDescription>
