@@ -8,14 +8,17 @@
   <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}" sizes="32x32">
 
   {% block stylesheets %}
-    {% stylesheets 'assets/css/*' filter='cssrewrite' %}
+    {% stylesheets filter="scssphp,cssrewrite" output="css/app.css"
+        "assets/scss/bootstrap-librecores.scss"
+        "assets/css/*.css"
+    %}
         <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
   {% endblock %}
 
   <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!--[if lt IE 9]>
-    {% javascripts '@js_head' %}
+    {% javascripts filter="?jsqueeze" output="js/app_head.js" '@js_head'%}
       <script src="{{ asset_url }}"></script>
     {% endjavascripts %}
   <![endif]-->
@@ -92,7 +95,7 @@
   </footer>
 
   {% block javascripts %}
-    {% javascripts '@js_body_end' %}
+    {% javascripts filter="?jsqueeze" output="js/app_body.js" '@js_body_end' %}
       <script src="{{ asset_url }}"></script>
     {% endjavascripts %}
 

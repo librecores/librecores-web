@@ -6,17 +6,11 @@ html, body {
 
 body {
   background: none repeat scroll 0 0 #fff;
-  font-family: 'Open Sans', sans-serif;
-  font-size: 15px;
   font-weight: 400;
   line-height: 24px;
 
   /* move content below top navbar */
   padding-top: 60px;
-}
-
-h1, h2, h3, h4, h5, h6 {
-  font-family: 'Open Sans', sans-serif;
 }
 
 h1 {
@@ -45,7 +39,6 @@ h4 {
 pre, code {
   border-radius: 3px 3px 3px 3px;
   color: #000000;
-  font-family: "Source Code Pro",Menlo,monospace;
   font-size: 14px;
 }
 pre {
@@ -63,14 +56,6 @@ pre code {
   box-shadow: none;
 }
 
-a:not(.btn), a:not(.btn):visited, a:not(.btn):hover, a:not(.btn):focus {
-  color: #3fb0ac;
-}
-
-a:hover {
-  text-decoration: underline;
-  color: #173e43;
-}
 
 /* top navigation bar */
 .librecores-nav {
@@ -240,7 +225,7 @@ a:hover {
 
 
 
-/* CORE REPOSITORY CSS */
+/* PROJECT REPOSITORY CSS */
 .tab-pane {
   border-bottom: 1px solid #DDD;
   border-left: 1px solid #DDD;
@@ -256,10 +241,6 @@ a:hover {
 
 .projectname {
   margin-bottom: 20px;
-}
-
-.projectname a {
-  color: #484235;
 }
 
 /*.panel-default > .panel-heading {

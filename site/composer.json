@@ -29,7 +29,9 @@
 		"php-amqplib/rabbitmq-bundle" : "1.*",
 		"hwi/oauth-bundle" : "0.4.*@dev",
 		"friendsofsymfony/user-bundle" : "~2.0@dev",
-		"sensio/generator-bundle" : "~2.3"
+		"sensio/generator-bundle" : "~2.3",
+		"leafo/scssphp": "^0.6.6",
+		"patchwork/jsqueeze": "^2.0"
 	},
 	"require-dev" : {
 	},

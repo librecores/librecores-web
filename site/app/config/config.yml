@@ -42,7 +42,10 @@ assetic:
     use_controller: false
     bundles:        [ ]
     filters:
+        scssphp:
+            formatter: 'Leafo\ScssPhp\Formatter\Compressed'
         cssrewrite: ~
+        jsqueeze: ~
     assets:
         # JavaScript files loaded inside <head> (only for special cases)
         js_head:
