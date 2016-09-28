@@ -1,0 +1,103 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}
+LibreCores Search
+{% endblock %}
+
+{% block pagepath %}Home &raquo; Projects &raquo; Find{% endblock %}
+
+{% block content %}
+{{ form_start(search_query_form, {'attr': {'class': 'form-inline'}}) }}
+
+<div class="librecores-search">
+<div class="row">
+  <div class="col-md-3">
+    <h1>Search</h1>
+  </div>
+  <div class="col-md-9">
+    <div class="input-group" style="width:100%">
+      {{ form_widget(search_query_form.q, {'attr': {'placeholder': 'Search for ...'}}) }}
+      <span class="input-group-btn">
+        <button class="btn btn-default" type="submit"
+          <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+          Search
+        </button>
+      </span>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-3">
+    {# sidebar for search refinements #}
+    <ul class="list-group">
+      {# XXX: maybe we can find a way to add the "active" class with
+         less code duplication? #}
+      {%  if search_query.type == 'projects' %}
+      {{ form_widget(search_query_form.search_projects, {
+          'icon': 'fa-code',
+          'attr':{'class': 'list-group-item active' }
+      }) }}
+      {% else %}
+      {{ form_widget(search_query_form.search_projects, {
+          'icon': 'fa-code',
+          'attr':{'class': 'list-group-item' }
+      }) }}
+      {% endif %}
+
+      {%  if search_query.type == 'users' %}
+      {{ form_widget(search_query_form.search_users, {
+          'icon': 'fa-user',
+          'attr':{'class': 'list-group-item active' }
+      }) }}
+      {% else %}
+      {{ form_widget(search_query_form.search_users, {
+          'icon': 'fa-user',
+          'attr':{'class': 'list-group-item' }
+      }) }}
+      {% endif %}
+    </ul>
+  </div>
+  <div class="col-md-9">
+    {# main content: search results #}
+    {% if search_query.type == 'projects' %}
+      {% for project in projects %}
+        <h2><a href="{{ path('librecores_project_repo_project_view', {'parentName':
+  project.getParentName(), 'projectName': project.getName()}) }}">{{ project.getFqname() }}</a></h2>
+        <div>{{ project.getTagline() }}</div>
+        <div><i>
+          added on {{ project.getDateAdded()|date('Y-m-d') }}
+        </i></div>
+        <hr/>
+      {% else %}
+        {% if search_query.q is empty %}
+          <div>Search for projects on LibreCores by entering a keyword above.</div>
+        {% else %}
+          <h2>Nothing found :-( Maybe try another search keyword?</h2>
+        {% endif %}
+      {% endfor %}
+
+    {% elseif search_query.type == 'users' %}
+      {% for user in users %}
+        <h2><a href="{{ path('librecores_project_repo_user_org_view', {'userOrOrganization':
+  user.getUsername()}) }}">{{ user.getUsername() }}</a></h2>
+        <div>{{ user.getName() }}</div>
+        <div><i>
+          joined on {{ user.getCreatedAt()|date('Y-m-d') }}
+        </i></div>
+        <hr/>
+      {% else %}
+        {% if search_query.q is empty %}
+          <div>Search for users on LibreCores by entering a keyword above.</div>
+        {% else %}
+          <h2>Nothing found :-( Maybe try another search keyword?</h2>
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+  </div>
+</div>
+
+
+{{ form_end(search_query_form) }}
+</div>
+{% endblock %}

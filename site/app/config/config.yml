@@ -34,7 +34,9 @@ twig:
         "%kernel.root_dir%/../sitecontent": site_content
     form:
         # Use Bootstrap Form styling by default
-        resources: ['bootstrap_3_layout.html.twig']
+        resources:
+            - 'bootstrap_3_layout.html.twig'
+            - 'LibrecoresProjectRepoBundle:Form:fields.html.twig'
 
 # Assetic Configuration
 assetic:

@@ -8,18 +8,19 @@ use Librecores\ProjectRepoBundle\Form\Type\ProjectType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Librecores\ProjectRepoBundle\Form\Type\SourceRepoType;
-use Symfony\Component\Validator\Exception\ValidatorException;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Librecores\ProjectRepoBundle\Entity\Organization;
 use Librecores\ProjectRepoBundle\Entity\User;
+use Librecores\ProjectRepoBundle\Form\Type\SearchQueryType;
+use Librecores\ProjectRepoBundle\Form\Model\SearchQuery;
 
 class DefaultController extends Controller
 {
     /**
      * Render the project overview page
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         return $this->render('LibrecoresProjectRepoBundle:Default:index.html.twig');
     }
@@ -234,5 +235,84 @@ class DefaultController extends Controller
 
         return $this->render('LibrecoresProjectRepoBundle:Default:project_settings_team.html.twig',
             array('project' => $p));
+    }
+
+    /**
+     * Search for a project
+     *
+     * @param Request $req
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function projectSearchAction(Request $req)
+    {
+        $searchQuery = new SearchQuery();
+        $searchQueryForm = $this->createForm(SearchQueryType::class, $searchQuery);
+        $searchQueryForm->add('search_users', SubmitType::class, array(
+            'label' => 'Users',
+        ));
+        $searchQueryForm->add('search_projects', SubmitType::class, array(
+            'label' => 'Projects'
+        ));
+        $searchQueryForm->handleRequest($req);
+
+        // Form validation: If we encounter any invalid value, simply
+        // redirect to an empty search form.
+        if (!empty($searchQuery->getQ()) && !$searchQueryForm->isValid()) {
+            return $this->redirectToRoute($req->get('_route'));
+        }
+
+        // Handle switching of search type
+        // In order to have always copy&paste-able URLs, we adjust the type
+        // based on the button click event and then redirect to a "nice" URL
+        // with the search results.
+        $redirect = false;
+        if ($searchQueryForm->get('search_projects')->isClicked()) {
+            $searchQuery->setType(SearchQuery::TYPE_PROJECTS);
+            $redirect = true;
+        }
+        if ($searchQueryForm->get('search_users')->isClicked()) {
+            $searchQuery->setType(SearchQuery::TYPE_USERS);
+            $redirect = true;
+        }
+        if ($redirect) {
+            return $this->redirectToRoute($req->get('_route'),
+                [ 'q' => $searchQuery->getQ(), 'type' => $searchQuery->getType()]);
+        }
+
+        // No query string given: no search necessary
+        if (empty($searchQuery->getQ())) {
+            return $this->render('LibrecoresProjectRepoBundle:Default:project_search.html.twig',
+                [
+                    'search_query_form' => $searchQueryForm->createView(),
+                    'search_query' => $searchQuery,
+                    'projects' => [],
+                    'users' => [],
+                ]);
+        }
+
+        // Get the results
+        $projects = array();
+        $users = array();
+
+        // Search for projects
+        if ($searchQuery->getType() == SearchQuery::TYPE_PROJECTS) {
+            $projects = $this->getDoctrine()
+                ->getRepository('LibrecoresProjectRepoBundle:Project')
+                ->findByFqnameFragment($searchQuery->getQ());
+        }
+
+        // Search for users
+        if ($searchQuery->getType() == SearchQuery::TYPE_USERS) {
+            $userManager = $this->container->get('fos_user.user_manager');
+            $users = $userManager->findUsersBySearchString($searchQuery->getQ());
+        }
+
+        return $this->render('LibrecoresProjectRepoBundle:Default:project_search.html.twig',
+            [
+                'search_query_form' => $searchQueryForm->createView(),
+                'search_query' => $searchQuery,
+                'projects' => $projects,
+                'users' => $users,
+            ]);
     }
 }

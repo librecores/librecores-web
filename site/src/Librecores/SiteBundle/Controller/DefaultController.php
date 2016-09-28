@@ -3,14 +3,30 @@
 namespace Librecores\SiteBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
+use Librecores\ProjectRepoBundle\Form\Type\SearchQueryType;
+use Librecores\ProjectRepoBundle\Form\Model\SearchQuery;
 
 class DefaultController extends Controller
 {
-    public function homeAction()
+    /**
+     * Render the home page
+     *
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function homeAction(Request $request)
     {
         $templateArgs = array();
-        $templateArgs['blogposts'] = $this->getBlogPosts();
 
+        // search query form
+        $searchQueryForm = $this->createForm(SearchQueryType::class,
+            new SearchQuery(),
+            ['action' => $this->generateUrl('librecores_project_repo_project_search')]);
+        $templateArgs['search_query_form'] = $searchQueryForm->createView();
+
+        // blog posts on planet
+        $templateArgs['blogposts'] = $this->getBlogPosts();
 
         return $this->render('LibrecoresSiteBundle:Default:home.html.twig',
             $templateArgs

@@ -17,7 +17,6 @@ h1 {
   color: #3fb0ac;
   font-weight: 600;
   font-size: 40px;
-  padding-top: 10px;
   padding-bottom: 20px;
 }
 h2 {
@@ -54,6 +53,10 @@ code {
 pre code {
   background: none repeat scroll 0 0 transparent;
   box-shadow: none;
+}
+
+h1 a:hover, h1 a:active {
+ color: #3fb0ac
 }
 
 .list-group-item {
@@ -119,6 +122,10 @@ pre code {
   color: #666666;
   text-shadow: 0 1px 0 white;
   font-size: 25px;
+}
+
+#maincontent {
+  margin-top: 20px;
 }
 
 /* search bar, also including quicknav */
@@ -202,8 +209,8 @@ pre code {
 }
 
 .librecores-home-showcase-keyword {
-  font-weight: bold; 
-  font-size: 20px; 
+  font-weight: bold;
+  font-size: 20px;
   text-align: center;
 }
 
@@ -276,6 +283,13 @@ pre code {
   font-size: 1.2em;
   line-height: normal;
   
+}
+
+.librecores-search h1 {
+  font-weight: bold;
+  font-size: 2em;
+  color: #3fb0ac;
+  margin-top: 0;
 }
 
 /* LOGIN/SIGNUP CSS */

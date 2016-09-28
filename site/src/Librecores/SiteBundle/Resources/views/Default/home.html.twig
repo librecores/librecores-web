@@ -12,13 +12,13 @@
         <span class="librecores-home-banner-claim">We drive Free and Open Digital Hardware.</span>
       </div>
 
-      <form class="form-inline center-block librecores-home-banner-search">
-        <input type="text" class="form-control" placeholder="What IP is missing in your project?"/>
+      {{ form_start(search_query_form, {'attr': {'class': 'form-inline center-block librecores-home-banner-search'}}) }}
+        {{ form_widget(search_query_form.q, {'attr': {'placeholder': 'What IP is missing in your project?' }}) }}
         <button class="btn btn-danger btn-lg" type="submit">
           <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
           Find IP Project
         </button>
-      </form>
+      {{ form_end(search_query_form) }}
     </div>
   </div>
 

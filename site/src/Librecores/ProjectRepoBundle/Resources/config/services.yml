@@ -30,6 +30,10 @@ services:
             - { name: security.voter }
         public: false
 
+    librecores.form_extention.icon:
+        class: Librecores\ProjectRepoBundle\Form\Extension\ButtonTypeIconExtension
+        tags:
+            - { name: form.type_extension, extended_type: Symfony\Component\Form\Extension\Core\Type\ButtonType }
 
 #    librecores_project_repo.example:
 #        class: Librecores\ProjectRepoBundle\Example

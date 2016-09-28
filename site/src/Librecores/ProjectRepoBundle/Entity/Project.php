@@ -224,6 +224,15 @@ class Project
         }
     }
 
+    /**
+     * Get the fully qualified name of this project
+     *
+     * @return string
+     */
+    public function getFqname()
+    {
+        return $this->getParentName().'/'.$this->getName();
+    }
 
     /**
      * Set the project status
@@ -612,7 +621,7 @@ class Project
     /**
      * Get dateAdded
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDateAdded()
     {
@@ -635,7 +644,7 @@ class Project
     /**
      * Get dateLastModified
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDateLastModified()
     {
