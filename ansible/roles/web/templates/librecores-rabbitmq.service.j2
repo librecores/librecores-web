@@ -1,7 +1,7 @@
 [Unit]
 Description=LibreCores RabbitMQ
-Requires=rabbitmq
-After=rabbitmq
+Requires=rabbitmq-server.service
+After=rabbitmq-server.service
 
 [Service]
 EnvironmentFile=/var/www/lc/site/app/config/symfony-env.sh

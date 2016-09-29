@@ -109,6 +109,12 @@
     mode: 0644
   notify: restart librecores-rabbitmq
 
+- name: reload systemd to pick up changes in Unit files
+  command: systemctl daemon-reload
+
+- name: ensure librecores-rabbitmq is running (and enable it at boot)
+  service: name=librecores-rabbitmq state=started enabled=yes
+
 # run this last to ensure all deployment-created directories are covered
 - name: Ensure directory permissions of Symfony log and cache directories
   file:
