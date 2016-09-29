@@ -1,7 +1,7 @@
 ---
 # get current AMI ID from http://cloud-images.ubuntu.com/locator/ec2/
-# search for trusty amd64 hvm:ebs eu-west-1
-ami_id: "ami-a7412ad4"
+# search for xenial amd64 hvm:ebs eu-west-1
+ami_id: "ami-844e0bf7"
 aws_region: "eu-west-1"
 
 # Public IPs (EC2 Elastic IPs)
@@ -13,3 +13,4 @@ librecores_domain: "stage.librecores.org"
 web_user: "www-data"
 mysql_host: "localhost"
 symfony_devel: false
+use_https: true

@@ -1,12 +1,41 @@
 ---
 # general site
-# web server
+# SSL certificates
+- name: Ensure that nginx is not running (there can be only one web server)
+  command: systemctl stop nginx
+  when: use_https
+
+- name: Obtain SSL certificate from Let's Encrypt
+  command: letsencrypt certonly --non-interactive --standalone --standalone-supported-challenges http-01 --keep -m info@fossi-foundation.org --agree-tos -w /var/www/lc/site -d {{ librecores_domain }} -d www.{{ librecores_domain }}
+  when: use_https
+
+# nginx (web server)
 - name: Ensure nginx log directory exists
   file: dest=/var/log/nginx/librecores state=directory
 
 - name: Change default nginx site
   template: src=nginx/librecores.tpl dest=/etc/nginx/sites-available/default
   notify: restart nginx
+
+- name: Install librecores snippet into nginx
+  template: src=nginx/snippet-librecores.conf.tpl dest=/etc/nginx/snippets/{{ librecores_domain }}.conf
+  notify: restart nginx
+
+# nginx SSL configuration
+- name: Create Diffie-Hellman Group (may take a while)
+  command: openssl dhparam -out /etc/ssl/certs/dhparam.pem 2048 creates=/etc/ssl/certs/dhparam.pem
+  notify: restart nginx
+  when: use_https
+
+- name: nginx SSL configuration snippet
+  template: src=nginx/snippet-ssl-params.conf.tpl dest=/etc/nginx/snippets/ssl-params.conf
+  notify: restart nginx
+  when: use_https
+
+- name: nginx SSL certificate snippet
+  template: src=nginx/snippet-ssl-certs.conf.tpl dest=/etc/nginx/snippets/ssl-{{ librecores_domain }}.conf
+  notify: restart nginx
+  when: use_https
 
 # symfony (main application)
 
@@ -112,3 +141,7 @@
 - name: Ensure directory permissions of web-accessible planet output directory
   command: chown -R {{ web_user }} /var/www/lc/site/web/planet
   when: not is_vagrant_environment
+
+
+- name: ensure nginx is running (and enable it at boot)
+  service: name=nginx state=started enabled=yes

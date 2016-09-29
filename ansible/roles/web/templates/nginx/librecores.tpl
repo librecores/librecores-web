@@ -1,43 +1,31 @@
 server {
-    listen 80;
-
-    server_name www.{{ librecores_domain }} {{ librecores_domain }};
-    root        /var/www/lc/site/web;
+    listen 80 default_server;
+    listen [::]:80 default_server;
 
     error_log   /var/log/nginx/librecores/error.log;
     access_log  /var/log/nginx/librecores/access.log;
 
-    rewrite     ^/(app|app_dev)\.php/?(.*)$ /$1 permanent;
+    server_name www.{{ librecores_domain }} {{ librecores_domain }};
 
-    {% if symfony_devel %}
-    location / {
-        index       app_dev.php;
-        try_files   $uri @rewriteapp;
-    }
-
-
-    location @rewriteapp {
-        rewrite     ^(.*)$ /app_dev.php/$1 last;
-    }
+    {% if use_https %}
+    # redirect all traffic to HTTPS
+    return 301 https://$server_name$request_uri;
     {% else %}
-    location / {
-        index       app.php;
-        try_files   $uri @rewriteapp;
-    }
-
-
-    location @rewriteapp {
-        rewrite     ^(.*)$ /app.php/$1 last;
-    }
+    include snippets/{{ librecores_domain }}.conf;
     {% endif %}
-
-    location ~ ^/(app|app_dev|config)\.php(/|$) {
-        fastcgi_pass            php7.0;
-        fastcgi_buffer_size     16k;
-        fastcgi_buffers         4 16k;
-        fastcgi_split_path_info ^(.+\.php)(/.*)$;
-        include                 fastcgi_params;
-        fastcgi_param           SCRIPT_FILENAME $document_root$fastcgi_script_name;
-        fastcgi_param           HTTPS           off;
-    }
 }
+
+{% if use_https %}
+server {
+    listen 443 ssl http2 default_server;
+    listen [::]:443 ssl http2 default_server;
+
+    include snippets/ssl-{{ librecores_domain }}.conf;
+    include snippets/ssl-params.conf;
+
+    error_log   /var/log/nginx/librecores/error.log;
+    access_log  /var/log/nginx/librecores/access.log;
+
+    include snippets/{{ librecores_domain }}.conf;
+}
+{% endif %}

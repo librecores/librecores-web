@@ -5,3 +5,4 @@
     - mcrypt
     # required for pod2markdown utility
     - libpod-markdown-perl
+    - letsencrypt
