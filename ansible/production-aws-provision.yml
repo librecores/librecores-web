@@ -60,8 +60,18 @@
         public_ip: "{{ ip_public }}"
         reuse_existing_ip_allowed: yes
         state: present
-        instance_id: "{{ instance_production_ec2_web.tagged_instances[0].id }}"
+        device_id: "{{ instance_production_ec2_web.tagged_instances[0].id }}"
+        in_vpc: yes
 
   vars_files:
     - vars/production-aws.yml
     - secrets/production-aws-sshkeys.secrets.yml
+
+- name: Install python2 on instance
+  hosts: tag_group_librecores_production
+  gather_facts: False
+  user: ubuntu
+  sudo: yes
+  tasks:
+    - name: 'install python2'
+      raw: sudo apt-get -y install python-simplejson

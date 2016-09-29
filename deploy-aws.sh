@@ -110,9 +110,9 @@ fi
 
 
 if [ -z "$ANSIBLE_VAULT_PASSWORD_FILE" ]; then
-  ANSIBLE_EXTRA_ARGS=--ask-vault-pass
+  ANSIBLE_EXTRA_ARGS=--ask-vault-pass $ANSIBLE_EXTRA_ARGS
 else
-  ANSIBLE_EXTRA_ARGS=--vault-password-file=$ANSIBLE_VAULT_PASSWORD_FILE
+  ANSIBLE_EXTRA_ARGS=--vault-password-file=$ANSIBLE_VAULT_PASSWORD_FILE $ANSIBLE_EXTRA_ARGS
 fi
 
 
@@ -133,7 +133,9 @@ esac
 case $action in
   provision)
     ensure_aws_creds
+    ensure_ssh_keys $environment
     ansible-playbook \
+      --private-key $HOME/.ssh/librecores-$environment \
       -i $SCRIPT_DIR/ansible/ec2.py \
       $ANSIBLE_EXTRA_ARGS \
       ansible/$environment-aws-provision.yml
