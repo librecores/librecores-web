@@ -19,8 +19,10 @@ class DefaultController extends Controller
 {
     /**
      * Render the project overview page
+     *
+     * @return Response
      */
-    public function indexAction(Request $request)
+    public function indexAction()
     {
         return $this->render('LibrecoresProjectRepoBundle:Default:index.html.twig');
     }
@@ -28,24 +30,28 @@ class DefaultController extends Controller
     /**
      * Display a user or an organization
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @param string $userOrOrganization
+     * @return Response
      */
     public function userOrgViewAction($userOrOrganization)
     {
         // try user first
         $user = $this->getDoctrine()
-            ->getRepository('LibrecoresProjectRepoBundle:User')
-            ->findOneByUsername($userOrOrganization);
+                     ->getRepository('LibrecoresProjectRepoBundle:User')
+                     ->findOneByUsername($userOrOrganization);
+
         if ($user !== null) {
             return $this->userViewAction($user);
         }
 
         // then organization
         $org = $this->getDoctrine()
-            ->getRepository('LibrecoresProjectRepoBundle:Organization')
-            ->findOneByName($userOrOrganization);
+                    ->getRepository('LibrecoresProjectRepoBundle:Organization')
+                    ->findOneByName($userOrOrganization);
+
         if ($org !== null) {
-            return $this->organizationViewAction($org);
+            return $this->forward('LibrecoresProjectRepoBundle:Organization:view',
+                array('organization' => $org));
         }
 
         // and 404 if it's neither
@@ -56,7 +62,7 @@ class DefaultController extends Controller
      * View a user's profile
      *
      * @param User $user
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
     public function userViewAction(User $user)
     {
@@ -65,21 +71,11 @@ class DefaultController extends Controller
     }
 
     /**
-     * View an organization profile
-     *
-     * @param Organization $org
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function organizationViewAction(Organization $org)
-    {
-        return $this->render('LibrecoresProjectRepoBundle:Default:organization_view.html.twig',
-            array('org' => $org));
-    }
-
-    /**
      * Render the "New Project" page
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @param Request $request
+     * @return Response
+     * @throws \Exception
      */
     public function projectNewAction(Request $request)
     {
@@ -154,7 +150,7 @@ class DefaultController extends Controller
      *
      * @param string $parentName URL component: name of the parent (user or organization)
      * @param string $projectName URL component: name of the project
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
     public function projectViewAction($parentName, $projectName)
     {
@@ -187,6 +183,7 @@ class DefaultController extends Controller
      * @param Request $request
      * @param string $parentName URL component: name of the parent (user or organization)
      * @param string $projectName URL component: name of the project
+     * @return Response
      */
     public function projectSettingsAction(Request $request, $parentName, $projectName)
     {
@@ -221,7 +218,7 @@ class DefaultController extends Controller
      *
      * @param string $parentName URL component: name of the parent (user or organization)
      * @param string $projectName URL component: name of the project
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
     public function projectSettingsTeamAction($parentName, $projectName)
     {
@@ -241,7 +238,7 @@ class DefaultController extends Controller
      * Search for a project
      *
      * @param Request $req
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
     public function projectSearchAction(Request $req)
     {
