@@ -1,9 +1,9 @@
 <?php
-
 namespace Librecores\ProjectRepoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * A project
@@ -11,9 +11,18 @@ use Symfony\Component\Validator\Constraints as Assert;
  * A project is a sufficiently independent piece of software or hardware. It
  * can be associated with a user or with an organization.
  *
- * @ORM\Table("Project")
+ * @ORM\Table("Project", uniqueConstraints={
+ *     @ORM\UniqueConstraint(name="projectname_full",
+ *         columns={"name", "parentUser_id", "parentOrganization_id"})
+ * })
  * @ORM\Entity(repositoryClass="Librecores\ProjectRepoBundle\Entity\ProjectRepository")
  * @ORM\HasLifecycleCallbacks
+ * @UniqueEntity(
+ *     fields={"parentUser", "parentOrganization", "name"},
+ *     errorPath="name",
+ *     message="A project with that name already exists.",
+ *     ignoreNull=false
+ * )
  */
 class Project
 {
