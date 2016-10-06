@@ -81,7 +81,9 @@ class DefaultController extends Controller
     {
         $p = new Project();
 
-        // XXX: make this dynamic
+        // XXX: We currently only support projects inside the user's own
+        //      namespace. Make this dynamic when introducing organizations.
+        $p->setParentUser($this->getUser());
         $username = $this->getUser()->getUsername();
         $parentChoices = array($username => 'u_'.$username);
         $form = $this->createFormBuilder($p)
@@ -100,6 +102,7 @@ class DefaultController extends Controller
 
         // save project and redirect to project page
         if ($form->isValid()) {
+            /* XXX: currently only the user namespace is supported, see above.
             // set parent (extract from string selection box)
             $formParent = $form->get('parentName')->getData();
             if (!preg_match('/^[uo]_.+$/', $formParent)) {
@@ -116,7 +119,7 @@ class DefaultController extends Controller
             } else if ($formParentType == 'o') {
                 // TODO: Add ability to add projects to organizations here
                 throw new \Exception("adding projects to organizations is currently not supported.");
-            }
+            }*/
 
             $p->setStatus(Project::STATUS_ASSIGNED);
 
@@ -136,7 +139,7 @@ class DefaultController extends Controller
             return $this->redirectToRoute(
                 'librecores_project_repo_project_view',
                 array(
-                    'parentName' => $formParentName,
+                    'parentName' => $p->getParentUser(),
                     'projectName' => $p->getName(),
                 ));
         }
