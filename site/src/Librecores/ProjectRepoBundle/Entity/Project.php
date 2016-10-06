@@ -11,7 +11,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * A project is a sufficiently independent piece of software or hardware. It
  * can be associated with a user or with an organization.
  *
- * @ORM\Table()
+ * @ORM\Table("Project")
  * @ORM\Entity(repositoryClass="Librecores\ProjectRepoBundle\Entity\ProjectRepository")
  * @ORM\HasLifecycleCallbacks
  */
@@ -160,7 +160,7 @@ class Project
     /**
      * The date when this project was added to LibreCores
      *
-     * @var DateTime date/time in UTC
+     * @var \DateTime date/time in UTC
      *
      * @see __construct()
      *
@@ -177,7 +177,7 @@ class Project
      * @see __construct()
      * @see updateDateLastModified()
      *
-     * @var DateTime date/time in UTC
+     * @var \DateTime date/time in UTC
      *
      * @ORM\Column(type="datetime", nullable=false)
      */
@@ -269,7 +269,7 @@ class Project
     /**
      * Set parentUser
      *
-     * @param integer $parentUser
+     * @param User $parentUser
      * @return Project
      */
     public function setParentUser($parentUser)
@@ -290,7 +290,7 @@ class Project
     /**
      * Get parentUser
      *
-     * @return integer
+     * @return User
      */
     public function getParentUser()
     {
@@ -300,7 +300,7 @@ class Project
     /**
      * Set parentOrganization
      *
-     * @param integer $parentOrganization
+     * @param User $parentOrganization
      * @return Project
      */
     public function setParentOrganization($parentOrganization)
@@ -321,7 +321,7 @@ class Project
     /**
      * Get parentOrganization
      *
-     * @return integer
+     * @return Organization
      */
     public function getParentOrganization()
     {
