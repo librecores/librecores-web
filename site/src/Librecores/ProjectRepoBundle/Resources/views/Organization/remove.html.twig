@@ -1,0 +1,14 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}
+    {{ organization.getName() }} : {{ organization.getDisplayName() }} Organization Removed
+{% endblock %}
+
+{% block pagepath %}Home &raquo; Organizations &raquo; {{ organization.getDisplayName() }}{% endblock %}
+
+{% block content %}
+    <h1 style="margin-bottom:5px">{{ organization.getName() }} : {{ organization.getDisplayName() }}</h1>
+
+    <p>The organization {{ organization.getName() }} ("{{ organization.getDisplayName() }}") has been removed!</p>
+
+{% endblock %}

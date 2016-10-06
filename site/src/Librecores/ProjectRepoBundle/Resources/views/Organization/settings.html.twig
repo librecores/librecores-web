@@ -1,0 +1,65 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}
+    {{ organization.getName() }} : {{ organization.getDisplayName() }} @ LibreCores: Settings
+{% endblock %}
+
+{% block pagepath %}Home &raquo; Organizations &raquo; {{ organization.getName() }} &raquo; Settings{% endblock %}
+
+{% block content %}
+<h1 class="organizationname">
+  <a href="{{ path('librecores_project_repo_user_org_view',
+  {'userOrOrganization': organization.getName()}) }}">{{ organization.getName() }}</a>: Settings</h1>
+
+<div class="row">
+<div class="col-md-2">
+  <ul class="list-group">
+    <a class="list-group-item" href="{{ path('librecores_project_repo_user_org_view',
+    {'userOrOrganization': organization.getName()}) }}">
+      <i class="fa fa-bookmark fa-fw"></i>
+      Organization
+    </a>
+    <a class="list-group-item active" href="#">
+      <i class="fa fa-cogs fa-fw"></i>Settings
+    </a>
+  </ul>
+</div>
+
+<div class="col-md-10">
+
+  {{ form_start(form) }}
+  {{ form_errors(form) }}
+
+   <div class="panel panel-default">
+      <div class="panel-heading">
+          <h3 class="panel-title">Name</h3>
+      </div>
+      <div class="panel-body">
+        <p><i>The name of the organization.</i></p>
+        {{  form_row(form.name, {'label': false}) }}
+      </div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">Display Name</h3>
+    </div>
+    <div class="panel-body">
+      <p><i>The full name of the organization.</i></p>
+      {{  form_row(form.displayName, {'label': false}) }}
+    </div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">Description</h3>
+    </div>
+    <div class="panel-body">
+      <p><i>The description of the organization.</i></p>
+      {{  form_row(form.description, {'label': false}) }}
+    </div>
+  </div>
+  {{ form_end(form) }}
+</div>
+</div>
+{% endblock %}

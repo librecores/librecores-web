@@ -1,0 +1,25 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}
+    {{ organization.getName() }} : {{ organization.getDisplayName() }} @ LibreCores
+{% endblock %}
+
+{% block pagepath %}Home &raquo; Organizations &raquo; {{ organization.getDisplayName() }}{% endblock %}
+
+{% block content %}
+  <h1 style="margin-bottom:5px">{{ organization.getName() }} : {{ organization.getDisplayName() }}</h1>
+
+  <p>Name: {{ organization.getName() }}</p>
+  <p>Display Name: {{ organization.getDisplayName() }}</p>
+  <p>Description: {{ organization.getDescription() }}</p>
+
+   <p>
+       <a href="{{ path('librecores_project_repo_organization_settings',
+       { 'organizationName': organization.getName() }) }}">Edit Organization Settings</a>
+   </p>
+   <p>
+       <a href="{{ path('librecores_project_repo_organization_remove',
+       { 'organizationName': organization.getName() }) }}">Remove Organization</a>
+   </p>
+
+{% endblock %}
