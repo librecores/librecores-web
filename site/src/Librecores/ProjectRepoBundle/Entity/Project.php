@@ -274,8 +274,15 @@ class Project
      */
     public function setParentUser($parentUser)
     {
+        if ($this->parentUser !== null)
+            $this->parentUser->removeProject($this);
+
+        if ($parentUser !== null) {
+            $parentUser->addProject($this);
+            $this->setParentOrganization(null);
+        }
+
         $this->parentUser = $parentUser;
-        $this->parentOrganization = null;
 
         return $this;
     }
@@ -298,8 +305,15 @@ class Project
      */
     public function setParentOrganization($parentOrganization)
     {
+        if ($this->parentOrganization !== null)
+            $this->parentOrganization->removeProject($this);
+
+        if ($parentOrganization !== null) {
+            $parentOrganization->addProject($this);
+            $this->setParentUser(null);
+        }
+
         $this->parentOrganization = $parentOrganization;
-        $this->parentUser = null;
 
         return $this;
     }
