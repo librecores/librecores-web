@@ -15,6 +15,11 @@ services:
         tags:
             - { name: form.type, alias: project }
 
+    app.form.type.organization:
+        class: Librecores\ProjectRepoBundle\Form\Type\OrganizationType
+        tags:
+            - { name: form.type, alias: organization }
+
     librecores_user_manager:
         class: Librecores\ProjectRepoBundle\Doctrine\UserManager
         arguments: [@security.encoder_factory, @fos_user.util.username_canonicalizer, @fos_user.util.email_canonicalizer, @fos_user.object_manager, %fos_user.model.user.class%]
