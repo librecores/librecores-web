@@ -39,6 +39,14 @@ services:
         class: Librecores\ProjectRepoBundle\Form\Extension\ButtonTypeIconExtension
         tags:
             - { name: form.type_extension, extended_type: Symfony\Component\Form\Extension\Core\Type\ButtonType }
+            
+    validator.user_org_name:
+        class: Librecores\ProjectRepoBundle\Validator\Constraints\UserOrgNameValidator
+        arguments:
+            - @doctrine
+        tags:
+            - { name: validator.constraint_validator }
+            
 
 #    librecores_project_repo.example:
 #        class: Librecores\ProjectRepoBundle\Example

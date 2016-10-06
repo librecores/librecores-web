@@ -5,6 +5,7 @@ namespace Librecores\ProjectRepoBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Librecores\ProjectRepoBundle\Validator\Constraints as LcAssert;
 
 /**
  * An organization
@@ -20,7 +21,6 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  *     errorPath="name",
  *     message="The organization already exists, please try a different name."
  * )
- *
  */
 class Organization
 {
@@ -38,6 +38,7 @@ class Organization
     /**
      * @var string
      *
+     * @LcAssert\UserOrgName
      * @ORM\Column(name="name", type="string", length=255, unique=true)
      */
     private $name;
