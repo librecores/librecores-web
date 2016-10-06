@@ -14,15 +14,16 @@ organization and a description!</p>
 
 {{ form_start(form) }}
   <div class="form-group">
-    {{ form_label(form.name, "What's the name of your organization? (short)") }}
+    {{ form_label(form.name, "Organization name on LibreCores") }}
     {{ form_errors(form.name) }}
     <div class="form-inline">
       {{ form_widget(form.name, {'attr': {'placeholder': 'organization name'}}) }}
     </div>
+    <div>Your organization will live at librecores.org/p/<span id="url-orgname">{{ organization.name }}</span></div>
   </div>
 
   <div class="form-group">
-    {{ form_label(form.displayName, "What's the display name of your organization? (long)") }}
+    {{ form_label(form.displayName, "What's the display name of your organization?") }}
     {{ form_errors(form.displayName) }}
     <div class="form-inline">
       {{ form_widget(form.displayName, {'attr': {'placeholder': 'display name'}}) }}
@@ -40,4 +41,13 @@ organization and a description!</p>
   {{ form_row(form.save) }}
 {{ form_end(form) }}
 
+{% endblock %}
+
+{% block pagejs %}
+$('#{{ form.name.vars.id|e('js') }}')
+  .keyup(function() {
+    var value = $(this).val();
+     $('#url-orgname').text(value);
+  })
+  .keyup();
 {% endblock %}
