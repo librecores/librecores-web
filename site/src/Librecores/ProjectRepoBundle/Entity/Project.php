@@ -63,7 +63,7 @@ class Project
     /**
      * @var string
      *
-     * @Assert\Length(max = 255)
+     * @Assert\Length(min = 4, max = 30)
      * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
