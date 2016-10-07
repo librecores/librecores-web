@@ -13,7 +13,7 @@
   changed_when: false
   register: web_user_home_raw
 
-- set_fact: web_user_home={{ web_user_home_raw.stdout }}
+- set_fact: web_user_home="{{ web_user_home_raw.stdout }}"
 
 - name: Update apt cache
   apt:  update_cache=yes
@@ -41,6 +41,10 @@
     - unzip
     # required for ansible
     - python-mysqldb
+
+# the data partition is on EBS in production/staging
+- name: Ensure data directory
+  file: path=/data state=directory
 
 # get source code (on non-development machines only)
 - name: Send deployment SSH key to remote machine (non-development only)

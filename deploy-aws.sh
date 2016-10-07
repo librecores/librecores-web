@@ -115,6 +115,8 @@ else
   ANSIBLE_EXTRA_ARGS=--vault-password-file=$ANSIBLE_VAULT_PASSWORD_FILE $ANSIBLE_EXTRA_ARGS
 fi
 
+# Disable host key checking in Ansible's SSH
+export ANSIBLE_HOST_KEY_CHECKING=False
 
 environment=$1
 action=$2

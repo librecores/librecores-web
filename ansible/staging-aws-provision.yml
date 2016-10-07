@@ -58,6 +58,16 @@
             group: librecores-staging
       register: instance_staging_ec2_web
 
+    - name: "Staging: Create and attach EBS volume to instance"
+      ec2_vol:
+        instance: "{{ instance_staging_ec2_web.tagged_instances[0].id }}"
+        region: "{{ aws_region }}"
+        device_name: /dev/sdf
+        volume_size: 40 # GB
+        volume_type: gp2 # general-purpose SSD
+        encrypted: no
+        delete_on_termination: no
+
     - name: "Staging: Assign Elastic IP (public)"
       ec2_eip:
         region: "{{ aws_region }}"
@@ -66,6 +76,25 @@
         state: present
         device_id: "{{ instance_staging_ec2_web.tagged_instances[0].id }}"
         in_vpc: yes
+
+    - name: Delete any existing SSH key for that host
+      shell: ssh-keygen -R {{ ip_public }}
+
+    - name: Wait for SSH
+      wait_for:
+        host: "{{ ip_public }}"
+        port: 22
+        delay: 10
+        timeout: 320
+        state: started
+
+    - name: Refresh the ec2.py cache
+      # XXX: Find a way to make this work when not calling ansible from the
+      # top source directory.
+      shell: ./ansible/ec2.py --refresh-cache
+
+    - name: Refresh inventory
+      meta: refresh_inventory
 
   vars_files:
     - vars/staging-aws.yml
@@ -79,3 +108,19 @@
   tasks:
     - name: 'install python2'
       raw: sudo apt-get -y install python-simplejson
+
+- name: Prepare EBS disk
+  hosts: tag_group_librecores_staging
+  gather_facts: True
+  user: ubuntu
+  sudo: yes
+  tasks:
+    - name: Format disk
+      filesystem: fstype=ext4 dev=/dev/xvdf
+    - name: Mount volume
+      mount:
+        name: /data
+        src: /dev/xvdf
+        opts: noatime
+        fstype: ext4
+        state: mounted

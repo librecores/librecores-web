@@ -3,6 +3,33 @@
   sudo: yes
   apt:  pkg=mysql-server state=installed
 
+# move data directory to EBS
+- name: Check if /data/mysql exists
+  stat: path=/data/mysql
+  register: data_mysql_stat
+
+- name: Stop mysqld
+  service: name=mysql state=stopped
+  when: not data_mysql_stat.stat.exists
+
+- name: Move data directory to EBS
+  command: mv /var/lib/mysql /data/mysql
+  when: not data_mysql_stat.stat.exists
+
+- name: Create symlink
+  file: src=/data/mysql dest=/var/lib/mysql owner=mysql group=mysql state=link
+  when: not data_mysql_stat.stat.exists
+
+- name: Add apparmor configuration override for MySQL
+  copy: src=../files/apparmor-usr.sbin.mysqld dest=/etc/apparmor.d/local/usr.sbin.mysqld
+
+- name: Reload apparmor to pick up changes
+  service: name=apparmor state=reloaded
+
+- name: Start mysqld again
+  service: name=mysql state=started
+  when: not data_mysql_stat.stat.exists
+
 - name: Update MySQL root password for all root accounts
   mysql_user: name=root host={{ item }} password={{ mysql_root_password }}
   with_items:
