@@ -97,7 +97,7 @@ class UpdateProjectInformation implements ConsumerInterface
             $readmeFile = $this->findFile($clonedir, $readmeFiles);
             if ($readmeFile === false) {
                 $this->logger->debug('Found no README file');
-                $project->setReadmeFileContent(null);
+                $project->setDescriptionText(null);
             } else {
                 $this->logger->debug('Using file '.$readmeFile['file'].' as README');
                 $md = $this->convertToMarkdown($readmeFile['file'],
