@@ -147,8 +147,7 @@ h1 a:hover, h1 a:active {
 
 /* home page */
 .librecores-home-startpane {
-  height: 100%; 
-  background-color: #dddfd4; 
+  background-color: #dddfd4;
   padding-top: 50px;
 }
 .librecores-home-banner {
