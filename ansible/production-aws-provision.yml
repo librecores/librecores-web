@@ -41,7 +41,7 @@
 
     - name: "Production: Provision EC2 instance"
       ec2:
-         instance_type: t2.micro
+         instance_type: t2.medium
          region: "{{ aws_region }}"
          image: "{{ ami_id }}"
          key_name: librecores-production
