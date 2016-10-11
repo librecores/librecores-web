@@ -111,7 +111,7 @@ The first question is how your code can be used. That answer is
 actually simple: By downloading it. There are no further restrictions,
 thats the idea of open source. So, despite we can understand the idea
 behind adding a non-commercial clause or a non-military clause, we
-highly encourage you to add any such clauses to your licenses. They
+highly discourage you to add any such clauses to your licenses. They
 are against the definition of open source (see
 [Open Source Initiative, crit. 6](opensource.org/osd): "No
 Discrimination Against Fields of Endeavor - The license must not
@@ -171,10 +171,3 @@ that you should consider using:
    written in a hardware-friendly language. Nevertheless, there is an
    ongoing discussion around the implications of it for hardware
    implementations.
-
-
-
-
-
-
-
