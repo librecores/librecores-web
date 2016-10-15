@@ -12,10 +12,10 @@ hwi_oauth_connect:
      prefix: /connect
 
 github_login:
-    pattern: /connect/check-github
+    path: /connect/check-github
 
 google_login:
-    pattern: /connect/check-google
+    path: /connect/check-google
 
 # FOSUser
 fos_user_security:
