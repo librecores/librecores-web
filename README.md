@@ -22,7 +22,7 @@ to install all dependencies (see below) and get started.
 - Install Ansible >= 2.0
 - Install the NFS server packages. If you don't want to, see the note on NFS
   below.
-- Install Vagrant. It's fast and simple: http://www.vagrantup.com/downloads
+- Install Vagrant. It's fast and simple: http://www.vagrantup.com/downloads.html
 - Install vagrant-hostmanager: `vagrant plugin install vagrant-hostmanager`
 - Create the secrets file `ansible/secrets/dev-vagrant.secrets.yml`. A
   template is available in `ansible/secrets.dist/dev-vagrant.secrets.yml`
