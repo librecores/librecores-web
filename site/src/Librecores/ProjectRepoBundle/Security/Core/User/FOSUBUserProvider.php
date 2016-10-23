@@ -39,11 +39,6 @@ class FOSUBUserProvider extends BaseClass
      */
     public function connect(UserInterface $user, UserResponseInterface $response)
     {
-        echo "inside connect\n";
-
-        var_dump($user);
-        var_dump($response);
-
         $property = $this->getProperty($response);
         $username = $response->getUsername();
         //on connect - get the access token and the user ID
