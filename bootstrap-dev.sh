@@ -6,7 +6,7 @@
 # runs Vagrant to display the site in a browser.
 #
 
-set -ex
+set -e
 
 # Version of vagrant we depend on
 VAGRANT_VERSION=1.8.5
@@ -62,7 +62,7 @@ case $(lsb_release -is) in
     fi
     ;;
   *SUSE*)
-    sudo zypper install virtualbox nfs-kernel-server curl
+    sudo zypper install -y virtualbox nfs-kernel-server curl
 
     if [ $INSTALL_VAGRANT = 1 ]; then
       curl -L https://releases.hashicorp.com/vagrant/${VAGRANT_VERSION}/vagrant_${VAGRANT_VERSION}_$(uname -m).rpm > "$DLDIR/vagrant.rpm"
@@ -78,8 +78,11 @@ case $(lsb_release -is) in
     fi
 
     if [ $INSTALL_ANSIBLE = 1 ]; then
-      sudo zypper ar http://download.opensuse.org/repositories/systemsmanagement/openSUSE_Leap_42.1/systemsmanagement.repo
-      sudo zypper install ansible
+      zypper lr -u | grep -q http://download.opensuse.org/repositories/systemsmanagement/openSUSE_Leap_42.1/
+      if [ $? -ne 0 ]; then
+        sudo zypper ar http://download.opensuse.org/repositories/systemsmanagement/openSUSE_Leap_42.1/systemsmanagement.repo
+      fi
+      sudo zypper install -y --from http://download.opensuse.org/repositories/systemsmanagement/openSUSE_Leap_42.1/ ansible
     fi
     ;;
   *)
