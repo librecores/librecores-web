@@ -5,7 +5,7 @@
     <Description>Use LibreCores.org to search for free and open digital hardware projects.</Description>
     <Tags>librecores fossi</Tags>
     <Contact>info@fossi-foundation.org</Contact>
-    <Url type="text/html" template="https://www.librecores.org/p/search/?q={searchTerms}"/>
+    <Url type="text/html" template="https://www.librecores.org/search/?q={searchTerms}"/>
     <Language>en-us</Language>
     <OutputEncoding>UTF-8</OutputEncoding>
     <InputEncoding>UTF-8</InputEncoding>
