@@ -91,7 +91,7 @@ class OrganizationController extends Controller
      * @param Organization $organization
      * @return Response
      */
-    public function viewAction($organization)
+    public function viewAction(Organization $organization)
     {
         return $this->render('LibrecoresProjectRepoBundle:Organization:view.html.twig',
             array('organization' => $organization));
@@ -101,34 +101,26 @@ class OrganizationController extends Controller
      * Display the organization settings page
      *
      * @param Request $request
-     * @param string $organizationName name of the organization
+     * @param Organization $organization  the organization entity
      * @return Response
      */
-    public function settingsAction(Request $request, $organizationName)
+    public function settingsAction(Request $request, Organization $organization)
     {
-        $o = $this->getDoctrine()
-                  ->getRepository('LibrecoresProjectRepoBundle:Organization')
-                  ->findOneByName($organizationName);
-
-        if (!$o) {
-            throw $this->createNotFoundException('No organization found with that name.');
-        }
-
-        if ($this->getUser() != $o->getOwner())
+        if ($this->getUser() != $organization->getOwner())
             throw $this->createAccessDeniedException("You don't own this organization in order to make changes");
 
         // create and show form
-        $form = $this->createForm(OrganizationType::class, $o);
+        $form = $this->createForm(OrganizationType::class, $organization);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $em->persist($o);
+            $em->persist($organization);
             $em->flush();
         }
 
         return $this->render('LibrecoresProjectRepoBundle:Organization:settings.html.twig',
-            array('organization' => $o,
+            array('organization' => $organization,
                   'form' => $form->createView()));
     }
 

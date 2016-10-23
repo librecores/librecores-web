@@ -14,8 +14,8 @@
   <p>Description: {{ organization.getDescription() }}</p>
 
    <p>
-       <a href="{{ path('librecores_project_repo_organization_settings',
-       { 'organizationName': organization.getName() }) }}">Edit Organization Settings</a>
+       <a href="{{ path('librecores_project_repo_user_org_settings',
+       { 'userOrOrganization': organization.getName() }) }}">Edit Organization Settings</a>
    </p>
    <p>
        <a href="{{ path('librecores_project_repo_organization_remove',
