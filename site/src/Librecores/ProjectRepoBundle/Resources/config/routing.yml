@@ -120,3 +120,14 @@ librecores_project_repo_project_settings:
 librecores_project_repo_project_settings_team:
     path:     /{parentName}/{projectName}/settings/team
     defaults: { _controller: LibrecoresProjectRepoBundle:Project:settingsTeam }
+
+
+
+# Redirect trailing slash
+# http://symfony.com/doc/current/routing/redirect_trailing_slash.html
+librecores_project_repo_remove_trailing_slash:
+    path:     /{url}
+    defaults: { _controller: LibrecoresProjectRepoBundle:Default:removeTrailingSlash }
+    requirements:
+        url:  .*/$
+    methods:  [GET]
