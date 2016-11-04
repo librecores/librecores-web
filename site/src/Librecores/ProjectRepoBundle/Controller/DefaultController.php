@@ -105,7 +105,7 @@ class DefaultController extends Controller
      * @param Request $req
      * @return Response
      */
-    public function projectSearchAction(Request $req)
+    public function searchAction(Request $req)
     {
         $searchQuery = new SearchQuery();
         $searchQueryForm = $this->createForm(SearchQueryType::class, $searchQuery);
