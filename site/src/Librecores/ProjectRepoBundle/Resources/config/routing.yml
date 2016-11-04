@@ -28,8 +28,8 @@
 
 # Project repository homepage
 librecores_project_repo_homepage:
-    path:     /projects
-    defaults: { _controller: LibrecoresProjectRepoBundle:Default:index }
+    path:     /
+    defaults: { _controller: LibrecoresSiteBundle:Default:home }
 
 # Unified search: users, organizations and projects
 librecores_project_repo_project_search:
