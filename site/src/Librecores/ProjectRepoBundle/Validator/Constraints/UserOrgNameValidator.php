@@ -1,6 +1,7 @@
 <?php
 namespace Librecores\ProjectRepoBundle\Validator\Constraints;
 
+use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Doctrine\Bundle\DoctrineBundle\Registry;
@@ -37,8 +38,8 @@ class UserOrgNameValidator extends ConstraintValidator
      *
      * @var string[]
      */
-    const RESERVED_NAMES = [ 'new', 'o', 'organization', 'organizations',
-        'org', 'project', 'projects', 'settings', 'search', 'unassigned' ];
+    const RESERVED_NAMES = [ 'org', 'orgs', 'planet', 'project', 'projects',
+                             'search', 'static', 'unassigned', 'user' ];
 
     /**
      * Regular expression checking for valid characters in an user or org name
@@ -55,9 +56,15 @@ class UserOrgNameValidator extends ConstraintValidator
     /** @var Doctrine\Bundle\DoctrineBundle\Registry */
     private $orm;
 
-    public function __construct(Registry $doctrine)
+    /**
+     * @var Router
+     */
+    private $router;
+
+    public function __construct(Registry $doctrine, Router $router)
     {
-        $this->orm = $doctrine;
+        $this->orm    = $doctrine;
+        $this->router = $router;
     }
 
     public function validate($value, Constraint $constraint)
@@ -79,13 +86,6 @@ class UserOrgNameValidator extends ConstraintValidator
                 ->addViolation();
         }
 
-        if (in_array($value, self::RESERVED_NAMES)) {
-            $this->context
-                ->buildViolation($constraint->messageReservedName)
-                ->setParameter('%string%', $value)
-                ->addViolation();
-        }
-
         if (!preg_match(self::VALID_NAME_REGEX, $value)) {
             $this->context
                 ->buildViolation($constraint->messageInvalidCharacters)
@@ -96,6 +96,11 @@ class UserOrgNameValidator extends ConstraintValidator
         if ($this->userOrOrgNameExists($value)) {
             $this->context
                 ->buildViolation($constraint->messageUniqueName)
+                ->setParameter('%string%', $value)
+                ->addViolation();
+        } else if ($this->userOrOrgReserved($value)) {
+            $this->context
+                ->buildViolation($constraint->messageReservedName)
                 ->setParameter('%string%', $value)
                 ->addViolation();
         }
@@ -129,5 +134,17 @@ class UserOrgNameValidator extends ConstraintValidator
         if ($cnt_org != 0) {
             return true;
         }
+    }
+
+    /**
+     * Find out if a given top-level URL value is reserved
+     *
+     * @param $value
+     * @return bool
+     */
+    private function userOrOrgReserved($value)
+    {
+        return (in_array($value, self::RESERVED_NAMES) ||
+                $this->router->match('/' . $value)['_route']);
     }
 }
