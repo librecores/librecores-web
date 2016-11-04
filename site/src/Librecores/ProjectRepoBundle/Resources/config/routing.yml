@@ -1,48 +1,40 @@
-# Routing schema
+# Routing Schema
 #
-# /p
+# /projects
 #   Homepage of the project repository
-# /p/*
-#   Most frequently used pages to display users, organizations and projects.
-#   This namespace contains mainly pages with user-defined names (usernames, 
-#   organization names, project names), so special care must be taken to avoid
-#   namespace collisions.
-# /project/*
-#   project management and utility functionality
-# /org/*
-#   organization management. No user-defined pages in this namespace.
-# /user/*
-#   user management, such as login, logout, OAuth connect, etc.
-#   No user-defined pages in this namespace.
+
 # /search
 #   general search functionality: one interface which combines all searchable
 #   items (projects, users, organizations, ...)
 
-# user/organization view pages
-librecores_project_repo_user_org_view:
-    path:     /p/{userOrOrganization}
-    defaults: { _controller: LibrecoresProjectRepoBundle:Default:userOrgView }
+# /project/*
+#   project management and utility functionality
 
-librecores_project_repo_user_org_settings:
-    path:     /p/{userOrOrganization}/settings
-    defaults: { _controller: LibrecoresProjectRepoBundle:Default:userOrgSettings }
+# /org/*
+#   organization management. No user-defined pages in this namespace.
 
-librecores_project_repo_organization_requests:
-    path:     /p/{organizationName}/settings/joinrequests
-    defaults: { _controller: LibrecoresProjectRepoBundle:Organization:requests }
+# /user/*
+#   user management, such as login, logout, OAuth connect, etc.
+#   No user-defined pages in this namespace.
 
-# project pages
-librecores_project_repo_project_view:
-    path:     /p/{parentName}/{projectName}
-    defaults: { _controller: LibrecoresProjectRepoBundle:Project:view }
+# /*
+#   Most frequently used pages to display users, organizations and projects.
+#   This namespace contains mainly pages with user-defined names (usernames,
+#   organization names, project names), so special care must be taken to avoid
+#   namespace collisions.
 
-librecores_project_repo_project_settings:
-    path:     /p/{parentName}/{projectName}/settings
-    defaults: { _controller: LibrecoresProjectRepoBundle:Project:settings }
 
-librecores_project_repo_project_settings_team:
-    path:     /p/{parentName}/{projectName}/settings/team
-    defaults: { _controller: LibrecoresProjectRepoBundle:Project:settingsTeam }
+
+
+# Project repository homepage
+librecores_project_repo_homepage:
+    path:     /projects
+    defaults: { _controller: LibrecoresProjectRepoBundle:Default:index }
+
+# Unified search: users, organizations and projects
+librecores_project_repo_project_search:
+    path:     /search
+    defaults: { _controller: LibrecoresProjectRepoBundle:Default:search }
 
 
 
@@ -51,14 +43,18 @@ librecores_project_repo_project_new:
     path:     /project/new
     defaults: { _controller: LibrecoresProjectRepoBundle:Project:new }
 
-# XXX: this is not yet implemented
+# XXX: this is not yet implemented - same as project repository homepage?
 #librecores_project_repo_project_list:
 #    path:     /project/list
 #    defaults: { _controller: LibrecoresProjectRepoBundle:Project:list }
 
+
+
 # User management pages
 # most /user/XXX routes are defined in app/config/routing.yml in the
 # FOSUserBundle routes.
+
+
 
 # Organization management pages
 librecores_project_repo_organization_new:
@@ -96,13 +92,31 @@ librecores_project_repo_organization_deny:
 
 
 
-# Unified search: users, organizations and projects
-librecores_project_repo_project_search:
-    path:     /search
-    defaults: { _controller: LibrecoresProjectRepoBundle:Default:search }
 
-# Project repository homepage
-librecores_project_repo_homepage:
-    path:     /p
-    defaults: { _controller: LibrecoresProjectRepoBundle:Default:index }
+# User/Organization view pages
+librecores_project_repo_user_org_view:
+    path:     /{userOrOrganization}
+    defaults: { _controller: LibrecoresProjectRepoBundle:Default:userOrgView }
 
+librecores_project_repo_user_org_settings:
+    path:     /{userOrOrganization}/settings
+    defaults: { _controller: LibrecoresProjectRepoBundle:Default:userOrgSettings }
+
+librecores_project_repo_organization_requests:
+    path:     /{organizationName}/settings/joinrequests
+    defaults: { _controller: LibrecoresProjectRepoBundle:Organization:requests }
+
+
+
+# Project pages
+librecores_project_repo_project_view:
+    path:     /{parentName}/{projectName}
+    defaults: { _controller: LibrecoresProjectRepoBundle:Project:view }
+
+librecores_project_repo_project_settings:
+    path:     /{parentName}/{projectName}/settings
+    defaults: { _controller: LibrecoresProjectRepoBundle:Project:settings }
+
+librecores_project_repo_project_settings_team:
+    path:     /{parentName}/{projectName}/settings/team
+    defaults: { _controller: LibrecoresProjectRepoBundle:Project:settingsTeam }

@@ -38,6 +38,11 @@ fos_user_change_password:
     resource: "@FOSUserBundle/Resources/config/routing/change_password.xml"
     prefix: /profile
 
+# Site routes ("static content")
+librecores_site:
+    resource: "@LibrecoresSiteBundle/Resources/config/routing.yml"
+    prefix:   /static
+
 # Planet routes
 librecores_planet:
     resource: "@LibrecoresPlanetBundle/Resources/config/routing.yml"
@@ -46,9 +51,4 @@ librecores_planet:
 # Project Repository Routes
 librecores_project_repo:
     resource: "@LibrecoresProjectRepoBundle/Resources/config/routing.yml"
-    prefix:   /
-
-# Site routes ("static content")
-librecores_site:
-    resource: "@LibrecoresSiteBundle/Resources/config/routing.yml"
     prefix:   /
