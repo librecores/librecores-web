@@ -37,7 +37,8 @@ class UserOrgNameValidator extends ConstraintValidator
      *
      * @var string[]
      */
-    const RESERVED_NAMES = [ 'org', 'orgs', 'project', 'projects', 'search', 'unassigned' ];
+    const RESERVED_NAMES = [ 'org', 'orgs', 'planet', 'project', 'projects',
+                             'search', 'static', 'unassigned', 'user' ];
 
     /**
      * Regular expression checking for valid characters in an user or org name
