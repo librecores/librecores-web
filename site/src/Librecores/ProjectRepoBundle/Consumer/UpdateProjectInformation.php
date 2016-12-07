@@ -132,8 +132,32 @@ class UpdateProjectInformation implements ConsumerInterface
         // persist to DB
         $this->orm->getManager()->flush();
 
+        // remove temporary directory
+        $this->recursiveRmdir($clonedir);
+
         // remove event from queue
         return true;
+    }
+
+    /**
+     * Recursive delete of a directory (rm -r)
+     *
+     * @param $dir string directory to delete recursively
+     */
+    private function recursiveRmdir($dir) {
+        if (is_dir($dir)) {
+          $objects = scandir($dir);
+          foreach ($objects as $object) {
+              if ($object != "." && $object != "..") {
+                  if (is_dir($dir."/".$object)) {
+                    $this->recursiveRmdir($dir."/".$object);
+                  } else {
+                    unlink($dir."/".$object);
+                  }
+              }
+          }
+          rmdir($dir);
+        }
     }
 
     private function markInProcessing($project, $isInProcessing = true)
