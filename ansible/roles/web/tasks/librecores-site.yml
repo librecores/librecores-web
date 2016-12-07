@@ -1,12 +1,23 @@
 ---
 # general site
 # SSL certificates
-- name: Ensure that nginx is not running (there can be only one web server)
-  command: systemctl stop nginx
+- name: Ensure HTTP-accessible directory for letsencrypt cert renewal exists
+  file: dest=/var/www/letsencrypt/.well-known state=directory
   when: use_https
 
-- name: Obtain SSL certificate from Let's Encrypt
-  command: letsencrypt certonly --non-interactive --standalone --standalone-supported-challenges http-01 --keep -m info@fossi-foundation.org --agree-tos -w /var/www/lc/site -d {{ librecores_domain }} -d www.{{ librecores_domain }}
+- name: Obtain initial SSL certificate from Let's Encrypt
+  command: letsencrypt certonly --pre-hook "service nginx stop" --non-interactive --standalone --standalone-supported-challenges http-01 --keep -m info@fossi-foundation.org --agree-tos -w /var/www/letsencrypt -d {{ librecores_domain }} -d www.{{ librecores_domain }}
+  args:
+    creates: /etc/letsencrypt/live/{{ librecores_domain }}/cert.pem
+  when: use_https
+
+# Let's Encrypt cert renewal
+- name: Install Let's Encrypt Cert Renewal service
+  template: src=letsencrypt-renew.service dest=/etc/systemd/system/letsencrypt-renew.service
+  when: use_https
+
+- name: Install Let's Encrypt Cert Renewal timer
+  template: src=letsencrypt-renew.timer dest=/etc/systemd/system/letsencrypt-renew.timer
   when: use_https
 
 # nginx (web server)
@@ -151,3 +162,7 @@
 
 - name: ensure nginx is running (and enable it at boot)
   service: name=nginx state=started enabled=yes
+
+- name: ensure letsencrypt-renew is running (and enable it at boot)
+  service: name=letsencrypt-renew state=started enabled=yes
+  when: use_https
