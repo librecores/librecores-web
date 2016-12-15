@@ -42,6 +42,15 @@ class UserOrgNameValidator extends ConstraintValidator
                              'search', 'static', 'unassigned', 'user' ];
 
     /**
+     * Routes that are excluded from checking for a match in userOrgReserved()
+     * since they will always match regardless of the selected username and
+     * thus produce false positive violations on any selected username.
+     *
+     * @var string[]
+     */
+    const EXCLUDE_ROUTE_CHECK = [ 'librecores_project_repo_user_org_view' ];
+
+    /**
      * Regular expression checking for valid characters in an user or org name
      *
      * The name is first converted to lowercase before passing to this regex,
@@ -144,7 +153,17 @@ class UserOrgNameValidator extends ConstraintValidator
      */
     private function userOrOrgReserved($value)
     {
-        return (in_array($value, self::RESERVED_NAMES) ||
-                $this->router->match('/' . $value)['_route']);
+        if (in_array($value, self::RESERVED_NAMES)) {
+            return true;
+        }
+
+        /*
+         * Also check for valid top-level routes in case we forgot to exclude
+         * a route pattern in the RESERVED_NAMES array.
+         */
+
+        $route = $this->router->match('/' . $value)['_route'];
+
+        return ($route !== null && !in_array($route, self::EXCLUDE_ROUTE_CHECK));
     }
 }
