@@ -62,7 +62,25 @@ class UserOrgNameValidator extends ConstraintValidator
      */
     const VALID_NAME_REGEX = '/^[a-z][a-z0-9-]+$/';
 
-    /** @var Doctrine\Bundle\DoctrineBundle\Registry */
+    /**
+     * Check if the user name is unique.
+     * FOS User Bundle already does this check
+     * so this is not needed if using that bundle.
+     *
+     * @var bool
+     */
+    const CHECK_UNIQUE_USER = false;
+
+    /*
+     * Check if the organization name is unique.
+     *
+     * @var bool
+     */
+    const CHECK_UNIQUE_ORG  = true;
+
+    /**
+     * @var Doctrine\Bundle\DoctrineBundle\Registry
+     */
     private $orm;
 
     /**
@@ -125,23 +143,28 @@ class UserOrgNameValidator extends ConstraintValidator
         $name = strtolower($name);
         $em = $this->orm->getManager();
 
-        $q =  'SELECT COUNT(u.id) FROM LibrecoresProjectRepoBundle:User u '.
-              'WHERE u.usernameCanonical = :name';
-        $cnt_user = $em->createQuery($q)
-            ->setParameter('name', $name)
-            ->getSingleScalarResult();
-        if ($cnt_user != 0) {
-            return true;
+        if (self::CHECK_UNIQUE_USER) {
+
+            $q = 'SELECT COUNT(u.id) FROM LibrecoresProjectRepoBundle:User u ' .
+                'WHERE u.usernameCanonical = :name';
+            $cnt_user = $em->createQuery($q)
+                ->setParameter('name', $name)
+                ->getSingleScalarResult();
+            if ($cnt_user != 0) {
+                return true;
+            }
         }
 
-        $q =  'SELECT COUNT(o.id) '.
-              'FROM LibrecoresProjectRepoBundle:Organization o '.
-              'WHERE LOWER(o.name) = :name';
-        $cnt_org = $em->createQuery($q)
-            ->setParameter('name', $name)
-            ->getSingleScalarResult();
-        if ($cnt_org != 0) {
-            return true;
+        if (self::CHECK_UNIQUE_ORG) {
+            $q = 'SELECT COUNT(o.id) ' .
+                'FROM LibrecoresProjectRepoBundle:Organization o ' .
+                'WHERE LOWER(o.name) = :name';
+            $cnt_org = $em->createQuery($q)
+                ->setParameter('name', $name)
+                ->getSingleScalarResult();
+            if ($cnt_org != 0) {
+                return true;
+            }
         }
     }
 
