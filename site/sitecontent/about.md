@@ -25,12 +25,18 @@ At the moment, LibreCores is in a preview state.
 We've laid down much of the groundwork for the site, and are now able to iterate quickly on new ideas and features.
 We do this to enable everybody to get involved and shape the future of LibreCores with the goal of making it a place where the community can truly feel at home.
 
-Looking ahead in addition to many smaller improvements we want to focus on three major areas.
+Looking ahead in addition to many smaller improvements we want to focus on four major areas.
 
 - **Project quality metrics.** Sometimes it's hard to decide if a project is usable for a given project. To make the decision process easier, we are thinking about both user-generated quality metrics (such as comments or reviews, likes, etc.) as well as machine-generated metrics (e.g. activity metrics or build and test status from continuous integration).
 - **Workflow integration.** Finding an IP core on LibreCores is just the first step of using it as part of an own project. Currently, making use of a core  involves in many cases copying the source code into the custom project. This process is tedious and makes updating a core to the latest upstream version hard.
 
   With LibreCores we want to explore different options to make this workflow more streamlined. One example is the integration of the LibreCores project repository with the [fusesoc](https://github.com/olofk/fusesoc) package manager.
+- **LibreCores CI.** ContinuousIntegration of projects is a de-facto standard approach to improving project quality and contributor experience.
+There are many services providing free CI hosting for open-source software projects,
+but they lack some features required for hardware projects (EDA tools, running tests on hardware, etc.).
+
+  In LibreCores we want to provide a CI instance for projects being hosted on LibreCores.
+  More information is available on the [LibreCores CI page](./librecores-ci).
 - **Documentation of best practices.** At LibreCores, we love digital hardware design and want more people to get involved. Unfortunately today, getting started with digital hardware design involves climbing a steep learning curve before the one reaches productivity -- and arguably that's where all the fun starts!
 
   We believe a good documentation of best practices, covering both non-code issues (such as "how to organize a repository", "what license options do I have"), as well as coding related advice (such as "how to code a FSM in Verilog") is essential to get started quickly and is therefore of great benefit to the community.
