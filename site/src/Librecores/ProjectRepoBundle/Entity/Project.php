@@ -4,6 +4,7 @@ namespace Librecores\ProjectRepoBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Librecores\ProjectRepoBundle\Util\GitHubUtil;
 
 /**
  * A project
@@ -672,5 +673,15 @@ class Project
     public function getDateLastModified()
     {
         return $this->dateLastModified;
+    }
+    
+    /**
+     * Gets GitHub Helper for the specified URL.
+     *
+     * @return \GitHubUtil
+     */
+    public function getGitHubUtil($url)
+    {
+        return new GitHubUtil($url);
     }
 }
