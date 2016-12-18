@@ -674,14 +674,4 @@ class Project
     {
         return $this->dateLastModified;
     }
-    
-    /**
-     * Gets GitHub Helper for the specified URL.
-     *
-     * @return \GitHubUtil
-     */
-    public function getGitHubUtil($url)
-    {
-        return new GitHubUtil($url);
-    }
 }

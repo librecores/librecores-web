@@ -1,6 +1,10 @@
 parameters:
     librecores_user_provider.class: Librecores\ProjectRepoBundle\Security\Core\User\FOSUBUserProvider
-    librecores_user_manager.class: Librecores\ProjectRepoBundle\Doctrine\UserManager
+    librecores_user_manager.class:  Librecores\ProjectRepoBundle\Doctrine\UserManager
+
+    projectrepo.util.github_url:  'https://github.com/'
+    projectrepo.util.shields_url: 'https://img.shields.io/github/'
+    projectrepo.util.shields_ext: 'svg'
 
 services:
     update_project_info_service:
@@ -47,7 +51,13 @@ services:
             - @router
         tags:
             - { name: validator.constraint_validator }
-            
+
+    projectrepo.util.github:
+        class: Librecores\ProjectRepoBundle\Util\GitHubUtil
+        arguments:
+            - '%projectrepo.util.github_url%'
+            - '%projectrepo.util.shields_url%'
+            - '%projectrepo.util.shields_ext%'
 
 #    librecores_project_repo.example:
 #        class: Librecores\ProjectRepoBundle\Example

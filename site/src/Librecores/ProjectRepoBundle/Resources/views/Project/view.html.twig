@@ -97,20 +97,18 @@
       
       <div class="project-badges">
         <!--Stars badge, which comes from the Source repo-->
-        {% set starsBadgeHelper = project.getGitHubUtil(project.getSourceRepo().getUrl()) %}
-        {% if starsBadgeHelper.isOnGitHub()  %}
-          <a href="https://github.com/{{ starsBadgeHelper.getGitHubPath() }}">
-            <img border="0" src="{{ starsBadgeHelper.getStarsBadgeImage() }}">
+        {% if githubUtil.isSourceRepoOnGitHub() %}
+          <a href="{{ githubUtil.getSourceRepoUrl() }}">
+            <img border="0" src="{{ githubUtil.getStarsBadgeImage() }}">
           </a>
-          <a href="https://github.com/{{ starsBadgeHelper.getGitHubPath() }}">
-            <img border="0" src="{{ starsBadgeHelper.getOpenPRsBadgeImage() }}">
+          <a href="{{ githubUtil.getPullRequestsUrl() }}">
+            <img border="0" src="{{ githubUtil.getOpenPRsBadgeImage() }}">
           </a>
         {% endif %}
         <!--Issues badge, which comes from the Issue tracker link-->
-        {% set issuesBadgeHelper = project.getGitHubUtil(project.getIssueTracker()) %}
-        {% if issuesBadgeHelper.isOnGitHub()  %}
-          <a href="https://github.com/{{ issuesBadgeHelper.getGitHubPath() }}/issues">
-            <img border="0" src="{{ starsBadgeHelper.getIssuesBadgeImage() }}">
+        {% if githubUtil.isIssueTrackerOnGitHub() %}
+          <a href="{{ githubUtil.getIssueTrackerUrl() }}">
+            <img border="0" src="{{ githubUtil.getIssuesBadgeImage() }}">
           </a>
         {% endif %}
       </div>
