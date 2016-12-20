@@ -5,6 +5,7 @@ use OldSound\RabbitMqBundle\RabbitMq\ConsumerInterface;
 use PhpAmqpLib\Message\AMQPMessage;
 use Symfony\Component\HttpKernel\Log\LoggerInterface;
 use Symfony\Component\Process\Process;
+use Symfony\Component\Process\Exception;
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use Knp\Bundle\MarkdownBundle\Parser\MarkdownParser;
 
@@ -30,6 +31,13 @@ class UpdateProjectInformation implements ConsumerInterface
     const TYPE_MARKDOWN = 'md';
     const TYPE_PLAINTEXT = 'txt';
     const TYPE_POD = 'pod';
+
+    /** maximum amount of time in seconds the git process can take to collect
+      * statistics from the repository */
+    const TIMEOUT_GIT_GET_STATS = 5*60;
+
+    /** git clone timeout in seconds */
+    const TIMEOUT_GIT_CLONE = 3*60;
 
     public function __construct(LoggerInterface $logger, Registry $doctrine,
                                 MarkdownParser $markdownParser)
@@ -57,57 +65,65 @@ class UpdateProjectInformation implements ConsumerInterface
         }
         $sourceRepo = $project->getSourceRepo();
 
-        // create temporary directory
-        $cmd = 'mktemp -d --tmpdir lc.updateprojectinfo.git.XXXXXXXXXX';
-        $process = new Process($cmd);
-        $process->run();
-        if (!$process->isSuccessful()) {
-            throw new \RuntimeException("Unable to create temporary directory: ".$process->getErrorOutput());
-        }
-        $clonedir = trim($process->getOutput());
-
-        // get the code from git
-        $cmd = 'git clone '.escapeshellarg($sourceRepo->getUrl()).' '.escapeshellarg($clonedir);
-        $this->logger->info('Cloning repository: '.$cmd);
-        $process = new Process($cmd);
-        $process->run();
-        if (!$process->isSuccessful()) {
-            throw new \RuntimeException("Unable to clone git repository: ".$process->getErrorOutput());
-        }
-        $this->logger->debug('Repository cloned');
-
-        // extract LICENSE file contents
-        if ($project->getLicenseTextAutoUpdate()) {
-            $licenseFiles = array('LICENSE', 'COPYING');
-            $licenseFile = $this->findFile($clonedir, $licenseFiles);
-            if ($licenseFile === false) {
-                $this->logger->debug('Found no LICENSE file');
-                $project->setLicenseText(null);
-            } else {
-                $this->logger->debug('Using file '.$licenseFile['file'].' as LICENSE');
-                $md = $this->convertToMarkdown($licenseFile['file'],
-                    $licenseFile['type']);
-                $project->setLicenseText($md);
+        try {
+            // create temporary directory
+            $cmd = 'mktemp -d --tmpdir lc.updateprojectinfo.git.XXXXXXXXXX';
+            $process = new Process($cmd);
+            $process->run();
+            if (!$process->isSuccessful()) {
+                throw new \RuntimeException("Unable to create temporary directory: ".$process->getErrorOutput());
             }
-        }
+            $clonedir = trim($process->getOutput());
 
-        // extract README file contents
-        if ($project->getDescriptionTextAutoUpdate()) {
-            $readmeFiles = array('README');
-            $readmeFile = $this->findFile($clonedir, $readmeFiles);
-            if ($readmeFile === false) {
-                $this->logger->debug('Found no README file');
-                $project->setDescriptionText(null);
-            } else {
-                $this->logger->debug('Using file '.$readmeFile['file'].' as README');
-                $md = $this->convertToMarkdown($readmeFile['file'],
-                    $readmeFile['type']);
-                $project->setDescriptionText($md);
+            // get the code from git
+            $cmd = 'git clone '.escapeshellarg($sourceRepo->getUrl()).' '.escapeshellarg($clonedir);
+            $this->logger->info('Cloning repository: '.$cmd);
+            $process = new Process($cmd);
+            $process->setTimeout(self::TIMEOUT_GIT_CLONE);
+            $process->run();
+            if (!$process->isSuccessful()) {
+                throw new \RuntimeException("Unable to clone git repository: ".$process->getErrorOutput());
             }
-        }
+            $this->logger->debug('Repository cloned');
 
-        // get git statistics
-        $this->collectGitStatistics($clonedir);
+            // extract LICENSE file contents
+            if ($project->getLicenseTextAutoUpdate()) {
+                $licenseFiles = array('LICENSE', 'COPYING');
+                $licenseFile = $this->findFile($clonedir, $licenseFiles);
+                if ($licenseFile === false) {
+                    $this->logger->debug('Found no LICENSE file');
+                    $project->setLicenseText(null);
+                } else {
+                    $this->logger->debug('Using file '.$licenseFile['file'].' as LICENSE');
+                    $md = $this->convertToMarkdown($licenseFile['file'],
+                        $licenseFile['type']);
+                    $project->setLicenseText($md);
+                }
+            }
+
+            // extract README file contents
+            if ($project->getDescriptionTextAutoUpdate()) {
+                $readmeFiles = array('README');
+                $readmeFile = $this->findFile($clonedir, $readmeFiles);
+                if ($readmeFile === false) {
+                    $this->logger->debug('Found no README file');
+                    $project->setDescriptionText(null);
+                } else {
+                    $this->logger->debug('Using file '.$readmeFile['file'].' as README');
+                    $md = $this->convertToMarkdown($readmeFile['file'],
+                        $readmeFile['type']);
+                    $project->setDescriptionText($md);
+                }
+            }
+
+            // get git statistics
+            $this->collectGitStatistics($clonedir);
+        } catch (\Exception $e) {
+            // we need to avoid a project staying in "in processing" state
+            // even if anything fails during the processing.
+            $this->logger->error("Processing of git repository resulted in an ".
+                "Exception: ".$e->getMessage());
+        }
 
         // mark project as "done processing"
         // we don't use markInProcessing() to avoid the double DB flush
@@ -204,6 +220,7 @@ class UpdateProjectInformation implements ConsumerInterface
      * Get statistics from a git repository
      *
      * @param string $repoDir root directory of the git checkout
+     * @return bool statistics collection successful?
      */
     protected function collectGitStatistics($repoDir)
     {
@@ -211,37 +228,50 @@ class UpdateProjectInformation implements ConsumerInterface
         $cmd = 'git --no-pager log --reverse '.
             '--pretty="%cd|%H|%aN|%aE" --no-merges --date=iso --shortstat';
         $process = new Process($cmd);
+        $process->setTimeout(self::TIMEOUT_GIT_GET_STATS);
         // XXX: Switch this to |git -C| as soon as a new enough version of git
         // is available on Debian.
         $process->setWorkingDirectory($repoDir);
 
-        $process->run(function ($type, $buffer) {
-            static $commitBuf = '';
-            static $nlcnt = 0;
+        try {
+            $process->run(function ($type, $buffer) {
+                static $commitBuf = '';
+                static $nlcnt = 0;
 
-            if (Process::ERR === $type) {
-                $this->logger->warning("Git error: ".$buffer);
-                return;
-            }
+                if (Process::ERR === $type) {
+                    $this->logger->warning("Git error: ".$buffer);
+                    return false;
+                }
 
-            for ($c = 0; $c < strlen($buffer); $c++) {
-                $commitBuf .= $buffer[$c];
+                for ($c = 0; $c < strlen($buffer); $c++) {
+                    $commitBuf .= $buffer[$c];
 
-                // Three lines always make up one commit. Split the incoming
-                // data stream on newlines and pass the string on to
-                // |parseGitCommit()| if we got three lines.
-                if ($buffer[$c] === "\n") {
-                    $nlcnt++;
-                    if ($nlcnt === 3) {
-                        $this->parseGitCommit($commitBuf);
-                        $nlcnt = 0;
-                        $commitBuf = '';
+                    // Three lines always make up one commit. Split the incoming
+                    // data stream on newlines and pass the string on to
+                    // |parseGitCommit()| if we got three lines.
+                    if ($buffer[$c] === "\n") {
+                        $nlcnt++;
+                        if ($nlcnt === 3) {
+                            $this->parseGitCommit($commitBuf);
+                            $nlcnt = 0;
+                            $commitBuf = '';
+                        }
                     }
                 }
-            }
-        });
+            });
+        } catch (ProcessTimedOutException $e) {
+            $this->logger->error($e->getMessage());
+            return false;
+        } catch (\Exception $e) {
+            $this->logger->error("Execution of command '$cmd' ended with an ".
+                "unhandled exception: ".$e->getMessage());
+            return false;
+        }
+
+        $this->logger->info("Got all git repository statistics.");
 
         var_dump($this->stats);
+        return true;
     }
 
     /**
