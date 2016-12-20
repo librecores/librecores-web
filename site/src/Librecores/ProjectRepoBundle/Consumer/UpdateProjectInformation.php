@@ -117,7 +117,9 @@ class UpdateProjectInformation implements ConsumerInterface
             }
 
             // get git statistics
-            $this->collectGitStatistics($clonedir);
+            // XXX: this is disabled currently until we integrate it fully into
+            // the site.
+            //$this->collectGitStatistics($clonedir);
         } catch (\Exception $e) {
             // we need to avoid a project staying in "in processing" state
             // even if anything fails during the processing.
