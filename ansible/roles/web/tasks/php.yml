@@ -1,7 +1,10 @@
 ---
 # Install PHP for the web server
-- name: Add PHP ppa repository
-  apt_repository: repo='ppa:ondrej/php'
+
+#
+#- name: Add PHP ppa repository
+#  apt_repository: repo='ppa:ondrej/php'
+#
 
 - name: Install PHP FPM
   sudo: yes
