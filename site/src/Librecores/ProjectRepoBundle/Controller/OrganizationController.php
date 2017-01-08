@@ -49,6 +49,18 @@ class OrganizationController extends Controller
     }
 
     /**
+     * Search for an organization
+     *
+     * @return Response
+     */
+    public function searchAction()
+    {
+        // Search for an organization
+
+        return $this->render('LibrecoresProjectRepoBundle:Organization:search.html.twig');
+    }
+
+    /**
      * Render the "New Organization" page
      *
      * @param Request $request
@@ -125,6 +137,86 @@ class OrganizationController extends Controller
     }
 
     /**
+     * Request to join an organization
+     *
+     * @param string $organizationName
+     * @return Response
+     */
+    public function joinAction($organizationName)
+    {
+        $o = $this->getDoctrine()
+            ->getRepository('LibrecoresProjectRepoBundle:Organization')
+            ->findOneByName($organizationName);
+
+        if (!$o) {
+            throw $this->createNotFoundException('No organization found with that name.');
+        }
+
+        // Join the organization
+
+        $user = $this->getUser();
+        $o->addRequest($user);
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($o);
+        $em->flush();
+
+        return $this->render('LibrecoresProjectRepoBundle:Organization:join.html.twig',
+            array('organization' => $o));
+    }
+
+    /**
+     * List the requests to join an organization
+     *
+     * @param string $organizationName
+     * @return Response
+     */
+    public function requestsAction($organizationName)
+    {
+        $o = $this->getDoctrine()
+            ->getRepository('LibrecoresProjectRepoBundle:Organization')
+            ->findOneByName($organizationName);
+
+        if (!$o) {
+            throw $this->createNotFoundException('No organization found with that name.');
+        }
+
+        // List the requests for the organization
+
+        $requests = $o->getRequests();
+
+        return $this->render('LibrecoresProjectRepoBundle:Organization:join.html.twig',
+            array('organization' => $o, 'requests' => $requests));
+    }
+
+    /**
+     * Leave from an organization
+     *
+     * @param string $organizationName
+     * @return Response
+     */
+    public function leaveAction($organizationName)
+    {
+        $o = $this->getDoctrine()
+            ->getRepository('LibrecoresProjectRepoBundle:Organization')
+            ->findOneByName($organizationName);
+
+        if (!$o) {
+            throw $this->createNotFoundException('No organization found with that name.');
+        }
+
+        // Leave the organization
+
+        $user = $this->getUser();
+        $o->removeRequest($user);
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($o);
+        $em->flush();
+
+        return $this->render('LibrecoresProjectRepoBundle:Organization:leave.html.twig',
+            array('organization' => $o));
+    }
+
+    /**
      * Remove an organization
      *
      * @param string $organizationName
@@ -155,97 +247,6 @@ class OrganizationController extends Controller
             array('organization' => $o));
     }
 
-    /**
-     * Search for an organization
-     *
-     * @return Response
-     */
-    public function searchAction()
-    {
-        // Search for an organization
-
-        return $this->render('LibrecoresProjectRepoBundle:Organization:search.html.twig');
-    }
-
-    /**
-     * Request to join an organization
-     *
-     * @param string $organizationName
-     * @return Response
-     */
-    public function joinAction($organizationName)
-    {
-        $o = $this->getDoctrine()
-                  ->getRepository('LibrecoresProjectRepoBundle:Organization')
-                  ->findOneByName($organizationName);
-
-        if (!$o) {
-            throw $this->createNotFoundException('No organization found with that name.');
-        }
-
-        // Join the organization
-
-        $user = $this->getUser();
-        $o->addRequest($user);
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($o);
-        $em->flush();
-
-        return $this->render('LibrecoresProjectRepoBundle:Organization:join.html.twig',
-            array('organization' => $o));
-    }
-
-    /**
-     * Leave from an organization
-     *
-     * @param string $organizationName
-     * @return Response
-     */
-    public function leaveAction($organizationName)
-    {
-        $o = $this->getDoctrine()
-                  ->getRepository('LibrecoresProjectRepoBundle:Organization')
-                  ->findOneByName($organizationName);
-
-        if (!$o) {
-            throw $this->createNotFoundException('No organization found with that name.');
-        }
-
-        // Leave the organization
-
-        $user = $this->getUser();
-        $o->removeRequest($user);
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($o);
-        $em->flush();
-
-        return $this->render('LibrecoresProjectRepoBundle:Organization:leave.html.twig',
-            array('organization' => $o));
-    }
-
-    /**
-     * List the requests to join an organization
-     *
-     * @param string $organizationName
-     * @return Response
-     */
-    public function requestsAction($organizationName)
-    {
-        $o = $this->getDoctrine()
-                  ->getRepository('LibrecoresProjectRepoBundle:Organization')
-                  ->findOneByName($organizationName);
-
-        if (!$o) {
-            throw $this->createNotFoundException('No organization found with that name.');
-        }
-
-        // List the requests for the organization
-
-        $requests = $o->getRequests();
-
-        return $this->render('LibrecoresProjectRepoBundle:Organization:join.html.twig',
-            array('organization' => $o, 'requests' => $requests));
-    }
 
     /**
      * Approve an organization join request
