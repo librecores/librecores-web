@@ -98,15 +98,11 @@ librecores_project_repo_organization_settings_join:
     path:     /{organizationName}/settings/join
     defaults: { _controller: LibrecoresProjectRepoBundle:Organization:join }
 
-librecores_project_repo_organization_settings_requests:
-    path:     /{organizationName}/settings/requests
-    defaults: { _controller: LibrecoresProjectRepoBundle:Organization:requests }
-
 librecores_project_repo_organization_settings_leave:
     path:     /{organizationName}/settings/leave
     defaults: { _controller: LibrecoresProjectRepoBundle:Organization:leave }
 
-librecores_project_repo_organization_settingS_remove:
+librecores_project_repo_organization_settings_remove:
     path:     /{organizationName}/settings/remove
     defaults: { _controller: LibrecoresProjectRepoBundle:Organization:remove }
 
