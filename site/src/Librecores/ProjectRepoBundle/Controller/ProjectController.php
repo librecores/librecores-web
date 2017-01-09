@@ -26,11 +26,17 @@ class ProjectController extends Controller {
     {
         $p = new Project();
 
-        // XXX: We currently only support projects inside the user's own
-        //      namespace. Make this dynamic when introducing organizations.
         $p->setParentUser($this->getUser());
+
         $username = $this->getUser()->getUsername();
-        $parentChoices = array($username => 'u_'.$username);
+
+        $parentChoices = array($username => 'u_' . $username);
+
+        foreach ($this->getUser()->getOrganizationsOwner() as $organization)
+        {
+            $parentChoices[$organization->getName()] = 'o_' . $organization->getName();
+        }
+
         $form = $this->createFormBuilder($p)
         ->add('parentName', ChoiceType::class, array(
             'mapped' => false,
@@ -46,25 +52,33 @@ class ProjectController extends Controller {
         $form->handleRequest($request);
 
         // save project and redirect to project page
-        if ($form->isValid()) {
-            /* XXX: currently only the user namespace is supported, see above.
-             // set parent (extract from string selection box)
-             $formParent = $form->get('parentName')->getData();
-             if (!preg_match('/^[uo]_.+$/', $formParent)) {
-             throw new \Exception("form manipulated");
-             }
-             list($formParentType, $formParentName) = explode('_', $formParent, 2);
-             if ($formParentType == 'u') {
-             $userManager = $this->container->get('fos_user.user_manager');
-             $user = $userManager->findUserByUsername($formParentName);
-             if (null === $user) {
-             throw new \Exception("form manipulated");
-             }
-             $p->setParentUser($user);
-             } else if ($formParentType == 'o') {
-             // TODO: Add ability to add projects to organizations here
-             throw new \Exception("adding projects to organizations is currently not supported.");
-             }*/
+        if ($form->isValid())
+        {
+            // set parent (extract from string selection box)
+            $formParent = $form->get('parentName')->getData();
+
+            if (!preg_match('/^[uo]_.+$/', $formParent))
+                throw new \Exception("form manipulated");
+
+            list($formParentType, $formParentName) = explode('_', $formParent, 2);
+
+            if ($formParentType === 'u')
+            {
+                $user = $this->container->get('fos_user.user_manager')->findUserByUsername($formParentName);
+
+                if (null === $user)
+                    throw new \Exception("form manipulated");
+
+                $p->setParentUser($user);
+            }
+            else if ($formParentType === 'o')
+            {
+                $organization = $this->getDoctrine()
+                                     ->getRepository('LibrecoresProjectRepoBundle:Organization')
+                                     ->findOneByName($formParentName);
+
+                $p->setParentOrganization($organization);
+            }
 
             $p->setStatus(Project::STATUS_ASSIGNED);
 
@@ -84,7 +98,7 @@ class ProjectController extends Controller {
             return $this->redirectToRoute(
                 'librecores_project_repo_project_view',
                 array(
-                    'parentName' => $p->getParentUser(),
+                    'parentName' => $formParentName,
                     'projectName' => $p->getName(),
                 ));
         }
