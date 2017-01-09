@@ -61,13 +61,28 @@ class ProjectVoter extends Voter
      *
      * @param Project $project
      * @param User $user
+     * @return boolean
      */
     private function canEdit(Project $project, User $user)
     {
-        // XXX: Projects owned by an organization are not supported for now
-        if ($project->getParentOrganization() !== null) {
-            return false;
-        }
-        return $user === $project->getParentUser();
+        // Check parent user
+
+        $userResult = false;
+
+        $parentUser = $project->getParentUser();
+
+        if ($parentUser !== null)
+            $userResult = ($user === $parentUser);
+
+        // Check parent organization
+
+        $orgResult = false;
+
+        $parentOrganization = $project->getParentOrganization();
+
+        if ($parentOrganization !== null)
+            $orgResult = ($user === $parentOrganization->getOwner());
+
+        return $orgResult or $userResult;
     }
 }
