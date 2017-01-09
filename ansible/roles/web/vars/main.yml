@@ -1,26 +1,24 @@
 ---
+# PHP version to be used
+# Packages are expected to be named php<php_version>, e.g. php7.0, php7.0-xml,
+# etc. The same is true for the binaries.
+php_version: 7.0
+
 # PHP extensions, installed from OS packages (preferred)
+# All packages are expected to be named "php{{ php_version }}-EXTENSION_NAME"
 php_extensions_packaged:
-  - { name: dev, package: php-dev }
-# XXX: What do we need that for? Composer is taking over
-#  - { name: pear, package: php-pear }
-# Currently not available as release for PHP 7
-#  - { name: xdebug, package: php5-xdebug }
-  - { name: curl, package: php-curl }
-  - { name: mcrypt, package: php-mcrypt }
-  - { name: mysql, package: php-mysql }
-  - { name: xml, package: php-xml }
-  - { name: bcmath, package: php-bcmath }
-  - { name: mbstring, package: php-mbstring }
-  - { name: zip, package: php-zip }
-# Currently not available for PHP 7 (not needed anyways?)
-#  - { name: apc, package: php-apc }
+  - dev
+  - curl
+  - mcrypt
+  - mysql
+  - xml
+  - bcmath
+  - mbstring
+  - zip
 
 # PHP extensions, installed through PEAR (if not available through OS packages)
 php_extensions_pecl: []
-# Currently not available for PHP 7
-#  - { name: "jsmin", package: "pecl.php.net/jsmin-beta" }
-#  - { name: "xhprof", package: "pecl.php.net/xhprof-beta" }
+#  - { name: "NAME", package: "pecl.php.net/NAME" }
 
 # PHP FPM socket (for web servers)
-php_fpm_sock: /var/run/php/php7.0-fpm.sock
+php_fpm_sock: "/var/run/php/php{{ php_version }}-fpm.sock"

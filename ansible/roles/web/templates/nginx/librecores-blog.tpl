@@ -30,7 +30,7 @@ server {
         #NOTE: You should have "cgi.fix_pathinfo = 0;" in php.ini
         include                 fastcgi_params;
         fastcgi_intercept_errors on;
-        fastcgi_pass            php7.0;
+        fastcgi_pass            php{{ php_version }};
     }
 
     location ~* \.(js|css|png|jpg|jpeg|gif|ico)$ {

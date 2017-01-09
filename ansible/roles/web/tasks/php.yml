@@ -5,29 +5,29 @@
 
 - name: Install PHP FPM
   sudo: yes
-  apt:  package=php7.0-fpm state=installed
+  apt:  package=php{{ php_version }}-fpm state=installed
 
 - name: Setup support for PHP in nginx
   sudo: yes
-  template: src=nginx/upstream_php7.0.conf.tpl dest=/etc/nginx/conf.d/upstream_php7.0.conf
+  template: src=nginx/upstream_php.conf.tpl dest=/etc/nginx/conf.d/upstream_php{{ php_version }}.conf
   notify: restart nginx
 
 - name: Install PHP CLI
   sudo: yes
-  apt:  package=php7.0-cli state=installed
+  apt:  package=php{{ php_version }}-cli state=installed
 
 # OS packaged PHP extensions
 - name: Install packaged PHP extensions
   sudo: yes
-  apt:  package={{ item.package }} state=installed
+  apt:  package=php{{php_version}}-{{ item }} state=installed
   with_items: "{{ php_extensions_packaged }}"
 
 - name: Enable packaged PHP extensions for all SAPIs
   sudo: yes
   # creates= only accepts one file; phpenmod also creates the fpm symlink
-  command: /usr/sbin/phpenmod -s ALL {{ item.name }} creates=/etc/php/7.0/cli/conf.d/20-{{ item.name }}.ini
+  command: /usr/sbin/phpenmod -s ALL {{ item }} creates=/etc/php/{{ php_version }}/cli/conf.d/20-{{ item }}.ini
   with_items: "{{ php_extensions_packaged }}"
-  notify: restart php7.0-fpm
+  notify: restart php-fpm
 
 # PHP extensions from PECL
 - name: Install PECL-installed PHP extensions
@@ -43,9 +43,9 @@
 - name: Enable PECL-installed PHP extensions for all SAPIs (through PECL)
   sudo: yes
   # creates= only accepts one file; phpenmod also creates the fpm symlink
-  command: /usr/sbin/phpenmod -s ALL {{ item.name }} creates=/etc/php/7.0/cli/conf.d/20-{{ item.name }}.ini
+  command: /usr/sbin/phpenmod -s ALL {{ item.name }} creates=/etc/php/{{ php_version }}/cli/conf.d/20-{{ item.name }}.ini
   with_items: "{{ php_extensions_pecl }}"
-  notify: restart php7.0-fpm
+  notify: restart php-fpm
 
 # Composer
 - name:  Install Composer

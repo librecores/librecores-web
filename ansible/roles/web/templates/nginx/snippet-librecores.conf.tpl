@@ -25,7 +25,7 @@ location @rewriteapp {
 {% endif %}
 
 location ~ ^/(app|app_dev|config)\.php(/|$) {
-    fastcgi_pass            php7.0;
+    fastcgi_pass            php{{ php_version }};
     fastcgi_buffer_size     16k;
     fastcgi_buffers         4 16k;
     fastcgi_split_path_info ^(.+\.php)(/.*)$;
