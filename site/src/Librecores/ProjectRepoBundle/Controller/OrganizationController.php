@@ -106,7 +106,8 @@ class OrganizationController extends Controller
     public function viewAction(Organization $organization)
     {
         return $this->render('LibrecoresProjectRepoBundle:Organization:view.html.twig',
-            array('organization' => $organization));
+            array('organization' => $organization,
+                  'user'         => $this->getUser()));
     }
 
     /**
@@ -162,30 +163,6 @@ class OrganizationController extends Controller
 
         return $this->render('LibrecoresProjectRepoBundle:Organization:join.html.twig',
             array('organization' => $o));
-    }
-
-    /**
-     * List the requests to join an organization
-     *
-     * @param string $organizationName
-     * @return Response
-     */
-    public function requestsAction($organizationName)
-    {
-        $o = $this->getDoctrine()
-            ->getRepository('LibrecoresProjectRepoBundle:Organization')
-            ->findOneByName($organizationName);
-
-        if (!$o) {
-            throw $this->createNotFoundException('No organization found with that name.');
-        }
-
-        // List the requests for the organization
-
-        $requests = $o->getRequests();
-
-        return $this->render('LibrecoresProjectRepoBundle:Organization:join.html.twig',
-            array('organization' => $o, 'requests' => $requests));
     }
 
     /**
@@ -280,7 +257,8 @@ class OrganizationController extends Controller
         $em->flush();
 
         return $this->render('LibrecoresProjectRepoBundle:Organization:approve.html.twig',
-            array('organization' => $o));
+            array('organization' => $o,
+                  'user'         => $user));
     }
 
     /**
@@ -314,6 +292,7 @@ class OrganizationController extends Controller
         $em->flush();
 
         return $this->render('LibrecoresProjectRepoBundle:Organization:deny.html.twig',
-            array('organization' => $o));
+            array('organization' => $o,
+                  'user'         => $user));
     }
 }
