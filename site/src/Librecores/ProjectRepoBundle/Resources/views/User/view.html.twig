@@ -17,8 +17,9 @@
 
 <h2>Projects</h2>
 {% for project in user.getProjects() %}
-  <h3>{{ project.getName() }}</h3>
-  {{ project.getTagline() }}
+  <a href="{{ path('librecores_project_repo_project_view', {'parentName':
+          project.getParentName(), 'projectName': project.getName()}) }}">{{ project.getName() }}</a>
+  {% if project.getTagline() is not null %} - {{ project.getTagline() }}{% endif %}<br/>
 {% else %}
   {% if is_granted("IS_AUTHENTICATED_REMEMBERED") and (user.getUsername() == app.user.username) %}
   <p>You have not yet created a project.</p>
@@ -30,4 +31,33 @@
   {% endif %}
 
 {% endfor %}
+
+<h2>Organizations (Owner)</h2>
+{% for organization in user.getOrganizationsOwner() %}
+  <a href="{{ path('librecores_project_repo_user_org_view', {'userOrOrganization':
+          organization.getName()}) }}">{{ organization.getDisplayName() }}</a>
+  {% if organization.getDescription() is not null %} - {{ organization.getDescription() }}{% endif %}<br/>
+{% else %}
+    {{ user.getUsername() }} has not yet created an organization.
+{% endfor %}
+
+<h2>Organizations (Member)</h2>
+{% for organization in user.getOrganizationsMember() %}
+    <a href="{{ path('librecores_project_repo_user_org_view', {'userOrOrganization':
+        organization.getName()}) }}">{{ organization.getDisplayName() }}</a>
+    {% if organization.getDescription() is not null %} - {{ organization.getDescription() }}{% endif %}<br/>
+{% else %}
+    {{ user.getUsername() }} has not yet joined an organization.
+{% endfor %}
+
+{% if user == app.user %}
+    <h2>Organizations (Pending Join Requests)</h2>
+    {% for organization in user.getOrganizationsRequest() %}
+        <a href="{{ path('librecores_project_repo_user_org_view', {'userOrOrganization':
+            organization.getName()}) }}">{{ organization.getDisplayName() }}</a>
+        {% if organization.getDescription() is not null %} - {{ organization.getDescription() }}{% endif %}<br/>
+    {% else %}
+        You have no pending requests to join an organization.
+    {% endfor %}
+{% endif %}
 {% endblock %}
