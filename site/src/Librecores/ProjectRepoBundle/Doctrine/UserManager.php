@@ -15,6 +15,10 @@ class UserManager extends BaseUserManager
     /**
      * Find user by given username or email
      *
+     * This implementation differs from
+     * findUserByUsernameOrEmail($usernameOrEmail) in that username and email
+     * are different arguments and the two are treated separately.
+     *
      * @param string $username
      * @param string $email
      * @return mixed
@@ -24,8 +28,8 @@ class UserManager extends BaseUserManager
         return $this->repository->createQueryBuilder('u')
             ->where('u.usernameCanonical = :username')
             ->orWhere('u.emailCanonical = :email')
-            ->setParameter('username', $this->canonicalizeUsername($username))
-            ->setParameter('email', $this->canonicalizeEmail($email))
+            ->setParameter('username', $this->getCanonicalFieldsUpdater()->canonicalizeUsername($username))
+            ->setParameter('email', $this->getCanonicalFieldsUpdater()->canonicalizeEmail($email))
             ->getQuery()
             ->getOneOrNullResult()
         ;
