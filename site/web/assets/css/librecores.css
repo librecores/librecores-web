@@ -55,6 +55,8 @@ pre code {
   box-shadow: none;
 }
 
+.anchor { padding-top: 60px; }
+
 h1 a:hover, h1 a:active {
  color: #3fb0ac
 }

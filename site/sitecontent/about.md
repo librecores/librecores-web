@@ -7,6 +7,7 @@ Towards this goal, LibreCores provides you
 - means to assess the quality of those components, and
 - documentation to learn more about the use and contribution to free and open source digital designs.
 
+Please find our feature [roadmap below](#roadmap).
 
 ## Frequently Asked Questions (FAQ)
 
@@ -19,7 +20,8 @@ LibreCores advances the idea of OpenCores.org to give the community a place to s
 As heavy users of OpenCores, we (the FOSSi Foundation) tried everything in our power to evolve the concept together with the owners of OpenCores. Unfortunately, to this day, we were not yet able to achieve this goal.
 Therefore, we decided to give it a real fresh start under the LibreCores brand.
 
-### What are the future plans for LibreCores?
+### <a class="anchor" name="roadmap"></a> What are the future plans for LibreCores?
+
 At the moment, LibreCores is in a preview state and we believe in "release early, release often".
 We've laid down much of the groundwork for the site, and are now able to iterate quickly on new ideas and features.
 We do this to enable everybody to get involved and shape the future of LibreCores with the goal of making it a place where the community can truly feel at home.
