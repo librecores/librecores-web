@@ -32,28 +32,26 @@ class ProjectController extends Controller {
 
         $parentChoices = array($username => 'u_' . $username);
 
-        foreach ($this->getUser()->getOrganizationsOwner() as $organization)
-        {
+        foreach ($this->getUser()->getOrganizationsOwner() as $organization) {
             $parentChoices[$organization->getName()] = 'o_' . $organization->getName();
         }
 
         $form = $this->createFormBuilder($p)
-        ->add('parentName', ChoiceType::class, array(
-            'mapped' => false,
-            'choices' => $parentChoices,
-            'choices_as_values' => true,
-            'multiple' => false,
-        ))
-        ->add('name')
-        ->add('sourceRepo', SourceRepoType::class)
-        ->add('save', SubmitType::class, array('label' => 'Create Project'))
-        ->getForm();
+                     ->add('parentName', ChoiceType::class, array(
+                        'mapped' => false,
+                        'choices' => $parentChoices,
+                        'choices_as_values' => true,
+                        'multiple' => false,
+                     ))
+                     ->add('name')
+                     ->add('sourceRepo', SourceRepoType::class)
+                     ->add('save', SubmitType::class, array('label' => 'Create Project'))
+                     ->getForm();
 
         $form->handleRequest($request);
 
         // save project and redirect to project page
-        if ($form->isValid())
-        {
+        if ($form->isValid()) {
             // set parent (extract from string selection box)
             $formParent = $form->get('parentName')->getData();
 
@@ -62,17 +60,16 @@ class ProjectController extends Controller {
 
             list($formParentType, $formParentName) = explode('_', $formParent, 2);
 
-            if ($formParentType === 'u')
-            {
-                $user = $this->container->get('fos_user.user_manager')->findUserByUsername($formParentName);
+            if ($formParentType === 'u') {
+                $user = $this->container->get('fos_user.user_manager')
+                                        ->findUserByUsername($formParentName);
 
                 if (null === $user)
                     throw new \Exception("form manipulated");
 
                 $p->setParentUser($user);
-            }
-            else if ($formParentType === 'o')
-            {
+
+            } else if ($formParentType === 'o') {
                 $organization = $this->getDoctrine()
                                      ->getRepository('LibrecoresProjectRepoBundle:Organization')
                                      ->findOneByName($formParentName);
@@ -92,7 +89,7 @@ class ProjectController extends Controller {
 
             // queue data collection from repository
             $this->get('old_sound_rabbit_mq.update_project_info_producer')
-            ->publish(serialize($p->getId()));
+                 ->publish(serialize($p->getId()));
 
             // redirect user to "view project" page
             return $this->redirectToRoute(
