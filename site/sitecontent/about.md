@@ -7,12 +7,11 @@ Towards this goal, LibreCores provides you
 - means to assess the quality of those components, and
 - documentation to learn more about the use and contribution to free and open source digital designs.
 
-LibreCores is a project of the [Free and Open Source Silicon Foundation](http://www.fossi-foundation.org), short FOSSi.
 
 ## Frequently Asked Questions (FAQ)
 
 ### Who's running LibreCores?
-LibreCores is a project of the [Free and Open Source Silicon Foundation](http://www.fossi-foundation.org) (FOSSi), which was created to give a voice to the digital hardware design community. LibreCores, like FOSSi, is run entirely by volunteers.
+LibreCores is a project of the [Free and Open Source Silicon (FOSSi) Foundation](http://www.fossi-foundation.org), which was created to give a voice to the digital hardware design community. LibreCores, like FOSSi Foundation, is run entirely by volunteers.
 
 ### How does LibreCores relate to OpenCores?
 LibreCores advances the idea of OpenCores.org to give the community a place to share projects, ideas, and knowledge in the area of free and open source digital hardware design.
