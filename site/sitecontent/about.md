@@ -20,11 +20,37 @@ As heavy users of OpenCores, we (the FOSSi Foundation) tried everything in our p
 Therefore, we decided to give it a real fresh start under the LibreCores brand.
 
 ### What are the future plans for LibreCores?
-At the moment, LibreCores is in a preview state.
+At the moment, LibreCores is in a preview state and we believe in "release early, release often".
 We've laid down much of the groundwork for the site, and are now able to iterate quickly on new ideas and features.
 We do this to enable everybody to get involved and shape the future of LibreCores with the goal of making it a place where the community can truly feel at home.
 
-Looking ahead in addition to many smaller improvements we want to focus on four major areas.
+#### Basic Features
+
+Some of the most important features we are working on and that will be added in the near future are:
+
+<div style="height: 64px">
+<img src="/img/freepik/hierarchical-structure.png" hspace="24" height="48px" style="float:left"/>
+<p style="overflow: hidden"><b>Organizations.</b> Similar to other platforms such as Github LibreCores can be organized in organizations. The structure is similar to the cores of a user, but with an organization being a collection of users.</p>
+</div>
+
+<div style="height: 64px">
+<img src="/img/freepik/label-right-arrow-outline.png" align="left" hspace="24" height="48px" />
+<p style="overflow: hidden"><b>Tags.</b> A core can be tagged with keywords, such as a design language, an interface, an ISA etc. This makes it easier for other users to find what they are searching for.</p>
+</div>
+
+<div style="height: 64px">
+<img src="/img/freepik/rating.png" align="left" hspace="24" height="48px" />
+<p style="overflow: hidden"><b>Reviews and Ratings.</b> We envision a mix of scale-based ratings and an optional comment. The goal is that other users get a better understanding of how other users percepted this core before.</p>
+</div>
+
+<div style="height: 64px">
+<p style="float:left"><img src="/img/freepik/molecular-bond.png" hspace="24" height="48px" /></p>
+<p style="overflow: hidden"><b>Core Relations.</b> Cores rarely stand for themselves, but are part of a larger collection, are forked from another core or depend on other cores.</p>
+</div>
+
+#### Our Vision
+
+Looking ahead in addition to those basic features we want to focus on four major areas.
 
 - **Project quality metrics.** Sometimes it's hard to decide if a project is usable for a given project. To make the decision process easier, we are thinking about both user-generated quality metrics (such as comments or reviews, likes, etc.) as well as machine-generated metrics (e.g. activity metrics or build and test status from continuous integration).
 - **Workflow integration.** Finding an IP core on LibreCores is just the first step of using it as part of an own project. Currently, making use of a core  involves in many cases copying the source code into the custom project. This process is tedious and makes updating a core to the latest upstream version hard.
