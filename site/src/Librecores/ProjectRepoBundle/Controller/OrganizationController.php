@@ -49,18 +49,6 @@ class OrganizationController extends Controller
     }
 
     /**
-     * Search for an organization
-     *
-     * @return Response
-     */
-    public function searchAction()
-    {
-        // Search for an organization
-
-        return $this->render('LibrecoresProjectRepoBundle:Organization:search.html.twig');
-    }
-
-    /**
      * Render the "New Organization" page
      *
      * @param Request $request
@@ -122,7 +110,7 @@ class OrganizationController extends Controller
         if ($this->getUser() != $organization->getOwner())
             throw $this->createAccessDeniedException("You don't own this organization in order to make changes");
 
-        // create and show form
+        // Create and show the form
         $form = $this->createForm(OrganizationType::class, $organization);
         $form->handleRequest($request);
 
@@ -149,11 +137,8 @@ class OrganizationController extends Controller
             ->getRepository('LibrecoresProjectRepoBundle:Organization')
             ->findOneByName($organizationName);
 
-        if (!$o) {
+        if (!$o)
             throw $this->createNotFoundException('No organization found with that name.');
-        }
-
-        // Join the organization
 
         $user = $this->getUser();
         $o->addRequest($user);
@@ -177,11 +162,8 @@ class OrganizationController extends Controller
             ->getRepository('LibrecoresProjectRepoBundle:Organization')
             ->findOneByName($organizationName);
 
-        if (!$o) {
+        if (!$o)
             throw $this->createNotFoundException('No organization found with that name.');
-        }
-
-        // Leave the organization
 
         $user = $this->getUser();
         $o->removeRequest($user);
@@ -194,31 +176,29 @@ class OrganizationController extends Controller
     }
 
     /**
-     * Remove an organization
+     * Delete an organization
      *
      * @param string $organizationName
      * @return Response
      */
-    public function removeAction($organizationName)
+    public function deleteAction($organizationName)
     {
         $o = $this->getDoctrine()
                   ->getRepository('LibrecoresProjectRepoBundle:Organization')
                   ->findOneByName($organizationName);
 
-        if (!$o) {
+        if (!$o)
             throw $this->createNotFoundException('No organization found with that name.');
-        }
-
-        // Remove the organization
 
         if ($this->getUser() != $o->getOwner())
-            throw $this->createAccessDeniedException("You don't own this organization in order to remove it");
+            throw $this->createAccessDeniedException("You don't own this organization in order to delete it");
 
-        // TODO: Handle projects related to this organization!
+        // We don't support this yet so just show 'this is an unsupported operation'
+        // message to the user until we provide support
 
-        $em = $this->getDoctrine()->getManager();
-        $em->remove($o);
-        $em->flush();
+        // $em = $this->getDoctrine()->getManager();
+        // $em->remove($o);
+        // $em->flush();
 
         return $this->render('LibrecoresProjectRepoBundle:Organization:remove.html.twig',
             array('organization' => $o));
@@ -238,17 +218,14 @@ class OrganizationController extends Controller
                   ->getRepository('LibrecoresProjectRepoBundle:Organization')
                   ->findOneByName($organizationName);
 
-        if (!$o) {
+        if (!$o)
             throw $this->createNotFoundException('No organization found with that name.');
-        }
-
-        // Approve the organization join request
 
         $userManager = $this->container->get('fos_user.user_manager');
         $user = $userManager->findUserByUsername($userName);
-        if (!$user) {
+
+        if (!$user)
             throw $this->createNotFoundException("No user found with that username");
-        }
 
         $o->addMember($user);
         $o->removeRequest($user);
@@ -274,17 +251,16 @@ class OrganizationController extends Controller
                   ->getRepository('LibrecoresProjectRepoBundle:Organization')
                   ->findOneByName($organizationName);
 
-        if (!$o) {
+        if (!$o)
             throw $this->createNotFoundException('No organization found with that name.');
-        }
 
         // Deny the organization join request
 
         $userManager = $this->container->get('fos_user.user_manager');
         $user = $userManager->findUserByUsername($userName);
-        if (!$user) {
+
+        if (!$user)
             throw $this->createNotFoundException("No user found with that username");
-        }
 
         $o->removeRequest($user);
         $em = $this->getDoctrine()->getManager();
@@ -294,5 +270,37 @@ class OrganizationController extends Controller
         return $this->render('LibrecoresProjectRepoBundle:Organization:deny.html.twig',
             array('organization' => $o,
                   'user'         => $user));
+    }
+
+    /**
+     * Remove an organization member
+     *
+     * @param string $organizationName
+     * @param string $userName
+     * @return Response
+     */
+    public function removeAction($organizationName, $userName)
+    {
+        $o = $this->getDoctrine()
+            ->getRepository('LibrecoresProjectRepoBundle:Organization')
+            ->findOneByName($organizationName);
+
+        if (!$o)
+            throw $this->createNotFoundException('No organization found with that name.');
+
+        $userManager = $this->container->get('fos_user.user_manager');
+        $user = $userManager->findUserByUsername($userName);
+
+        if (!$user)
+            throw $this->createNotFoundException("No user found with that username");
+
+        $o->removeMember($user);
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($o);
+        $em->flush();
+
+        return $this->render('LibrecoresProjectRepoBundle:Organization:deny.html.twig',
+            array('organization' => $o,
+                'user'         => $user));
     }
 }
