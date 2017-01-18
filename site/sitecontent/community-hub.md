@@ -13,7 +13,7 @@ Everybody has questions. Let's find answers!
 * LibreCores provides you with some documentation resources. It covers
   frequently asked questions, like "How do I publish my code?", or
   "Which license should I choose?". Have a look at our
-  [documentation pages](/docs) for an overview of available topics.
+  [documentation pages](docs) for an overview of available topics.
 * You couldn't find the answer? Let's talk to real people!
 
   A good place to start is the discussion mailing list at 
@@ -24,6 +24,6 @@ Everybody has questions. Let's find answers!
 
   Some questions are better suited for real-time chat. Most people use IRC for
   that, and you can find many people hanging out on the #fossi channel on freenode.
-  You can connect either with a IRC client like [XChat](http://xchat.org/download/), 
+  You can connect either with a IRC client like [Hexchat](https://hexchat.github.io/),
   or use a [web interface](https://webchat.freenode.net/#fossi) to connect 
   directly from your browser.
