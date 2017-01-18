@@ -1,9 +1,10 @@
 Vagrant.configure("2") do |config|
     # Configure the box to use
     config.vm.box       = 'bento/ubuntu-16.04'
-    # There seems to be a bug in the 2.3.0 version of the box, force a working
-    # one for now.
-    config.vm.box_version = '2.2.9'
+    # We explicitly set the box version as we've encountered bugs in at least
+    # one older version (2.3.0). A fixed version should ensure a deterministic
+    # developer experience.
+    config.vm.box_version = '2.3.1'
 
     # Configure shared folders
     # uncomment either one of the two versions below. See README.md in the
