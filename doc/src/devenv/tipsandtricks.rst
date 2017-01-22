@@ -34,7 +34,7 @@ Rebuild ORM (Doctrine) Entity
 
 
 Asynchronous Processing with RabbitMQ
------------------------~~~~~~~~~~~~~~
+-------------------------------------
 
 Access the RabbitMQ management plugin
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -74,3 +74,5 @@ Access the MySQL database
 .. code-block:: bash
 
   vm$> mysql -uroot librecores -ppassword
+
+(Yes, the password is "password".)
