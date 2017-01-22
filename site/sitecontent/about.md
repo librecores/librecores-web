@@ -43,11 +43,11 @@ but they lack some features required for hardware projects (EDA tools, running t
 
 ### How can I contribute to LibreCores?
 All code and all development on LibreCores is fully open and we welcome any input you might have regarding the site.
+If you want to contribute to LibreCores, we have documented some ways to get started in the document [Contributing to LibreCores](http://librecores-web.readthedocs.io/en/latest/contributing.html).
+Don't be scared if you're not a programmer: There are many tasks which do not require any programming experience. Just have a look and talk to us if you didn't find a suitable task just yet.
 
 Code, bug tracker and project planning is done in the [librecores-web repository](https://github.com/librecores/librecores-web) on GitHub.
 
 Development discussion happens on the [dev@lists.librecores.org](mailto:dev@lists.librecores.org) mailing list ([subscribe here](https://lists.librecores.org/listinfo/dev)).
 
 Many developers also hang out on IRC on the [#librecores channel on Freenode](http://webchat.freenode.net?channels=%23librecores&uio=d4).
-
-For further information how to contribute please also have a look at the [contribution guide](https://github.com/librecores/librecores-web/blob/master/CONTRIBUTING.md) inside the repository.
