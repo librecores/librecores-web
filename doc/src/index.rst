@@ -13,4 +13,5 @@ Documentation Contents
    :maxdepth: 2
 
    devenv/index.rst
+   contributing.rst
    designdocs/index.rst
