@@ -60,6 +60,13 @@ Test the producer: update one project
   # update the project information of project 1 (needs the consumer!)
   vm$> echo 1 | ./app/console rabbitmq:stdin-producer update_project_info
 
+Empty the queue
+~~~~~~~~~~~~~~~
+
+.. code-block:: bash
+
+  vm$> sudo rabbitmqctl purge_queue update-project-info
+
 
 Clean the Symfony caches
 ------------------------
