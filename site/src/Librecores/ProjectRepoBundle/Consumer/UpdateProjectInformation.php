@@ -49,23 +49,33 @@ class UpdateProjectInformation implements ConsumerInterface
 
     public function execute(AMQPMessage $msg)
     {
-        $projectId = (int)unserialize($msg->body);
-
-        $project = $this->orm->getRepository('LibrecoresProjectRepoBundle:Project')
-            ->find($projectId);
-
-        // check if this project is associated with a source repository
-        if ($project->getSourceRepo() === null ||
-            $project->getSourceRepo()->getType() != SourceRepo::REPO_TYPE_GIT) {
-            $this->logger->error("Unable to update project with ID $project: ".
-                "no valid source repository associated.");
-
-            $this->markInProcessing($project, false);
-            return true; /* don't requeue */
-        }
-        $sourceRepo = $project->getSourceRepo();
-
+        // We need to be very careful not to fail due to a PHP error or an unhandled
+        // within a consumer, as this essentially kills the RabbitMQ daemon and ends
+        // all processing tasks.
         try {
+            $projectId = (int)unserialize($msg->body);
+
+            $project = $this->orm->getRepository('LibrecoresProjectRepoBundle:Project')
+                ->find($projectId);
+            if (!$project) {
+                $this->logger->error("Unable to update project with ID $project: ".
+                    "project does not exist.");
+
+                $this->markInProcessing($project, false);
+                return true; /* don't requeue */
+            }
+
+            // check if this project is associated with a source repository
+            if ($project->getSourceRepo() === null ||
+                $project->getSourceRepo()->getType() != SourceRepo::REPO_TYPE_GIT) {
+                $this->logger->error("Unable to update project with ID $project: ".
+                    "no valid source repository associated.");
+
+                $this->markInProcessing($project, false);
+                return true; /* don't requeue */
+            }
+            $sourceRepo = $project->getSourceRepo();
+
             // create temporary directory
             $cmd = 'mktemp -d --tmpdir lc.updateprojectinfo.git.XXXXXXXXXX';
             $process = new Process($cmd);
@@ -120,25 +130,25 @@ class UpdateProjectInformation implements ConsumerInterface
             // XXX: this is disabled currently until we integrate it fully into
             // the site.
             //$this->collectGitStatistics($clonedir);
+
+            // mark project as "done processing"
+            // we don't use markInProcessing() to avoid the double DB flush
+            $project->setInProcessing(false);
+
+            // persist to DB
+            $this->orm->getManager()->flush();
+
+            // remove temporary directory
+            $this->recursiveRmdir($clonedir);
+
+            // remove event from queue
+            return true;
         } catch (\Exception $e) {
             // we need to avoid a project staying in "in processing" state
             // even if anything fails during the processing.
             $this->logger->error("Processing of git repository resulted in an ".
                 "Exception: ".$e->getMessage());
         }
-
-        // mark project as "done processing"
-        // we don't use markInProcessing() to avoid the double DB flush
-        $project->setInProcessing(false);
-
-        // persist to DB
-        $this->orm->getManager()->flush();
-
-        // remove temporary directory
-        $this->recursiveRmdir($clonedir);
-
-        // remove event from queue
-        return true;
     }
 
     /**
