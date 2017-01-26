@@ -5,11 +5,13 @@ which provides Continuous Integration of projects being hosted on LibreCores.
 The objective of the service is to improve the contributor experience and to increase trust to projects by providing automated testing and health metrics of the projects.
 Currently the service is **under development**.
 
+<img src="/img/ci-overview.svg" width="400px" style="float: right; margin: 20px"/>
+
 With LibreCores CI you will be able to...
 
 * Build your projects using [FuseSoC](https://github.com/olofk/fusesoc) and open-source EDAs
-* Run simulation tests in the cloud
-* Run tests on FPGAs and custom peripherals using "bring your own" agents
+* Run automated simulation tests in the cloud
+* Run tests on FPGAs and custom peripherals using "bring your own" agents. Users or sponsors can also provide their FPGA agents for other individual projects or even all projects tagged for that FPGA.
 * Define custom build flows using [Jenkins Pipeline](https://jenkins.io/doc/book/pipeline/) 
 * Setup pull request builders and test reporters in order to improve the contributor experience
 
