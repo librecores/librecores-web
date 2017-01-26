@@ -32,22 +32,22 @@ Some of the most important features we are working on and that will be added in 
 
 <div style="height: 64px">
 <img src="/img/freepik/hierarchical-structure.png" hspace="24" height="48px" style="float:left"/>
-<p style="overflow: hidden"><b>Organizations.</b> Similar to other platforms such as Github LibreCores can be organized in organizations. The structure is similar to the cores of a user, but with an organization being a collection of users.</p>
+<p style="overflow: hidden"><b>Organizations.</b> Similar to other platforms such as Github, LibreCores can be organized in organizations. The structure is similar to the projects of a user, but with an organization being a collection of users.</p>
 </div>
 
 <div style="height: 64px">
 <img src="/img/freepik/label-right-arrow-outline.png" align="left" hspace="24" height="48px" />
-<p style="overflow: hidden"><b>Tags.</b> A core can be tagged with keywords, such as a design language, an interface, an ISA etc. This makes it easier for other users to find what they are searching for.</p>
+<p style="overflow: hidden"><b>Tags.</b> A project can be tagged with keywords, such as a design language, an interface, an ISA etc. This makes it easier for other users to find what they are searching for.</p>
 </div>
 
 <div style="height: 64px">
 <img src="/img/freepik/rating.png" align="left" hspace="24" height="48px" />
-<p style="overflow: hidden"><b>Reviews and Ratings.</b> We envision a mix of scale-based ratings and an optional comment. The goal is that other users get a better understanding of how other users percepted this core before.</p>
+<p style="overflow: hidden"><b>Reviews and Ratings.</b> We envision a mix of scale-based ratings and an optional comment. The goal is that other users get a better understanding of how other users percepted this project before.</p>
 </div>
 
 <div style="height: 64px">
 <p style="float:left"><img src="/img/freepik/molecular-bond.png" hspace="24" height="48px" /></p>
-<p style="overflow: hidden"><b>Core Relations.</b> Cores rarely stand for themselves, but are part of a larger collection, are forked from another core or depend on other cores.</p>
+<p style="overflow: hidden"><b>Project Relations.</b> Projects rarely stand for themselves, but are part of a larger collection, are forked from another project or depend on other projects.</p>
 </div>
 
 #### Our Vision
