@@ -15,7 +15,7 @@ class OrganizationRepository extends EntityRepository
      * Find all the organizations that a user owns.
      *
      * @param User $user
-     * @return ArrayCollection of Organizations
+     * @return array of Organizations
      */
     public function findAllByOwnerOrderedByName(User $user)
     {
@@ -34,7 +34,7 @@ class OrganizationRepository extends EntityRepository
      * Find all the organizations that a user is a member of.
      *
      * @param User $user
-     * @return ArrayCollection of Organizations
+     * @return array of Organizations
      */
     public function findAllByMemberOrderedByName(User $user)
     {

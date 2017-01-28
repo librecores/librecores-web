@@ -59,46 +59,72 @@ class Organization
 
     /**
      * @var ArrayCollection
+     *
      * @ORM\OneToMany(targetEntity="Project", mappedBy="parentOrganization")
      * @ORM\JoinColumn(name="projectId", referencedColumnName="id")
      */
     private $projects;
 
     /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="OrganizationMember", inversedBy="organization", cascade={"remove"}))
+     **/
+    protected $organizationMembers;
+
+    /**
      * @var User
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="organizationsOwner")
-     * @ORM\JoinColumn(name="ownerId", referencedColumnName="id")
-     **/
-    protected $owner;
+     *
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="organizationsCreated")
+     * @ORM\JoinColumn(name="creatorId", referencedColumnName="id")
+     */
+    private $creator;
+
+    // metadata
+    /**
+     * When was this organization created?
+     *
+     * @var \DateTime
+     * @ORM\Column(type="datetime")
+     */
+    protected $createdAt;
 
     /**
-     * @var ArrayCollection
-     * @ORM\ManyToMany(targetEntity="User", inversedBy="organizationsMember")
-     * @ORM\JoinTable(name="OrganizationMembers",
-     *     joinColumns={@ORM\JoinColumn(name="organizationId", referencedColumnName="id")},
-     *     inverseJoinColumns={@ORM\JoinColumn(name="memberId", referencedColumnName="id")}
-     *     )
-     **/
-    protected $members;
-
-    /**
-     * @var ArrayCollection
-     * @ORM\ManyToMany(targetEntity="User", inversedBy="organizationsRequest")
-     * @ORM\JoinTable(name="OrganizationRequests",
-     *     joinColumns={@ORM\JoinColumn(name="organizationId", referencedColumnName="id")},
-     *     inverseJoinColumns={@ORM\JoinColumn(name="requestId", referencedColumnName="id")}
-     *     )
-     **/
-    protected $requests;
+     * When was this organization last updated?
+     *
+     * @var \DateTime
+     * @ORM\Column(type="datetime")
+     */
+    protected $updatedAt;
 
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->projects = new ArrayCollection();
-        $this->members  = new ArrayCollection();
-        $this->requests = new ArrayCollection();
+        $this->projects             = new ArrayCollection();
+        $this->organizationMembers  = new ArrayCollection();
+    }
+
+    /**
+     * Hook on the first storing of this object
+     *
+     * @ORM\PrePersist()
+     */
+    public function prePersist()
+    {
+        $this->createdAt = new \DateTime;
+        $this->updatedAt = new \DateTime;
+    }
+
+    /**
+     * Hook before each update
+     *
+     * @ORM\PreUpdate()
+     */
+    public function preUpdate()
+    {
+        $this->updatedAt = new \DateTime;
     }
 
     /**
@@ -181,26 +207,32 @@ class Organization
     }
 
     /**
-     * Add projects
+     * Add project
      *
-     * @param Project $projects
+     * @param Project $project
      * @return Organization
      */
-    public function addProject(Project $projects)
+    public function addProject(Project $project)
     {
-        $this->projects[] = $projects;
+        if (!$this->projects->contains($project)) {
+            $this->projects[] = $project;
+            $project->setParentOrganization($this);
+        }
 
         return $this;
     }
 
     /**
-     * Remove projects
+     * Remove project
      *
-     * @param Project $projects
+     * @param Project $project
      */
-    public function removeProject(Project $projects)
+    public function removeProject(Project $project)
     {
-        $this->projects->removeElement($projects);
+        if ($this->projects->contains($project)) {
+            $this->projects->removeElement($project);
+            $project->setParentOrganization(null);
+        }
     }
 
     /**
@@ -214,113 +246,81 @@ class Organization
     }
 
     /**
-     * Set owner
+     * Add organization member
      *
-     * @param User $owner
+     * @param OrganizationMember $organizationMember
      * @return Organization
      */
-    public function setOwner(User $owner = null)
+    public function addOrganizationMember(OrganizationMember $organizationMember)
     {
-        if ($this->owner !== null)
-            $this->owner->removeOrganizationsOwner($this);
-
-        if ($owner !== null)
-            $owner->addOrganizationsOwner($this);
-
-        $this->owner = $owner;
+        if (!$this->organizationMembers->contains($organizationMember))
+            $this->organizationMembers[] = $organizationMember;
 
         return $this;
     }
 
     /**
-     * Get owner
+     * Remove organization member
+     *
+     * @param OrganizationMember $organizationMember
+     */
+    public function removeOrganizationMember(OrganizationMember $organizationMember)
+    {
+        if ($this->organizationMembers->contains($organizationMember))
+            $this->organizationMembers->removeElement($organizationMember);
+    }
+
+    /**
+     * Get organization members
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getOrganizationMembers()
+    {
+        return $this->organizationMembers;
+    }
+
+    /**
+     * Get users
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getUsers()
+    {
+        return array_map(
+            function (OrganizationMember $organizationMember) {
+                return $organizationMember->getUser();
+            },
+            $this->organizationMembers->toArray()
+        );
+    }
+
+    /**
+     * Set creator
+     *
+     * @param User $creator
+     * @return Organization
+     */
+    public function setCreator(User $creator)
+    {
+        if ($this->creator !== null)
+            $this->creator->removeOrganizationCreated($this);
+
+        if ($creator !== null)
+            $creator->addOrganizationCreated($this);
+
+        $this->creator = $creator;
+
+        return $this;
+    }
+
+    /**
+     * Get creator
      *
      * @return User
      */
-    public function getOwner()
+    public function getCreator()
     {
-        return $this->owner;
-    }
-
-    /**
-     * Add member
-     *
-     * @param User $member
-     * @return Organization
-     */
-    public function addMember(User $member)
-    {
-        if ($member !== null)
-            $member->addOrganizationsMember($this);
-
-        if (!$this->members->contains($member))
-            $this->members[] = $member;
-
-        return $this;
-    }
-
-    /**
-     * Remove member
-     *
-     * @param User $member
-     */
-    public function removeMember(User $member)
-    {
-        if ($member !== null)
-            $member->removeOrganizationsMember($this);
-
-        if ($this->members->contains($member))
-            $this->members->removeElement($member);
-    }
-
-    /**
-     * Get members
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getMembers()
-    {
-        return $this->members;
-    }
-
-    /**
-     * Add request
-     *
-     * @param User $request
-     * @return Organization
-     */
-    public function addRequest(User $request)
-    {
-        if ($request !== null)
-            $request->addOrganizationsRequest($this);
-
-        if (!$this->requests->contains($request))
-            $this->requests[] = $request;
-
-        return $this;
-    }
-
-    /**
-     * Remove request
-     *
-     * @param User $request
-     */
-    public function removeRequest(User $request)
-    {
-        if ($request !== null)
-            $request->removeOrganizationsRequest($this);
-
-        if ($this->requests->contains($request))
-            $this->requests->removeElement($request);
-    }
-
-    /**
-     * Get requests
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getRequests()
-    {
-        return $this->requests;
+        return $this->creator;
     }
 }

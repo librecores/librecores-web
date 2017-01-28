@@ -2,6 +2,7 @@
 
 namespace Librecores\ProjectRepoBundle\Controller;
 
+use Librecores\ProjectRepoBundle\Entity\OrganizationMember;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -70,9 +71,19 @@ class OrganizationController extends Controller
         // Save organization and redirect to organization page
         if ($form->isValid()) {
             $user = $this->getUser();
-            $o->setOwner($user);
+
+            // Update and save new org
+            $o->setCreator($user);
             $em = $this->getDoctrine()->getManager();
             $em->persist($o);
+
+            // Create and save new membership
+            $member = new OrganizationMember();
+            $member->setOrganization($o);
+            $member->setUser($user);
+            $member->setGroup(OrganizationMember::GROUP_ADMIN);
+            $em->persist($member);
+
             $em->flush();
 
             // Redirect user to "view organization" page
@@ -141,9 +152,12 @@ class OrganizationController extends Controller
             throw $this->createNotFoundException('No organization found with that name.');
 
         $user = $this->getUser();
-        $o->addRequest($user);
+        $member = new OrganizationMember();
+        $member->setOrganization($o);
+        $member->setUser($user);
+        $member->setGroup(OrganizationMember::GROUP_REQUEST);
         $em = $this->getDoctrine()->getManager();
-        $em->persist($o);
+        $em->persist($member);
         $em->flush();
 
         return $this->render('LibrecoresProjectRepoBundle:Organization:join.html.twig',
@@ -166,9 +180,17 @@ class OrganizationController extends Controller
             throw $this->createNotFoundException('No organization found with that name.');
 
         $user = $this->getUser();
-        $o->removeRequest($user);
+        $member = $this->getDoctrine()
+                       ->getRepository('LibrecoresProjectRepoBundle:OrganizationMember')
+                       ->findOneBy(['organization' => $o, 'user' => $user]);
+
+        $member->setOrganization(null);
+        $member->setUser(null);
+
         $em = $this->getDoctrine()->getManager();
         $em->persist($o);
+        $em->persist($user);
+        $em->remove($member);
         $em->flush();
 
         return $this->render('LibrecoresProjectRepoBundle:Organization:leave.html.twig',
@@ -227,10 +249,13 @@ class OrganizationController extends Controller
         if (!$user)
             throw $this->createNotFoundException("No user found with that username");
 
-        $o->addMember($user);
-        $o->removeRequest($user);
+        $user = $this->getUser();
+        $member = $this->getDoctrine()
+                       ->getRepository('LibrecoresProjectRepoBundle:OrganizationMember')
+                       ->findOneBy(['organization' => $o, 'user' => $user]);
+        $member->setGroup(OrganizationMember::GROUP_MEMBER);
         $em = $this->getDoctrine()->getManager();
-        $em->persist($o);
+        $em->persist($member);
         $em->flush();
 
         return $this->render('LibrecoresProjectRepoBundle:Organization:approve.html.twig',
@@ -262,9 +287,13 @@ class OrganizationController extends Controller
         if (!$user)
             throw $this->createNotFoundException("No user found with that username");
 
-        $o->removeRequest($user);
+        $user = $this->getUser();
+        $member = $this->getDoctrine()
+                       ->getRepository('LibrecoresProjectRepoBundle:OrganizationMember')
+                       ->findOneBy(['organization' => $o, 'user' => $user]);
+        $member->setGroup(OrganizationMember::GROUP_DENY);
         $em = $this->getDoctrine()->getManager();
-        $em->persist($o);
+        $em->persist($member);
         $em->flush();
 
         return $this->render('LibrecoresProjectRepoBundle:Organization:deny.html.twig',
@@ -294,13 +323,22 @@ class OrganizationController extends Controller
         if (!$user)
             throw $this->createNotFoundException("No user found with that username");
 
-        $o->removeMember($user);
+        $member = $this->getDoctrine()
+                       ->getRepository('LibrecoresProjectRepoBundle:OrganizationMember')
+                       ->findOneBy(['organization' => $o, 'user' => $user]);
+
+        $member->setOrganization(null);
+        $member->setUser(null);
+
         $em = $this->getDoctrine()->getManager();
         $em->persist($o);
+        $em->persist($user);
+        $em->remove($member);
         $em->flush();
+
 
         return $this->render('LibrecoresProjectRepoBundle:Organization:deny.html.twig',
             array('organization' => $o,
-                'user'         => $user));
+                  'user'         => $user));
     }
 }
