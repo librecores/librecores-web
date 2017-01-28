@@ -20,6 +20,14 @@
   <h3>{{ project.getName() }}</h3>
   {{ project.getTagline() }}
 {% else %}
+  {% if is_granted("IS_AUTHENTICATED_REMEMBERED") and (user.getUsername() == app.user.username) %}
+  <p>You have not yet created a project.</p>
+  <p><a href="{{ path('librecores_project_repo_project_new') }}">
+    Add project
+  </a></p>
+  {% else %}
   {{ user.getUsername() }} has not yet created a project.
+  {% endif %}
+
 {% endfor %}
 {% endblock %}
