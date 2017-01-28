@@ -18,6 +18,7 @@ class OrganizationMember
 {
     const PERMISSIONS_REQUEST = 'REQUEST';
     const PERMISSIONS_DENY    = 'DENY';
+    const PERMISSIONS_SUPPORT = 'SUPPORT';
     const PERMISSIONS_MEMBER  = 'MEMBER';
     const PERMISSIONS_ADMIN   = 'ADMIN';
 
@@ -48,7 +49,7 @@ class OrganizationMember
     /**
      * @var string
      *
-     * @Assert\Choice(choices = {"REQUEST", "DENY", "MEMBER", "ADMIN"})
+     * @Assert\Choice(choices = {"REQUEST", "DENY", "SUPPORT", "MEMBER", "ADMIN"})
      * @ORM\Column(type="string")
      */
     protected $permissions = self::PERMISSIONS_REQUEST;
@@ -173,16 +174,17 @@ class OrganizationMember
      */
     public function setPermissions($permissions)
     {
-        if (!in_array($group, [self::PERMISSIONS_REQUEST,
+        if (!in_array($permissions, [self::PERMISSIONS_REQUEST,
                                self::PERMISSIONS_DENY,
+                               self::PERMISSIONS_SUPPORT,
                                self::PERMISSIONS_MEMBER,
                                self::PERMISSIONS_ADMIN], false))
             throw new \InvalidArgumentException('Invalid Permissions');
 
-        if ($this->group === $group)
+        if ($this->permissions === $permissions)
             return;
 
-        $this->group = $group;
+        $this->permissions = $permissions;
     }
 
     /**

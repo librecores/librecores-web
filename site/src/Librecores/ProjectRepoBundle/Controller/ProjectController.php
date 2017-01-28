@@ -32,8 +32,11 @@ class ProjectController extends Controller {
         $parentChoices = array($username => 'u_' . $username);
 
         foreach ($this->getUser()->getOrganizationMemberships() as $organizationMembership) {
-            if ($member->getPermissions(OrganizationMember::PERMISSIONS_ADMIN))
-                $parentChoices[$organization->getName()] = 'o_' . $organization->getName();
+            if ($organizationMembership->getPermissions() === OrganizationMember::PERMISSIONS_MEMBER or
+                $organizationMembership->getPermissions() === OrganizationMember::PERMISSIONS_ADMIN) {
+                $parentChoices[$organizationMembership->getOrganization()->getName()] =
+                    'o_' . $organizationMembership->getOrganization()->getName();
+            }
         }
 
         $form = $this->createFormBuilder($p)

@@ -12,19 +12,19 @@ use Doctrine\ORM\EntityRepository;
 class OrganizationRepository extends EntityRepository
 {
     /**
-     * Find all the organizations that a user owns.
+     * Find all the organizations that a user created.
      *
      * @param User $user
      * @return array of Organizations
      */
-    public function findAllByOwnerOrderedByName(User $user)
+    public function findAllByCreatorOrderedByName(User $user)
     {
         return $this->getEntityManager()
             ->createQueryBuilder()
             ->select('o')
             ->from('LibrecoresProjectRepoBundle:Organization', 'o')
-            ->where('o.owner = :owner')
-            ->setParameter('owner', $user->getId())
+            ->where('o.creator = :creator')
+            ->setParameter('creator', $user->getId())
             ->orderBy('o.name', 'ASC')
             ->getQuery()
             ->getResult();

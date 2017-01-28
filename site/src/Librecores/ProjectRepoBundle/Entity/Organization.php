@@ -16,6 +16,7 @@ use Librecores\ProjectRepoBundle\Validator\Constraints as LcAssert;
  *
  * @ORM\Table("Organization")
  * @ORM\Entity(repositoryClass="Librecores\ProjectRepoBundle\Entity\OrganizationRepository")
+ * @ORM\HasLifecycleCallbacks
  * @UniqueEntity(
  *     fields={"name"},
  *     errorPath="name",
