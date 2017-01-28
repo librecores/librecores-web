@@ -8,10 +8,10 @@
     <h1>My Organizations</h1>
 
     <p>
-        These are the organizations you own or your are a member of:
+        These are the organizations you created or your are a member of:
     </p>
 
-    {% if organizationsOwner is not empty %}
+    {% if organizationsCreator is not empty %}
         <div class="row">
             <div class="col-sm-4">
                 <h3>Name</h3>
@@ -27,25 +27,25 @@
             </div>
         </div>
 
-        {% for organizationOnwer in organizationsOnwer %}
+        {% for organizationCreator in organizationsCreator %}
             <div class="row">
                 <div class="col-sm-4">
                     <a href="{{ path('librecores_project_repo_user_org_view',
-                    {'organizationName': organizationOwner.name}) }}">{{ organizationOwner.name }}</a>
+                    {'organizationName': organizationCreator.name}) }}">{{ organizationCreator.name }}</a>
                 </div>
                 <div class="col-sm-2">
-                    {{ organizationOwner.displayName }}
+                    {{ organizationCreator.displayName }}
                 </div>
                 <div class="col-sm-2">
-                    {{ organizationOwner.description }}
+                    {{ organizationCreator.description }}
                 </div>
                 <div class="col-sm-4">
                     [ <a href="{{ path('librecores_project_repo_user_org_view',
-                    {'organizationName': organizationOwner.name}) }}">View</a> ]
+                    {'organizationName': organizationCreator.name}) }}">View</a> ]
                     [ <a href="{{ path('librecores_project_repo_organization_settings',
-                    {'organizationName': organizationOwner.name}) }}">Settings</a> ]
+                    {'organizationName': organizationCreator.name}) }}">Settings</a> ]
                     [ <a href="{{ path('librecores_project_repo_organization_remove',
-                    {'organizationName': organizationOwner.name}) }}">{{ Remove }}</a> ]
+                    {'organizationName': organizationCreator.name}) }}">{{ Remove }}</a> ]
                 </div>
             </div>
         {% endfor %}
@@ -53,7 +53,7 @@
         <div class="row">
             <div class="col-sm-12">
                 <p>
-                    You don't own any organizations
+                    You haven't created any organizations
                 </p>
             </div>
         </div>

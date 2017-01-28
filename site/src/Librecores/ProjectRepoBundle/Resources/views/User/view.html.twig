@@ -32,32 +32,19 @@
 
 {% endfor %}
 
-<h2>Organizations (Owner)</h2>
-{% for organization in user.getOrganizationsOwner() %}
-  <a href="{{ path('librecores_project_repo_user_org_view', {'userOrOrganization':
-          organization.getName()}) }}">{{ organization.getDisplayName() }}</a>
-  {% if organization.getDescription() is not null %} - {{ organization.getDescription() }}{% endif %}<br/>
-{% else %}
-    {{ user.getUsername() }} has not yet created an organization.
-{% endfor %}
-
-<h2>Organizations (Member)</h2>
-{% for organization in user.getOrganizationsMember() %}
+<h2>Organizations</h2>
+{% for membership in user.getOrganizationMemberships() %}
     <a href="{{ path('librecores_project_repo_user_org_view', {'userOrOrganization':
-        organization.getName()}) }}">{{ organization.getDisplayName() }}</a>
-    {% if organization.getDescription() is not null %} - {{ organization.getDescription() }}{% endif %}<br/>
+        membership.getOrganization.getName()}) }}">{{ membership.getOrganization.getDisplayName() }}</a>
+    {% if membership.getPermissions == 'MEMBER' %} (Member) {% endif %}
+    {% if membership.getPermissions == 'ADMIN' %} (Admin) {% endif %}
+    {% if user == app.user %}
+        {% if membership.getPermissions == 'REQUEST' %} (Join request in progress) {% endif %}
+        {% if membership.getPermissions == 'DENY' %} (Denied your request to join) {% endif %}
+    {% endif %}
+    {% if membership.getOrganization.getDescription() is not null %}
+     - {{ membership.getOrganization.getDescription() }}{% endif %}<br/>
 {% else %}
     {{ user.getUsername() }} has not yet joined an organization.
 {% endfor %}
-
-{% if user == app.user %}
-    <h2>Organizations (Pending Join Requests)</h2>
-    {% for organization in user.getOrganizationsRequest() %}
-        <a href="{{ path('librecores_project_repo_user_org_view', {'userOrOrganization':
-            organization.getName()}) }}">{{ organization.getDisplayName() }}</a>
-        {% if organization.getDescription() is not null %} - {{ organization.getDescription() }}{% endif %}<br/>
-    {% else %}
-        You have no pending requests to join an organization.
-    {% endfor %}
-{% endif %}
 {% endblock %}
