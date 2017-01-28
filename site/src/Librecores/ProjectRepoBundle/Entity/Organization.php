@@ -68,7 +68,7 @@ class Organization
     /**
      * @var ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="OrganizationMember", inversedBy="organization", cascade={"remove"}))
+     * @ORM\OneToMany(targetEntity="OrganizationMember", mappedBy="organization", cascade={"remove"}))
      **/
     protected $organizationMembers;
 
@@ -85,7 +85,7 @@ class Organization
      * When was this organization created?
      *
      * @var \DateTime
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", nullable=true)
      */
     protected $createdAt;
 
@@ -93,7 +93,7 @@ class Organization
      * When was this organization last updated?
      *
      * @var \DateTime
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", nullable=true)
      */
     protected $updatedAt;
 
@@ -214,10 +214,8 @@ class Organization
      */
     public function addProject(Project $project)
     {
-        if (!$this->projects->contains($project)) {
+        if (!$this->projects->contains($project))
             $this->projects[] = $project;
-            $project->setParentOrganization($this);
-        }
 
         return $this;
     }
@@ -229,10 +227,8 @@ class Organization
      */
     public function removeProject(Project $project)
     {
-        if ($this->projects->contains($project)) {
+        if ($this->projects->contains($project))
             $this->projects->removeElement($project);
-            $project->setParentOrganization(null);
-        }
     }
 
     /**

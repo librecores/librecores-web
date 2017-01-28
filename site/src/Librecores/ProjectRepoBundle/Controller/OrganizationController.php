@@ -2,13 +2,13 @@
 
 namespace Librecores\ProjectRepoBundle\Controller;
 
-use Librecores\ProjectRepoBundle\Entity\OrganizationMember;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 use Librecores\ProjectRepoBundle\Entity\Organization;
+use Librecores\ProjectRepoBundle\Entity\OrganizationMember;
 use Librecores\ProjectRepoBundle\Form\Type\OrganizationType;
 
 class OrganizationController extends Controller
@@ -81,7 +81,7 @@ class OrganizationController extends Controller
             $member = new OrganizationMember();
             $member->setOrganization($o);
             $member->setUser($user);
-            $member->setGroup(OrganizationMember::GROUP_ADMIN);
+            $member->setPermissions(OrganizationMember::PERMISSIONS_ADMIN);
             $em->persist($member);
 
             $em->flush();
@@ -155,7 +155,7 @@ class OrganizationController extends Controller
         $member = new OrganizationMember();
         $member->setOrganization($o);
         $member->setUser($user);
-        $member->setGroup(OrganizationMember::GROUP_REQUEST);
+        $member->setPermissions(OrganizationMember::PERMISSIONS_REQUEST);
         $em = $this->getDoctrine()->getManager();
         $em->persist($member);
         $em->flush();
@@ -253,7 +253,7 @@ class OrganizationController extends Controller
         $member = $this->getDoctrine()
                        ->getRepository('LibrecoresProjectRepoBundle:OrganizationMember')
                        ->findOneBy(['organization' => $o, 'user' => $user]);
-        $member->setGroup(OrganizationMember::GROUP_MEMBER);
+        $member->setPermissions(OrganizationMember::PERMISSIONS_MEMBER);
         $em = $this->getDoctrine()->getManager();
         $em->persist($member);
         $em->flush();
@@ -291,7 +291,7 @@ class OrganizationController extends Controller
         $member = $this->getDoctrine()
                        ->getRepository('LibrecoresProjectRepoBundle:OrganizationMember')
                        ->findOneBy(['organization' => $o, 'user' => $user]);
-        $member->setGroup(OrganizationMember::GROUP_DENY);
+        $member->setPermissions(OrganizationMember::PERMISSIONS_DENY);
         $em = $this->getDoctrine()->getManager();
         $em->persist($member);
         $em->flush();

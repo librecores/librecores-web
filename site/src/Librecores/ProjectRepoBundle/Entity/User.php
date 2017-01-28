@@ -162,7 +162,6 @@ class User extends BaseUser
     {
         if (!$this->projects->contains($project)) {
             $this->projects[] = $project;
-            $project->setParentUser($this);
         }
 
         return $this;
@@ -177,7 +176,6 @@ class User extends BaseUser
     {
         if ($this->projects->contains($project)) {
             $this->projects->removeElement($project);
-            $project->setParentUser(null);
         }
     }
 
@@ -201,7 +199,6 @@ class User extends BaseUser
     {
         if (!$this->organizationsCreated->contains($organization)) {
             $this->organizationsCreated[] = $organization;
-            $organization->setCreator($this);
         }
 
         return $this;
@@ -216,7 +213,6 @@ class User extends BaseUser
     {
         if ($this->organizationsCreated->contains($organization)) {
             $this->organizationsCreated->removeElement($organization);
-            $organization->setCreator(null);
         }
     }
 

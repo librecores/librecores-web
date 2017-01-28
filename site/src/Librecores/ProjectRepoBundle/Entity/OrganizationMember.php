@@ -2,6 +2,7 @@
 namespace Librecores\ProjectRepoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
@@ -15,10 +16,10 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class OrganizationMember
 {
-    const GROUP_REQUEST = 'REQUEST';
-    const GROUP_DENY    = 'DENY';
-    const GROUP_MEMBER  = 'MEMBER';
-    const GROUP_ADMIN   = 'ADMIN';
+    const PERMISSIONS_REQUEST = 'REQUEST';
+    const PERMISSIONS_DENY    = 'DENY';
+    const PERMISSIONS_MEMBER  = 'MEMBER';
+    const PERMISSIONS_ADMIN   = 'ADMIN';
 
     /**
      * @var integer
@@ -32,7 +33,7 @@ class OrganizationMember
     /**
      * @var Organization
      * @ORM\ManyToOne(targetEntity="Organization", inversedBy="members")
-     * @ORM\JoinColumn(name="organization_id", referencedColumnName="id", nullable=FALSE)
+     * @ORM\JoinColumn(name="organizationId", referencedColumnName="id", nullable=FALSE)
      */
     protected $organization;
 
@@ -40,7 +41,7 @@ class OrganizationMember
      * @var User
      *
      * @ORM\ManyToOne(targetEntity="User", inversedBy="organizations")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=FALSE)
+     * @ORM\JoinColumn(name="userId", referencedColumnName="id", nullable=FALSE)
      */
     protected $user;
 
@@ -50,7 +51,7 @@ class OrganizationMember
      * @Assert\Choice(choices = {"REQUEST", "DENY", "MEMBER", "ADMIN"})
      * @ORM\Column(type="string")
      */
-    private $group = self::GROUP_REQUEST;
+    protected $permissions = self::PERMISSIONS_REQUEST;
 
     // metadata
     /**
@@ -165,18 +166,18 @@ class OrganizationMember
     }
 
     /**
-     * Set the group
+     * Set permissions
      *
-     * @param string $group one of the self::GROUP_* constants
+     * @param string $group one of the self::PERMISSIONS_* constants
      * @throws \InvalidArgumentException
      */
-    public function setGroup($group)
+    public function setPermissions($permissions)
     {
-        if (!in_array($group, [self::GROUP_REQUEST,
-                               self::GROUP_DENY,
-                               self::GROUP_MEMBER,
-                               self::GROUP_ADMIN], false))
-            throw new \InvalidArgumentException('Invalid Group');
+        if (!in_array($group, [self::PERMISSIONS_REQUEST,
+                               self::PERMISSIONS_DENY,
+                               self::PERMISSIONS_MEMBER,
+                               self::PERMISSIONS_ADMIN], false))
+            throw new \InvalidArgumentException('Invalid Permissions');
 
         if ($this->group === $group)
             return;
@@ -185,12 +186,12 @@ class OrganizationMember
     }
 
     /**
-     * Get group
+     * Get permissions
      *
      * @return string
      */
-    public function getGroup()
+    public function getPermissions()
     {
-        return $this->group;
+        return $this->permissions;
     }
 }

@@ -281,7 +281,7 @@ class Project
      * @param User $parentUser
      * @return Project
      */
-    public function setParentUser(User $parentUser)
+    public function setParentUser(User $parentUser = null)
     {
         if ($this->parentUser !== null)
             $this->parentUser->removeProject($this);
@@ -312,7 +312,7 @@ class Project
      * @param Organization $parentOrganization
      * @return Project
      */
-    public function setParentOrganization(Organization $parentOrganization)
+    public function setParentOrganization(Organization $parentOrganization = null)
     {
         if ($this->parentOrganization !== null)
             $this->parentOrganization->removeProject($this);

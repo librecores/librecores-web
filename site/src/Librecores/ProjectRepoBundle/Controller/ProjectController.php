@@ -9,10 +9,9 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 use Librecores\ProjectRepoBundle\Entity\Project;
+use Librecores\ProjectRepoBundle\Entity\OrganizationMember;
 use Librecores\ProjectRepoBundle\Form\Type\ProjectType;
 use Librecores\ProjectRepoBundle\Form\Type\SourceRepoType;
-use Librecores\ProjectRepoBundle\Entity\Organization;
-use Librecores\ProjectRepoBundle\Entity\User;
 
 class ProjectController extends Controller {
     /**
@@ -32,8 +31,9 @@ class ProjectController extends Controller {
 
         $parentChoices = array($username => 'u_' . $username);
 
-        foreach ($this->getUser()->getOrganizationsOwner() as $organization) {
-            $parentChoices[$organization->getName()] = 'o_' . $organization->getName();
+        foreach ($this->getUser()->getOrganizationMemberships() as $organizationMembership) {
+            if ($member->getPermissions(OrganizationMember::PERMISSIONS_ADMIN))
+                $parentChoices[$organization->getName()] = 'o_' . $organization->getName();
         }
 
         $form = $this->createFormBuilder($p)
