@@ -25,7 +25,7 @@ class ProjectType extends AbstractType
                 'label' => 'Project Description',
                 'expanded' => true,
                 'multiple' => false))
-            ->add('descriptionText', TextareaType::class, array('label' => false, 'required' => false))
+            ->add('descriptionText', PurifiedTextareaType::class, array('label' => false, 'required' => false))
             ->add('projectUrl', UrlType::class, array('label' => 'Project URL', 'required' => false))
             ->add('issueTracker', UrlType::class, array('label' => 'Issue/Bug Tracker URL', 'required' => false))
             ->add('sourceRepo', new SourceRepoType())
@@ -39,7 +39,7 @@ class ProjectType extends AbstractType
                 'label' => 'Full License Text',
                 'expanded' => true,
                 'multiple' => false))
-            ->add('licenseText', TextareaType::class, array('label' => false, 'required' => false))
+            ->add('licenseText', PurifiedTextareaType::class, array('label' => false, 'required' => false))
             ->add('save', SubmitType::class, array('label' => 'Update Project'))
         ;
     }

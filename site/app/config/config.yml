@@ -42,7 +42,8 @@ twig:
 assetic:
     debug:          "%kernel.debug%"
     use_controller: false
-    bundles:        [ ]
+    bundles:
+        - LibrecoresProjectRepoBundle
     filters:
         scssphp:
             formatter: 'Leafo\ScssPhp\Formatter\Compressed'
@@ -60,8 +61,6 @@ assetic:
             inputs:
                 - "assets/js/jquery.min.js"
                 - "assets/js/bootstrap.min.js"
-                - "assets/js/bootstrap-markdown.js"
-                - "assets/js/marked.min.js"
                 - "assets/js/moment.min.js"
                 - "assets/js/livestamp.js"
 
