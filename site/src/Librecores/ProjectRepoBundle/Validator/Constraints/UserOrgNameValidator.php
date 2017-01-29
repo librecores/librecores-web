@@ -76,7 +76,7 @@ class UserOrgNameValidator extends ConstraintValidator
      *
      * @var bool
      */
-    const CHECK_UNIQUE_ORG  = true;
+    const CHECK_UNIQUE_ORG  = false;
 
     /**
      * @var Doctrine\Bundle\DoctrineBundle\Registry
