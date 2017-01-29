@@ -28,6 +28,9 @@ class DefaultController extends Controller
         // blog posts on planet
         $templateArgs['blogposts'] = $this->getBlogPosts();
 
+        $prjrepo = $this->getDoctrine()->getRepository('LibrecoresProjectRepoBundle:Project');
+		$templateArgs['activity'] = $prjrepo->findByRecentActivity(10);;
+
         return $this->render('LibrecoresSiteBundle:Default:home.html.twig',
             $templateArgs
         );
