@@ -3,6 +3,7 @@ namespace Librecores\ProjectRepoBundle\Security;
 
 use Librecores\ProjectRepoBundle\Entity\Project;
 use Librecores\ProjectRepoBundle\Entity\User;
+use Librecores\ProjectRepoBundle\Entity\OrganizationMember;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
@@ -71,8 +72,9 @@ class ProjectVoter extends Voter
 
         $parentUser = $project->getParentUser();
 
-        if ($parentUser !== null)
+        if ($parentUser !== null) {
             $userResult = ($user === $parentUser);
+        }
 
         // Check parent organization
 
@@ -80,8 +82,16 @@ class ProjectVoter extends Voter
 
         $parentOrganization = $project->getParentOrganization();
 
-        if ($parentOrganization !== null)
-            $orgResult = ($user === $parentOrganization->getOwner());
+        if ($parentOrganization !== null) {
+            foreach ($parentOrganization->getMembers() as $m) {
+                if (($m->getUser()        === $user) &&
+                    ($m->getPermissions() === OrganizationMember::PERMISSIONS_MEMBER ||
+                     $m->getPermissions() === OrganizationMember::PERMISSIONS_ADMIN)) {
+                    $orgResult = true;
+                    break;
+                }
+            }
+        }
 
         return $orgResult or $userResult;
     }
