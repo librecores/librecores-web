@@ -126,7 +126,8 @@ class Project
      *
      * @var string
      *
-     * @ORM\Column(type="text", nullable=true)
+     * @Assert\Length(max = 64000)
+     * @ORM\Column(type="text", nullable=true, length=64000)
      */
     private $licenseText;
 
@@ -144,7 +145,8 @@ class Project
      *
      * @var string
      *
-     * @ORM\Column(type="text", nullable=true)
+     * @Assert\Length(max = 64000)
+     * @ORM\Column(type="text", nullable=true, length=64000)
      */
     private $descriptionText;
 
