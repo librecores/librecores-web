@@ -1,6 +1,6 @@
 ---
 - name: Create librecores-blog MySQL database
-  mysql_db: name=librecores-blog state=present collation=utf8_general_ci encoding=utf8
+  mysql_db: name=librecores-blog state=present collation=utf8mb4_unicode_520_ci encoding=utf8mb4
 
 - name: Add librecores-blog@localhost user to MySQL
   mysql_user: name=librecores-blog password={{ blog_mysql_password }} priv=librecores-blog.*:ALL host='localhost' state=present
