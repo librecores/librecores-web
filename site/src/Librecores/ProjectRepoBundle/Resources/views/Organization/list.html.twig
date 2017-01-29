@@ -13,33 +13,33 @@
 
     {% if organizationsOwner is not empty %}
         <div class="row">
-            <div class="col-lg-4">
+            <div class="col-sm-4">
                 <h3>Name</h3>
             </div>
-            <div class="col-lg-2">
+            <div class="col-sm-2">
                 <h3>Display Name</h3>
             </div>
-            <div class="col-lg-2">
+            <div class="col-sm-2">
                 <h3>Description</h3>
             </div>
-            <div class="col-lg-4">
+            <div class="col-sm-4">
                 <h3>Actions</h3>
             </div>
         </div>
 
         {% for organizationOnwer in organizationsOnwer %}
             <div class="row">
-                <div class="col-lg-4">
+                <div class="col-sm-4">
                     <a href="{{ path('librecores_project_repo_user_org_view',
                     {'organizationName': organizationOwner.name}) }}">{{ organizationOwner.name }}</a>
                 </div>
-                <div class="col-lg-2">
+                <div class="col-sm-2">
                     {{ organizationOwner.displayName }}
                 </div>
-                <div class="col-lg-2">
+                <div class="col-sm-2">
                     {{ organizationOwner.description }}
                 </div>
-                <div class="col-lg-4">
+                <div class="col-sm-4">
                     [ <a href="{{ path('librecores_project_repo_user_org_view',
                     {'organizationName': organizationOwner.name}) }}">View</a> ]
                     [ <a href="{{ path('librecores_project_repo_organization_settings',
@@ -51,7 +51,7 @@
         {% endfor %}
     {% else %}
         <div class="row">
-            <div class="col-lg-12">
+            <div class="col-sm-12">
                 <p>
                     You don't own any organizations
                 </p>
@@ -60,7 +60,7 @@
     {% endif %}
 
     <div class="row">
-        <div class="col-lg-12">
+        <div class="col-sm-12">
             <p>
                 <a href="{{ path('librecores_project_repo_organization_new') }}">Create a New Organization</a>
             </p>
@@ -69,33 +69,33 @@
 
     {% if organizationsMember is not empty %}
         <div class="row">
-            <div class="col-lg-4">
+            <div class="col-sm-4">
                 <h3>Name</h3>
             </div>
-            <div class="col-lg-2">
+            <div class="col-sm-2">
                 <h3>Display Name</h3>
             </div>
-            <div class="col-lg-2">
+            <div class="col-sm-2">
                 <h3>Description</h3>
             </div>
-            <div class="col-lg-4">
+            <div class="col-sm-4">
                 <h3>Actions</h3>
             </div>
         </div>
 
         {% for organizationMember in organizationsMember %}
             <div class="row">
-                <div class="col-lg-4">
+                <div class="col-sm-4">
                     <a href="{{ path('librecores_project_repo_user_org_view',
                     {'organizationName': organizationMember.name}) }}">{{ organizationMember.name }}</a>
                 </div>
-                <div class="col-lg-2">
+                <div class="col-sm-2">
                     {{ organizationOwner.displayName }}
                 </div>
-                <div class="col-lg-2">
+                <div class="col-sm-2">
                     {{ organizationOwner.description }}
                 </div>
-                <div class="col-lg-4">
+                <div class="col-sm-4">
                     [ <a href="{{ path('librecores_project_repo_user_org_view',
                     {'organizationName': organizationMember.name}) }}">View</a> ]
                     [ <a href="{{ path('librecores_project_repo_organization_leave',
@@ -105,7 +105,7 @@
         {% endfor %}
     {% else %}
         <div class="row">
-            <div class="col-lg-12">
+            <div class="col-sm-12">
                 <p>
                     You are not a member of any organizations
                 </p>
@@ -114,7 +114,7 @@
     {% endif %}
 
     <div class="row">
-        <div class="col-lg-12">
+        <div class="col-sm-12">
             <p>
                 <a href="{{ path('librecores_project_repo_organization_search') }}">Search Organizations</a>
             </p>
