@@ -14,40 +14,19 @@ use Librecores\ProjectRepoBundle\Form\Type\OrganizationType;
 class OrganizationController extends Controller
 {
     /**
-     * List all the organizations
-     * TODO: Maybe remove?
-     * This listing might not be needed since the search will be
-     * enough to find an organization to view / join etc.
-     *
-     * @return Response
-     */
-    public function indexAction()
-    {
-        return $this->render('LibrecoresProjectRepoBundle:Organization:index.html.twig');
-    }
-
-    /**
      * List the organizations that current user belongs
-     * TODO: Not routed until we decide whether it's needed
      *
      * @return Response
      */
     public function listAction()
     {
-        $user = $this->getUser();
-
-        $organizationsCreator = $this->getDoctrine()
-                                     ->getRepository('LibrecoresProjectRepoBundle:Organization')
-                                     ->findAllByCreatorOrderedByName($user);
-
-        $organizationsMember = $this->getDoctrine()
-                                    ->getRepository('LibrecoresProjectRepoBundle:Organization')
-                                    ->findAllByMemberOrderedByName($user);
+        $organizations = $this->getDoctrine()
+                              ->getRepository('LibrecoresProjectRepoBundle:Organization')
+                              ->findAllByMemberOrderedByName($this->getUser());
 
 
         return $this->render('LibrecoresProjectRepoBundle:Organization:list.html.twig',
-            array('organizationsCreator'  => $organizationsCreator,
-                  'organizationsMember'   => $organizationsMember));
+            array('organizations'   => $organizations));
     }
 
     /**

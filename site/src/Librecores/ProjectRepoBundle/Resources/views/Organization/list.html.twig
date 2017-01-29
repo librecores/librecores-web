@@ -8,98 +8,55 @@
     <h1>My Organizations</h1>
 
     <p>
-        These are the organizations you created or your are a member of:
+        These are the organizations you are a member of:
     </p>
 
-    {% if organizationsCreator is not empty %}
+    {% if organizations is not empty %}
         <div class="row">
-            <div class="col-sm-4">
+            <div class="col-sm-2">
                 <h3>Name</h3>
             </div>
             <div class="col-sm-2">
                 <h3>Display Name</h3>
             </div>
-            <div class="col-sm-2">
+            <div class="col-sm-3">
                 <h3>Description</h3>
             </div>
-            <div class="col-sm-4">
+            <div class="col-sm-2">
+                <h3>Permissions</h3>
+            </div>
+            <div class="col-sm-3">
                 <h3>Actions</h3>
             </div>
         </div>
 
-        {% for organizationCreator in organizationsCreator %}
+        {% for organization in organizations %}
             <div class="row">
-                <div class="col-sm-4">
+                <div class="col-sm-2">
                     <a href="{{ path('librecores_project_repo_user_org_view',
-                    {'organizationName': organizationCreator.name}) }}">{{ organizationCreator.name }}</a>
+                    {'userOrOrganization': organization.name}) }}">{{ organization.name }}</a>
                 </div>
                 <div class="col-sm-2">
-                    {{ organizationCreator.displayName }}
+                    {{ organization.displayName }}
+                </div>
+                <div class="col-sm-3">
+                    {{ organization.description }}
                 </div>
                 <div class="col-sm-2">
-                    {{ organizationCreator.description }}
+                    {% if organization.permissions == 'MEMBER' %} Member {% endif %}
+                    {% if organization.permissions == 'ADMIN' %} Admin {% endif %}
+                    {% if organization.permissions == 'REQUEST' %} Join Request {% endif %}
+                    {% if organization.permissions == 'DENY' %} Denied Request {% endif %}
                 </div>
-                <div class="col-sm-4">
+                <div class="col-sm-3">
                     [ <a href="{{ path('librecores_project_repo_user_org_view',
-                    {'organizationName': organizationCreator.name}) }}">View</a> ]
+                    {'userOrOrganization': organization.name}) }}">View</a> ]
                     [ <a href="{{ path('librecores_project_repo_organization_settings',
-                    {'organizationName': organizationCreator.name}) }}">Settings</a> ]
-                    [ <a href="{{ path('librecores_project_repo_organization_remove',
-                    {'organizationName': organizationCreator.name}) }}">{{ Remove }}</a> ]
-                </div>
-            </div>
-        {% endfor %}
-    {% else %}
-        <div class="row">
-            <div class="col-sm-12">
-                <p>
-                    You haven't created any organizations
-                </p>
-            </div>
-        </div>
-    {% endif %}
-
-    <div class="row">
-        <div class="col-sm-12">
-            <p>
-                <a href="{{ path('librecores_project_repo_organization_new') }}">Create a New Organization</a>
-            </p>
-        </div>
-    </div>
-
-    {% if organizationsMember is not empty %}
-        <div class="row">
-            <div class="col-sm-4">
-                <h3>Name</h3>
-            </div>
-            <div class="col-sm-2">
-                <h3>Display Name</h3>
-            </div>
-            <div class="col-sm-2">
-                <h3>Description</h3>
-            </div>
-            <div class="col-sm-4">
-                <h3>Actions</h3>
-            </div>
-        </div>
-
-        {% for organizationMember in organizationsMember %}
-            <div class="row">
-                <div class="col-sm-4">
-                    <a href="{{ path('librecores_project_repo_user_org_view',
-                    {'organizationName': organizationMember.name}) }}">{{ organizationMember.name }}</a>
-                </div>
-                <div class="col-sm-2">
-                    {{ organizationOwner.displayName }}
-                </div>
-                <div class="col-sm-2">
-                    {{ organizationOwner.description }}
-                </div>
-                <div class="col-sm-4">
-                    [ <a href="{{ path('librecores_project_repo_user_org_view',
-                    {'organizationName': organizationMember.name}) }}">View</a> ]
-                    [ <a href="{{ path('librecores_project_repo_organization_leave',
-                    {'organizationName': organizationMember.name}) }}">{{ Leave }}</a> ]
+                    {'organizationName': organization.name}) }}">Settings</a> ]
+                    [ <a href="{{ path('librecores_project_repo_organization_settings_delete',
+                    {'organizationName': organization.name}) }}">Delete</a> ]
+                    [ <a href="{{ path('librecores_project_repo_organization_settings_leave',
+                    {'organizationName': organization.name}) }}">Leave</a> ]
                 </div>
             </div>
         {% endfor %}
@@ -113,10 +70,11 @@
         </div>
     {% endif %}
 
+    <p></p>
     <div class="row">
         <div class="col-sm-12">
             <p>
-                <a href="{{ path('librecores_project_repo_organization_search') }}">Search Organizations</a>
+                <a href="{{ path('librecores_project_repo_organization_new') }}">Create a New Organization</a>
             </p>
         </div>
     </div>

@@ -53,11 +53,9 @@ librecores_project_repo_organization_new:
     path:     /org/new
     defaults: { _controller: LibrecoresProjectRepoBundle:Organization:new }
 
-# XXX: this is not yet implemented - Maybe remove and don't list organizations?
-#librecores_project_repo_project_list:
-#librecores_project_repo_organization_list:
-#    path:     /org/list
-#    defaults: { _controller: LibrecoresProjectRepoBundle:Organization:list }
+librecores_project_repo_organization_list:
+    path:     /org/list
+    defaults: { _controller: LibrecoresProjectRepoBundle:Organization:list }
 
 
 

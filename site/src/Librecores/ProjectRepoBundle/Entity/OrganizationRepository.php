@@ -12,25 +12,6 @@ use Doctrine\ORM\EntityRepository;
 class OrganizationRepository extends EntityRepository
 {
     /**
-     * Find all the organizations that a user created.
-     *
-     * @param User $user
-     * @return array of Organizations
-     */
-    public function findAllByCreatorOrderedByName(User $user)
-    {
-        return $this->getEntityManager()
-                    ->createQueryBuilder()
-                    ->select('o')
-                    ->from('LibrecoresProjectRepoBundle:Organization', 'o')
-                    ->where('o.creator = :creator')
-                    ->setParameter('creator', $user->getId())
-                    ->orderBy('o.name', 'ASC')
-                    ->getQuery()
-                    ->getResult();
-    }
-
-    /**
      * Find all the organizations that a user is a member of.
      *
      * @param User $user
@@ -40,7 +21,7 @@ class OrganizationRepository extends EntityRepository
     {
         return $this->getEntityManager()
                     ->createQueryBuilder()
-                    ->select('o')
+                    ->select('o.name', 'o.displayName', 'o.description', 'm.permissions')
                     ->from('LibrecoresProjectRepoBundle:Organization', 'o')
                     ->innerJoin('o.members', 'm')
                     ->where('m.user = :member')
