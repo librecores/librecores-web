@@ -7,6 +7,13 @@ services:
             - '@doctrine'
             - @markdown.parser
 
+    # Utilities
+    librecores.util.markuptohtmlconverter:
+        class: Librecores\ProjectRepoBundle\Util\MarkupToHtmlConverter
+        arguments:
+            - '@logger'
+            - '@exercise_html_purifier.default'
+
     # Forms
     app.form.type.project:
         class: Librecores\ProjectRepoBundle\Form\Type\ProjectType
@@ -22,6 +29,18 @@ services:
         class: Librecores\ProjectRepoBundle\Form\Extension\ButtonTypeIconExtension
         tags:
             - { name: form.type_extension, extended_type: Symfony\Component\Form\Extension\Core\Type\ButtonType }
+
+    librecores.form.type.purified_textarea:
+        class: Librecores\ProjectRepoBundle\Form\Type\PurifiedTextareaType
+        arguments:
+          - '@librecores.form.transformer.html_purifier'
+        tags:
+            - { name: form.type, alias: purified_textarea }
+
+    librecores.form.transformer.html_purifier:
+        class: Exercise\HTMLPurifierBundle\Form\HTMLPurifierTransformer
+        arguments:
+            - '@exercise_html_purifier.default'
 
     validator.user_org_name:
         class: Librecores\ProjectRepoBundle\Validator\Constraints\UserOrgNameValidator
