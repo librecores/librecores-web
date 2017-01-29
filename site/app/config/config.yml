@@ -99,7 +99,7 @@ swiftmailer:
 # Docs: http://simplepie.org/wiki/faq/how_does_simplepie_s_caching_http_conditional_get_system_work
 fkr_simple_pie:
     cache_enabled: true
-    cache_dir: %kernel.cache_dir%/rss
+    cache_dir: '%kernel.cache_dir%/rss'
     cache_duration: 3600
 
 # RabbitMQ Configuration
@@ -107,7 +107,7 @@ old_sound_rabbit_mq:
     connections:
         default:
             host:     "%rabbitmq_host%"
-            port:     %rabbitmq_port%
+            port:     "%rabbitmq_port%"
             user:     "%rabbitmq_user%"
             password: "%rabbitmq_password%"
             vhost:    '/'
