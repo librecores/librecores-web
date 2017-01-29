@@ -10,16 +10,16 @@
 <h1 style="margin-bottom:5px">{{ project.getFullName() }}</h1>
 {% if project.isAssigned() %}
   {% if project.getParentOrganization() != null %}
-    <p>by {{ project.getParentOrganization().getName() }}
+    <p>by {{ project.getParentOrganization().getName() }}</p>
   {% else %}
-    <p>by {{ project.getParentUser().getUsername() }}
+    <p>by {{ project.getParentUser().getUsername() }}</p>
   {% endif %}
 {% else %}
   <p><i>This project is currently not claimed by anyone. <a href="#">Is it yours?</a></i></p>
 {% endif %}
 
 <div class="row">
-<div class="col-md-8">
+<div class="col-sm-8">
 
 
 {% if project.getTagline() %}
@@ -63,7 +63,7 @@
 </div>
 
 </div>
-<div class="col-md-4">
+<div class="col-sm-4">
   <div class="librecores-project-infobox" style="background-color: #f7f7f7; padding: 10px; border-radius: 3px;">
     <p><b>Data Sheet</b></p>
     <p>
