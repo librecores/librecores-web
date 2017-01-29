@@ -13,7 +13,8 @@
     <p>Name: {{ organization.getName() }}</p>
     <p>Display Name: {{ organization.getDisplayName() }}</p>
     <p>Description: {{ organization.getDescription() }}</p>
-    {# Do not show the creator}
+
+    {# Do not show the creator }
     <p>Creator: <a href="{{ path('librecores_project_repo_user_org_view',
         {'userOrOrganization': organization.getCreator()}) }}">
             {{ organization.getCreator() }}</a>
@@ -46,6 +47,11 @@
         <p>
         <h2><a href="{{ path('librecores_project_repo_user_org_settings',
             { 'userOrOrganization': organization.getName() }) }}">Organization Settings</a></h2>
+        </p>
+
+        <p>
+        <h2><a href="{{ path('librecores_project_repo_organization_settings_leave',
+            { 'organizationName': organization.getName() }) }}">Leave Organization</a></h2>
         </p>
 
         <p>
@@ -112,11 +118,6 @@
     {% elseif userWasDenied %}
         <p>
         <h3>You request to join the organization was denied by the organization's owner.</h3>
-        </p>
-    {% elseif userIsMember or userIsAdmin %}
-        <p>
-        <h3><a href="{{ path('librecores_project_repo_organization_settings_leave',
-            { 'organizationName': organization.getName() }) }}">Leave Organization</a></h3>
         </p>
     {% endif %}
 

@@ -314,8 +314,9 @@ class Project
      */
     public function setParentOrganization(Organization $parentOrganization = null)
     {
-        if ($this->parentOrganization !== null)
+        if ($this->parentOrganization !== null) {
             $this->parentOrganization->removeProject($this);
+        }
 
         if ($parentOrganization !== null) {
             $parentOrganization->addProject($this);
@@ -451,9 +452,11 @@ class Project
         if ($this->getParentOrganization() !== null) {
             return $this->getParentOrganization()->getName().'/'.$this->getName();
         }
+
         if ($this->getParentUser() !== null) {
             return $this->getParentUser()->getUsername().'/'.$this->getName();
         }
+
         return $this->getName();
     }
 

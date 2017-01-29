@@ -9,7 +9,7 @@
 {% block content %}
     <h1 style="margin-bottom:5px">{{ organization.getName() }} : {{ organization.getDisplayName() }}</h1>
 
-    <p>You have successfully requested to join the organization {{ organization.getName() }} ("{{ organization.getDisplayName() }}")
+    <p>You have successfully requested to join the organization {{ organization.getName() }} ("{{ organization.getDisplayName() }}").
        <br/>Please be patient until the organization's owner reviews your request!
     </p>
     <p><a href="{{ path('librecores_project_repo_user_org_view', {'userOrOrganization':

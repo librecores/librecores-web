@@ -3,7 +3,6 @@ namespace Librecores\ProjectRepoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * An Organization Member
@@ -41,7 +40,7 @@ class OrganizationMember
     /**
      * @var User
      *
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="organizations")
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="organizationMemberships")
      * @ORM\JoinColumn(name="userId", referencedColumnName="id", nullable=FALSE)
      */
     protected $user;
@@ -116,11 +115,13 @@ class OrganizationMember
      */
     public function setUser(User $user = null)
     {
-        if ($this->user !== null)
+        if ($this->user !== null) {
             $this->user->removeOrganizationMembership($this);
+        }
 
-        if ($user !== null)
+        if ($user !== null) {
             $user->addOrganizationMembership($this);
+        }
 
         $this->user = $user;
 
@@ -145,11 +146,13 @@ class OrganizationMember
     */
     public function setOrganization(Organization $organization = null)
     {
-        if ($this->organization !== null)
-            $this->organization->removeOrganizationMember($this);
+        if ($this->organization !== null) {
+            $this->organization->removeMember($this);
+        }
 
-        if ($organization !== null)
-            $organization->addOrganizationMember($this);
+        if ($organization !== null) {
+            $organization->addMember($this);
+        }
 
         $this->organization = $organization;
 
@@ -169,20 +172,22 @@ class OrganizationMember
     /**
      * Set permissions
      *
-     * @param string $group one of the self::PERMISSIONS_* constants
+     * @param string $permissions One of the self::PERMISSIONS_* constants
      * @throws \InvalidArgumentException
      */
     public function setPermissions($permissions)
     {
         if (!in_array($permissions, [self::PERMISSIONS_REQUEST,
-                               self::PERMISSIONS_DENY,
-                               self::PERMISSIONS_SUPPORT,
-                               self::PERMISSIONS_MEMBER,
-                               self::PERMISSIONS_ADMIN], false))
+                                     self::PERMISSIONS_DENY,
+                                     self::PERMISSIONS_SUPPORT,
+                                     self::PERMISSIONS_MEMBER,
+                                     self::PERMISSIONS_ADMIN], false)) {
             throw new \InvalidArgumentException('Invalid Permissions');
+        }
 
-        if ($this->permissions === $permissions)
+        if ($this->permissions === $permissions) {
             return;
+        }
 
         $this->permissions = $permissions;
     }

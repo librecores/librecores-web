@@ -71,7 +71,7 @@ class Organization
      *
      * @ORM\OneToMany(targetEntity="OrganizationMember", mappedBy="organization", cascade={"remove"}))
      **/
-    protected $organizationMembers;
+    protected $members;
 
     /**
      * @var User
@@ -103,8 +103,8 @@ class Organization
      */
     public function __construct()
     {
-        $this->projects             = new ArrayCollection();
-        $this->organizationMembers  = new ArrayCollection();
+        $this->projects = new ArrayCollection();
+        $this->members  = new ArrayCollection();
     }
 
     /**
@@ -215,8 +215,9 @@ class Organization
      */
     public function addProject(Project $project)
     {
-        if (!$this->projects->contains($project))
+        if (!$this->projects->contains($project)) {
             $this->projects[] = $project;
+        }
 
         return $this;
     }
@@ -228,8 +229,9 @@ class Organization
      */
     public function removeProject(Project $project)
     {
-        if ($this->projects->contains($project))
+        if ($this->projects->contains($project)) {
             $this->projects->removeElement($project);
+        }
     }
 
     /**
@@ -243,52 +245,54 @@ class Organization
     }
 
     /**
-     * Add organization member
+     * Add member
      *
-     * @param OrganizationMember $organizationMember
+     * @param OrganizationMember $member
      * @return Organization
      */
-    public function addOrganizationMember(OrganizationMember $organizationMember)
+    public function addMember(OrganizationMember $member)
     {
-        if (!$this->organizationMembers->contains($organizationMember))
-            $this->organizationMembers[] = $organizationMember;
+        if (!$this->members->contains($member)) {
+            $this->members[] = $member;
+        }
 
         return $this;
     }
 
     /**
-     * Remove organization member
+     * Remove member
      *
-     * @param OrganizationMember $organizationMember
+     * @param OrganizationMember $member
      */
-    public function removeOrganizationMember(OrganizationMember $organizationMember)
+    public function removeMember(OrganizationMember $member)
     {
-        if ($this->organizationMembers->contains($organizationMember))
-            $this->organizationMembers->removeElement($organizationMember);
+        if ($this->members->contains($member)) {
+            $this->members->removeElement($member);
+        }
     }
 
     /**
-     * Get organization members
+     * Get members
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getOrganizationMembers()
+    public function getMembers()
     {
-        return $this->organizationMembers;
+        return $this->members;
     }
 
     /**
-     * Get users
+     * Get users mapped through organization memberships
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getUsers()
+    public function getMemberUsers()
     {
         return array_map(
-            function (OrganizationMember $organizationMember) {
-                return $organizationMember->getUser();
+            function (OrganizationMember $member) {
+                return $member->getUser();
             },
-            $this->organizationMembers->toArray()
+            $this->members->toArray()
         );
     }
 
@@ -300,11 +304,13 @@ class Organization
      */
     public function setCreator(User $creator)
     {
-        if ($this->creator !== null)
+        if ($this->creator !== null) {
             $this->creator->removeOrganizationCreated($this);
+        }
 
-        if ($creator !== null)
+        if ($creator !== null) {
             $creator->addOrganizationCreated($this);
+        }
 
         $this->creator = $creator;
 

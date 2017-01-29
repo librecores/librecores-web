@@ -4,7 +4,6 @@ namespace Librecores\ProjectRepoBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use FOS\UserBundle\Model\User as BaseUser;
-use Symfony\Component\Validator\Constraints\DateTime;
 
 /**
  * A user
@@ -264,7 +263,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get organizations
+     * Get organizations mapped through organization memberships
      *
      * @return \Doctrine\Common\Collections\Collection
      */

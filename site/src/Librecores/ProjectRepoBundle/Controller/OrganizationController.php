@@ -27,7 +27,8 @@ class OrganizationController extends Controller
     }
 
     /**
-     * List the organizations that a user belongs
+     * List the organizations that current user belongs
+     * TODO: Not routed until we decide whether it's needed
      *
      * @return Response
      */
@@ -71,18 +72,19 @@ class OrganizationController extends Controller
         // Save organization and redirect to organization page
         if ($form->isValid()) {
             $user = $this->getUser();
-
-            // Update and save new org
-            $o->setCreator($user);
             $em = $this->getDoctrine()->getManager();
+
+            // Update new org
+            $o->setCreator($user);
             $em->persist($o);
 
-            // Create and save new membership
+            // Create new membership
             $member = new OrganizationMember();
             $member->setOrganization($o);
             $member->setUser($user);
             $member->setPermissions(OrganizationMember::PERMISSIONS_ADMIN);
             $em->persist($member);
+
             $em->flush();
 
             // Redirect user to "view organization" page
@@ -92,7 +94,7 @@ class OrganizationController extends Controller
 
         return $this->render('LibrecoresProjectRepoBundle:Organization:new.html.twig',
             array('organization' => $o,
-                  'form' => $form->createView()));
+                  'form'         => $form->createView()));
     }
 
     /**
@@ -116,9 +118,7 @@ class OrganizationController extends Controller
 
         $user = $this->getUser();
 
-        $allOrgMembers = $organization->getOrganizationMembers();
-
-        foreach ($allOrgMembers as $m) {
+        foreach ($organization->getMembers() as $m) {
             if ($m->getPermissions() === OrganizationMember::PERMISSIONS_REQUEST) {
                 $requests[] = $m;
                 if ($user === $m->getUser())
@@ -167,8 +167,10 @@ class OrganizationController extends Controller
      */
     public function settingsAction(Request $request, Organization $organization)
     {
-        if (!$this->userIsMember($organization))
-            throw $this->createAccessDeniedException("You aren't a member of the organization in order to make changes");
+        if (!$this->userIsMember($organization)) {
+            throw $this->createAccessDeniedException(
+                "You aren't a member of the organization in order to make changes.");
+        }
 
         // Create and show the form
         $form = $this->createForm(OrganizationType::class, $organization);
@@ -182,7 +184,7 @@ class OrganizationController extends Controller
 
         return $this->render('LibrecoresProjectRepoBundle:Organization:settings.html.twig',
             array('organization' => $organization,
-                  'form' => $form->createView()));
+                  'form'         => $form->createView()));
     }
 
     /**
@@ -194,19 +196,21 @@ class OrganizationController extends Controller
     public function joinAction($organizationName)
     {
         $o = $this->getDoctrine()
-            ->getRepository('LibrecoresProjectRepoBundle:Organization')
-            ->findOneByName($organizationName);
+                  ->getRepository('LibrecoresProjectRepoBundle:Organization')
+                  ->findOneByName($organizationName);
 
-        if (!$o)
-            throw $this->createNotFoundException('No organization found with that name.');
+        if (!$o) {
+            throw $this->createNotFoundException(
+                'No organization found with that name.');
+        }
 
         $user = $this->getUser();
 
+        // Create new organization membership
         $member = new OrganizationMember();
         $member->setOrganization($o);
         $member->setUser($user);
         $member->setPermissions(OrganizationMember::PERMISSIONS_REQUEST);
-
         $em = $this->getDoctrine()->getManager();
         $em->persist($member);
         $em->flush();
@@ -227,14 +231,18 @@ class OrganizationController extends Controller
             ->getRepository('LibrecoresProjectRepoBundle:Organization')
             ->findOneByName($organizationName);
 
-        if (!$o)
-            throw $this->createNotFoundException('No organization found with that name.');
+        if (!$o) {
+            throw $this->createNotFoundException(
+                'No organization found with that name.');
+        }
 
         $user = $this->getUser();
+
+        // Remove the organization membership
         $member = $this->getDoctrine()
                        ->getRepository('LibrecoresProjectRepoBundle:OrganizationMember')
-                       ->findOneBy(['organization' => $o, 'user' => $user]);
-
+                       ->findOneBy(['organization' => $o,
+                                    'user'         => $user]);
         $em = $this->getDoctrine()->getManager();
         $em->remove($member);
         $em->flush();
@@ -258,15 +266,19 @@ class OrganizationController extends Controller
                   ->getRepository('LibrecoresProjectRepoBundle:Organization')
                   ->findOneByName($organizationName);
 
-        if (!$o)
-            throw $this->createNotFoundException('No organization found with that name.');
+        if (!$o) {
+            throw $this->createNotFoundException(
+                'No organization found with that name.');
+        }
 
-        if (!$this->userIsMember($o))
-            throw $this->createAccessDeniedException("You aren't a member of the organization in order to make changes");
+        if (!$this->userIsMember($o)) {
+            throw $this->createAccessDeniedException(
+                "You aren't a member of the organization in order to make changes.");
+        }
 
         // We don't support this yet so just show 'this is an unsupported operation'
         // message to the user until we provide support
-
+        //
         // $em = $this->getDoctrine()->getManager();
         // $em->remove($o);
         // $em->flush();
@@ -295,14 +307,17 @@ class OrganizationController extends Controller
         $userManager = $this->container->get('fos_user.user_manager');
         $user = $userManager->findUserByUsername($userName);
 
-        if (!$user)
-            throw $this->createNotFoundException("No user found with that username");
+        if (!$user) {
+            throw $this->createNotFoundException(
+                'No user found with that username.');
+        }
 
+        // Update the organization membership
         $member = $this->getDoctrine()
                        ->getRepository('LibrecoresProjectRepoBundle:OrganizationMember')
-                       ->findOneBy(['organization' => $o, 'user' => $user]);
+                       ->findOneBy(['organization' => $o,
+                                    'user'         => $user]);
         $member->setPermissions(OrganizationMember::PERMISSIONS_MEMBER);
-
         $em = $this->getDoctrine()->getManager();
         $em->persist($member);
         $em->flush();
@@ -325,20 +340,24 @@ class OrganizationController extends Controller
                   ->getRepository('LibrecoresProjectRepoBundle:Organization')
                   ->findOneByName($organizationName);
 
-        if (!$o)
-            throw $this->createNotFoundException('No organization found with that name.');
+        if (!$o) {
+            throw $this->createNotFoundException(
+                'No organization found with that name.');
+        }
 
         $userManager = $this->container->get('fos_user.user_manager');
         $user = $userManager->findUserByUsername($userName);
 
-        if (!$user)
-            throw $this->createNotFoundException("No user found with that username");
+        if (!$user) {
+            throw $this->createNotFoundException(
+                'No user found with that username.');
+        }
 
+        // Update the organization membership
         $member = $this->getDoctrine()
                        ->getRepository('LibrecoresProjectRepoBundle:OrganizationMember')
                        ->findOneBy(['organization' => $o, 'user' => $user]);
         $member->setPermissions(OrganizationMember::PERMISSIONS_DENY);
-
         $em = $this->getDoctrine()->getManager();
         $em->persist($member);
         $em->flush();
@@ -367,13 +386,16 @@ class OrganizationController extends Controller
         $userManager = $this->container->get('fos_user.user_manager');
         $user = $userManager->findUserByUsername($userName);
 
-        if (!$user)
-            throw $this->createNotFoundException("No user found with that username");
+        if (!$user) {
+            throw $this->createNotFoundException(
+                'No user found with that username');
+        }
 
+        // Remove the organization membership
         $member = $this->getDoctrine()
                        ->getRepository('LibrecoresProjectRepoBundle:OrganizationMember')
-                       ->findOneBy(['organization' => $o, 'user' => $user]);
-
+                       ->findOneBy(['organization' => $o,
+                                    'user'         => $user]);
         $em = $this->getDoctrine()->getManager();
         $em->remove($member);
         $em->flush();
@@ -386,17 +408,20 @@ class OrganizationController extends Controller
                   'user'         => $user));
     }
 
+    /**
+     * Test if the logged-in user is an organization
+     * member with either MEMBER or ADMIN permissions
+     *
+     * @param Organization $organization
+     * @return boolean
+     */
     private function userIsMember(Organization $organization)
     {
-        $allOrgMembers = $organization->getOrganizationMembers();
-
-        foreach ($organization->getOrganizationMembers() as $m) {
-            if ($m->getPermissions() === OrganizationMember::PERMISSIONS_MEMBER or
-                $m->getPermissions() === OrganizationMember::PERMISSIONS_ADMIN
-            ) {
-                if ($this->getUser() === $m->getUser()) {
-                    return true;
-                }
+        foreach ($organization->getMembers() as $m) {
+            if (($m->getUser()        === $this->getUser()) &&
+                ($m->getPermissions() === OrganizationMember::PERMISSIONS_MEMBER ||
+                 $m->getPermissions() === OrganizationMember::PERMISSIONS_ADMIN)) {
+                return true;
             }
         }
 
