@@ -1,21 +1,25 @@
 <?php
-
 namespace Librecores\ProjectRepoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * A source code repository
+ * A source code repository (base entity)
  *
- * Currently only git and subversion (svn) repositories are supported.
+ * This entity contains all general information regarding a source code
+ * repository. The items specific to a certain type of SCM tool (like git or
+ * subversion) are inside the entities which inherit from this one.
  *
  * @ORM\Table()
  * @ORM\Entity
+ * @ORM\InheritanceType("SINGLE_TABLE")
+ * @ORM\DiscriminatorColumn(name="type", type="string")
+ * @ORM\DiscriminatorMap({"git" = "GitSourceRepo"})
  */
-class SourceRepo
+abstract class SourceRepo
 {
+    // keep in sync with the DiscriminatorMap values above!
     const REPO_TYPE_GIT = 'git';
     const REPO_TYPE_SVN = 'svn';
 
@@ -29,16 +33,6 @@ class SourceRepo
     private $id;
 
     /**
-     * The repository type.
-     *
-     * @var string One of the REPO_TYPE_* constants
-     *
-     * @Assert\Choice(choices = {"git", "svn"})
-     * @ORM\Column(type="string")
-     */
-    private $type;
-
-    /**
      * The URL to clone/checkout the repository.
      *
      * @var string
@@ -49,30 +43,24 @@ class SourceRepo
     private $url;
 
     /**
-     * Statistics about this souce code repository.
+     * Project associated with this source repository
      *
-     * @var SourceStats
+     * @var Project
      *
-     * @ORM\OneToOne(targetEntity="SourceStats")
+     * @ORM\OneToOne(targetEntity="Project", mappedBy="sourceRepo", cascade={"persist"})
      */
-    private $stats;
+    private $project;
 
     /**
-     * Projects using this source code repository.
+     * Get the type of source repository
      *
-     * @var ArrayCollection
+     * Doctrine unfortunately provides no easy way to access the discriminator
+     * value as string to use it inside templates.
+     * For PHP code, use something like |$var instanceof GitSourceRepo| instead.
      *
-     * @ORM\OneToMany(targetEntity="Project", mappedBy="sourceRepo")
+     * @return string one of the REPO_TYPE_* constants
      */
-    private $projects;
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->projects = new \Doctrine\Common\Collections\ArrayCollection();
-    }
+    abstract public function getType();
 
     /**
      * Get id
@@ -82,29 +70,6 @@ class SourceRepo
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set type
-     *
-     * @param string $type
-     * @return SourceRepo
-     */
-    public function setType($type)
-    {
-        $this->type = $type;
-
-        return $this;
-    }
-
-    /**
-     * Get type
-     *
-     * @return string
-     */
-    public function getType()
-    {
-        return $this->type;
     }
 
     /**
@@ -131,58 +96,25 @@ class SourceRepo
     }
 
     /**
-     * Set stats
+     * Set project
      *
-     * @param \Librecores\ProjectRepoBundle\Entity\SourceStats $stats
+     * @param \Librecores\ProjectRepoBundle\Entity\Project $project
      * @return SourceRepo
      */
-    public function setStats(\Librecores\ProjectRepoBundle\Entity\SourceStats $stats = null)
+    public function setProject(\Librecores\ProjectRepoBundle\Entity\Project $project = null)
     {
-        $this->stats = $stats;
+        $this->project = $project;
 
         return $this;
     }
 
     /**
-     * Get stats
+     * Get project
      *
-     * @return \Librecores\ProjectRepoBundle\Entity\SourceStats
+     * @return \Librecores\ProjectRepoBundle\Entity\Project
      */
-    public function getStats()
+    public function getProject()
     {
-        return $this->stats;
-    }
-
-    /**
-     * Add projects
-     *
-     * @param \Librecores\ProjectRepoBundle\Entity\Project $projects
-     * @return SourceRepo
-     */
-    public function addProject(\Librecores\ProjectRepoBundle\Entity\Project $projects)
-    {
-        $this->projects[] = $projects;
-
-        return $this;
-    }
-
-    /**
-     * Remove projects
-     *
-     * @param \Librecores\ProjectRepoBundle\Entity\Project $projects
-     */
-    public function removeProject(\Librecores\ProjectRepoBundle\Entity\Project $projects)
-    {
-        $this->projects->removeElement($projects);
-    }
-
-    /**
-     * Get projects
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getProjects()
-    {
-        return $this->projects;
+        return $this->project;
     }
 }

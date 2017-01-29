@@ -3,9 +3,9 @@ services:
     update_project_info_service:
         class: Librecores\ProjectRepoBundle\Consumer\UpdateProjectInformation
         arguments:
+            - '@librecores.repocrawlerfactory'
             - '@logger'
             - '@doctrine'
-            - @markdown.parser
 
     # Utilities
     librecores.util.markuptohtmlconverter:
@@ -13,6 +13,12 @@ services:
         arguments:
             - '@logger'
             - '@exercise_html_purifier.default'
+
+    librecores.repocrawlerfactory:
+        class: Librecores\ProjectRepoBundle\RepoCrawler\RepoCrawlerFactory
+        arguments:
+            - '@librecores.util.markuptohtmlconverter'
+            - '@logger'
 
     # Forms
     app.form.type.project:

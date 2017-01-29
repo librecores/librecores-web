@@ -73,11 +73,11 @@
       <br/>
       {% endif %}
 
-      {% if project.getSourceRepo().getUrl() %}
-      {% if project.getSourceRepo.getType() == 'git'  %}
+      {% if project.getSourceRepo() %}
+      {% if project.getSourceRepo().getType() == 'git'  %}
         <i class="fa fa-git-square" aria-hidden="true"></i>
       {% else %}
-        {{ project.getSourceRepo.getType() }}:
+        {{ project.getSourceRepo().getType() }}:
       {% endif %}
       {{ project.getSourceRepo().getUrl() }}
       <br/>

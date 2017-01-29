@@ -32,8 +32,7 @@ the rest.</p>
     {{ form_errors(form.sourceRepo) }}
 
     <div class="form-inline">
-      {{ form_label(form.sourceRepo.type, null, {'label_attr': {'class': 'sr-only'}}) }}
-      {{ form_widget(form.sourceRepo.type) }}
+      Git repository URL
       {{ form_widget(form.sourceRepo.url, {'attr': {'style': 'width:500px', 'placeholder': 'URL, e.g. https://github.com/yourname/project'}}) }}
     </div>
   </div>
