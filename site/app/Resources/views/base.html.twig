@@ -70,11 +70,6 @@
             </a>
             <ul class="dropdown-menu">
               <li>
-                <a href="{{ path('librecores_project_repo_user_org_view', {'userOrOrganization': app.user.username}) }}">
-                  Profile
-                </a>
-              </li>
-              <li>
                 <a href="{{ path('librecores_project_repo_project_new') }}">
                   New Project
                 </a>
@@ -87,7 +82,7 @@
               <li role="separator" class="divider"></li>
               <li>
                 <a href="{{ path('librecores_project_repo_user_org_view',
-                {'userOrOrganization': app.user.usernameCanonical}) }}">
+                                 {'userOrOrganization': app.user.username}) }}">
                   Your Profile
                 </a>
               </li>
