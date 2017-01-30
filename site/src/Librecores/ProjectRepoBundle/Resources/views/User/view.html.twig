@@ -17,7 +17,8 @@
 
 <h2>Projects</h2>
 {% for project in user.getProjects() %}
-  <h3>{{ project.getName() }}</h3>
+  <h3><a href="{{ path('librecores_project_repo_project_view', {'parentName':
+   project.getParentName(), 'projectName': project.getName()}) }}">{{ project.getName() }}</h3>
   {{ project.getTagline() }}
 {% else %}
   {% if is_granted("IS_AUTHENTICATED_REMEMBERED") and (user.getUsername() == app.user.username) %}
