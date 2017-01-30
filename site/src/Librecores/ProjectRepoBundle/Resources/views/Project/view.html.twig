@@ -94,6 +94,24 @@
       <a href="{{ project.getIssueTracker()|escape('html_attr') }}">Issue Tracker</a>
       <br/>
       {% endif %}
+      
+      <div class="project-badges">
+        <!--Stars badge, which comes from the Source repo-->
+        {% if githubUtil.isSourceRepoOnGitHub() %}
+          <a href="{{ githubUtil.getSourceRepoUrl() }}">
+            <img border="0" src="{{ githubUtil.getStarsBadgeImage() }}">
+          </a>
+          <a href="{{ githubUtil.getPullRequestsUrl() }}">
+            <img border="0" src="{{ githubUtil.getOpenPRsBadgeImage() }}">
+          </a>
+        {% endif %}
+        <!--Issues badge, which comes from the Issue tracker link-->
+        {% if githubUtil.isIssueTrackerOnGitHub() %}
+          <a href="{{ githubUtil.getIssueTrackerUrl() }}">
+            <img border="0" src="{{ githubUtil.getIssuesBadgeImage() }}">
+          </a>
+        {% endif %}
+      </div>
     </p>
   </div>
 

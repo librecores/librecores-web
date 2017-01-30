@@ -120,9 +120,14 @@ class ProjectController extends Controller {
             return $response;
         }
 
+        // Get Github Util service and set the source repo and issue tracker urls
+        $githubUtil = $this->getGitHubUtil();
+        $githubUtil->setUrls($p->getSourceRepo()->getUrl(), $p->getIssueTracker());
+
         // the actual project page
         return $this->render('LibrecoresProjectRepoBundle:Project:view.html.twig',
-            array('project' => $p));
+            array('project'     => $p,
+                  'githubUtil'  => $githubUtil));
     }
 
     /**
@@ -180,5 +185,14 @@ class ProjectController extends Controller {
 
         return $this->render('LibrecoresProjectRepoBundle:Project:settings_team.html.twig',
             array('project' => $p));
+    }
+
+    /**
+     * Get GitHub Helper for the specified URL.
+     *
+     */
+    public function getGitHubUtil()
+    {
+        return $this->get('projectrepo.util.github');
     }
 }
