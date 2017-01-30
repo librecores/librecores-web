@@ -39,7 +39,7 @@ class Organization
     /**
      * @var string
      *
-     * @LcAssert\UserOrgName
+     * @LcAssert\UserOrgName(payload = {"type" = "org"})
      * @ORM\Column(name="name", type="string", length=255, unique=true)
      */
     private $name;
