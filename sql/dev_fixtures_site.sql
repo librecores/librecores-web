@@ -1,8 +1,8 @@
 -- sample data for development of the LibreCores web site
 
 INSERT INTO `Organization` (`id`, `name`, `displayName`, `description`, `creatorId`, `createdAt`, `updatedAt`) VALUES
-(1, 'unassigned', 'Unassigned', 'Unassigned description', NULL, NULL, NULL),
-(2, 'openrisc', 'OpenRISC', 'OpenRISC Description', NULL, NULL, NULL);
+(1, 'unassigned', 'Unassigned', 'Unassigned description', NULL, 2017-01-01 00:00:00, 2017-01-01 00:00:00),
+(2, 'openrisc', 'OpenRISC', 'OpenRISC Description', NULL, 2017-01-01 00:00:00, 2017-01-01 00:00:00);
 
 INSERT INTO `SourceRepo` (`id`, `type`, `url`, `stats_id`) VALUES
 (1, 'git', 'https://github.com/openrisc/mor1kx.git', NULL),
