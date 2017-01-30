@@ -15,13 +15,13 @@ class OrganizationRepository extends EntityRepository
      * Find all the organizations that a user is a member of.
      *
      * @param User $user
-     * @return array of Organizations
+     * @return Organization[]
      */
     public function findAllByMemberOrderedByName(User $user)
     {
         return $this->getEntityManager()
                     ->createQueryBuilder()
-                    ->select('o.name', 'o.displayName', 'o.description', 'm.permissions')
+                    ->select('o.name', 'o.displayName', 'o.description', 'm.permission')
                     ->from('LibrecoresProjectRepoBundle:Organization', 'o')
                     ->innerJoin('o.members', 'm')
                     ->where('m.user = :member')

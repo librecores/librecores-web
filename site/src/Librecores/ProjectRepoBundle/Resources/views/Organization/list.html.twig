@@ -43,10 +43,10 @@
                     {{ organization.description }}
                 </div>
                 <div class="col-sm-2">
-                    {% if organization.permissions == 'MEMBER' %} Member {% endif %}
-                    {% if organization.permissions == 'ADMIN' %} Admin {% endif %}
-                    {% if organization.permissions == 'REQUEST' %} Join Request {% endif %}
-                    {% if organization.permissions == 'DENY' %} Denied Request {% endif %}
+                    {% if organization.permission == 'MEMBER' %} Member {% endif %}
+                    {% if organization.permission == 'ADMIN' %} Admin {% endif %}
+                    {% if organization.permission == 'REQUEST' %} Join Request {% endif %}
+                    {% if organization.permission == 'DENY' %} Denied Request {% endif %}
                 </div>
                 <div class="col-sm-3">
                     [ <a href="{{ path('librecores_project_repo_user_org_view',

@@ -61,7 +61,7 @@ class OrganizationController extends Controller
             $member = new OrganizationMember();
             $member->setOrganization($o);
             $member->setUser($user);
-            $member->setPermissions(OrganizationMember::PERMISSIONS_ADMIN);
+            $member->setPermission(OrganizationMember::PERMISSION_ADMIN);
             $em->persist($member);
 
             $em->flush();
@@ -98,24 +98,24 @@ class OrganizationController extends Controller
         $user = $this->getUser();
 
         foreach ($organization->getMembers() as $m) {
-            if ($m->getPermissions() === OrganizationMember::PERMISSIONS_REQUEST) {
+            if ($m->getPermission() === OrganizationMember::PERMISSION_REQUEST) {
                 $requests[] = $m;
                 if ($user === $m->getUser())
                     $userHasRequest = true;
-            } elseif ($m->getPermissions() === OrganizationMember::PERMISSIONS_DENY) {
+            } elseif ($m->getPermission() === OrganizationMember::PERMISSION_DENY) {
                 $denies[] = $m;
                 if ($user === $m->getUser())
                     $userWasDenied = true;
-            } elseif ($m->getPermissions() === OrganizationMember::PERMISSIONS_SUPPORT) {
+            } elseif ($m->getPermission() === OrganizationMember::PERMISSION_SUPPORT) {
                 $supporters[] = $m;
                 if ($user === $m->getUser())
                     $userIsSupporter = true;
-            } elseif ($m->getPermissions() === OrganizationMember::PERMISSIONS_MEMBER) {
+            } elseif ($m->getPermission() === OrganizationMember::PERMISSION_MEMBER) {
                 $members[] = $m;
                 if ($user === $m->getUser())
                     $userIsMember = true;
             }
-            elseif ($m->getPermissions() === OrganizationMember::PERMISSIONS_ADMIN) {
+            elseif ($m->getPermission() === OrganizationMember::PERMISSION_ADMIN) {
                 $admins[] = $m;
                 if ($user === $m->getUser())
                     $userIsAdmin = true;
@@ -148,7 +148,7 @@ class OrganizationController extends Controller
     {
         if (!$this->userIsMember($organization)) {
             throw $this->createAccessDeniedException(
-                "You aren't a member of the organization in order to make changes.");
+                'You need to be a member of the organization in order to make changes.');
         }
 
         // Create and show the form
@@ -189,7 +189,7 @@ class OrganizationController extends Controller
         $member = new OrganizationMember();
         $member->setOrganization($o);
         $member->setUser($user);
-        $member->setPermissions(OrganizationMember::PERMISSIONS_REQUEST);
+        $member->setPermission(OrganizationMember::PERMISSION_REQUEST);
         $em = $this->getDoctrine()->getManager();
         $em->persist($member);
         $em->flush();
@@ -199,7 +199,7 @@ class OrganizationController extends Controller
     }
 
     /**
-     * Leave from an organization
+     * Leave an organization
      *
      * @param string $organizationName
      * @return Response
@@ -296,7 +296,7 @@ class OrganizationController extends Controller
                        ->getRepository('LibrecoresProjectRepoBundle:OrganizationMember')
                        ->findOneBy(['organization' => $o,
                                     'user'         => $user]);
-        $member->setPermissions(OrganizationMember::PERMISSIONS_MEMBER);
+        $member->setPermission(OrganizationMember::PERMISSION_MEMBER);
         $em = $this->getDoctrine()->getManager();
         $em->persist($member);
         $em->flush();
@@ -336,7 +336,7 @@ class OrganizationController extends Controller
         $member = $this->getDoctrine()
                        ->getRepository('LibrecoresProjectRepoBundle:OrganizationMember')
                        ->findOneBy(['organization' => $o, 'user' => $user]);
-        $member->setPermissions(OrganizationMember::PERMISSIONS_DENY);
+        $member->setPermission(OrganizationMember::PERMISSION_DENY);
         $em = $this->getDoctrine()->getManager();
         $em->persist($member);
         $em->flush();
@@ -389,7 +389,7 @@ class OrganizationController extends Controller
 
     /**
      * Test if the logged-in user is an organization
-     * member with either MEMBER or ADMIN permissions
+     * member with either MEMBER or ADMIN permission
      *
      * @param Organization $organization
      * @return boolean
@@ -398,8 +398,8 @@ class OrganizationController extends Controller
     {
         foreach ($organization->getMembers() as $m) {
             if (($m->getUser()        === $this->getUser()) &&
-                ($m->getPermissions() === OrganizationMember::PERMISSIONS_MEMBER ||
-                 $m->getPermissions() === OrganizationMember::PERMISSIONS_ADMIN)) {
+                ($m->getPermission() === OrganizationMember::PERMISSION_MEMBER ||
+                 $m->getPermission() === OrganizationMember::PERMISSION_ADMIN)) {
                 return true;
             }
         }

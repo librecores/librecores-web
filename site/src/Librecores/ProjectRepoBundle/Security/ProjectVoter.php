@@ -85,8 +85,8 @@ class ProjectVoter extends Voter
         if ($parentOrganization !== null) {
             foreach ($parentOrganization->getMembers() as $m) {
                 if (($m->getUser()        === $user) &&
-                    ($m->getPermissions() === OrganizationMember::PERMISSIONS_MEMBER ||
-                     $m->getPermissions() === OrganizationMember::PERMISSIONS_ADMIN)) {
+                    ($m->getPermission() === OrganizationMember::PERMISSION_MEMBER ||
+                     $m->getPermission() === OrganizationMember::PERMISSION_ADMIN)) {
                     $orgResult = true;
                     break;
                 }

@@ -15,11 +15,11 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class OrganizationMember
 {
-    const PERMISSIONS_REQUEST = 'REQUEST';
-    const PERMISSIONS_DENY    = 'DENY';
-    const PERMISSIONS_SUPPORT = 'SUPPORT';
-    const PERMISSIONS_MEMBER  = 'MEMBER';
-    const PERMISSIONS_ADMIN   = 'ADMIN';
+    const PERMISSION_REQUEST = 'REQUEST';
+    const PERMISSION_DENY    = 'DENY';
+    const PERMISSION_SUPPORT = 'SUPPORT';
+    const PERMISSION_MEMBER  = 'MEMBER';
+    const PERMISSION_ADMIN   = 'ADMIN';
 
     /**
      * @var integer
@@ -51,7 +51,7 @@ class OrganizationMember
      * @Assert\Choice(choices = {"REQUEST", "DENY", "SUPPORT", "MEMBER", "ADMIN"})
      * @ORM\Column(type="string")
      */
-    protected $permissions = self::PERMISSIONS_REQUEST;
+    protected $permission = self::PERMISSION_REQUEST;
 
     // metadata
     /**
@@ -170,35 +170,35 @@ class OrganizationMember
     }
 
     /**
-     * Set permissions
+     * Set permission
      *
-     * @param string $permissions One of the self::PERMISSIONS_* constants
+     * @param string $permission One of the self::PERMISSION_* constants
      * @throws \InvalidArgumentException
      */
-    public function setPermissions($permissions)
+    public function setPermission($permission)
     {
-        if (!in_array($permissions, [self::PERMISSIONS_REQUEST,
-                                     self::PERMISSIONS_DENY,
-                                     self::PERMISSIONS_SUPPORT,
-                                     self::PERMISSIONS_MEMBER,
-                                     self::PERMISSIONS_ADMIN], false)) {
-            throw new \InvalidArgumentException('Invalid Permissions');
+        if (!in_array($permission, [self::PERMISSION_REQUEST,
+                                    self::PERMISSION_DENY,
+                                    self::PERMISSION_SUPPORT,
+                                    self::PERMISSION_MEMBER,
+                                    self::PERMISSION_ADMIN], false)) {
+            throw new \InvalidArgumentException('Invalid Permission');
         }
 
-        if ($this->permissions === $permissions) {
+        if ($this->permission === $permission) {
             return;
         }
 
-        $this->permissions = $permissions;
+        $this->permission = $permission;
     }
 
     /**
-     * Get permissions
+     * Get permission
      *
      * @return string
      */
-    public function getPermissions()
+    public function getPermission()
     {
-        return $this->permissions;
+        return $this->permission;
     }
 }
