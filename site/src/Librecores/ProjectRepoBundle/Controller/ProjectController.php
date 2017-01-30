@@ -115,25 +115,12 @@ class ProjectController extends Controller {
      */
     public function tagsAction(Request $request)
     {
-        $t = $this->getDoctrine()
-            ->getRepository('LibrecoresProjectRepoBundle:ProjectTag')
-            ->findTags("");
-        return new JsonResponse(array(
-                "tags" => ProjectController::tagsToArray($t)
-        ));
-    }
+        $filter = $request->query->get('s');
 
-    /**
-     * Provide tags
-     */
-    public function tagsQueryAction($query)
-    {
         $t = $this->getDoctrine()
             ->getRepository('LibrecoresProjectRepoBundle:ProjectTag')
-            ->findTags("");
-        return new JsonResponse(array(
-                "tags" => $t
-        ));
+            ->findTags($filter);
+        return new JsonResponse(ProjectController::tagsToArray($t));
     }
 
     /**

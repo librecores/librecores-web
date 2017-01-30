@@ -20,6 +20,8 @@ class ProjectTagRepository extends EntityRepository
             ->select(array('t','c'))
             ->from('LibrecoresProjectRepoBundle:ProjectTag', 't')
             ->innerJoin('t.category', 'c')
+            ->where("t.name LIKE :search OR c.name LIKE :search")
+            ->setParameter('search', strtolower('%'.$search.'%'))
             ->getQuery()
             ->getResult();
         return $t;
