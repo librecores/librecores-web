@@ -69,14 +69,14 @@ class UserOrgNameValidator extends ConstraintValidator
      *
      * @var bool
      */
-    const CHECK_UNIQUE_USER = false;
+    const CHECK_UNIQUE_USER = true;
 
     /*
      * Check if the organization name is unique.
      *
      * @var bool
      */
-    const CHECK_UNIQUE_ORG  = false;
+    const CHECK_UNIQUE_ORG  = true;
 
     /**
      * @var Doctrine\Bundle\DoctrineBundle\Registry
@@ -137,6 +137,7 @@ class UserOrgNameValidator extends ConstraintValidator
      * Check if a username or organization name already exists on LibreCores
      *
      * @param string $name user or org name
+     * @return bool
      */
     private function userOrOrgNameExists($name)
     {
