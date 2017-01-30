@@ -63,22 +63,6 @@ class UserOrgNameValidator extends ConstraintValidator
     const VALID_NAME_REGEX = '/^[a-z][a-z0-9-]+$/';
 
     /**
-     * Check if the user name is unique.
-     * FOS User Bundle already does this check
-     * so this is not needed if using that bundle.
-     *
-     * @var bool
-     */
-    const CHECK_UNIQUE_USER = false;
-
-    /*
-     * Check if the organization name is unique.
-     *
-     * @var bool
-     */
-    const CHECK_UNIQUE_ORG  = true;
-
-    /**
      * @var Doctrine\Bundle\DoctrineBundle\Registry
      */
     private $orm;
@@ -97,6 +81,11 @@ class UserOrgNameValidator extends ConstraintValidator
     public function validate($value, Constraint $constraint)
     {
         $value = strtolower($value);
+
+        $type = 'none';
+        if (isset($constraint->payload['type'])) {
+            $type = $constraint->payload['type'];
+        }
 
         if (strlen($value) < self::LENGTH_MIN) {
             $this->context->buildViolation($constraint->messageTooShort)
@@ -120,7 +109,7 @@ class UserOrgNameValidator extends ConstraintValidator
                 ->addViolation();
         }
 
-        if ($this->userOrOrgNameExists($value)) {
+        if ($this->userOrOrgNameExists($value, $type)) {
             $this->context
                 ->buildViolation($constraint->messageUniqueName)
                 ->setParameter('%string%', $value)
@@ -137,13 +126,16 @@ class UserOrgNameValidator extends ConstraintValidator
      * Check if a username or organization name already exists on LibreCores
      *
      * @param string $name user or org name
+     * @param string $type "user" or "org"
+     * @return bool
      */
-    private function userOrOrgNameExists($name)
+    private function userOrOrgNameExists($name, $type)
     {
         $name = strtolower($name);
         $em = $this->orm->getManager();
 
-        if (self::CHECK_UNIQUE_USER) {
+        // Check the org name against existing usernames
+        if ($type === "org") {
 
             $q = 'SELECT COUNT(u.id) FROM LibrecoresProjectRepoBundle:User u ' .
                 'WHERE u.usernameCanonical = :name';
@@ -155,7 +147,8 @@ class UserOrgNameValidator extends ConstraintValidator
             }
         }
 
-        if (self::CHECK_UNIQUE_ORG) {
+        // Check the username against existing org names
+        if ($type === "user") {
             $q = 'SELECT COUNT(o.id) ' .
                 'FROM LibrecoresProjectRepoBundle:Organization o ' .
                 'WHERE LOWER(o.name) = :name';

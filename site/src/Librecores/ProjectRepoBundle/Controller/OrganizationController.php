@@ -8,44 +8,25 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 use Librecores\ProjectRepoBundle\Entity\Organization;
+use Librecores\ProjectRepoBundle\Entity\OrganizationMember;
 use Librecores\ProjectRepoBundle\Form\Type\OrganizationType;
 
 class OrganizationController extends Controller
 {
     /**
-     * List all the organizations
-     * TODO: Maybe remove?
-     * This listing might not be needed since the search will be
-     * enough to find an organization to view / join etc.
-     *
-     * @return Response
-     */
-    public function indexAction()
-    {
-        return $this->render('LibrecoresProjectRepoBundle:Organization:index.html.twig');
-    }
-
-    /**
-     * List the organizations that a user belongs
+     * List the organizations that current user belongs
      *
      * @return Response
      */
     public function listAction()
     {
-        $user = $this->getUser();
-
-        $organizationsOwner = $this->getDoctrine()
-                                   ->getRepository('LibrecoresProjectRepoBundle:Organization')
-                                   ->findAllByOwnerOrderedByName($user);
-
-        $organizationsMember = $this->getDoctrine()
-                                    ->getRepository('LibrecoresProjectRepoBundle:Organization')
-                                    ->findAllByMemberOrderedByName($user);
+        $organizations = $this->getDoctrine()
+                              ->getRepository('LibrecoresProjectRepoBundle:Organization')
+                              ->findAllByMemberOrderedByName($this->getUser());
 
 
         return $this->render('LibrecoresProjectRepoBundle:Organization:list.html.twig',
-            array('organizationsOwner'  => $organizationsOwner,
-                  'organizationsMember' => $organizationsMember));
+            array('organizations'   => $organizations));
     }
 
     /**
@@ -70,9 +51,19 @@ class OrganizationController extends Controller
         // Save organization and redirect to organization page
         if ($form->isValid()) {
             $user = $this->getUser();
-            $o->setOwner($user);
             $em = $this->getDoctrine()->getManager();
+
+            // Update new org
+            $o->setCreator($user);
             $em->persist($o);
+
+            // Create new membership
+            $member = new OrganizationMember();
+            $member->setOrganization($o);
+            $member->setUser($user);
+            $member->setPermission(OrganizationMember::PERMISSION_ADMIN);
+            $em->persist($member);
+
             $em->flush();
 
             // Redirect user to "view organization" page
@@ -82,7 +73,7 @@ class OrganizationController extends Controller
 
         return $this->render('LibrecoresProjectRepoBundle:Organization:new.html.twig',
             array('organization' => $o,
-                  'form' => $form->createView()));
+                  'form'         => $form->createView()));
     }
 
     /**
@@ -93,8 +84,57 @@ class OrganizationController extends Controller
      */
     public function viewAction(Organization $organization)
     {
+        $requests        = [];
+        $denies          = [];
+        $supporters      = [];
+        $members         = [];
+        $admins          = [];
+        $userHasRequest  = false;
+        $userWasDenied   = false;
+        $userIsSupporter = false;
+        $userIsMember    = false;
+        $userIsAdmin     = false;
+
+        $user = $this->getUser();
+
+        foreach ($organization->getMembers() as $m) {
+            if ($m->getPermission() === OrganizationMember::PERMISSION_REQUEST) {
+                $requests[] = $m;
+                if ($user === $m->getUser())
+                    $userHasRequest = true;
+            } elseif ($m->getPermission() === OrganizationMember::PERMISSION_DENY) {
+                $denies[] = $m;
+                if ($user === $m->getUser())
+                    $userWasDenied = true;
+            } elseif ($m->getPermission() === OrganizationMember::PERMISSION_SUPPORT) {
+                $supporters[] = $m;
+                if ($user === $m->getUser())
+                    $userIsSupporter = true;
+            } elseif ($m->getPermission() === OrganizationMember::PERMISSION_MEMBER) {
+                $members[] = $m;
+                if ($user === $m->getUser())
+                    $userIsMember = true;
+            }
+            elseif ($m->getPermission() === OrganizationMember::PERMISSION_ADMIN) {
+                $admins[] = $m;
+                if ($user === $m->getUser())
+                    $userIsAdmin = true;
+            }
+        }
+
         return $this->render('LibrecoresProjectRepoBundle:Organization:view.html.twig',
-            array('organization' => $organization));
+            array('organization'    => $organization,
+                  'user'            => $user,
+                  'requests'        => $requests,
+                  'denies'          => $denies,
+                  'supporters'      => $supporters,
+                  'members'         => $members,
+                  'admins'          => $admins,
+                  'userHasRequest'  => $userHasRequest,
+                  'userWasDenied'   => $userWasDenied,
+                  'userIsSupporter' => $userIsSupporter,
+                  'userIsMember'    => $userIsMember,
+                  'userIsAdmin'     => $userIsAdmin));
     }
 
     /**
@@ -106,10 +146,12 @@ class OrganizationController extends Controller
      */
     public function settingsAction(Request $request, Organization $organization)
     {
-        if ($this->getUser() != $organization->getOwner())
-            throw $this->createAccessDeniedException("You don't own this organization in order to make changes");
+        if (!$this->userIsMember($organization)) {
+            throw $this->createAccessDeniedException(
+                'You need to be a member of the organization in order to make changes.');
+        }
 
-        // create and show form
+        // Create and show the form
         $form = $this->createForm(OrganizationType::class, $organization);
         $form->handleRequest($request);
 
@@ -121,50 +163,7 @@ class OrganizationController extends Controller
 
         return $this->render('LibrecoresProjectRepoBundle:Organization:settings.html.twig',
             array('organization' => $organization,
-                  'form' => $form->createView()));
-    }
-
-    /**
-     * Remove an organization
-     *
-     * @param string $organizationName
-     * @return Response
-     */
-    public function removeAction($organizationName)
-    {
-        $o = $this->getDoctrine()
-                  ->getRepository('LibrecoresProjectRepoBundle:Organization')
-                  ->findOneByName($organizationName);
-
-        if (!$o) {
-            throw $this->createNotFoundException('No organization found with that name.');
-        }
-
-        // Remove the organization
-
-        if ($this->getUser() != $o->getOwner())
-            throw $this->createAccessDeniedException("You don't own this organization in order to remove it");
-
-        // TODO: Handle projects related to this organization!
-
-        $em = $this->getDoctrine()->getManager();
-        $em->remove($o);
-        $em->flush();
-
-        return $this->render('LibrecoresProjectRepoBundle:Organization:remove.html.twig',
-            array('organization' => $o));
-    }
-
-    /**
-     * Search for an organization
-     *
-     * @return Response
-     */
-    public function searchAction()
-    {
-        // Search for an organization
-
-        return $this->render('LibrecoresProjectRepoBundle:Organization:search.html.twig');
+                  'form'         => $form->createView()));
     }
 
     /**
@@ -180,15 +179,19 @@ class OrganizationController extends Controller
                   ->findOneByName($organizationName);
 
         if (!$o) {
-            throw $this->createNotFoundException('No organization found with that name.');
+            throw $this->createNotFoundException(
+                'No organization found with that name.');
         }
 
-        // Join the organization
-
         $user = $this->getUser();
-        $o->addRequest($user);
+
+        // Create new organization membership
+        $member = new OrganizationMember();
+        $member->setOrganization($o);
+        $member->setUser($user);
+        $member->setPermission(OrganizationMember::PERMISSION_REQUEST);
         $em = $this->getDoctrine()->getManager();
-        $em->persist($o);
+        $em->persist($member);
         $em->flush();
 
         return $this->render('LibrecoresProjectRepoBundle:Organization:join.html.twig',
@@ -196,7 +199,7 @@ class OrganizationController extends Controller
     }
 
     /**
-     * Leave from an organization
+     * Leave an organization
      *
      * @param string $organizationName
      * @return Response
@@ -208,44 +211,70 @@ class OrganizationController extends Controller
                   ->findOneByName($organizationName);
 
         if (!$o) {
-            throw $this->createNotFoundException('No organization found with that name.');
+            throw $this->createNotFoundException(
+                'No organization found with that name.');
         }
 
-        // Leave the organization
-
         $user = $this->getUser();
-        $o->removeRequest($user);
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($o);
-        $em->flush();
+
+        // TODO: Currently organization creators cannot leave their organization
+        // TODO: We should revisit this when we properly implement the deletion of an organization
+
+        if ($user === $o->getCreator()) {
+            $userIsCreator = true;
+        } else {
+            // Remove the organization membership
+            $userIsCreator = false;
+            $member = $this->getDoctrine()
+                           ->getRepository('LibrecoresProjectRepoBundle:OrganizationMember')
+                           ->findOneBy(['organization' => $o,
+                                        'user'         => $user]);
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($member);
+            $em->flush();
+        }
+
+        // Do not use the membership properties of $user or $o in the rest of the request
+        // as they are now invalid and need to be fetched again if needed for use
 
         return $this->render('LibrecoresProjectRepoBundle:Organization:leave.html.twig',
-            array('organization' => $o));
+            array('organization'  => $o,
+                  'userIsCreator' => $userIsCreator));
     }
 
     /**
-     * List the requests to join an organization
+     * Delete an organization
      *
      * @param string $organizationName
      * @return Response
      */
-    public function requestsAction($organizationName)
+    public function deleteAction($organizationName)
     {
         $o = $this->getDoctrine()
                   ->getRepository('LibrecoresProjectRepoBundle:Organization')
                   ->findOneByName($organizationName);
 
         if (!$o) {
-            throw $this->createNotFoundException('No organization found with that name.');
+            throw $this->createNotFoundException(
+                'No organization found with that name.');
         }
 
-        // List the requests for the organization
+        if (!$this->userIsMember($o)) {
+            throw $this->createAccessDeniedException(
+                "You aren't a member of the organization in order to make changes.");
+        }
 
-        $requests = $o->getRequests();
+        // We don't support this yet so just show 'this is an unsupported operation'
+        // message to the user until we provide support
+        //
+        // $em = $this->getDoctrine()->getManager();
+        // $em->remove($o);
+        // $em->flush();
 
-        return $this->render('LibrecoresProjectRepoBundle:Organization:join.html.twig',
-            array('organization' => $o, 'requests' => $requests));
+        return $this->render('LibrecoresProjectRepoBundle:Organization:delete.html.twig',
+            array('organization' => $o));
     }
+
 
     /**
      * Approve an organization join request
@@ -260,26 +289,30 @@ class OrganizationController extends Controller
                   ->getRepository('LibrecoresProjectRepoBundle:Organization')
                   ->findOneByName($organizationName);
 
-        if (!$o) {
+        if (!$o)
             throw $this->createNotFoundException('No organization found with that name.');
-        }
-
-        // Approve the organization join request
 
         $userManager = $this->container->get('fos_user.user_manager');
         $user = $userManager->findUserByUsername($userName);
+
         if (!$user) {
-            throw $this->createNotFoundException("No user found with that username");
+            throw $this->createNotFoundException(
+                'No user found with that username.');
         }
 
-        $o->addMember($user);
-        $o->removeRequest($user);
+        // Update the organization membership
+        $member = $this->getDoctrine()
+                       ->getRepository('LibrecoresProjectRepoBundle:OrganizationMember')
+                       ->findOneBy(['organization' => $o,
+                                    'user'         => $user]);
+        $member->setPermission(OrganizationMember::PERMISSION_MEMBER);
         $em = $this->getDoctrine()->getManager();
-        $em->persist($o);
+        $em->persist($member);
         $em->flush();
 
         return $this->render('LibrecoresProjectRepoBundle:Organization:approve.html.twig',
-            array('organization' => $o));
+            array('organization' => $o,
+                  'user'         => $user));
     }
 
     /**
@@ -296,23 +329,99 @@ class OrganizationController extends Controller
                   ->findOneByName($organizationName);
 
         if (!$o) {
-            throw $this->createNotFoundException('No organization found with that name.');
+            throw $this->createNotFoundException(
+                'No organization found with that name.');
         }
-
-        // Deny the organization join request
 
         $userManager = $this->container->get('fos_user.user_manager');
         $user = $userManager->findUserByUsername($userName);
+
         if (!$user) {
-            throw $this->createNotFoundException("No user found with that username");
+            throw $this->createNotFoundException(
+                'No user found with that username.');
         }
 
-        $o->removeRequest($user);
+        // Update the organization membership
+        $member = $this->getDoctrine()
+                       ->getRepository('LibrecoresProjectRepoBundle:OrganizationMember')
+                       ->findOneBy(['organization' => $o, 'user' => $user]);
+        $member->setPermission(OrganizationMember::PERMISSION_DENY);
         $em = $this->getDoctrine()->getManager();
-        $em->persist($o);
+        $em->persist($member);
         $em->flush();
 
         return $this->render('LibrecoresProjectRepoBundle:Organization:deny.html.twig',
-            array('organization' => $o));
+            array('organization' => $o,
+                  'user'         => $user));
+    }
+
+    /**
+     * Remove an organization member
+     *
+     * @param string $organizationName
+     * @param string $userName
+     * @return Response
+     */
+    public function removeAction($organizationName, $userName)
+    {
+        $o = $this->getDoctrine()
+                  ->getRepository('LibrecoresProjectRepoBundle:Organization')
+                  ->findOneByName($organizationName);
+
+        if (!$o)
+            throw $this->createNotFoundException('No organization found with that name.');
+
+        $userManager = $this->container->get('fos_user.user_manager');
+        $user = $userManager->findUserByUsername($userName);
+
+        if (!$user) {
+            throw $this->createNotFoundException(
+                'No user found with that username');
+        }
+
+        // TODO: Currently organization creators cannot be removed from their organization
+        // TODO: We should revisit this when we properly implement the deletion of an organization
+
+        if ($user === $o->getCreator()) {
+            $memberIsCreator = true;
+        } else {
+            // Remove the organization membership
+            $memberIsCreator = false;
+            $member = $this->getDoctrine()
+                ->getRepository('LibrecoresProjectRepoBundle:OrganizationMember')
+                ->findOneBy(['organization' => $o,
+                    'user' => $user]);
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($member);
+            $em->flush();
+        }
+
+        // Do not use the membership properties of $user or $o in the rest of the request
+        // as they are now invalid and need to be fetched again if needed for use
+
+        return $this->render('LibrecoresProjectRepoBundle:Organization:remove.html.twig',
+            array('organization'    => $o,
+                  'user'            => $user,
+                  'memberIsCreator' => $memberIsCreator));
+    }
+
+    /**
+     * Test if the logged-in user is an organization
+     * member with either MEMBER or ADMIN permission
+     *
+     * @param Organization $organization
+     * @return boolean
+     */
+    private function userIsMember(Organization $organization)
+    {
+        foreach ($organization->getMembers() as $m) {
+            if (($m->getUser()        === $this->getUser()) &&
+                ($m->getPermission() === OrganizationMember::PERMISSION_MEMBER ||
+                 $m->getPermission() === OrganizationMember::PERMISSION_ADMIN)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

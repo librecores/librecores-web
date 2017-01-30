@@ -29,6 +29,9 @@
                     <value>Registration</value>
                     <value>Profile</value>
                 </option>
+                <option name="payload">
+                    <value key="type">user</value>
+                </option>
             </constraint>
         </property>
 

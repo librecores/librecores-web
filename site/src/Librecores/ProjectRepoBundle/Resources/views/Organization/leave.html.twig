@@ -1,10 +1,23 @@
 {% extends 'layout.html.twig' %}
 
-{% block content %}
-
-{% endblock %}
-
 {% block title %}
-
+    {{ organization.getName() }} : {{ organization.getDisplayName() }} Leave
 {% endblock %}
 
+{% block pagepath %}Home &raquo; Organizations &raquo; {{ organization.getDisplayName() }}{% endblock %}
+
+{% block content %}
+    <h1 style="margin-bottom:5px">{{ organization.getName() }} : {{ organization.getDisplayName() }}</h1>
+
+    {% if not userIsCreator %}
+        <p>You have successfully left the organization {{ organization.getName() }} ("{{ organization.getDisplayName() }}").
+        </p>
+    {% else %}
+        <p>You cannot leave an organization you created!
+        </p>
+    {% endif %}
+
+    <p><a href="{{ path('librecores_project_repo_user_org_view', {'userOrOrganization':
+            organization.getName()}) }}">Return to {{ organization.getDisplayName() }}</a>
+    </p>
+{% endblock %}

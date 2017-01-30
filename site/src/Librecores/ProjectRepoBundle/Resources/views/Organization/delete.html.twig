@@ -1,7 +1,7 @@
 {% extends 'layout.html.twig' %}
 
 {% block title %}
-    {{ organization.getName() }} : {{ organization.getDisplayName() }} Remove Member
+    {{ organization.getName() }} : {{ organization.getDisplayName() }} Organization Delete
 {% endblock %}
 
 {% block pagepath %}Home &raquo; Organizations &raquo; {{ organization.getDisplayName() }}{% endblock %}
@@ -9,15 +9,11 @@
 {% block content %}
     <h1 style="margin-bottom:5px">{{ organization.getName() }} : {{ organization.getDisplayName() }}</h1>
 
-    {% if not memberIsCreator %}
-        <p>You have successfully removed {{ user.username }} from the organization {{ organization.getName() }} ("{{ organization.getDisplayName() }}").
-        </p>
-    {% else %}
-        <p>You cannot remove the organization creator!
-        </p>
-    {% endif %}
-
+    <p>The organization {{ organization.getName() }} ("{{ organization.getDisplayName() }}") cannot be
+       deleted as we currently do not support the deletion of organizations.
+    </p>
     <p><a href="{{ path('librecores_project_repo_user_org_view', {'userOrOrganization':
             organization.getName()}) }}">Return to {{ organization.getDisplayName() }}</a>
     </p>
+
 {% endblock %}

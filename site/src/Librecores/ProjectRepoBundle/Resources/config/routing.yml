@@ -38,7 +38,7 @@ librecores_project_repo_project_search:
 
 
 
-# Project management pages
+# Project/Organization management pages
 librecores_project_repo_project_new:
     path:     /project/new
     defaults: { _controller: LibrecoresProjectRepoBundle:Project:new }
@@ -48,15 +48,7 @@ librecores_project_repo_project_new:
 #    path:     /project/list
 #    defaults: { _controller: LibrecoresProjectRepoBundle:Project:list }
 
-
-
-# User management pages
-# most /user/XXX routes are defined in app/config/routing.yml in the
-# FOSUserBundle routes.
-
-
-
-# Organization management pages
+#  management pages
 librecores_project_repo_organization_new:
     path:     /org/new
     defaults: { _controller: LibrecoresProjectRepoBundle:Organization:new }
@@ -65,35 +57,9 @@ librecores_project_repo_organization_list:
     path:     /org/list
     defaults: { _controller: LibrecoresProjectRepoBundle:Organization:list }
 
-# XXX: THE ORG ROUTES BELOW SHOULD BE RECONSIDERED/MERGED
-
-# Organization Routes
-# XXX: what about moving these actions inside the organization view or settings
-# pages and to avoid having almost-empty pages?
-librecores_project_repo_organization_remove:
-    path:     /org/{organizationName}/remove
-    defaults: { _controller: LibrecoresProjectRepoBundle:Organization:remove }
-
-librecores_project_repo_organization_join:
-    path:     /org/{organizationName}/join
-    defaults: { _controller: LibrecoresProjectRepoBundle:Organization:join }
-
-librecores_project_repo_organization_leave:
-    path:     /org/{organizationName}/leave
-    defaults: { _controller: LibrecoresProjectRepoBundle:Organization:leave }
-
-librecores_project_repo_organization_approve:
-    path:     /org/{organizationName}/{userName}/approve
-    defaults: { _controller: LibrecoresProjectRepoBundle:Organization:approve }
-
-librecores_project_repo_organization_deny:
-    path:     /org/{organizationName}/{userName}/deny
-    defaults: { _controller: LibrecoresProjectRepoBundle:Organization:deny }
 
 
-
-
-# User/Organization view pages
+# User/Organization view routes
 librecores_project_repo_user_org_view:
     path:     /{userOrOrganization}
     defaults: { _controller: LibrecoresProjectRepoBundle:Default:userOrgView }
@@ -102,13 +68,10 @@ librecores_project_repo_user_org_settings:
     path:     /{userOrOrganization}/settings
     defaults: { _controller: LibrecoresProjectRepoBundle:Default:userOrgSettings }
 
-librecores_project_repo_organization_requests:
-    path:     /{organizationName}/settings/joinrequests
-    defaults: { _controller: LibrecoresProjectRepoBundle:Organization:requests }
 
 
+# Project routes
 
-# Project pages
 librecores_project_repo_project_view:
     path:     /{parentName}/{projectName}
     defaults: { _controller: LibrecoresProjectRepoBundle:Project:view }
@@ -117,9 +80,47 @@ librecores_project_repo_project_settings:
     path:     /{parentName}/{projectName}/settings
     defaults: { _controller: LibrecoresProjectRepoBundle:Project:settings }
 
-librecores_project_repo_project_settings_team:
-    path:     /{parentName}/{projectName}/settings/team
-    defaults: { _controller: LibrecoresProjectRepoBundle:Project:settingsTeam }
+
+
+# Organization routes
+
+librecores_project_repo_organization_view:
+    path:     /{organizationName}
+    defaults: { _controller: LibrecoresProjectRepoBundle:Organization:view }
+
+librecores_project_repo_organization_settings:
+    path:     /{organizationName}/settings
+    defaults: { _controller: LibrecoresProjectRepoBundle:Organization:settings }
+
+librecores_project_repo_organization_settings_delete:
+    path:     /{organizationName}/settings/delete
+    defaults: { _controller: LibrecoresProjectRepoBundle:Organization:delete }
+
+librecores_project_repo_organization_settings_join:
+    path:     /{organizationName}/settings/join
+    defaults: { _controller: LibrecoresProjectRepoBundle:Organization:join }
+
+librecores_project_repo_organization_settings_leave:
+    path:     /{organizationName}/settings/leave
+    defaults: { _controller: LibrecoresProjectRepoBundle:Organization:leave }
+
+librecores_project_repo_organization_settings_approve:
+    path:     /{organizationName}/settings/approve/{userName}
+    defaults: { _controller: LibrecoresProjectRepoBundle:Organization:approve }
+
+librecores_project_repo_organization_settings_deny:
+    path:     /{organizationName}/settings/deny/{userName}
+    defaults: { _controller: LibrecoresProjectRepoBundle:Organization:deny }
+
+librecores_project_repo_organization_settings_remove:
+    path:     /{organizationName}/settings/remove/{userName}
+    defaults: { _controller: LibrecoresProjectRepoBundle:Organization:remove }
+
+
+
+# User management pages
+# most /user/XXX routes are defined in app/config/routing.yml in the
+# FOSUserBundle routes.
 
 
 

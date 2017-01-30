@@ -26,7 +26,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  */
 class Project
 {
-    const STATUS_ASSIGNED = 'ASSIGNED';
+    const STATUS_ASSIGNED   = 'ASSIGNED';
     const STATUS_UNASSIGNED = 'UNASSIGNED';
 
     /**
@@ -254,12 +254,12 @@ class Project
         if (!in_array($status, array(self::STATUS_ASSIGNED, self::STATUS_UNASSIGNED))) {
             throw new \InvalidArgumentException("Invalid status");
         }
-        if ($this->status == $status) {
+        if ($this->status === $status) {
             return;
         }
 
         // all unassigned projects are collected in the "unassigned" organization
-        if ($status == self::STATUS_UNASSIGNED) {
+        if ($status === self::STATUS_UNASSIGNED) {
             $this->setParentOrganization(Organization::SPECIAL_UNASSIGNED_ID);
         }
         $this->status = $status;
@@ -281,7 +281,7 @@ class Project
      * @param User $parentUser
      * @return Project
      */
-    public function setParentUser($parentUser)
+    public function setParentUser(User $parentUser = null)
     {
         if ($this->parentUser !== null)
             $this->parentUser->removeProject($this);
@@ -309,13 +309,14 @@ class Project
     /**
      * Set parentOrganization
      *
-     * @param User $parentOrganization
+     * @param Organization $parentOrganization
      * @return Project
      */
-    public function setParentOrganization($parentOrganization)
+    public function setParentOrganization(Organization $parentOrganization = null)
     {
-        if ($this->parentOrganization !== null)
+        if ($this->parentOrganization !== null) {
             $this->parentOrganization->removeProject($this);
+        }
 
         if ($parentOrganization !== null) {
             $parentOrganization->addProject($this);
@@ -409,10 +410,10 @@ class Project
     /**
      * Set sourceRepo
      *
-     * @param \Librecores\ProjectRepoBundle\Entity\SourceRepo $sourceRepo
+     * @param SourceRepo $sourceRepo
      * @return Project
      */
-    public function setSourceRepo(\Librecores\ProjectRepoBundle\Entity\SourceRepo $sourceRepo = null)
+    public function setSourceRepo(SourceRepo $sourceRepo = null)
     {
         $this->sourceRepo = $sourceRepo;
 
@@ -422,7 +423,7 @@ class Project
     /**
      * Get sourceRepo
      *
-     * @return \Librecores\ProjectRepoBundle\Entity\SourceRepo
+     * @return SourceRepo
      */
     public function getSourceRepo()
     {
@@ -451,9 +452,11 @@ class Project
         if ($this->getParentOrganization() !== null) {
             return $this->getParentOrganization()->getName().'/'.$this->getName();
         }
+
         if ($this->getParentUser() !== null) {
             return $this->getParentUser()->getUsername().'/'.$this->getName();
         }
+
         return $this->getName();
     }
 
