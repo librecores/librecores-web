@@ -48,13 +48,18 @@ librecores_project_repo_project_new:
 #    path:     /project/list
 #    defaults: { _controller: LibrecoresProjectRepoBundle:Project:list }
 
+# Tags
+librecores_project_tags:
+    path:     /project/tags
+    defaults: { _controller: LibrecoresProjectRepoBundle:Project:tags }
 
+librecores_project_tagsquery:
+    path:     /project/tags/{query}
+    defaults: { _controller: LibrecoresProjectRepoBundle:Project:tagsQuery }
 
 # User management pages
 # most /user/XXX routes are defined in app/config/routing.yml in the
 # FOSUserBundle routes.
-
-
 
 # Organization management pages
 librecores_project_repo_organization_new:

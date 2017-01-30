@@ -4,6 +4,7 @@ namespace Librecores\ProjectRepoBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * A project
@@ -191,6 +192,16 @@ class Project
      * @ORM\Column(type="datetime", nullable=false)
      */
     private $dateLastModified = false;
+
+
+    /**
+     * Tags
+     *
+     * @var Collection $tags
+     *
+     * @ORM\OneToMany(targetEntity="ProjectTagging", mappedBy="project")
+     */
+    private $tags = array();
 
     /**
      * Constructor
@@ -672,5 +683,12 @@ class Project
     public function getDateLastModified()
     {
         return $this->dateLastModified;
+    }
+
+    public function getTags()
+    {
+        $this->tags = $this->tags ?: new ArrayCollection();
+
+        return $this->tags;
     }
 }

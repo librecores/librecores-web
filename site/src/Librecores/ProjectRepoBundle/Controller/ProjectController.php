@@ -13,6 +13,8 @@ use Librecores\ProjectRepoBundle\Form\Type\ProjectType;
 use Librecores\ProjectRepoBundle\Form\Type\SourceRepoType;
 use Librecores\ProjectRepoBundle\Entity\Organization;
 use Librecores\ProjectRepoBundle\Entity\User;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Librecores\ProjectRepoBundle\Entity\ProjectTag;
 
 class ProjectController extends Controller {
     /**
@@ -93,6 +95,47 @@ class ProjectController extends Controller {
             array('project' => $p, 'form' => $form->createView()));
     }
 
+    static public function tagsToArray($tags)
+    {
+        return array_map(function ($t){
+            return array (
+                    "id" => $t->getId(),
+                    "name" => $t->getFullName(),
+                    "color" => $t->getCategoryColor()
+            );
+        }, $tags);
+    }
+
+    /**
+     * Provide tags
+     *
+     * @param Request $request
+     * @return Response
+     * @throws \Exception
+     */
+    public function tagsAction(Request $request)
+    {
+        $t = $this->getDoctrine()
+            ->getRepository('LibrecoresProjectRepoBundle:ProjectTag')
+            ->findTags("");
+        return new JsonResponse(array(
+                "tags" => ProjectController::tagsToArray($t)
+        ));
+    }
+
+    /**
+     * Provide tags
+     */
+    public function tagsQueryAction($query)
+    {
+        $t = $this->getDoctrine()
+            ->getRepository('LibrecoresProjectRepoBundle:ProjectTag')
+            ->findTags("");
+        return new JsonResponse(array(
+                "tags" => $t
+        ));
+    }
+
     /**
      * Display the project
      *
@@ -119,10 +162,13 @@ class ProjectController extends Controller {
             $response->headers->set('refresh', '5;url='.$this->getRequest()->getUri());
             return $response;
         }
+        $tags = $this->getDoctrine()
+            ->getRepository('LibrecoresProjectRepoBundle:ProjectTag')
+            ->findTagsForProject($p);
 
         // the actual project page
         return $this->render('LibrecoresProjectRepoBundle:Project:view.html.twig',
-            array('project' => $p));
+            array('project' => $p, 'tags' => $tags));
     }
 
     /**

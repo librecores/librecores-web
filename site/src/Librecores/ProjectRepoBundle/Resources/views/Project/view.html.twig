@@ -97,12 +97,15 @@
     </p>
   </div>
 
-  {# XXX: Tags are not yet supported
   <div class="librecores-project-infobox" style="background-color: #f7f7f7; padding: 10px; border-radius: 3px;">
     <p><b>Tags</b></p>
-    <p>CPU, some, tag, what, else</p>
+    {% for t in tags %}
+    <span class="label"
+        style="margin: 2px; background-color: {{ t.getTag().getCategoryColor() }}">
+        {{ t.getTag().getFullName() }}
+    </span>
+    {% endfor %}
   </div>
-  #}
 </div>
 
 </div>
