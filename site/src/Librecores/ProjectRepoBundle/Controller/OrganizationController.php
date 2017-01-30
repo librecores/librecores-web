@@ -207,8 +207,8 @@ class OrganizationController extends Controller
     public function leaveAction($organizationName)
     {
         $o = $this->getDoctrine()
-            ->getRepository('LibrecoresProjectRepoBundle:Organization')
-            ->findOneByName($organizationName);
+                  ->getRepository('LibrecoresProjectRepoBundle:Organization')
+                  ->findOneByName($organizationName);
 
         if (!$o) {
             throw $this->createNotFoundException(
@@ -217,20 +217,29 @@ class OrganizationController extends Controller
 
         $user = $this->getUser();
 
-        // Remove the organization membership
-        $member = $this->getDoctrine()
-                       ->getRepository('LibrecoresProjectRepoBundle:OrganizationMember')
-                       ->findOneBy(['organization' => $o,
-                                    'user'         => $user]);
-        $em = $this->getDoctrine()->getManager();
-        $em->remove($member);
-        $em->flush();
+        // TODO: Currently organization creators cannot leave their organization
+        // TODO: We should revisit this when we properly implement the deletion of an organization
+
+        if ($user === $o->getCreator()) {
+            $userIsCreator = true;
+        } else {
+            // Remove the organization membership
+            $userIsCreator = false;
+            $member = $this->getDoctrine()
+                           ->getRepository('LibrecoresProjectRepoBundle:OrganizationMember')
+                           ->findOneBy(['organization' => $o,
+                                        'user'         => $user]);
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($member);
+            $em->flush();
+        }
 
         // Do not use the membership properties of $user or $o in the rest of the request
         // as they are now invalid and need to be fetched again if needed for use
 
         return $this->render('LibrecoresProjectRepoBundle:Organization:leave.html.twig',
-            array('organization' => $o));
+            array('organization'  => $o,
+                  'userIsCreator' => $userIsCreator));
     }
 
     /**
@@ -356,8 +365,8 @@ class OrganizationController extends Controller
     public function removeAction($organizationName, $userName)
     {
         $o = $this->getDoctrine()
-            ->getRepository('LibrecoresProjectRepoBundle:Organization')
-            ->findOneByName($organizationName);
+                  ->getRepository('LibrecoresProjectRepoBundle:Organization')
+                  ->findOneByName($organizationName);
 
         if (!$o)
             throw $this->createNotFoundException('No organization found with that name.');
@@ -370,21 +379,30 @@ class OrganizationController extends Controller
                 'No user found with that username');
         }
 
-        // Remove the organization membership
-        $member = $this->getDoctrine()
-                       ->getRepository('LibrecoresProjectRepoBundle:OrganizationMember')
-                       ->findOneBy(['organization' => $o,
-                                    'user'         => $user]);
-        $em = $this->getDoctrine()->getManager();
-        $em->remove($member);
-        $em->flush();
+        // TODO: Currently organization creators cannot be removed from their organization
+        // TODO: We should revisit this when we properly implement the deletion of an organization
+
+        if ($user === $o->getCreator()) {
+            $memberIsCreator = true;
+        } else {
+            // Remove the organization membership
+            $memberIsCreator = false;
+            $member = $this->getDoctrine()
+                ->getRepository('LibrecoresProjectRepoBundle:OrganizationMember')
+                ->findOneBy(['organization' => $o,
+                    'user' => $user]);
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($member);
+            $em->flush();
+        }
 
         // Do not use the membership properties of $user or $o in the rest of the request
         // as they are now invalid and need to be fetched again if needed for use
 
-        return $this->render('LibrecoresProjectRepoBundle:Organization:deny.html.twig',
-            array('organization' => $o,
-                  'user'         => $user));
+        return $this->render('LibrecoresProjectRepoBundle:Organization:remove.html.twig',
+            array('organization'    => $o,
+                  'user'            => $user,
+                  'memberIsCreator' => $memberIsCreator));
     }
 
     /**

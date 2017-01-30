@@ -37,7 +37,13 @@
     {% for user in members|merge(admins) %}
         <a href="{{ path('librecores_project_repo_user_org_view',
         {'userOrOrganization': user.getUser.getUsernameCanonical()}) }}">
-            {{  user.getUser.getUsernameCanonical() }}</a><br/>
+            {{  user.getUser.getUsernameCanonical() }}</a>
+        {% if userIsMember or userIsAdmin %}
+            - <a href="{{ path('librecores_project_repo_organization_settings_remove',
+            { 'organizationName': organization.getName(),
+              'userName': user.getUser.getUsernameCanonical() }) }}">Remove</a>
+        {% endif %}
+        <br/>
     {% else %}
         {{ organization.getDisplayName() }} doesn't yet have any members.
     {% endfor %}

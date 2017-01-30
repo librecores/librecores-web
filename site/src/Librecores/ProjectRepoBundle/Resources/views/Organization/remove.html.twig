@@ -1,7 +1,7 @@
 {% extends 'layout.html.twig' %}
 
 {% block title %}
-    {{ organization.getName() }} : {{ organization.getDisplayName() }} Leave
+    {{ organization.getName() }} : {{ organization.getDisplayName() }} Remove Member
 {% endblock %}
 
 {% block pagepath %}Home &raquo; Organizations &raquo; {{ organization.getDisplayName() }}{% endblock %}
@@ -9,11 +9,11 @@
 {% block content %}
     <h1 style="margin-bottom:5px">{{ organization.getName() }} : {{ organization.getDisplayName() }}</h1>
 
-    {% if not userIsCreator %}
-        <p>You have successfully left the organization {{ organization.getName() }} ("{{ organization.getDisplayName() }}").
+    {% if not memberIsCreator %}
+        <p>You have successfully removed {{ user.username }} from the organization {{ organization.getName() }} ("{{ organization.getDisplayName() }}").
         </p>
     {% else %}
-        <p>You cannot leave an organization you created!
+        <p>You cannot remove the organization creator!
         </p>
     {% endif %}
 
