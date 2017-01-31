@@ -12,42 +12,23 @@ use Doctrine\ORM\EntityRepository;
 class OrganizationRepository extends EntityRepository
 {
     /**
-     * Find all the organizations that a user owns.
-     *
-     * @param User $user
-     * @return ArrayCollection of Organizations
-     */
-    public function findAllByOwnerOrderedByName(User $user)
-    {
-        return $this->getEntityManager()
-            ->createQueryBuilder()
-            ->select('o')
-            ->from('LibrecoresProjectRepoBundle:Organization', 'o')
-            ->where('o.owner = :owner')
-            ->setParameter('owner', $user->getId())
-            ->orderBy('o.name', 'ASC')
-            ->getQuery()
-            ->getResult();
-    }
-
-    /**
      * Find all the organizations that a user is a member of.
      *
      * @param User $user
-     * @return ArrayCollection of Organizations
+     * @return Organization[]
      */
     public function findAllByMemberOrderedByName(User $user)
     {
         return $this->getEntityManager()
-            ->createQueryBuilder()
-            ->select('o')
-            ->from('LibrecoresProjectRepoBundle:Organization', 'o')
-            ->innerJoin('o.members', 'm')
-            ->where('m.id = :member')
-            ->setParameter('member', $user->getId())
-            ->orderBy('o.name', 'ASC')
-            ->getQuery()
-            ->getResult();
+                    ->createQueryBuilder()
+                    ->select('o.name', 'o.displayName', 'o.description', 'm.permission')
+                    ->from('LibrecoresProjectRepoBundle:Organization', 'o')
+                    ->innerJoin('o.members', 'm')
+                    ->where('m.user = :member')
+                    ->setParameter('member', $user->getId())
+                    ->orderBy('o.name', 'ASC')
+                    ->getQuery()
+                    ->getResult();
     }
 
     /**
@@ -59,12 +40,12 @@ class OrganizationRepository extends EntityRepository
     public function findOneByName($organizationName)
     {
         return $this->getEntityManager()
-            ->createQueryBuilder()
-            ->select('o')
-            ->from('LibrecoresProjectRepoBundle:Organization', 'o')
-            ->where('o.name = :name')
-            ->setParameter('name', $organizationName)
-            ->getQuery()
-            ->getOneOrNullResult();
+                    ->createQueryBuilder()
+                    ->select('o')
+                    ->from('LibrecoresProjectRepoBundle:Organization', 'o')
+                    ->where('o.name = :name')
+                    ->setParameter('name', $organizationName)
+                    ->getQuery()
+                    ->getOneOrNullResult();
     }
 }

@@ -9,10 +9,9 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 use Librecores\ProjectRepoBundle\Entity\Project;
+use Librecores\ProjectRepoBundle\Entity\OrganizationMember;
 use Librecores\ProjectRepoBundle\Form\Type\ProjectType;
 use Librecores\ProjectRepoBundle\Form\Type\SourceRepoType;
-use Librecores\ProjectRepoBundle\Entity\Organization;
-use Librecores\ProjectRepoBundle\Entity\User;
 
 class ProjectController extends Controller {
     /**
@@ -26,45 +25,60 @@ class ProjectController extends Controller {
     {
         $p = new Project();
 
-        // XXX: We currently only support projects inside the user's own
-        //      namespace. Make this dynamic when introducing organizations.
         $p->setParentUser($this->getUser());
+
         $username = $this->getUser()->getUsername();
-        $parentChoices = array($username => 'u_'.$username);
+
+        $parentChoices = array($username => 'u_' . $username);
+
+        foreach ($this->getUser()->getOrganizationMemberships() as $organizationMembership) {
+            if ($organizationMembership->getPermission() === OrganizationMember::PERMISSION_MEMBER or
+                $organizationMembership->getPermission() === OrganizationMember::PERMISSION_ADMIN) {
+                $parentChoices[$organizationMembership->getOrganization()->getName()] =
+                    'o_' . $organizationMembership->getOrganization()->getName();
+            }
+        }
+
         $form = $this->createFormBuilder($p)
-        ->add('parentName', ChoiceType::class, array(
-            'mapped' => false,
-            'choices' => $parentChoices,
-            'choices_as_values' => true,
-            'multiple' => false,
-        ))
-        ->add('name')
-        ->add('sourceRepo', SourceRepoType::class)
-        ->add('save', SubmitType::class, array('label' => 'Create Project'))
-        ->getForm();
+                     ->add('parentName', ChoiceType::class, array(
+                        'mapped' => false,
+                        'choices' => $parentChoices,
+                        'choices_as_values' => true,
+                        'multiple' => false,
+                     ))
+                     ->add('name')
+                     ->add('sourceRepo', SourceRepoType::class)
+                     ->add('save', SubmitType::class, array('label' => 'Create Project'))
+                     ->getForm();
 
         $form->handleRequest($request);
 
         // save project and redirect to project page
         if ($form->isValid()) {
-            /* XXX: currently only the user namespace is supported, see above.
-             // set parent (extract from string selection box)
-             $formParent = $form->get('parentName')->getData();
-             if (!preg_match('/^[uo]_.+$/', $formParent)) {
-             throw new \Exception("form manipulated");
-             }
-             list($formParentType, $formParentName) = explode('_', $formParent, 2);
-             if ($formParentType == 'u') {
-             $userManager = $this->container->get('fos_user.user_manager');
-             $user = $userManager->findUserByUsername($formParentName);
-             if (null === $user) {
-             throw new \Exception("form manipulated");
-             }
-             $p->setParentUser($user);
-             } else if ($formParentType == 'o') {
-             // TODO: Add ability to add projects to organizations here
-             throw new \Exception("adding projects to organizations is currently not supported.");
-             }*/
+            // set parent (extract from string selection box)
+            $formParent = $form->get('parentName')->getData();
+
+            if (!preg_match('/^[uo]_.+$/', $formParent))
+                throw new \Exception("form manipulated");
+
+            list($formParentType, $formParentName) = explode('_', $formParent, 2);
+
+            if ($formParentType === 'u') {
+                $user = $this->container->get('fos_user.user_manager')
+                                        ->findUserByUsername($formParentName);
+
+                if (null === $user)
+                    throw new \Exception("form manipulated");
+
+                $p->setParentUser($user);
+
+            } else if ($formParentType === 'o') {
+                $organization = $this->getDoctrine()
+                                     ->getRepository('LibrecoresProjectRepoBundle:Organization')
+                                     ->findOneByName($formParentName);
+
+                $p->setParentOrganization($organization);
+            }
 
             $p->setStatus(Project::STATUS_ASSIGNED);
 
@@ -78,13 +92,13 @@ class ProjectController extends Controller {
 
             // queue data collection from repository
             $this->get('old_sound_rabbit_mq.update_project_info_producer')
-            ->publish(serialize($p->getId()));
+                 ->publish(serialize($p->getId()));
 
             // redirect user to "view project" page
             return $this->redirectToRoute(
                 'librecores_project_repo_project_view',
                 array(
-                    'parentName' => $p->getParentUser(),
+                    'parentName' => $formParentName,
                     'projectName' => $p->getName(),
                 ));
         }

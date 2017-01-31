@@ -3,6 +3,7 @@ namespace Librecores\ProjectRepoBundle\Security;
 
 use Librecores\ProjectRepoBundle\Entity\Project;
 use Librecores\ProjectRepoBundle\Entity\User;
+use Librecores\ProjectRepoBundle\Entity\OrganizationMember;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
@@ -61,13 +62,37 @@ class ProjectVoter extends Voter
      *
      * @param Project $project
      * @param User $user
+     * @return boolean
      */
     private function canEdit(Project $project, User $user)
     {
-        // XXX: Projects owned by an organization are not supported for now
-        if ($project->getParentOrganization() !== null) {
-            return false;
+        // Check parent user
+
+        $userResult = false;
+
+        $parentUser = $project->getParentUser();
+
+        if ($parentUser !== null) {
+            $userResult = ($user === $parentUser);
         }
-        return $user === $project->getParentUser();
+
+        // Check parent organization
+
+        $orgResult = false;
+
+        $parentOrganization = $project->getParentOrganization();
+
+        if ($parentOrganization !== null) {
+            foreach ($parentOrganization->getMembers() as $m) {
+                if (($m->getUser()        === $user) &&
+                    ($m->getPermission() === OrganizationMember::PERMISSION_MEMBER ||
+                     $m->getPermission() === OrganizationMember::PERMISSION_ADMIN)) {
+                    $orgResult = true;
+                    break;
+                }
+            }
+        }
+
+        return $orgResult or $userResult;
     }
 }
