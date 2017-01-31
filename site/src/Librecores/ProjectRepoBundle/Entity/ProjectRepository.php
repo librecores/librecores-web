@@ -62,19 +62,17 @@ class ProjectRepository extends EntityRepository
     /**
      * Find all projects ordered by recent activity (last modified)
      *
-     * @param int $limit
-     * @return array of projects
+     * @param int|null $limit
+     * @return Project[]
      */
     public function findByRecentActivity($limit = null)
     {
-		$p = $this->getEntityManager()
-			->createQuery(
-				'SELECT p '.
-				'FROM LibrecoresProjectRepoBundle:Project p '.
-				'ORDER BY p.dateLastModified DESC');
-		if ($limit != 0) {
-			$p->setFirstResult(0)->setMaxResults($limit);
-		}
-		return $p->getResult();
+        $p = $this->getEntityManager()
+            ->createQuery('SELECT p ' . 'FROM LibrecoresProjectRepoBundle:Project p '.
+                    'ORDER BY p.dateLastModified DESC');
+        if ($limit != 0) {
+            $p->setFirstResult(0)->setMaxResults($limit);
+        }
+        return $p->getResult();
     }
 }
