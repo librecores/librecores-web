@@ -8,6 +8,11 @@
   <div class="panel panel-default">
     <div class="panel-heading"><h3 class="panel-title">Register account</h3></div>
     <div class="panel-body">
+      <div class="text-center">
+        By registering an account or signing in with another service you accept our <a href="{{ path('librecores_site_page', {'page': 'terms'}) }}">Terms and Policies</a>.
+      </div>
+      <hr/>
+
       {{ form_start(form, {'method': 'post', 'action': path('fos_user_registration_register'), 'attr': {'class': 'fos_user_registration_register'}}) }}
         {{ form_widget(form) }}
         <button class="btn btn-success btn-block" type="submit" id="_submit" name="_submit">Create account</button>
