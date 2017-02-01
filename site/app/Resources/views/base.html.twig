@@ -29,27 +29,6 @@
   {% block head_additional %}{% endblock %}
 
   <link rel="search" type="application/opensearchdescription+xml" href="/search.osd" title="LibreCores" />
-
-  <link rel="stylesheet" type="text/css"
-    href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.css" />
-  <script
-    src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.js"></script>
-  <script>
-    window.addEventListener("load", function(){
-    window.cookieconsent.initialise({
-      "palette": {
-        "popup": {
-          "background": "#173e43",
-          "text": "#dddfd4"
-        },
-        "button": {
-          "background": "transparent",
-          "border": "#fae596",
-          "text": "#fae596"
-        }
-      }
-    })});
-  </script>
 </head>
 <body>
   <!-- top navigation bar -->
@@ -166,6 +145,27 @@
       ga('create', 'UA-85345883-1', 'auto');
       ga('send', 'pageview');
 
+    </script>
+
+    <link rel="stylesheet" type="text/css"
+      href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.css" />
+    <script
+      src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.js"></script>
+    <script>
+      window.addEventListener("load", function(){
+      window.cookieconsent.initialise({
+        "palette": {
+          "popup": {
+            "background": "#173e43",
+            "text": "#dddfd4"
+          },
+          "button": {
+            "background": "transparent",
+            "border": "#fae596",
+            "text": "#fae596"
+          }
+        }
+      })});
     </script>
   {% endblock %}
 </body>
