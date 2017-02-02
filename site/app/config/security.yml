@@ -56,4 +56,4 @@ security:
         - { path: ^/user/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/project/new$, role: ROLE_USER }
         - { path: ^/org/new$, role: ROLE_USER }
-        - { path: ^/p/[^/]+/settings, role: ROLE_USER }
+        - { path: ^/[^/]+/settings, role: ROLE_USER }
