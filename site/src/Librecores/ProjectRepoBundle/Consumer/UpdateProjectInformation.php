@@ -50,8 +50,12 @@ class UpdateProjectInformation implements ConsumerInterface
     public function execute(AMQPMessage $msg)
     {
         // We need to be very careful not to fail due to a PHP error or an unhandled
-        // within a consumer, as this essentially kills the RabbitMQ daemon and ends
-        // all processing tasks.
+        // exception within a consumer, as this essentially kills the RabbitMQ daemon
+        // and ends all processing tasks.
+
+        // Store clonedir on this level so that we can clean it up in exception handler
+        $clonedir = null;
+
         try {
             $projectId = (int)unserialize($msg->body);
 
@@ -148,6 +152,11 @@ class UpdateProjectInformation implements ConsumerInterface
             // even if anything fails during the processing.
             $this->logger->error("Processing of git repository resulted in an ".
                 "Exception: ".$e->getMessage());
+
+            // we must clean up the repository if it was already checked out
+            if ($clonedir != null) {
+                $this->recursiveRmdir($clonedir);
+            }
         }
     }
 
