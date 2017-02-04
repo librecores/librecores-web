@@ -27,6 +27,7 @@ class AppKernel extends Kernel
             // XXX: Add this to production as long as we're in the testing phase
             // and need to use doctrine:schema:update from CLI
             new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle(),
+            new Exercise\HTMLPurifierBundle\ExerciseHTMLPurifierBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

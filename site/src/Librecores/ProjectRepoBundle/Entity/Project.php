@@ -4,6 +4,7 @@ namespace Librecores\ProjectRepoBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Librecores\ProjectRepoBundle\Entity\SourceRepo;
 
 /**
  * A project
@@ -107,7 +108,9 @@ class Project
      *
      * @Assert\Type(type="Librecores\ProjectRepoBundle\Entity\SourceRepo")
      * @Assert\Valid()
-     * @ORM\ManyToOne(targetEntity="SourceRepo", inversedBy="projects", cascade={"persist"})
+     *
+     * @ORM\OneToOne(targetEntity="SourceRepo", inversedBy="project", cascade={"persist"})
+     * @ORM\JoinColumn(name="sourceRepo_id", referencedColumnName="id", nullable=true)
      */
     private $sourceRepo;
 
@@ -126,7 +129,8 @@ class Project
      *
      * @var string
      *
-     * @ORM\Column(type="text", nullable=true)
+     * @Assert\Length(max = 64000)
+     * @ORM\Column(type="text", nullable=true, length=64000)
      */
     private $licenseText;
 
@@ -144,7 +148,8 @@ class Project
      *
      * @var string
      *
-     * @ORM\Column(type="text", nullable=true)
+     * @Assert\Length(max = 64000)
+     * @ORM\Column(type="text", nullable=true, length=64000)
      */
     private $descriptionText;
 
@@ -408,29 +413,6 @@ class Project
     }
 
     /**
-     * Set sourceRepo
-     *
-     * @param SourceRepo $sourceRepo
-     * @return Project
-     */
-    public function setSourceRepo(SourceRepo $sourceRepo = null)
-    {
-        $this->sourceRepo = $sourceRepo;
-
-        return $this;
-    }
-
-    /**
-     * Get sourceRepo
-     *
-     * @return SourceRepo
-     */
-    public function getSourceRepo()
-    {
-        return $this->sourceRepo;
-    }
-
-    /**
      * Get status
      *
      * @return string
@@ -675,5 +657,28 @@ class Project
     public function getDateLastModified()
     {
         return $this->dateLastModified;
+    }
+
+    /**
+     * Set sourceRepo
+     *
+     * @param \Librecores\ProjectRepoBundle\Entity\SourceRepo $sourceRepo
+     * @return Project
+     */
+    public function setSourceRepo(\Librecores\ProjectRepoBundle\Entity\SourceRepo $sourceRepo = null)
+    {
+        $this->sourceRepo = $sourceRepo;
+
+        return $this;
+    }
+
+    /**
+     * Get sourceRepo
+     *
+     * @return \Librecores\ProjectRepoBundle\Entity\SourceRepo
+     */
+    public function getSourceRepo()
+    {
+        return $this->sourceRepo;
     }
 }

@@ -1,0 +1,34 @@
+---
+# github-markup tool
+#
+# Used for converting any markup content on github (such as markdown, RST,
+# and others) to HTML.
+#
+# We install it from source and not from the Ubuntu repository to get the
+# newest version which is also used on GitHub itself, avoiding rendering
+# differences as much as we can.
+- name: Install ruby
+  apt:
+    name: ruby
+
+- name: Install ruby-dev
+  apt:
+    name: ruby-dev
+
+- name: Install ruby-bundler
+  apt:
+    name: ruby-bundler
+
+- name: Get Gemfile for github-markup dependencies
+  template: src=github-markup/Gemfile dest=/tmp/github-markup-gemfile
+
+- name: Install github-markup dependencies
+  command: bundle install --gemfile /tmp/github-markup-gemfile
+
+- name: Install docutils for github-markup
+#  command: easy_install docutils
+  apt:
+    name: python-docutils
+
+- name: Install github-markup
+  command: gem install github-markup
