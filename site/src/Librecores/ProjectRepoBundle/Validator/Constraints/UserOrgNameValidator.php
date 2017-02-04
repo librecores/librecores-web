@@ -29,7 +29,7 @@ class UserOrgNameValidator extends ConstraintValidator
      *
      * @var integer
      */
-    const LENGTH_MAX = 15;
+    const LENGTH_MAX = 39;
     /**
      * Names reserved for internal use, mostly to avoid clashes where
      * a name is equal to a route.
