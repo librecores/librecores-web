@@ -82,7 +82,7 @@ class GitRepoCrawler extends RepoCrawler
         $repoUrl = $this->repo->getUrl();
         $this->repoClonePath = FileUtil::createTemporaryDirectory('lc-gitrepocrawler-');
 
-        $cmd = 'git clone '.escapeshellarg($repoUrl).' '.escapeshellarg($this->repoClonePath);
+        $cmd = 'git clone --depth 1 '.escapeshellarg($repoUrl).' '.escapeshellarg($this->repoClonePath);
         $this->logger->info('Cloning repository: '.$cmd);
         $process = new Process($cmd);
         $process->setTimeout(self::TIMEOUT_GIT_CLONE);
