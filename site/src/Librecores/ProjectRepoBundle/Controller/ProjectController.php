@@ -195,4 +195,24 @@ class ProjectController extends Controller {
         return $this->render('LibrecoresProjectRepoBundle:Project:settings_team.html.twig',
             array('project' => $p));
     }
+
+    /**
+     * List all projects available on LibreCores
+     *
+     * @todo paginate result
+     *
+     * @param Request $req
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function listAction(Request $req)
+    {
+        $projects = $this->getDoctrine()
+            ->getRepository('LibrecoresProjectRepoBundle:Project')
+            ->findAll();
+
+        return $this->render('LibrecoresProjectRepoBundle:Project:list.html.twig',
+            [
+                'projects' => $projects,
+            ]);
+    }
 }

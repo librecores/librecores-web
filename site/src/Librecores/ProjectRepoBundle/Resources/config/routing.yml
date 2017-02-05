@@ -43,10 +43,9 @@ librecores_project_repo_project_new:
     path:     /project/new
     defaults: { _controller: LibrecoresProjectRepoBundle:Project:new }
 
-# XXX: this is not yet implemented - same as project repository homepage?
-#librecores_project_repo_project_list:
-#    path:     /project/list
-#    defaults: { _controller: LibrecoresProjectRepoBundle:Project:list }
+librecores_project_repo_project_list:
+    path:     /project/list
+    defaults: { _controller: LibrecoresProjectRepoBundle:Project:list }
 
 #  management pages
 librecores_project_repo_organization_new:

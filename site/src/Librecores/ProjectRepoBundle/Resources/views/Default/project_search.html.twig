@@ -72,8 +72,12 @@ LibreCores Search
       {% else %}
         {% if search_query.q is empty %}
           <div>Search for projects on LibreCores by entering a keyword above.</div>
+          <br/>
+          <strong>Don't know what you're looking for? <a href="{{ path('librecores_project_repo_project_list') }}">Browse the list of all projects.</a></strong>
         {% else %}
           <h2>Nothing found :-( Maybe try another search keyword?</h2>
+          <br/>
+          <strong>Don't know what you're looking for? <a href="{{ path('librecores_project_repo_project_list') }}">Browse the list of all projects.</a></strong>
         {% endif %}
       {% endfor %}
 
