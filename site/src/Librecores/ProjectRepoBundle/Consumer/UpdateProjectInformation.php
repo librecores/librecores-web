@@ -6,6 +6,7 @@ use PhpAmqpLib\Message\AMQPMessage;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Process\Exception;
 use Doctrine\Bundle\DoctrineBundle\Registry;
+use Symfony\Component\Debug\Exception\ContextErrorException;
 
 use Librecores\ProjectRepoBundle\Entity\Project;
 use Librecores\ProjectRepoBundle\Entity\SourceRepo;
@@ -79,11 +80,31 @@ class UpdateProjectInformation implements ConsumerInterface
 
             // persist all changes made to to DB
             $this->orm->getManager()->flush();
+        } catch (ContextErrorException $e) {
+            // We assume we got a database exception.
+            //
+            // Unfortunately, we're not able to distinguish this exception more
+            // easily from others other than comparing the message string
+            // "Warning: PDO::beginTransaction(): MySQL server has gone away", so
+            // let's handle all such exceptions in the same way for now.
+            //
+            // Most likely the connection to
+            // the DB server died for some reason (probably due to a timeout).
+            // Log it and end this script. It will be re-spawned by systemd and
+            // a fresh DB connection will be created. The processing request stays
+            // in the queue and will be processed once this service returns.
+            $this->logger->info("Processing of repository resulted in an ".
+                get_class($e).' with message '.$e->getMessage());
+            $this->logger->info("Exiting this script and waiting for it to be ".
+                "re-spawned by systemd.");
+            exit(0);
         } catch (\Exception $e) {
             // we need to avoid a project staying in "in processing" state
             // even if anything fails during the processing.
             $this->logger->error("Processing of repository resulted in an ".
-                "Exception: ".$e->getMessage());
+                get_class($e));
+            $this->logger->error('Message: '.$e->getMessage());
+            $this->logger->error('Trace: '.$e->getTraceAsString());
         }
 
         // remove element from queue
