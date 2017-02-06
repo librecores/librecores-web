@@ -6,7 +6,6 @@ use PhpAmqpLib\Message\AMQPMessage;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Process\Exception;
 use Doctrine\Bundle\DoctrineBundle\Registry;
-use Symfony\Component\Debug\Exception\ContextErrorException;
 
 use Librecores\ProjectRepoBundle\Entity\Project;
 use Librecores\ProjectRepoBundle\Entity\SourceRepo;
@@ -80,15 +79,8 @@ class UpdateProjectInformation implements ConsumerInterface
 
             // persist all changes made to to DB
             $this->orm->getManager()->flush();
-        } catch (ContextErrorException $e) {
-            // We assume we got a database exception.
-            //
-            // Unfortunately, we're not able to distinguish this exception more
-            // easily from others other than comparing the message string
-            // "Warning: PDO::beginTransaction(): MySQL server has gone away", so
-            // let's handle all such exceptions in the same way for now.
-            //
-            // Most likely the connection to
+        } catch (Doctrine\DBAL\DBALException $e) {
+            // We assume we got a database exception. Most likely the connection to
             // the DB server died for some reason (probably due to a timeout).
             // Log it and end this script. It will be re-spawned by systemd and
             // a fresh DB connection will be created. The processing request stays
