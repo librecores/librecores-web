@@ -137,6 +137,12 @@
     - cache
   when: not is_vagrant_environment
 
+# The services need to pick up the code changes by being restarted.
+# Thanks to RabbitMQ we don't loose any messages in this case.
+- name: Restart RabbitMQ message handlers
+  command: /bin/true
+  notify: restart librecores-rabbitmq
+
 # Install librecores planet generator
 - name: Install extra packages for librecores-planet
   apt:  pkg={{ item }} state=installed
