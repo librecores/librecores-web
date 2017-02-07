@@ -6,6 +6,7 @@ use PhpAmqpLib\Message\AMQPMessage;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Process\Exception;
 use Doctrine\Bundle\DoctrineBundle\Registry;
+use Doctrine\DBAL\DBALException;
 
 use Librecores\ProjectRepoBundle\Entity\Project;
 use Librecores\ProjectRepoBundle\Entity\SourceRepo;
@@ -79,7 +80,8 @@ class UpdateProjectInformation implements ConsumerInterface
 
             // persist all changes made to to DB
             $this->orm->getManager()->flush();
-        } catch (Doctrine\DBAL\DBALException $e) {
+
+        } catch (DBALException $e) {
             // We assume we got a database exception. Most likely the connection to
             // the DB server died for some reason (probably due to a timeout).
             // Log it and end this script. It will be re-spawned by systemd and
@@ -90,13 +92,26 @@ class UpdateProjectInformation implements ConsumerInterface
             $this->logger->info("Exiting this script and waiting for it to be ".
                 "re-spawned by systemd.");
             exit(0);
+
         } catch (\Exception $e) {
-            // we need to avoid a project staying in "in processing" state
-            // even if anything fails during the processing.
+            // We got an unexpected Exception. We assume this is a one-off event
+            // and just log it, but otherwise keep the consumer running for the
+            // next requests.
             $this->logger->error("Processing of repository resulted in an ".
                 get_class($e));
             $this->logger->error('Message: '.$e->getMessage());
             $this->logger->error('Trace: '.$e->getTraceAsString());
+
+            // Try to mark this project as not in progress any more to let people
+            // edit it online. The next crawling update will possibly get the
+            // changes.
+            try {
+                $this->markInProcessing($project, false);
+            } catch (\Exception $e) {
+                // Ignore -- we're already in the error handling path.
+                // The project will most likely remain in the "in processing"
+                // state.
+            }
         }
 
         // remove element from queue
