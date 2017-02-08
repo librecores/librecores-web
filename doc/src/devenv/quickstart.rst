@@ -88,4 +88,8 @@ First, point your web browser to http://librecores.devel.
 This will open the development version of LibreCores running on your machine.
 Whenever you make a code change, a simple reload of the page in your browser is usually sufficient to show the changes.
 
+.. note::
+  By default, two test users are created which you can use to log in:
+  user "test" with password "test", and user "test2" with password "test2".
+
 Happy coding!

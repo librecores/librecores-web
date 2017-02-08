@@ -1,4 +1,9 @@
 ---
+# Insert development test data into all systems
+
+# Ensure all services are running/restarted before using them below
+- meta: flush_handlers
+
 - copy: src=../files/drop_all_tables.sql dest=/tmp
 - name: Drop all tables from librecores database
   mysql_db: >
@@ -8,17 +13,25 @@
 - file: path=/tmp/drop_all_tables.sql state=absent
 
 - name: Let doctrine generate DB contents
+  sudo: yes
+  sudo_user: "{{ web_user }}"
   command: php app/console doctrine:schema:update --force
   args:
     chdir: /var/www/lc/site
 
-- name: Import LibreCores development DB Dump
-  mysql_db: >
-    name=librecores
-    login_user=librecores
-    login_password={{ site_mysql_password }}
-    state=import
-    target=/var/www/lc/sql/dev_fixtures_site.sql
+- name: Insert database fixtures
+  sudo: yes
+  sudo_user: "{{ web_user }}"
+  command: php app/console doctrine:fixtures:load
+  args:
+    chdir: /var/www/lc/site
+
+- name: Update all projects from their source repository
+  sudo: yes
+  sudo_user: "{{ web_user }}"
+  command: php app/console librecores:update-repos
+  args:
+    chdir: /var/www/lc/site
 
 - name: Run planet generator for the first time
   sudo: yes
