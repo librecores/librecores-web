@@ -140,6 +140,9 @@ fos_user:
     user_class: Librecores\ProjectRepoBundle\Entity\User
     service:
         user_manager: librecores_user_manager
+    from_email:
+        address:        noreply@librecores.org
+        sender_name:    LibreCores
 
 # HWI OAuth Configuration
 hwi_oauth:
