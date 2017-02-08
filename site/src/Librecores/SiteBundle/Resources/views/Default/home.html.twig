@@ -7,27 +7,27 @@
 <div class="librecores-home-startpane">
   <div class="librecores-home-banner">
     <div class="container">
-                <div class="row librecores-home-banner-wordmark">LibreCores</div>
-                <div class="row librecores-home-banner-claim">We drive Free and Open Digital Hardware.</div>
+      <div class="row librecores-home-banner-wordmark">LibreCores</div>
+      <div class="row librecores-home-banner-claim">We drive Free and Open Digital Hardware.</div>
 
-<form name="search-form" method="get" action="{{ path('librecores_project_repo_project_search') }}">
-    <div class="input-group">
-        <input type="text" class="form-control" placeholder="What IP is missing in your project?">
-        <span class="input-group-btn">
-      <button class="btn btn-danger" type="submit">
-        <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-        <span class="hidden-xs">Find IP Project</span></button>
-        </span>
-    </div>
-</form>
+      <form name="search-form" method="get" action="{{ path('librecores_project_repo_project_search') }}">
+        <div class="input-group">
+          <input type="text" class="form-control" name="q" placeholder="What IP is missing in your project?">
+          <span class="input-group-btn">
+            <button class="btn btn-danger" type="submit">
+            <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+            <span class="hidden-xs">Find IP Project</span></button>
+          </span>
+        </div>
+      </form>
     </div>
   </div>
 
   <div class="librecores-home-showcase">
-            <div class="container hidden-xs">
-                <div class="col-sm-1 "></div>
-                <div class="col-sm-2">
-                    <img src="/img/home-cat-1.svg" alt="engage" />
+    <div class="container hidden-xs">
+      <div class="col-sm-1 "></div>
+      <div class="col-sm-2">
+        <img src="/img/home-cat-1.svg" alt="engage" />
         <div class="librecores-home-showcase-keyword">engage</div>
         <div class="librecores-home-showcase-desc">
           You're not alone.
@@ -92,73 +92,75 @@
       </div>
       <div class="col-sm-1"></div>
     </div>
-            <div class="container visible-xs-block">
-                <div class="row">
-                    <div class="col-fa-3x">
-                        <i class="fa fa-comment-o fa-3x fa-fw" aria-hidden="true"></i>
-                    </div>
-                    <div class="col-xs-12 col-offset-fa-3x">
-                        <div class="row">
-                            You're not alone. Meet other developers, engage and tackle your challenges together. Join the mailing list, hop on to IRC, or read blogs.
-                            <a class="librecores-home-showcase-link-xs" href="{{ path('librecores_site_page', {'page': 'community-hub'}) }}"> » Community Hub </a>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-fa-3x">
-                        <i class="fa fa-code fa-3x" aria-hidden="true"></i>
-                    </div>
-                    <div class="col-xs-12 col-offset-fa-3x">
-                        <div class="row">
-                            Express your ideas in code. Create new digital hardware designs and improve existing ones. Open them up for the world to see.
-                            <a class="librecores-home-showcase-link-xs" href="{{ path('librecores_project_repo_project_new') }}">
-» Add a project
-</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-fa-3x">
-                        <i class="fa fa-share-alt fa-3x" aria-hidden="true"></i>
-                    </div>
-                    <div class="col-xs-12 col-offset-fa-3x">
-                        <div class="row">
-                        Share IP cores. Share knowledge. Share the fun of free and open digital hardware design.
-                        <a class="librecores-home-showcase-link-xs" href="{{ path('librecores_project_repo_project_new') }}">
-» Add a project
-</a></div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-fa-3x">
-                        <i class="fa fa-search fa-3x" aria-hidden="true"></i>
-                    </div>
-                    <div class="col-xs-12 col-offset-fa-3x">
-                        <div class="row">
-                        Implement your ideas faster: build on a great stack of existing work! The LibreCores Project Repository lists IP cores and related projects.
-                        <a class="librecores-home-showcase-link-xs" href="{{ path('librecores_project_repo_homepage') }}">
-» Browse projects
-</a></div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-fa-3x">
-                        <i class="fa fa-book fa-3x" aria-hidden="true"></i>
-                    </div>
-                    <div class="col-xs-12 col-offset-fa-3x">
-                        <div class="row">
-                        Get started with VHDL, Verilog and other languages. Find out what tools you can use. Learn which licenses are best for your project.
-                        <a class="librecores-home-showcase-link-xs" href="{{ path('librecores_site_page', {'page': 'docs'}) }}">
-» Read the docs
-</a></div>
-                    </div>
-                </div>
-
-            </div>
+    <div class="container visible-xs-block">
+      <div class="row">
+        <div class="col-fa-3x">
+          <i class="fa fa-comment-o fa-3x fa-fw" aria-hidden="true"></i>
         </div>
+        <div class="col-xs-12 col-offset-fa-3x">
+          <div class="row">
+            You're not alone. Meet other developers, engage and tackle your challenges together. Join the mailing list, hop on to IRC, or read blogs.
+            <a class="librecores-home-showcase-link-xs" href="{{ path('librecores_site_page', {'page': 'community-hub'}) }}"> » Community Hub </a>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-fa-3x">
+          <i class="fa fa-code fa-3x" aria-hidden="true"></i>
+        </div>
+        <div class="col-xs-12 col-offset-fa-3x">
+          <div class="row">
+            Express your ideas in code. Create new digital hardware designs and improve existing ones. Open them up for the world to see.
+            <a class="librecores-home-showcase-link-xs" href="{{ path('librecores_project_repo_project_new') }}">
+              » Add a project
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-fa-3x">
+          <i class="fa fa-share-alt fa-3x" aria-hidden="true"></i>
+        </div>
+        <div class="col-xs-12 col-offset-fa-3x">
+          <div class="row">
+            Share IP cores. Share knowledge. Share the fun of free and open digital hardware design.
+            <a class="librecores-home-showcase-link-xs" href="{{ path('librecores_project_repo_project_new') }}">
+              » Add a project
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-fa-3x">
+          <i class="fa fa-search fa-3x" aria-hidden="true"></i>
+        </div>
+        <div class="col-xs-12 col-offset-fa-3x">
+          <div class="row">
+            Implement your ideas faster: build on a great stack of existing work! The LibreCores Project Repository lists IP cores and related projects.
+            <a class="librecores-home-showcase-link-xs" href="{{ path('librecores_project_repo_homepage') }}">
+              » Browse projects
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-fa-3x">
+          <i class="fa fa-book fa-3x" aria-hidden="true"></i>
+        </div>
+        <div class="col-xs-12 col-offset-fa-3x">
+          <div class="row">
+            Get started with VHDL, Verilog and other languages. Find out what tools you can use. Learn which licenses are best for your project.
+            <a class="librecores-home-showcase-link-xs" href="{{ path('librecores_site_page', {'page': 'docs'}) }}">
+              » Read the docs
+            </a>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
+</div>
 
 <!-- 3 columns with main messages -->
 <div class="container" style="padding-top: 30px;">
