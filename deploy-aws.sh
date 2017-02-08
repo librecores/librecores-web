@@ -46,6 +46,9 @@ Available ACTIONs:
   deploy
     Deploy current code to stage.librecores.org
 
+  resetdata
+    DANGEROUS: Resets all data in the database.
+
   initdata
     Initialize the site with the data fixtures from Git.
 
@@ -141,21 +144,13 @@ case $action in
       $ANSIBLE_EXTRA_ARGS \
       ansible/$environment-aws-provision.yml
     ;;
-  deploy)
+  deploy|resetdata|initdata)
     ensure_ssh_keys $environment
     ansible-playbook \
       --private-key $HOME/.ssh/librecores-$environment \
       -i $SCRIPT_DIR/aws-static-inventory \
       $ANSIBLE_EXTRA_ARGS \
-      ansible/$environment-aws-deploy.yml
-    ;;
-  initdata)
-    ensure_ssh_keys $environment
-    ansible-playbook \
-      --private-key $HOME/.ssh/librecores-$environment \
-      -i $SCRIPT_DIR/aws-static-inventory \
-      $ANSIBLE_EXTRA_ARGS \
-      ansible/$environment-aws-initdata.yml
+      ansible/$environment-aws-$action.yml
     ;;
   "")
     echo ERROR: No action given. >&2
