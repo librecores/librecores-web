@@ -48,7 +48,6 @@ Available ACTIONs:
 
   initdata
     Initialize the site with the data fixtures from Git.
-    This overwrites all existing data!
 
 Environment variables:
   ANSIBLE_VAULT_PASSWORD_FILE

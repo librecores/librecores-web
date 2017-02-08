@@ -1,24 +1,6 @@
 ---
 # Insert development test data into all systems
 
-# Ensure all services are running/restarted before using them below
-- meta: flush_handlers
-
-- copy: src=../files/drop_all_tables.sql dest=/tmp
-- name: Drop all tables from librecores database
-  mysql_db: >
-    name=librecores
-    state=import
-    target=/tmp/drop_all_tables.sql
-- file: path=/tmp/drop_all_tables.sql state=absent
-
-- name: Let doctrine generate DB contents
-  sudo: yes
-  sudo_user: "{{ web_user }}"
-  command: php app/console doctrine:schema:update --force
-  args:
-    chdir: /var/www/lc/site
-
 - name: Insert database fixtures
   sudo: yes
   sudo_user: "{{ web_user }}"

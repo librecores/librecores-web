@@ -33,7 +33,8 @@
 		"sensio/generator-bundle" : "~2.3",
 		"leafo/scssphp" : "^0.6.6",
 		"patchwork/jsqueeze" : "^2.0",
-		"exercise/htmlpurifier-bundle" : "*"
+		"exercise/htmlpurifier-bundle" : "*",
+		"doctrine/doctrine-migrations-bundle": "^1.0"
 	},
 	"scripts" : {
 		"post-install-cmd" : [
