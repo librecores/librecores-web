@@ -1,0 +1,13 @@
+---
+# Staging environment on AWS: reset all data
+- name: Deploy stage.librecores.org on AWS
+#  hosts: tag_group_librecores_staging
+  hosts: staging
+  gather_facts: true
+  user: ubuntu
+  sudo: yes
+  roles:
+    - resetdata
+  vars_files:
+    - "vars/staging-aws.yml"
+    - "secrets/staging-aws.secrets.yml"
