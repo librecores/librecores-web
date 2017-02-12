@@ -54,7 +54,7 @@ class ProjectController extends Controller {
         $form->handleRequest($request);
 
         // save project and redirect to project page
-        if ($form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             // set parent (extract from string selection box)
             $formParent = $form->get('parentName')->getData();
 
@@ -76,6 +76,9 @@ class ProjectController extends Controller {
                 $organization = $this->getDoctrine()
                                      ->getRepository('LibrecoresProjectRepoBundle:Organization')
                                      ->findOneByName($formParentName);
+
+                if (null === $organization)
+                    throw new \Exception("form manipulated");
 
                 $p->setParentOrganization($organization);
             }
@@ -164,7 +167,7 @@ class ProjectController extends Controller {
         $form = $this->createForm(ProjectType::class, $p);
         $form->handleRequest($request);
 
-        if ($form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($p);
             $em->flush();
