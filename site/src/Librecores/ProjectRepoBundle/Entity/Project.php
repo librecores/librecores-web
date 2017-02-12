@@ -675,6 +675,8 @@ class Project
         $this->tags = $this->tags ?: new ArrayCollection();
 
         return $this->tags;
+    }
+
 
     /**
      * Set sourceRepo
