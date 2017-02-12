@@ -5,7 +5,7 @@ After=rabbitmq-server.service
 
 [Service]
 EnvironmentFile=/var/www/lc/site/app/config/symfony-env.sh
-ExecStart=/usr/bin/php /var/www/lc/site/app/console rabbitmq:consumer -m 250 update_project_info
+ExecStart=/usr/bin/php /var/www/lc/site/app/console rabbitmq:consumer -w -l 256 -m 250 update_project_info
 Restart=always
 User={{ web_user }}
 

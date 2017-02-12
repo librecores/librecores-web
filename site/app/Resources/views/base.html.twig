@@ -32,7 +32,7 @@
 </head>
 <body>
   <!-- top navigation bar -->
-  <nav class="navbar navbar-fixed-top librecores-nav" role="navigation">
+  <nav class="navbar navbar-fixed-top librecores-nav">
     <div class="container">
       <div class="navbar-header">
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -41,17 +41,24 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="{{ path('librecores_site_home') }}" alt="LibreCores">
+        <a class="navbar-brand" href="{{ path('librecores_site_home') }}">
           <span class="wordmark">LibreCores</span>
         </a>
       </div>
       <div class="navbar-collapse collapse">
         <ul class="nav navbar-nav">
-          <li><a href="{{ path('librecores_project_repo_project_search') }}">Search Projects</a></li>
-          <li><a href="{{ path('librecores_site_page', {'page': 'docs'}) }}">Getting Started</a></li>
+          <li><a href="{{ path('librecores_project_repo_project_search') }}">Search</a></li>
+          <li><a href="{{ path('librecores_site_page', {'page': 'docs'}) }}">Learn</a></li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+            aria-haspopup="true" aria-expanded="false">Community <span class="caret"></span></a>
+            <ul class="dropdown-menu">
           <li><a href="{{ path('librecores_planet_homepage') }}">Planet LibreCores</a></li>
-          <li><a href="{{ path('librecores_site_page', {'page': 'librecores-ci'}) }}">Continuous Integration</a></li>
-          <li><a href="{{ path('librecores_site_page', {'page': 'about'}) }}">About &amp; Roadmap</a></li>
+              <li><a href="{{ path('librecores_site_page', {'page': 'community-hub'}) }}">Community Hub</a></li>
+            </ul>
+          </li> 
+          <li><a href="{{ path('librecores_site_page', {'page': 'librecores-ci'}) }}">LibreCores CI</a></li>
+          <li><a href="{{ path('librecores_site_page', {'page': 'about'}) }}">About</a></li>
         </ul>
 
         <ul class="nav navbar-nav navbar-right">
@@ -63,18 +70,30 @@
             </a>
             <ul class="dropdown-menu">
               <li>
-                <a href="{{ path('librecores_project_repo_user_org_view', {'userOrOrganization': app.user.username}) }}">
-                  Profile
+                <a href="{{ path('librecores_project_repo_project_new') }}">
+                  New Project
                 </a>
               </li>
               <li>
-                <a href="{{ path('librecores_project_repo_project_new') }}">
-                  Add project
+                <a href="{{ path('librecores_project_repo_organization_new') }}">
+                  New Organization
+                </a>
+              </li>
+              <li role="separator" class="divider"></li>
+              <li>
+                <a href="{{ path('librecores_project_repo_user_org_view',
+                                 {'userOrOrganization': app.user.username}) }}">
+                  Your Profile
+                </a>
+              </li>
+              <li>
+                <a href="{{ path('librecores_project_repo_organization_list') }}">
+                  Your Organizations
                 </a>
               </li>
               {#<li>
                 <a href="{{ path('fos_user_profile_edit') }}">
-                  Profile settings
+                  Profile Settings
                 </a>
               </li>#}
               <li role="separator" class="divider"></li>
@@ -126,6 +145,27 @@
       ga('create', 'UA-85345883-1', 'auto');
       ga('send', 'pageview');
 
+    </script>
+
+    <link rel="stylesheet" type="text/css"
+      href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.css" />
+    <script
+      src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.js"></script>
+    <script>
+      window.addEventListener("load", function(){
+      window.cookieconsent.initialise({
+        "palette": {
+          "popup": {
+            "background": "#173e43",
+            "text": "#dddfd4"
+          },
+          "button": {
+            "background": "transparent",
+            "border": "#fae596",
+            "text": "#fae596"
+          }
+        }
+      })});
     </script>
   {% endblock %}
 </body>

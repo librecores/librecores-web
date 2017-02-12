@@ -11,14 +11,14 @@ LibreCores Search
 
 <div class="librecores-search">
 <div class="row">
-  <div class="col-md-3">
+  <div class="col-sm-3">
     <h1>Search</h1>
   </div>
-  <div class="col-md-9">
+  <div class="col-sm-9">
     <div class="input-group" style="width:100%">
       {{ form_widget(search_query_form.q, {'attr': {'placeholder': 'Search for ...'}}) }}
       <span class="input-group-btn">
-        <button class="btn btn-default" type="submit"
+        <button class="btn btn-default" type="submit">
           <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
           Search
         </button>
@@ -28,7 +28,7 @@ LibreCores Search
 </div>
 
 <div class="row">
-  <div class="col-md-3">
+  <div class="col-sm-3">
     {# sidebar for search refinements #}
     <ul class="list-group">
       {# XXX: maybe we can find a way to add the "active" class with
@@ -58,7 +58,7 @@ LibreCores Search
       {% endif %}
     </ul>
   </div>
-  <div class="col-md-9">
+  <div class="col-sm-9">
     {# main content: search results #}
     {% if search_query.type == 'projects' %}
       {% for project in projects %}
@@ -72,8 +72,12 @@ LibreCores Search
       {% else %}
         {% if search_query.q is empty %}
           <div>Search for projects on LibreCores by entering a keyword above.</div>
+          <br/>
+          <strong>Don't know what you're looking for? <a href="{{ path('librecores_project_repo_project_list') }}">Browse the list of all projects.</a></strong>
         {% else %}
           <h2>Nothing found :-( Maybe try another search keyword?</h2>
+          <br/>
+          <strong>Don't know what you're looking for? <a href="{{ path('librecores_project_repo_project_list') }}">Browse the list of all projects.</a></strong>
         {% endif %}
       {% endfor %}
 

@@ -1,0 +1,20 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}
+LibreCores Project List
+{% endblock %}
+
+{% block pagepath %}Home &raquo; Projects &raquo; Browse{% endblock %}
+
+{% block content %}
+  <h1>LibreCores Project List</h1>
+  {% for project in projects %}
+    <h2><a href="{{ path('librecores_project_repo_project_view', {'parentName':
+project.getParentName(), 'projectName': project.getName()}) }}">{{ project.getFqname() }}</a></h2>
+    <div>{{ project.getTagline() }}</div>
+    <div><i>
+      by {{ project.getParentName() }} (added on {{ project.getDateAdded()|date('Y-m-d') }})
+    </i></div>
+    <hr/>
+  {% endfor %}
+{% endblock %}

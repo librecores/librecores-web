@@ -21,7 +21,6 @@ class SearchQuery
     /**
      * What are type of result are we looking for?
      *
-     * @Assert\NotBlank()
      * @Assert\Choice({"projects", "users"})
      */
     protected $type = self::TYPE_PROJECTS;
@@ -51,6 +50,9 @@ class SearchQuery
 
     public function getType()
     {
+        if (empty($this->type)) {
+            return self::TYPE_PROJECTS;
+        }
         return $this->type;
     }
 }

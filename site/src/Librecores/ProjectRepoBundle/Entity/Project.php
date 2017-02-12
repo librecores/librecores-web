@@ -5,6 +5,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
+use Librecores\ProjectRepoBundle\Entity\SourceRepo;
 
 /**
  * A project
@@ -27,7 +28,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class Project
 {
-    const STATUS_ASSIGNED = 'ASSIGNED';
+    const STATUS_ASSIGNED   = 'ASSIGNED';
     const STATUS_UNASSIGNED = 'UNASSIGNED';
 
     /**
@@ -108,7 +109,9 @@ class Project
      *
      * @Assert\Type(type="Librecores\ProjectRepoBundle\Entity\SourceRepo")
      * @Assert\Valid()
-     * @ORM\ManyToOne(targetEntity="SourceRepo", inversedBy="projects", cascade={"persist"})
+     *
+     * @ORM\OneToOne(targetEntity="SourceRepo", inversedBy="project", cascade={"persist"})
+     * @ORM\JoinColumn(name="sourceRepo_id", referencedColumnName="id", nullable=true)
      */
     private $sourceRepo;
 
@@ -127,7 +130,8 @@ class Project
      *
      * @var string
      *
-     * @ORM\Column(type="text", nullable=true)
+     * @Assert\Length(max = 64000)
+     * @ORM\Column(type="text", nullable=true, length=64000)
      */
     private $licenseText;
 
@@ -145,7 +149,8 @@ class Project
      *
      * @var string
      *
-     * @ORM\Column(type="text", nullable=true)
+     * @Assert\Length(max = 64000)
+     * @ORM\Column(type="text", nullable=true, length=64000)
      */
     private $descriptionText;
 
@@ -265,12 +270,12 @@ class Project
         if (!in_array($status, array(self::STATUS_ASSIGNED, self::STATUS_UNASSIGNED))) {
             throw new \InvalidArgumentException("Invalid status");
         }
-        if ($this->status == $status) {
+        if ($this->status === $status) {
             return;
         }
 
         // all unassigned projects are collected in the "unassigned" organization
-        if ($status == self::STATUS_UNASSIGNED) {
+        if ($status === self::STATUS_UNASSIGNED) {
             $this->setParentOrganization(Organization::SPECIAL_UNASSIGNED_ID);
         }
         $this->status = $status;
@@ -292,7 +297,7 @@ class Project
      * @param User $parentUser
      * @return Project
      */
-    public function setParentUser($parentUser)
+    public function setParentUser(User $parentUser = null)
     {
         if ($this->parentUser !== null)
             $this->parentUser->removeProject($this);
@@ -320,13 +325,14 @@ class Project
     /**
      * Set parentOrganization
      *
-     * @param User $parentOrganization
+     * @param Organization $parentOrganization
      * @return Project
      */
-    public function setParentOrganization($parentOrganization)
+    public function setParentOrganization(Organization $parentOrganization = null)
     {
-        if ($this->parentOrganization !== null)
+        if ($this->parentOrganization !== null) {
             $this->parentOrganization->removeProject($this);
+        }
 
         if ($parentOrganization !== null) {
             $parentOrganization->addProject($this);
@@ -418,29 +424,6 @@ class Project
     }
 
     /**
-     * Set sourceRepo
-     *
-     * @param \Librecores\ProjectRepoBundle\Entity\SourceRepo $sourceRepo
-     * @return Project
-     */
-    public function setSourceRepo(\Librecores\ProjectRepoBundle\Entity\SourceRepo $sourceRepo = null)
-    {
-        $this->sourceRepo = $sourceRepo;
-
-        return $this;
-    }
-
-    /**
-     * Get sourceRepo
-     *
-     * @return \Librecores\ProjectRepoBundle\Entity\SourceRepo
-     */
-    public function getSourceRepo()
-    {
-        return $this->sourceRepo;
-    }
-
-    /**
      * Get status
      *
      * @return string
@@ -462,9 +445,11 @@ class Project
         if ($this->getParentOrganization() !== null) {
             return $this->getParentOrganization()->getName().'/'.$this->getName();
         }
+
         if ($this->getParentUser() !== null) {
             return $this->getParentUser()->getUsername().'/'.$this->getName();
         }
+
         return $this->getName();
     }
 
@@ -690,5 +675,27 @@ class Project
         $this->tags = $this->tags ?: new ArrayCollection();
 
         return $this->tags;
+
+    /**
+     * Set sourceRepo
+     *
+     * @param \Librecores\ProjectRepoBundle\Entity\SourceRepo $sourceRepo
+     * @return Project
+     */
+    public function setSourceRepo(\Librecores\ProjectRepoBundle\Entity\SourceRepo $sourceRepo = null)
+    {
+        $this->sourceRepo = $sourceRepo;
+
+        return $this;
+    }
+
+    /**
+     * Get sourceRepo
+     *
+     * @return \Librecores\ProjectRepoBundle\Entity\SourceRepo
+     */
+    public function getSourceRepo()
+    {
+        return $this->sourceRepo;
     }
 }

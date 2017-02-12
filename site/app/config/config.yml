@@ -42,7 +42,8 @@ twig:
 assetic:
     debug:          "%kernel.debug%"
     use_controller: false
-    bundles:        [ ]
+    bundles:
+        - LibrecoresProjectRepoBundle
     filters:
         scssphp:
             formatter: 'Leafo\ScssPhp\Formatter\Compressed'
@@ -60,8 +61,6 @@ assetic:
             inputs:
                 - "assets/js/jquery.min.js"
                 - "assets/js/bootstrap.min.js"
-                - "assets/js/bootstrap-markdown.js"
-                - "assets/js/marked.min.js"
                 - "assets/js/moment.min.js"
                 - "assets/js/livestamp.js"
 
@@ -74,17 +73,21 @@ doctrine:
         dbname:   "%database_name%"
         user:     "%database_user%"
         password: "%database_password%"
-        charset:  UTF8
-        # if using pdo_sqlite as your database driver:
-        #   1. add the path in parameters.yml
-        #     e.g. database_path: "%kernel.root_dir%/data/data.db3"
-        #   2. Uncomment database_path in parameters.yml.dist
-        #   3. Uncomment next line:
-        #     path:     "%database_path%"
+        charset:  utf8mb4
+        default_table_options:
+            charset: utf8mb4
+            collate: utf8mb4_unicode_520_ci
 
     orm:
         auto_generate_proxy_classes: "%kernel.debug%"
         auto_mapping: true
+
+# Doctrine Migrations
+doctrine_migrations:
+    dir_name: "%kernel.root_dir%/DoctrineMigrations"
+    namespace: Application\Migrations
+    table_name: migration_versions
+    name: LibreCores Migrations
 
 # Swiftmailer Configuration
 swiftmailer:
@@ -99,7 +102,7 @@ swiftmailer:
 # Docs: http://simplepie.org/wiki/faq/how_does_simplepie_s_caching_http_conditional_get_system_work
 fkr_simple_pie:
     cache_enabled: true
-    cache_dir: %kernel.cache_dir%/rss
+    cache_dir: '%kernel.cache_dir%/rss'
     cache_duration: 3600
 
 # RabbitMQ Configuration
@@ -107,7 +110,7 @@ old_sound_rabbit_mq:
     connections:
         default:
             host:     "%rabbitmq_host%"
-            port:     %rabbitmq_port%
+            port:     "%rabbitmq_port%"
             user:     "%rabbitmq_user%"
             password: "%rabbitmq_password%"
             vhost:    '/'
@@ -138,6 +141,9 @@ fos_user:
     user_class: Librecores\ProjectRepoBundle\Entity\User
     service:
         user_manager: librecores_user_manager
+    from_email:
+        address:        noreply@librecores.org
+        sender_name:    LibreCores
 
 # HWI OAuth Configuration
 hwi_oauth:

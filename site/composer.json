@@ -10,7 +10,7 @@
 		}
 	},
 	"require" : {
-		"php" : ">=5.5",
+		"php" : ">=7.1",
 		"symfony/symfony" : "2.8.*",
 		"symfony/console" : "2.8.*",
 		"symfony/process" : "2.8.*",
@@ -20,6 +20,7 @@
 		"doctrine/orm" : "~2.2,>=2.2.3,<2.5",
 		"doctrine/dbal" : "<2.5",
 		"doctrine/doctrine-bundle" : "~1.2",
+		"doctrine/doctrine-fixtures-bundle" : "<2.5",
 		"twig/extensions" : "~1.0",
 		"sensio/distribution-bundle" : "~3.0,>=3.0.12",
 		"sensio/framework-extra-bundle" : "~3.0,>=3.0.2",
@@ -30,10 +31,10 @@
 		"hwi/oauth-bundle" : "0.4.*@dev",
 		"friendsofsymfony/user-bundle" : "~2.0@dev",
 		"sensio/generator-bundle" : "~2.3",
-		"leafo/scssphp": "^0.6.6",
-		"patchwork/jsqueeze": "^2.0"
-	},
-	"require-dev" : {
+		"leafo/scssphp" : "^0.6.6",
+		"patchwork/jsqueeze" : "^2.0",
+		"exercise/htmlpurifier-bundle" : "*",
+		"doctrine/doctrine-migrations-bundle": "^1.0"
 	},
 	"scripts" : {
 		"post-install-cmd" : [

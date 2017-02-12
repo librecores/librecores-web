@@ -1,15 +1,26 @@
-parameters:
-    librecores_user_provider.class: Librecores\ProjectRepoBundle\Security\Core\User\FOSUBUserProvider
-    librecores_user_manager.class: Librecores\ProjectRepoBundle\Doctrine\UserManager
-
 services:
+    # Consumer Services (called through RabbitMQ)
     update_project_info_service:
         class: Librecores\ProjectRepoBundle\Consumer\UpdateProjectInformation
         arguments:
-            - @logger
-            - @doctrine
-            - @markdown.parser
+            - '@librecores.repocrawlerfactory'
+            - '@logger'
+            - '@doctrine'
 
+    # Utilities
+    librecores.util.markuptohtmlconverter:
+        class: Librecores\ProjectRepoBundle\Util\MarkupToHtmlConverter
+        arguments:
+            - '@logger'
+            - '@exercise_html_purifier.default'
+
+    librecores.repocrawlerfactory:
+        class: Librecores\ProjectRepoBundle\RepoCrawler\RepoCrawlerFactory
+        arguments:
+            - '@librecores.util.markuptohtmlconverter'
+            - '@logger'
+
+    # Forms
     app.form.type.project:
         class: Librecores\ProjectRepoBundle\Form\Type\ProjectType
         tags:
@@ -20,35 +31,45 @@ services:
         tags:
             - { name: form.type, alias: organization }
 
+    librecores.form_extention.icon:
+        class: Librecores\ProjectRepoBundle\Form\Extension\ButtonTypeIconExtension
+        tags:
+            - { name: form.type_extension, extended_type: Symfony\Component\Form\Extension\Core\Type\ButtonType }
+
+    librecores.form.type.purified_textarea:
+        class: Librecores\ProjectRepoBundle\Form\Type\PurifiedTextareaType
+        arguments:
+          - '@librecores.form.transformer.html_purifier'
+        tags:
+            - { name: form.type, alias: purified_textarea }
+
+    librecores.form.transformer.html_purifier:
+        class: Exercise\HTMLPurifierBundle\Form\HTMLPurifierTransformer
+        arguments:
+            - '@exercise_html_purifier.default'
+
+    validator.user_org_name:
+        class: Librecores\ProjectRepoBundle\Validator\Constraints\UserOrgNameValidator
+        arguments:
+            - '@doctrine'
+            - '@router'
+        tags:
+            - { name: validator.constraint_validator }
+
+    # User/auth management services
     librecores_user_manager:
         class: Librecores\ProjectRepoBundle\Doctrine\UserManager
         arguments: ['@fos_user.util.password_updater', '@fos_user.util.canonical_fields_updater', '@fos_user.object_manager', '%fos_user.model.user.class%']
 
     librecores_user_provider:
-        class: "%librecores_user_provider.class%"
+        class: Librecores\ProjectRepoBundle\Security\Core\User\FOSUBUserProvider
         #this is the place where the properties are passed to the UserProvider - see config.yml
-        arguments: [@fos_user.user_manager, {github: oauth_user_id, google: oauth_user_id}]
+        arguments: ['@fos_user.user_manager', {github: oauth_user_id, google: oauth_user_id}]
 
+    # Security
     librecores_project_voter:
         class: Librecores\ProjectRepoBundle\Security\ProjectVoter
         tags:
             - { name: security.voter }
         public: false
 
-    librecores.form_extention.icon:
-        class: Librecores\ProjectRepoBundle\Form\Extension\ButtonTypeIconExtension
-        tags:
-            - { name: form.type_extension, extended_type: Symfony\Component\Form\Extension\Core\Type\ButtonType }
-            
-    validator.user_org_name:
-        class: Librecores\ProjectRepoBundle\Validator\Constraints\UserOrgNameValidator
-        arguments:
-            - @doctrine
-            - @router
-        tags:
-            - { name: validator.constraint_validator }
-            
-
-#    librecores_project_repo.example:
-#        class: Librecores\ProjectRepoBundle\Example
-#        arguments: [@service_id, "plain_value", %parameter%]

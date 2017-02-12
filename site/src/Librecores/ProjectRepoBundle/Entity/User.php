@@ -4,7 +4,6 @@ namespace Librecores\ProjectRepoBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use FOS\UserBundle\Model\User as BaseUser;
-use Symfony\Component\Validator\Constraints\DateTime;
 
 /**
  * A user
@@ -61,6 +60,7 @@ class User extends BaseUser
     // associations
     /**
      * @var ArrayCollection
+     *
      * @ORM\OneToMany(targetEntity="Project", mappedBy="parentUser")
      * @ORM\JoinColumn(name="projectId", referencedColumnName="id")
      */
@@ -68,36 +68,26 @@ class User extends BaseUser
 
     /**
      * @var ArrayCollection
-     * @ORM\OneToMany(targetEntity="Organization", mappedBy="owner")
+     *
+     * @ORM\OneToMany(targetEntity="Organization", mappedBy="creator")
      * @ORM\JoinColumn(name="organizationId", referencedColumnName="id")
      */
-    protected $organizationsOwner;
+    protected $organizationsCreated;
 
     /**
      * @var ArrayCollection
-     * @ORM\ManyToMany(targetEntity="Organization", mappedBy="members")
-     * @ORM\JoinTable(name="UsersOrganizations",
-     *     joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
-     *     inverseJoinColumns={@ORM\JoinColumn(name="organizationId", referencedColumnName="id")}
-     *     )
+     *
+     * @ORM\OneToMany(targetEntity="OrganizationMember", mappedBy="user", cascade={"remove"})
+     * @ORM\JoinColumn(name="membershipId", referencedColumnName="id")
      **/
-    protected $organizationsMember;
-
-    /**
-     * @var ArrayCollection
-     * @ORM\ManyToMany(targetEntity="Organization", mappedBy="requests")
-     * @ORM\JoinTable(name="UsersOrganizationRequests",
-     *     joinColumns={@ORM\JoinColumn(name="userId", referencedColumnName="id")},
-     *     inverseJoinColumns={@ORM\JoinColumn(name="organizationId", referencedColumnName="id")}
-     *     )
-     **/
-    protected $organizationsRequest;
+    protected $organizationMemberships;
 
     // profile data
     /**
      * Full (real) name of the user
      *
      * @var string $name
+     *
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     protected $name;
@@ -107,6 +97,7 @@ class User extends BaseUser
      * When was this user created?
      *
      * @var \DateTime
+     *
      * @ORM\Column(type="datetime")
      */
     protected $createdAt;
@@ -115,6 +106,7 @@ class User extends BaseUser
      * When was this user last updated?
      *
      * @var \DateTime
+     *
      * @ORM\Column(type="datetime")
      */
     protected $updatedAt;
@@ -123,10 +115,9 @@ class User extends BaseUser
     public function __construct()
     {
         parent::__construct();
-        $this->projects             = new ArrayCollection();
-        $this->organizationsOwner   = new ArrayCollection();
-        $this->organizationsMember  = new ArrayCollection();
-        $this->organizationsRequest = new ArrayCollection();
+        $this->projects                = new ArrayCollection();
+        $this->organizationsCreated    = new ArrayCollection();
+        $this->organizationMemberships = new ArrayCollection();
     }
 
     /**
@@ -161,26 +152,30 @@ class User extends BaseUser
     }
 
     /**
-     * Add projects
+     * Add project
      *
-     * @param Project $projects
+     * @param Project $project
      * @return User
      */
-    public function addProject(Project $projects)
+    public function addProject(Project $project)
     {
-        $this->projects[] = $projects;
+        if (!$this->projects->contains($project)) {
+            $this->projects[] = $project;
+        }
 
         return $this;
     }
 
     /**
-     * Remove projects
+     * Remove project
      *
-     * @param Project $projects
+     * @param Project $project
      */
-    public function removeProject(Project $projects)
+    public function removeProject(Project $project)
     {
-        $this->projects->removeElement($projects);
+        if ($this->projects->contains($project)) {
+            $this->projects->removeElement($project);
+        }
     }
 
     /**
@@ -194,108 +189,92 @@ class User extends BaseUser
     }
 
     /**
-     * Add organizationsOwner
+     * Add organization created
      *
-     * @param Organization $organizationsOwner
+     * @param Organization $organization
      * @return User
      */
-    public function addOrganizationsOwner(Organization $organizationsOwner)
+    public function addOrganizationCreated(Organization $organization)
     {
-        if (!$this->organizationsOwner->contains($organizationsOwner))
-            $this->organizationsOwner[] = $organizationsOwner;
+        if (!$this->organizationsCreated->contains($organization)) {
+            $this->organizationsCreated[] = $organization;
+        }
 
         return $this;
     }
 
     /**
-     * Remove organizationsOwner
+     * Remove organization created
      *
-     * @param Organization $organizationsOwner
+     * @param Organization $organization
      */
-    public function removeOrganizationsOwner(Organization $organizationsOwner)
+    public function removeOrganizationCreated(Organization $organization)
     {
-        if ($this->organizationsOwner->contains($organizationsOwner))
-            $this->organizationsOwner->removeElement($organizationsOwner);
+        if ($this->organizationsCreated->contains($organization)) {
+            $this->organizationsCreated->removeElement($organization);
+        }
     }
 
     /**
-     * Get organizationsOwner
+     * Get organizations created
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getOrganizationsOwner()
+    public function getOrganizationsCreated()
     {
-        return $this->organizationsOwner;
+        return $this->organizationsCreated;
     }
 
     /**
-     * Add organizationsMember
+     * Add organization membership
      *
-     * @param Organization $organizationsMember
+     * @param OrganizationMember $organizationMember
      * @return User
      */
-    public function addOrganizationsMember(Organization $organizationsMember)
+    public function addOrganizationMembership(OrganizationMember $organizationMember)
     {
-        if (!$this->organizationsMember->contains($organizationsMember))
-            $this->organizationsMember[] = $organizationsMember;
+        if (!$this->organizationMemberships->contains($organizationMember)) {
+            $this->organizationMemberships[] = $organizationMember;
+        }
 
         return $this;
     }
 
     /**
-     * Remove organizationsMember
+     * Remove organization membership
      *
-     * @param Organization $organizationsMember
+     * @param OrganizationMember $organizationMember
      */
-    public function removeOrganizationsMember(Organization $organizationsMember)
+    public function removeOrganizationMembership(OrganizationMember $organizationMember)
     {
-        if ($this->organizationsMember->contains($organizationsMember))
-            $this->organizationsMember->removeElement($organizationsMember);
+        if ($this->organizationMemberships->contains($organizationMember)) {
+            $this->organizationMemberships->removeElement($organizationMember);
+        }
     }
 
     /**
-     * Get organizationsMember
+     * Get organization memberships
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getOrganizationsMember()
+    public function getOrganizationMemberships()
     {
-        return $this->organizationsMember;
+        return $this->organizationMemberships;
     }
 
     /**
-     * Add organizationsRequest
-     *
-     * @param Organization $organizationsRequest
-     * @return User
-     */
-    public function addOrganizationsRequest(Organization $organizationsRequest)
-    {
-        if (!$this->organizationsRequest->contains($organizationsRequest))
-            $this->organizationsRequest[] = $organizationsRequest;
-
-        return $this;
-    }
-
-    /**
-     * Remove organizationsRequest
-     *
-     * @param Organization $organizationsRequest
-     */
-    public function removeOrganizationsRequest(Organization $organizationsRequest)
-    {
-        if ($this->organizationsRequest->contains($organizationsRequest))
-            $this->organizationsRequest->removeElement($organizationsRequest);
-    }
-
-    /**
-     * Get organizationsRequest
+     * Get organizations mapped through organization memberships
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getOrganizationsRequest()
+    public function getOrganizations()
     {
-        return $this->organizationsRequest;
+        return array_map(
+            function (OrganizationMember $organizationMember) {
+                return $organizationMember->getOrganization();
+            },
+            $this->organizationMemberships->toArray()
+        );
     }
 
     /**

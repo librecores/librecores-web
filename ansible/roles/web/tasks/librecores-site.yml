@@ -137,6 +137,12 @@
     - cache
   when: not is_vagrant_environment
 
+# The services need to pick up the code changes by being restarted.
+# Thanks to RabbitMQ we don't loose any messages in this case.
+- name: Restart RabbitMQ message handlers
+  command: /bin/true
+  notify: restart librecores-rabbitmq
+
 # Install librecores planet generator
 - name: Install extra packages for librecores-planet
   apt:  pkg={{ item }} state=installed
@@ -166,3 +172,13 @@
 - name: ensure letsencrypt-renew is running (and enable it at boot)
   service: name=letsencrypt-renew state=started enabled=yes
   when: use_https
+
+- name: Restart all services (we need them from now on)
+  meta: flush_handlers
+
+- name: Run all database migrations (also creates initial tables if necessary)
+  sudo: yes
+  sudo_user: "{{ web_user }}"
+  command: php app/console doctrine:migrations:migrate
+  args:
+    chdir: /var/www/lc/site

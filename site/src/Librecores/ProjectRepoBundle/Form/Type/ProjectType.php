@@ -5,7 +5,6 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -25,7 +24,7 @@ class ProjectType extends AbstractType
                 'label' => 'Project Description',
                 'expanded' => true,
                 'multiple' => false))
-            ->add('descriptionText', TextareaType::class, array('label' => false, 'required' => false))
+            ->add('descriptionText', PurifiedTextareaType::class, array('label' => false, 'required' => false))
             ->add('projectUrl', UrlType::class, array('label' => 'Project URL', 'required' => false))
             ->add('issueTracker', UrlType::class, array('label' => 'Issue/Bug Tracker URL', 'required' => false))
             ->add('sourceRepo', new SourceRepoType())
@@ -39,7 +38,7 @@ class ProjectType extends AbstractType
                 'label' => 'Full License Text',
                 'expanded' => true,
                 'multiple' => false))
-            ->add('licenseText', TextareaType::class, array('label' => false, 'required' => false))
+            ->add('licenseText', PurifiedTextareaType::class, array('label' => false, 'required' => false))
             ->add('save', SubmitType::class, array('label' => 'Update Project'))
         ;
     }

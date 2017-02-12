@@ -304,8 +304,8 @@ $icon-font-svg-id:        "glyphicons_halflingsregular";
 
 // Medium screen / desktop
 //** Deprecated `$screen-md` as of v3.0.1
-//$screen-md:                  992px;
-//$screen-md-min:              $screen-md;
+$screen-md:                  992px;
+$screen-md-min:              $screen-md;
 //** Deprecated `$screen-desktop` as of v3.0.1
 //$screen-desktop:             $screen-md-min;
 
@@ -332,7 +332,7 @@ $icon-font-svg-id:        "glyphicons_halflingsregular";
 //$grid-gutter-width:         30px;
 // Navbar collapse
 //** Point at which the navbar becomes uncollapsed.
-//$grid-float-breakpoint:     $screen-sm-min;
+$grid-float-breakpoint:     $screen-md-min;
 //** Point at which the navbar begins collapsing.
 //$grid-float-breakpoint-max: ($grid-float-breakpoint - 1);
 

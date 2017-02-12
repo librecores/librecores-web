@@ -2,6 +2,3 @@
 dependencies:
 - { role: db }
 - { role: web }
-# XXX: This is for early testing only, until we have a proper storage setup
-# and the ability to reset it in staging.
-- { role: initdata }

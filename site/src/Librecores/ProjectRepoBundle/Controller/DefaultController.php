@@ -4,11 +4,8 @@ namespace Librecores\ProjectRepoBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
 use Librecores\ProjectRepoBundle\Entity\Project;
-use Librecores\ProjectRepoBundle\Form\Type\ProjectType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Librecores\ProjectRepoBundle\Form\Type\SourceRepoType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Librecores\ProjectRepoBundle\Entity\Organization;
 use Librecores\ProjectRepoBundle\Entity\User;

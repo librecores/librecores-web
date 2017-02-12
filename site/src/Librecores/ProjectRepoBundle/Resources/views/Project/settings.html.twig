@@ -1,5 +1,25 @@
 {% extends 'layout.html.twig' %}
 
+{# include trumbowyg CSS/JS #}
+{% block stylesheets %}
+  {% stylesheets filter="scssphp,cssrewrite"
+      "assets/scss/trumbowyg.scss"
+  %}
+    <link rel="stylesheet" href="{{ asset_url }}" />
+  {% endstylesheets %}
+  {{ parent() }}
+{% endblock %}
+
+{% block javascripts %}
+  {{ parent() }}
+  {% javascripts filter="?jsqueeze"
+    "assets/js/trumbowyg.min.js"
+  %}
+    <script src="{{ asset_url }}"></script>
+  {% endjavascripts %}
+{% endblock %}
+
+
 {% block title %}
 {{ project.getFullName() }} @ LibreCores: Settings
 {% endblock %}
@@ -11,19 +31,19 @@
   project.getParentName(), 'projectName': project.getName()}) }}">{{ project.getFullName() }}</a>: Settings</h1>
 
 <div class="row">
-<div class="col-md-2">
+<div class="col-sm-2">
   <ul class="list-group">
-    <a class="list-group-item" href="{{ path('librecores_project_repo_project_view', {'parentName':
+    <li class="list-group-item"><a href="{{ path('librecores_project_repo_project_view', {'parentName':
   project.getParentName(), 'projectName': project.getName()}) }}">
       <i class="fa fa-bookmark fa-fw"></i>
       Project
-    </a>
-    <a class="list-group-item active" href="#">
+    </a></li>
+    <li class="list-group-item active"><a href="#">
       <i class="fa fa-cogs fa-fw"></i>Settings
-    </a>
+    </a></li>
   </ul>
 </div>
-<div class="col-md-10">
+<div class="col-sm-10">
 
 {{ form_start(form) }}
   {{ form_errors(form) }}
@@ -47,7 +67,7 @@
       {{  form_row(form.descriptionTextAutoUpdate, {'label': false}) }}
       <div id="descriptionText_div"
            style="padding-left: 15px; display: {% if form.vars.value.descriptionTextAutoUpdate %}none{% else %}block{% endif %};">
-        {{ form_row(form.descriptionText, {'attr': {'data-provide': 'markdown'}}) }}
+        {{ form_row(form.descriptionText) }}
       </div>
     </div>
   </div>
@@ -80,7 +100,7 @@
 
       {{ form_row(form.licenseTextAutoUpdate) }}
       <div id="licenseText_div" style="padding-left: 15px; display: {% if  form.vars.value.licenseTextAutoUpdate %}none{% else %}block{% endif %};">
-        {{ form_row(form.licenseText, {'attr': {'data-provide': 'markdown'}}) }}
+        {{ form_row(form.licenseText) }}
       </div>
     </div>
   </div>
@@ -88,7 +108,27 @@
 {% endblock %}
 
 {% block pagejs %}
+
 $(document).ready(function(){
+  $.trumbowyg.svgPath = '/img/trumbowyg-icons.svg';
+
+  var trumbowyg_config = {
+    btns: [
+      ['formatting'],
+      'btnGrp-semantic',
+      ['link'],
+      ['insertImage'],
+      'btnGrp-lists',
+      ['horizontalRule'],
+      ['removeformat'],
+      ['viewHTML'],
+      ['fullscreen']
+    ]
+  };
+
+  $('#{{ form.descriptionText.vars.id }}').trumbowyg(trumbowyg_config);
+  $('#{{ form.licenseText.vars.id }}').trumbowyg(trumbowyg_config);
+
   /* toggle text boxes in respect to the auto update settings */
   $('#{{ form.descriptionTextAutoUpdate.vars.id }}').on('change', function() {
     var au = $('input[name="{{ form.descriptionTextAutoUpdate.vars.full_name }}"]:checked').val() == '1';
