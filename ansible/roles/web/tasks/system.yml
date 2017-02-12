@@ -3,6 +3,4 @@
   apt:  pkg={{ item }} state=installed
   with_items:
     - mcrypt
-    # required for pod2markdown utility
-    - libpod-markdown-perl
     - letsencrypt
