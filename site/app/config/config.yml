@@ -156,7 +156,7 @@ hwi_oauth:
             type:                github
             client_id:           "%github_app_id%"
             client_secret:       "%github_app_secret%"
-            scope:               "user:email"
+            scope:               "user:email admin:repo_hook"
             options:
                 csrf:            true
         google:
