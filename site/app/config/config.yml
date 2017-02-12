@@ -151,11 +151,6 @@ hwi_oauth:
         confirmation: true
         account_connector: librecores_user_provider
     firewall_name: main
-    fosub:
-        username_iterations: 30
-        properties:
-            github: oauth_user_id
-            google: oauth_user_id
     resource_owners:
         github:
             type:                github

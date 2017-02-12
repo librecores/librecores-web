@@ -44,10 +44,9 @@ class UserManager extends BaseUserManager
      */
     public function findUserByOAuth($oAuthService, $oAuthUserId)
     {
+        $columnName = $oAuthService.'OAuthUserId';
         return $this->repository->createQueryBuilder('u')
-            ->where('u.oAuthUserId = :oAuthUserId')
-            ->andWhere('u.oAuthService = :oAuthService')
-            ->setParameter('oAuthService', $oAuthService)
+            ->where("u.$columnName = :oAuthUserId")
             ->setParameter('oAuthUserId', $oAuthUserId)
             ->getQuery()
             ->getOneOrNullResult()

@@ -28,34 +28,46 @@ class User extends BaseUser
 
     // OAuth-related entries
     /**
-     * Name of the OAuth service provider
+     * GitHub User ID provided by the OAuth service.
      *
-     * @var string $oAuthService
+     * @var string
      *
-     * @ORM\Column(name="oauth_service", type="string", length=255, nullable=true)
+     * @ORM\Column(name="githubOAuthUserId", type="string", length=255, nullable=true)
      */
-    protected $oAuthService;
+    protected $githubOAuthUserId;
 
     /**
-     * User ID provided by the OAuth service.
-     *
-     * @var string $oAuthId
-     *
-     * @ORM\Column(name="oauth_user_id", type="string", length=255, nullable=true)
-     */
-    protected $oAuthUserId;
-
-    /**
-     * OAuth access token.
+     * GitHub OAuth access token.
      *
      * With this token, authenticated requests to the OAuth API can be
      * performed.
      *
-     * @var string $oAuthAccessToken
+     * @var string
      *
-     * @ORM\Column(name="oauth_access_token", type="string", length=255, nullable=true)
+     * @ORM\Column(name="githubOAuthAccessToken", type="string", length=255, nullable=true)
      */
-    protected $oAuthAccessToken;
+    protected $githubOAuthAccessToken;
+
+    /**
+     * Google User ID provided by the OAuth service.
+     *
+     * @var string
+     *
+     * @ORM\Column(name="googleOAuthUserId", type="string", length=255, nullable=true)
+     */
+    protected $googleOAuthUserId;
+
+    /**
+     * Google OAuth access token.
+     *
+     * With this token, authenticated requests to the OAuth API can be
+     * performed.
+     *
+     * @var string
+     *
+     * @ORM\Column(name="googleOAuthAccessToken", type="string", length=255, nullable=true)
+     */
+    protected $googleOAuthAccessToken;
 
     // associations
     /**
@@ -139,6 +151,40 @@ class User extends BaseUser
     public function preUpdate()
     {
         $this->updatedAt = new \DateTime;
+    }
+
+    /**
+     * Get the names of all OAuth services connected to this user
+     *
+     * @return string[]
+     */
+    public function getConnectedOAuthServices()
+    {
+        $result = [];
+        if ($this->googleOAuthUserId) {
+            $result[] = 'google';
+        }
+        if ($this->googleOAuthUserId) {
+            $result[] = 'github';
+        }
+        return $result;
+    }
+
+    /**
+     * Is the user account connected to an OAuth service with a given name?
+     *
+     * @param string $serviceName
+     * @return boolean
+     */
+    public function isConnectedToOAuthService($serviceName)
+    {
+        if ($serviceName == 'github') {
+            return $this->githubOAuthUserId !== null;
+        }
+        if ($serviceName == 'google') {
+            return $this->googleOAuthUserId !== null;
+        }
+        return false;
     }
 
     /**
@@ -278,75 +324,6 @@ class User extends BaseUser
     }
 
     /**
-     * Set oAuthService
-     *
-     * @param string $oAuthService
-     * @return User
-     */
-    public function setOAuthService($oAuthService)
-    {
-        $this->oAuthService = $oAuthService;
-
-        return $this;
-    }
-
-    /**
-     * Get oAuthService
-     *
-     * @return string
-     */
-    public function getOAuthService()
-    {
-        return $this->oAuthService;
-    }
-
-    /**
-     * Set oAuthUserId
-     *
-     * @param string $oAuthUserId
-     * @return User
-     */
-    public function setOAuthUserId($oAuthUserId)
-    {
-        $this->oAuthUserId = $oAuthUserId;
-
-        return $this;
-    }
-
-    /**
-     * Get oAuthUserId
-     *
-     * @return string
-     */
-    public function getOAuthUserId()
-    {
-        return $this->oAuthUserId;
-    }
-
-    /**
-     * Set oAuthAccessToken
-     *
-     * @param string $oAuthAccessToken
-     * @return User
-     */
-    public function setOAuthAccessToken($oAuthAccessToken)
-    {
-        $this->oAuthAccessToken = $oAuthAccessToken;
-
-        return $this;
-    }
-
-    /**
-     * Get oAuthAccessToken
-     *
-     * @return string
-     */
-    public function getOAuthAccessToken()
-    {
-        return $this->oAuthAccessToken;
-    }
-
-    /**
      * Set createdAt
      *
      * @param \DateTime $createdAt
@@ -413,5 +390,120 @@ class User extends BaseUser
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * Set githubOAuthUserId
+     *
+     * @param string $githubOAuthUserId
+     * @return User
+     */
+    public function setGithubOAuthUserId($githubOAuthUserId)
+    {
+        $this->githubOAuthUserId = $githubOAuthUserId;
+
+        return $this;
+    }
+
+    /**
+     * Get githubOAuthUserId
+     *
+     * @return string
+     */
+    public function getGithubOAuthUserId()
+    {
+        return $this->githubOAuthUserId;
+    }
+
+    /**
+     * Set githubOAuthAccessToken
+     *
+     * @param string $githubOAuthAccessToken
+     * @return User
+     */
+    public function setGithubOAuthAccessToken($githubOAuthAccessToken)
+    {
+        $this->githubOAuthAccessToken = $githubOAuthAccessToken;
+
+        return $this;
+    }
+
+    /**
+     * Get githubOAuthAccessToken
+     *
+     * @return string
+     */
+    public function getGithubOAuthAccessToken()
+    {
+        return $this->githubOAuthAccessToken;
+    }
+
+    /**
+     * Set googleOAuthUserId
+     *
+     * @param string $googleOAuthUserId
+     * @return User
+     */
+    public function setGoogleOAuthUserId($googleOAuthUserId)
+    {
+        $this->googleOAuthUserId = $googleOAuthUserId;
+
+        return $this;
+    }
+
+    /**
+     * Get googleOAuthUserId
+     *
+     * @return string
+     */
+    public function getGoogleOAuthUserId()
+    {
+        return $this->googleOAuthUserId;
+    }
+
+    /**
+     * Set googleOAuthAccessToken
+     *
+     * @param string $googleOAuthAccessToken
+     * @return User
+     */
+    public function setGoogleOAuthAccessToken($googleOAuthAccessToken)
+    {
+        $this->googleOAuthAccessToken = $googleOAuthAccessToken;
+
+        return $this;
+    }
+
+    /**
+     * Get googleOAuthAccessToken
+     *
+     * @return string
+     */
+    public function getGoogleOAuthAccessToken()
+    {
+        return $this->googleOAuthAccessToken;
+    }
+
+    /**
+     * Add organizationsCreated
+     *
+     * @param \Librecores\ProjectRepoBundle\Entity\Organization $organizationsCreated
+     * @return User
+     */
+    public function addOrganizationsCreated(\Librecores\ProjectRepoBundle\Entity\Organization $organizationsCreated)
+    {
+        $this->organizationsCreated[] = $organizationsCreated;
+
+        return $this;
+    }
+
+    /**
+     * Remove organizationsCreated
+     *
+     * @param \Librecores\ProjectRepoBundle\Entity\Organization $organizationsCreated
+     */
+    public function removeOrganizationsCreated(\Librecores\ProjectRepoBundle\Entity\Organization $organizationsCreated)
+    {
+        $this->organizationsCreated->removeElement($organizationsCreated);
     }
 }
