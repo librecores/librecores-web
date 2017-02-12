@@ -58,7 +58,7 @@ pre code {
 .anchor { padding-top: 60px; }
 
 h1 a:hover, h1 a:active {
-    color: #3fb0ac;
+  color: #3fb0ac;
 }
 
 .list-group-item {
@@ -84,20 +84,20 @@ h1 a:hover, h1 a:active {
 .librecores-nav {
   background-color: #fff;
   box-shadow: 0 0 3px rgba(153, 153, 153, 0.75);
-  
+
   color: #777;
   border-bottom: 1px solid #cccccc;
-  
+
   /* remember to adjust body padding-top as well */
   padding-top: 5px;
-  padding-bottom: 5px;  
-  min-height: 60px; 
+  padding-bottom: 5px;
+  min-height: 60px;
 }
 
 .librecores-nav .navbar-brand {
   background: no-repeat scroll left center transparent;
   background-image: url("/img/logo_small.svg");
-    margin-left: 10px;
+  margin-left: 10px;
   padding-left: 40px;
   display: inline-block;
   background-size: 30px 30px;
@@ -165,35 +165,35 @@ h1 a:hover, h1 a:active {
 }
 
 .librecores-home-banner-wordmark {
-  font-size: 40px; 
-  line-height: normal; 
+  font-size: 40px;
+  line-height: normal;
   color: #3fb0ac;
 }
 
 .librecores-home-banner-claim {
-   font-size: 24px; 
-   line-height: normal; 
-   color: #c0c4b0; 
-    margin-bottom: 8px;
+  font-size: 24px;
+  line-height: normal;
+  color: #c0c4b0;
+  margin-bottom: 8px;
 }
 
 .librecores-home-banner-search {
-   margin-top: 20px;
+  margin-top: 20px;
 }
 
 .librecores-home-banner-search input {
-  font-size: 20px; 
-  height: 40px; 
+  font-size: 20px;
+  height: 40px;
   min-width: 50%;
 }
 
 .librecores-home-banner-search button {
-  margin-left: 20px; 
+  margin-left: 20px;
   background-color: #e62739;
 }
 
 .librecores-home-showcase {
-  background-color: #dddfd4; 
+  background-color: #dddfd4;
   margin-top: 30px;
   color: #173e43;
   padding-bottom: 30px;
@@ -216,10 +216,10 @@ h1 a:hover, h1 a:active {
 }
 
 .librecores-home-showcase-desc {
-  text-align: center; 
-  padding-top: 10px; 
-  padding-left: 5px; 
-  padding-right: 5px; 
+  text-align: center;
+  padding-top: 10px;
+  padding-left: 5px;
+  padding-right: 5px;
   font-size: 16px;
   line-height: 1.4em;
 }
@@ -231,9 +231,9 @@ h1 a:hover, h1 a:active {
 }
 
 .librecores-home-showcase-link-xs {
-    margin-bottom: 10px;
-    display: block;
-    font-weight: bold;
+  margin-bottom: 10px;
+  display: block;
+  font-weight: bold;
 }
 
 .librecores-home-showcase-btn:hover,
@@ -289,7 +289,6 @@ h1 a:hover, h1 a:active {
   font-weight: bold;
   font-size: 1.2em;
   line-height: normal;
-  
 }
 
 .librecores-search h1 {
@@ -301,7 +300,7 @@ h1 a:hover, h1 a:active {
 
 /* LOGIN/SIGNUP CSS */
 .librecores-user-signupin-panel {
-  width: 280px; 
+  width: 280px;
   margin-top: 40px;
 }
 
