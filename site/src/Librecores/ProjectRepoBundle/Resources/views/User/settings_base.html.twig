@@ -1,0 +1,61 @@
+{#
+Base template for all user settings pages
+page path: n/a
+#}
+{% extends 'layout.html.twig' %}
+
+{% block title %}
+Settings for {{ user.getName() ? user.getName() : user.getUsername() }} @ LibreCores
+{% endblock %}
+
+{% block content %}
+<div class="librecores-user-page-header">
+{% if user.getName() %}
+<h1>{{ user.getName() }} <small>{{ user.getUsername() }}</small></h1>
+{% else %}
+<h1>{{ user.getUsername() }}</h1>
+{% endif %}
+</div>
+
+<ul class="nav nav-tabs librecores-tabs-topnav">
+  <li role="presentation">
+    <a href="{{ path('librecores_project_repo_user_org_view', {'userOrOrganization': user.getUsernameCanonical()}) }}" aria-controls="settings" role="tab">
+      Public Profile
+    </a>
+  </li>
+  <li role="presentation" class="active">
+    <a href="{{ path('librecores.user.settings.profile') }}" aria-controls="settings" role="tab">
+      <i class="fa fa-cogs fa-fw" aria-hidden="true"></i>
+      Settings
+    </a>
+  </li>
+</ul>
+
+<div class="row">
+<div class="col-sm-2">
+  <ul class="list-group">
+    <li class="list-group-item librecores-list-group-header">Personal Settings</li>
+
+    <li class="list-group-item {{ settings_subpage == "profile" ? "active"}}">
+      <a href="{{ path('librecores.user.settings.profile') }}">
+        Profile Settings
+      </a>
+    </li>
+    <li class="list-group-item {{ settings_subpage == "connections" ? "active"}}">
+      <a href="{{ path('librecores.user.settings.connections') }}">
+        Connected Services
+      </a>
+    </li>
+    <li class="list-group-item {{ settings_subpage == "password" ? "active"}}">
+      <a href="{{ path('librecores.user.settings.password') }}">
+        Change Password
+      </a>
+    </li>
+  </ul>
+</div>
+<div class="col-sm-10">
+  {% block settings_content %}{% endblock %}
+</div>
+</div>
+
+{% endblock %}

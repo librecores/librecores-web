@@ -148,7 +148,7 @@ fos_user:
 # HWI OAuth Configuration
 hwi_oauth:
     connect:
-        confirmation: true
+        confirmation: false
         account_connector: librecores_user_provider
     firewall_name: main
     resource_owners:

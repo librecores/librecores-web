@@ -83,10 +83,13 @@ class DefaultController extends Controller
         $uoo = $this->getUserOrOrg($userOrOrganization);
 
         if ($uoo instanceof User) {
-            /* this page does not exist yet -- forward to the user settings page?
-             return $this->forward('LibrecoresProjectRepoBundle:User:view',
-                array('user' => $userOrOrganization));*/
+            if ($uoo->getId() != $this->getUser()->getId()) {
+                throw $this->createAccessDeniedException();
+            }
+            return $this->forward('LibrecoresProjectRepoBundle:User:profileSettings',
+                array('user' => $userOrOrganization));
         }
+
         if ($uoo instanceof Organization) {
             return $this->forward('LibrecoresProjectRepoBundle:Organization:settings',
                 array('organization' => $uoo));

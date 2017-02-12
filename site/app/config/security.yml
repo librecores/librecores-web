@@ -50,10 +50,19 @@ security:
                 domain: ~ # Defaults to the current domain from $_SERVER
 
     access_control:
+        # login and registration pages should work for non-logged-in users
         - { path: ^/user/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/user/connect$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/user/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/user/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/user/connect, role: IS_AUTHENTICATED_ANONYMOUSLY }
+
+        # all other user setting functionality requires a login
+        - { path: ^/user/.+$, role: IS_AUTHENTICATED_FULLY }
+
+        # users need to be logged in to create a new project or organization
         - { path: ^/project/new$, role: ROLE_USER }
         - { path: ^/org/new$, role: ROLE_USER }
+
+        # and of course to edit any settings
+        # additional fine-grained checks are done inside the controllers
         - { path: ^/[^/]+/settings, role: ROLE_USER }

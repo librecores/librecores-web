@@ -1,13 +1,38 @@
+{#
+Public profile of a user
+page path: /USERNAME
+#}
 {% extends 'layout.html.twig' %}
 
 {% block title %}
-{{ user.getUsername() }} {% if user.getName() %}({{ user.getName() }}){% endif %}@ LibreCores
+{{ user.getName() ? user.getName() : user.getUsername() }} @ LibreCores
 {% endblock %}
 
-{% block pagepath %}Home &raquo; Projects &raquo; {{ user.getUsername() }}{% endblock %}
-
 {% block content %}
-<h1 class="projectname">{{ user.getUsername() }}</h1>
+<div class="librecores-user-page-header">
+{% if user.getName() %}
+<h1>{{ user.getName() }} <small>{{ user.getUsername() }}</small></h1>
+{% else %}
+<h1>{{ user.getUsername() }}</h1>
+{% endif %}
+</div>
+
+{% if is_granted("IS_AUTHENTICATED_REMEMBERED") and user.getId() == app.user.getId() %}
+<ul class="nav nav-tabs librecores-tabs-topnav">
+  <li role="presentation" class="active">
+    <a href="{{ path('librecores_project_repo_user_org_view', {'userOrOrganization': user.getUsernameCanonical()}) }}" aria-controls="settings" role="tab">
+      Public Profile
+    </a>
+  </li>
+
+  <li role="presentation">
+    <a href="{{ path('librecores.user.settings.profile') }}" aria-controls="settings" role="tab">
+      <i class="fa fa-cogs fa-fw" aria-hidden="true"></i>
+      Settings
+    </a>
+  </li>
+</ul>
+{% endif %}
 
 {{ user.getUsername() }} joined LibreCores
 <time datetime="{{ user.getCreatedAt()|date("c", "UTC") }}"

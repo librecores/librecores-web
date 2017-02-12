@@ -1,0 +1,33 @@
+{#
+Template for the user connected services settings page
+page path: /user/settings/connected-services
+#}
+{% extends 'LibrecoresProjectRepoBundle:User:settings_base.html.twig' %}
+
+{# Inform settings_base.html.twig about the page currently displayed #}
+{% set settings_subpage = 'connections' %}
+
+{% block settings_content %}
+
+<p>You can connect your LibreCores to an external account. This allows you to 
+login through the external account, and access the data stored there easily.
+For example, you can import projects from GitHub more easily if you connect
+your LibreCores account with your GitHub account.</p>
+
+
+{% for serviceName in hwi_oauth_resource_owners() %}
+  {% if user.isConnectedToOAuthService(serviceName) %}
+    <p>
+    Your account is connected to {{ serviceName|capitalize }}.
+    (<a href="{{ path('librecores.user.settings.oauth-disconnect', { serviceName: serviceName }) }}">Disconnect</a>)
+    </p>
+  {% else %}
+    <p>
+      <a class="btn btn-social btn-{{ serviceName }}" href="{{ hwi_oauth_login_url(serviceName) }}">
+        <i class="fa fa-{{ serviceName }}"></i> Connect to {{ serviceName|capitalize }}
+      </a>
+    </p>
+  {% endif %}
+{% endfor %}
+
+{% endblock %}

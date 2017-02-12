@@ -17,6 +17,22 @@ github_login:
 google_login:
     path: /user/connect/check-google
 
+librecores.user.settings.oauth-disconnect:
+    path: /user/disconnect/{serviceName}
+    defaults: { _controller: LibrecoresProjectRepoBundle:User:disconnectFromOAuthService }
+
+librecores.user.settings.profile:
+    path: /user/settings/profile
+    defaults: { _controller: LibrecoresProjectRepoBundle:User:profileSettings }
+
+librecores.user.settings.connections:
+    path: /user/settings/connected-services
+    defaults: { _controller: LibrecoresProjectRepoBundle:User:connectionsSettings }
+
+librecores.user.settings.password:
+    path: /user/settings/password
+    defaults: { _controller: LibrecoresProjectRepoBundle:User:passwordSettings }
+
 # FOSUser
 fos_user_security:
     resource: "@FOSUserBundle/Resources/config/routing/security.xml"
