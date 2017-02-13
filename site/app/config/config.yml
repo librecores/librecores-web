@@ -163,11 +163,4 @@ hwi_oauth:
             type:                google
             client_id:           "%google_app_id%"
             client_secret:       "%google_app_secret%"
-            scope:               "https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile"
-#            paths:
-#                email:           email
-#                profilepicture:  picture
-            options:
-#                access_type:     offline
-                display:         popup
-
+            scope:               "email profile"
