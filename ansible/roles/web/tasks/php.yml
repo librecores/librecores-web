@@ -29,6 +29,18 @@
   with_items: "{{ php_extensions_packaged }}"
   notify: restart php-fpm
 
+- name: Install packaged PHP extensions for development
+  sudo: yes
+  apt:  package=php{{php_version}}-{{ item }} state=installed
+  with_items: "{{ php_devel_extensions_packaged }}"
+
+- name: Enable packaged PHP extensions for development for all SAPIs
+  sudo: yes
+  # creates= only accepts one file; phpenmod also creates the fpm symlink
+  command: /usr/sbin/phpenmod -s ALL {{ item }} creates=/etc/php/{{ php_version }}/cli/conf.d/20-{{ item }}.ini
+  with_items: "{{ php_devel_extensions_packaged }}"
+  notify: restart php-fpm
+
 # PHP extensions from PECL
 - name: Install PECL-installed PHP extensions
   sudo: yes

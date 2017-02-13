@@ -16,6 +16,11 @@ php_extensions_packaged:
   - mbstring
   - zip
 
+# Development extensions installed through OS packages
+# Like php_extensions_packaged, but only available during development
+php_devel_extensions_packaged:
+  - xdebug
+
 # PHP extensions, installed through PEAR (if not available through OS packages)
 php_extensions_pecl: []
 #  - { name: "NAME", package: "pecl.php.net/NAME" }
