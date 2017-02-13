@@ -100,7 +100,7 @@ class LibreCoresUserProvider implements UserProviderInterface,
             $oAuthUsername);
 
         if ($user === null) {
-            $this->registerNewUser($response);
+            $user = $this->registerNewUser($response);
         }
 
         // user already exists
@@ -197,6 +197,8 @@ class LibreCoresUserProvider implements UserProviderInterface,
             throw new OAuthUserExistsException();
         }
 
+        $serviceName = $response->getResourceOwner()->getName();
+
         // create new user account
         $user = $this->userManager->createUser();
         $user->setUsername($response->getNickname());
@@ -205,10 +207,10 @@ class LibreCoresUserProvider implements UserProviderInterface,
         $user->setPassword('');
         $user->setEnabled(true);
         $this->accessor->setValue($user,
-            $this->getAccessTokenProperty($response),
+            $this->getAccessTokenProperty($serviceName),
             $response->getAccessToken());
         $this->accessor->setValue($user,
-            $this->getUserIdProperty($response),
+            $this->getUserIdProperty($serviceName),
             $response->getUsername());
         $this->userManager->updateUser($user);
 
