@@ -3,6 +3,21 @@ Description=LibreCores RabbitMQ
 Requires=rabbitmq-server.service
 After=rabbitmq-server.service
 
+{#
+In the Vagrant-based development environment, the file systems holding our
+configuration (e.g. EnvironmentFile) and code must be available before this
+service can be started. Not checking for this causes a couple of failed start
+attempts of this unit, effectively leaving it in disabled state until the VM
+is restarted or the unit is manually started.
+PartOf takes care to restart this service together with the NFS client, i.e.
+if the connectivity to the host changes.
+#}
+{% if is_vagrant_environment %}
+After=nfs-client.target
+Requires=nfs-client.target
+PartOf=nfs-client.target
+{% endif %}
+
 [Service]
 EnvironmentFile=/var/www/lc/site/app/config/symfony-env.sh
 ExecStart=/usr/bin/php /var/www/lc/site/app/console rabbitmq:consumer -w -l 256 -m 250 update_project_info
