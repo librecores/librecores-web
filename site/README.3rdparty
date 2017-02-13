@@ -16,18 +16,6 @@ Social Buttons for Bootstrap
   Files:
     web/assets/css/bootstrap-social.css
 
-Bootstrap Markdown
-  URL: http://www.codingdrama.com/bootstrap-markdown/
-  License: Apache 2
-  Files:
-    web/assets/js/bootstrap-markdown.js
-
-marked
-  URL: https://raw.githubusercontent.com/chjj/marked/master/marked.min.js
-  License: MIT
-  Files:
-    web/assets/js/marked.min.js
-
 html5shiv
   URL: https://raw.githubusercontent.com/aFarkas/html5shiv/master/dist/html5shiv.min.js
   License: dual MIT/GPLv2
