@@ -25,18 +25,18 @@ framework:
         handler_id:  ~
     fragments:       ~
     http_method_override: true
-
+    assets: ~
+    
 # Twig Configuration
 twig:
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
     paths:
         "%kernel.root_dir%/../sitecontent": site_content
-    form:
-        # Use Bootstrap Form styling by default
-        resources:
-            - 'bootstrap_3_layout.html.twig'
-            - 'LibrecoresProjectRepoBundle:Form:fields.html.twig'
+    # Use Bootstrap Form styling by default
+    form_themes:
+        - 'bootstrap_3_layout.html.twig'
+        - 'LibrecoresProjectRepoBundle:Form:fields.html.twig'
 
 # Assetic Configuration
 assetic:
@@ -150,7 +150,7 @@ hwi_oauth:
     connect:
         confirmation: false
         account_connector: librecores_user_provider
-    firewall_name: main
+    firewall_names: [main]
     resource_owners:
         github:
             type:                github

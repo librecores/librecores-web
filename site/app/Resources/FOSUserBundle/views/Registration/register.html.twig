@@ -8,11 +8,10 @@
   <div class="panel panel-default">
     <div class="panel-heading"><h3 class="panel-title">Register account</h3></div>
     <div class="panel-body">
-      <form action="{{ path('fos_user_registration_register') }}" {{ form_enctype(form) }} method="POST" class="fos_user_registration_register">
+      {{ form_start(form, {'method': 'post', 'action': path('fos_user_registration_register'), 'attr': {'class': 'fos_user_registration_register'}}) }}
         {{ form_widget(form) }}
         <button class="btn btn-success btn-block" type="submit" id="_submit" name="_submit">Create account</button>
-      </form>
-
+      {{ form_end(form) }}
       <div class="or-container">
         <hr class="or-hr" />
         <div id="or">or</div>

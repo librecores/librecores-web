@@ -5,6 +5,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 /**
  * Textarea form control type which purifies (sanitizes) its contents
@@ -28,7 +29,7 @@ class PurifiedTextareaType extends AbstractType
 
     public function getParent()
     {
-        return 'textarea';
+        return TextareaType::class;
     }
 
     public function configureOptions(OptionsResolver $resolver)

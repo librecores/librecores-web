@@ -27,7 +27,7 @@ class ProjectType extends AbstractType
             ->add('descriptionText', PurifiedTextareaType::class, array('label' => false, 'required' => false))
             ->add('projectUrl', UrlType::class, array('label' => 'Project URL', 'required' => false))
             ->add('issueTracker', UrlType::class, array('label' => 'Issue/Bug Tracker URL', 'required' => false))
-            ->add('sourceRepo', new SourceRepoType())
+            ->add('sourceRepo', SourceRepoType::class)
             ->add('licenseName', TextType::class, array('label' => 'License Name (such as GPL or MIT)', 'required' => false))
             ->add('licenseTextAutoUpdate', ChoiceType::class, array(
                 'choices' => array(

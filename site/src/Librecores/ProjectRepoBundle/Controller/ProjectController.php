@@ -113,11 +113,12 @@ class ProjectController extends Controller {
     /**
      * Display the project
      *
+     * @param Request $request
      * @param string $parentName URL component: name of the parent (user or organization)
      * @param string $projectName URL component: name of the project
      * @return Response
      */
-    public function viewAction($parentName, $projectName)
+    public function viewAction(Request $request, $parentName, $projectName)
     {
         $p = $this->getDoctrine()
         ->getRepository('LibrecoresProjectRepoBundle:Project')
@@ -133,7 +134,7 @@ class ProjectController extends Controller {
             $response = new Response(
                 $this->renderView($waitTemplate, array('project' => $p)),
                 Response::HTTP_OK);
-            $response->headers->set('refresh', '5;url='.$this->getRequest()->getUri());
+            $response->headers->set('refresh', '5;url='.$request->getUri());
             return $response;
         }
 

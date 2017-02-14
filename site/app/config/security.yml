@@ -20,7 +20,7 @@ security:
             pattern: ^/
             form_login:
                 provider: fos_userbundle
-                csrf_provider: security.csrf.token_manager
+                csrf_token_generator: security.csrf.token_manager
                 login_path: /user/login
                 check_path: /user/login_check
             oauth:
@@ -44,7 +44,7 @@ security:
             security: false
 
             remember_me:
-                key: "%secret%"
+                secret: "%secret%"
                 lifetime: 31536000 # 365 days in seconds
                 path: /
                 domain: ~ # Defaults to the current domain from $_SERVER
