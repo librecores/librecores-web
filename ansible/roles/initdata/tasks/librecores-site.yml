@@ -4,7 +4,7 @@
 - name: Insert database fixtures
   sudo: yes
   sudo_user: "{{ web_user }}"
-  command: php app/console doctrine:fixtures:load
+  command: php app/console doctrine:fixtures:load -n
   args:
     chdir: /var/www/lc/site
 
