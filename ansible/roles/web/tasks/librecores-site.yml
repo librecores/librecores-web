@@ -179,6 +179,6 @@
 - name: Run all database migrations (also creates initial tables if necessary)
   sudo: yes
   sudo_user: "{{ web_user }}"
-  command: php app/console doctrine:migrations:migrate
+  command: php app/console doctrine:migrations:migrate -n
   args:
     chdir: /var/www/lc/site
