@@ -4,7 +4,7 @@
 LibreCores Search
 {% endblock %}
 
-{% block pagepath %}Home &raquo; Projects &raquo; Find{% endblock %}
+{% block pagepath %}Home &raquo; LibreCores Search{% endblock %}
 
 {% block content %}
 {{ form_start(search_query_form, {'attr': {'class': 'form-inline'}}) }}
@@ -56,6 +56,18 @@ LibreCores Search
           'attr':{'class': 'list-group-item' }
       }) }}
       {% endif %}
+
+      {%  if search_query.type == 'orgs' %}
+      {{ form_widget(search_query_form.search_orgs, {
+          'icon': 'fa-users',
+          'attr':{'class': 'list-group-item active' }
+      }) }}
+      {% else %}
+      {{ form_widget(search_query_form.search_orgs, {
+          'icon': 'fa-users',
+          'attr':{'class': 'list-group-item' }
+      }) }}
+      {% endif %}
     </ul>
   </div>
   <div class="col-sm-9">
@@ -93,6 +105,20 @@ LibreCores Search
       {% else %}
         {% if search_query.q is empty %}
           <div>Search for users on LibreCores by entering a keyword above.</div>
+        {% else %}
+          <h2>Nothing found :-( Maybe try another search keyword?</h2>
+        {% endif %}
+      {% endfor %}
+
+    {% elseif search_query.type == 'orgs' %}
+      {% for org in orgs %}
+        <h2><a href="{{ path('librecores_project_repo_user_org_view', {'userOrOrganization':
+  org.getName()}) }}">{{ org.getDisplayName() }}</a></h2>
+        <div>{{ org.getName() }}</div>
+        <hr/>
+      {% else %}
+        {% if search_query.q is empty %}
+          <div>Search for organizations on LibreCores by entering a keyword above.</div>
         {% else %}
           <h2>Nothing found :-( Maybe try another search keyword?</h2>
         {% endif %}

@@ -48,4 +48,24 @@ class OrganizationRepository extends EntityRepository
                     ->getQuery()
                     ->getOneOrNullResult();
     }
+
+    /**
+     * Find an organization by a part of its name
+     *
+     * @param string $fragment
+     * @return NULL|Organization
+     */
+    public function findByFragment($fragment)
+    {
+        return $this->getEntityManager()
+                    ->createQueryBuilder()
+                    ->select('o')
+                    ->from('LibrecoresProjectRepoBundle:Organization', 'o')
+                    ->where('o.name LIKE :name')
+                    ->orWhere('o.displayName LIKE :name')
+                    ->orWhere('o.description LIKE :name')
+                    ->setParameter('name', "%$fragment%")
+                    ->getQuery()
+                    ->getResult();
+    }
 }

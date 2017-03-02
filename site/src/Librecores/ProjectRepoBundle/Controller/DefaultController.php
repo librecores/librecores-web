@@ -115,6 +115,9 @@ class DefaultController extends Controller
         $searchQueryForm->add('search_projects', SubmitType::class, array(
             'label' => 'Projects'
         ));
+        $searchQueryForm->add('search_orgs', SubmitType::class, array(
+            'label' => 'Organizations'
+        ));
         $searchQueryForm->handleRequest($req);
 
         // Form validation: If we encounter any invalid value, simply
@@ -136,6 +139,10 @@ class DefaultController extends Controller
             $searchQuery->setType(SearchQuery::TYPE_USERS);
             $redirect = true;
         }
+        if ($searchQueryForm->get('search_orgs')->isClicked()) {
+            $searchQuery->setType(SearchQuery::TYPE_ORGS);
+            $redirect = true;
+        }
         if ($redirect) {
             return $this->redirectToRoute($req->get('_route'),
                 [ 'q' => $searchQuery->getQ(), 'type' => $searchQuery->getType()]);
@@ -149,12 +156,14 @@ class DefaultController extends Controller
                     'search_query' => $searchQuery,
                     'projects' => [],
                     'users' => [],
+                    'orgs' => [],
                 ]);
         }
 
         // Get the results
         $projects = array();
         $users = array();
+        $orgs = array();
 
         // Search for projects
         if ($searchQuery->getType() == SearchQuery::TYPE_PROJECTS) {
@@ -165,8 +174,15 @@ class DefaultController extends Controller
 
         // Search for users
         if ($searchQuery->getType() == SearchQuery::TYPE_USERS) {
-            $userManager = $this->container->get('fos_user.user_manager');
+            $userManager = $this->get('fos_user.user_manager');
             $users = $userManager->findUsersBySearchString($searchQuery->getQ());
+        }
+
+        // Search for organizations
+        if ($searchQuery->getType() == SearchQuery::TYPE_ORGS) {
+            $orgs = $this->getDoctrine()
+                ->getRepository('LibrecoresProjectRepoBundle:Organization')
+                ->findByFragment($searchQuery->getQ());
         }
 
         return $this->render('LibrecoresProjectRepoBundle:Default:project_search.html.twig',
@@ -175,6 +191,7 @@ class DefaultController extends Controller
                 'search_query' => $searchQuery,
                 'projects' => $projects,
                 'users' => $users,
+                'orgs' => $orgs,
             ]);
     }
 

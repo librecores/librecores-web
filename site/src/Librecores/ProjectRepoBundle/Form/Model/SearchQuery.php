@@ -9,6 +9,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class SearchQuery
 {
     const TYPE_USERS = 'users';
+    const TYPE_ORGS = 'orgs';
     const TYPE_PROJECTS = 'projects';
 
     /**
@@ -21,7 +22,7 @@ class SearchQuery
     /**
      * What are type of result are we looking for?
      *
-     * @Assert\Choice({"projects", "users"})
+     * @Assert\Choice({"projects", "users", "orgs"})
      */
     protected $type = self::TYPE_PROJECTS;
 
