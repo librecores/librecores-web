@@ -1,0 +1,18 @@
+{% extends '@Twig/Exception/error.html.twig' %}
+
+{% block error_title %}
+  Unauthorized
+{% endblock %}
+
+{% block error_description %}
+  You are not authorized to perform this action.
+{% endblock %}
+
+{% block error_explanation %}
+  <p>
+    You do not have sufficient previlages to perform this action on the specified object.
+  </p>
+  <p>
+    If you believe this is an error, please <a href="https://github.com/librecores/librecores-web/issues">open an issue</a> at our Github repository and let us know what you were doing when this error occurred.
+  </p>
+{% endblock %}
