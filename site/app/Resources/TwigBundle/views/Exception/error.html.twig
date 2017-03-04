@@ -1,0 +1,26 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}{{ status_code }} {{ status_text }}{% endblock %}
+
+{% block body %}
+  <div class="container">
+    <h1>{% block error_title %}We could not process your request{% endblock %}</h1>
+    <h2>{% block error_description %}The server returned "{{ status_code }} {{ status_text }}". That's all we know.{% endblock %}</h2>
+    <div class="row">
+      <div class="col-md-12">
+        {% block error_explanation %}
+          <p>
+            Please <a href="https://github.com/librecores/librecores-web/issues">open an issue</a> at our Github repository
+            and let us know what you were doing when this error occurred.
+            We will fix it as soon as possible. Sorry for any inconvenience caused.
+          </p>
+        {% endblock %}
+      </div>
+      {# <div class="col-md-6 col-md-offset-3">
+          {% block error_graphics %}
+              <img class="librecores-error-image" src="{{ asset('img/400.svg') }}" />
+          {% endblock &}
+      </div> #}
+    </div>
+  </div>
+{% endblock %}
