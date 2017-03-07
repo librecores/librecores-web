@@ -112,9 +112,9 @@ fi
 
 
 if [ -z "$ANSIBLE_VAULT_PASSWORD_FILE" ]; then
-  ANSIBLE_EXTRA_ARGS=--ask-vault-pass $ANSIBLE_EXTRA_ARGS
+  ANSIBLE_EXTRA_ARGS="--ask-vault-pass $ANSIBLE_EXTRA_ARGS"
 else
-  ANSIBLE_EXTRA_ARGS=--vault-password-file=$ANSIBLE_VAULT_PASSWORD_FILE $ANSIBLE_EXTRA_ARGS
+  ANSIBLE_EXTRA_ARGS="--vault-password-file=$ANSIBLE_VAULT_PASSWORD_FILE $ANSIBLE_EXTRA_ARGS"
 fi
 
 # Disable host key checking in Ansible's SSH
