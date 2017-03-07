@@ -1,62 +1,23 @@
 <?php
 namespace Librecores\ProjectRepoBundle\Security\Core\Exception;
 
-use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException;
 
-class OAuthUserExistsException extends AuthenticationException
+class OAuthUserLinkingException extends AccountNotLinkedException
 {
-    private $username;
-    private $email;
-
     /**
-     * {@inheritdoc}
+     * @var string[]
      */
-    public function getMessageKey()
+    protected $oAuthData;
+
+    public function getOAuthData()
     {
-        return 'A user with your username or email address already '.
-               'exists on LibreCores. If this is you, please log in and '.
-               'connect your account. Otherwise, please create a new '.
-               'account on LibreCores and connect it then.';
+        return $this->oAuthData;
     }
 
-    /**
-     * Get the username.
-     *
-     * @return string
-     */
-    public function getUsername()
+    public function setOAuthData($oAuthData)
     {
-        return $this->username;
-    }
-
-    /**
-     * Set the username.
-     *
-     * @param string $username
-     */
-    public function setUsername($username)
-    {
-        $this->username = $username;
-    }
-
-    /**
-     * Get the email address
-     *
-     * @return string
-     */
-    public function getEmail()
-    {
-        return $this->email;
-    }
-
-    /**
-     * Set the email address.
-     *
-     * @param string $email
-     */
-    public function setEmail($email)
-    {
-        $this->email = $email;
+        $this->oAuthData = $oAuthData;
     }
 
     /**
@@ -65,8 +26,7 @@ class OAuthUserExistsException extends AuthenticationException
     public function serialize()
     {
         return serialize(array(
-            $this->username,
-            $this->email,
+            $this->oAuthData,
             parent::serialize(),
         ));
     }
@@ -76,19 +36,10 @@ class OAuthUserExistsException extends AuthenticationException
      */
     public function unserialize($str)
     {
-        list($this->username, $this->email, $parentData) = unserialize($str);
-
+        list(
+            $this->oAuthData,
+            $parentData
+        ) = unserialize($str);
         parent::unserialize($parentData);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getMessageData()
-    {
-        return array(
-            '{{ username }}' => $this->username,
-            '{{ email }}' => $this->email
-        );
     }
 }

@@ -28,7 +28,7 @@ security:
                     github: "/user/connect/check-github"
                     google: "/user/connect/check-google"
                 login_path: /user/login
-                failure_path: /user/login
+                failure_path: /user/register
 
                 oauth_user_provider:
                     service: librecores_user_provider

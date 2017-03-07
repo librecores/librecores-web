@@ -46,15 +46,18 @@ Prerequisite: The user is not logged in on the LibreCores site.
    address, the account creation fails with an error message.
 6) The LibreCores user database is searched for an existing account
    associated with the username or the email address.
-7) Account checking
+7) The OAuth provided username and email address are used to create a new user
+   account.
+8) User validation
 
-  a) If an account
-     exists, the account creation process is aborted with the error
-     message "An user account with the email address or the username
-     already exists on LibreCores. If this is your account, please log in
-     and connect your account. If this is not your account, please create
-     a new account on LibreCores and then connect this account to your
-     OAuth provider."
+  a) If the newly created user does not validate, e.g. because the username
+     provided by the OAuth provider does not follow our rules or is already
+     taken, the user is redirected to the registration form.
+     The registration form is pre-filled with the data used for the automatic
+     account creation and left for the user to modify.
+     After submitting the registration form successfully, the newly created
+     account is automatically connected to the OAuth account provided in the
+     first place.
   b) If no account with either the email address or
      the username exists, a new LibreCores user account is created. The
      email address and the username are filled with the data from the
@@ -64,14 +67,6 @@ Prerequisite: The user is not logged in on the LibreCores site.
 Final state: The user is either logged in with the new account (account
 creation successful); or remains not logged in (account creation
 failed).
-
-.. note::
-  Leaving the registration process if any of the OAuth provided data
-  fields is invalid is the easiest way to handle the process, not the most
-  user friendly one. Depending on the frequency of this error path, the
-  process might be extended to be more user-friendly. This could include
-  allowing the user to choose a (different) username or to enter a
-  (different) email address.
 
 Login
 -----
@@ -84,10 +79,12 @@ OAuth Login
 ~~~~~~~~~~~
 A button "Login with SERVICE" is provided, which redirects the user to the auth provider.
 After a successful login, the auth provider redirects the user back to the previously viewed page on LibreCores.
+If no user account is associated with the OAuth account, the account is automatically created (see "Account Creation" above).
+
 
 Connecting an Existing Account with an OAuth Provider
 -----------------------------------------------------
 
 Users can connect (associate) an existing account on LibreCores with an OAuth-provider.
-
-.. todo:: Document how this works.
+Multiple OAuth accounts can be connected to a single LibreCores account.
+Every OAuth account can be connected only to one LibreCores account.
