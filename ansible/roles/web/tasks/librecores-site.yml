@@ -94,19 +94,19 @@
   when: not symfony_devel
 
 - name: Clear symfony cache (production)
-  command: php app/console cache:clear --env=prod --no-debug
+  command: php bin/console cache:clear --env=prod --no-debug
   args:
     chdir: /var/www/lc/site
   when: not symfony_devel
 
 - name: Clear symfony cache (development)
-  command: php app/console cache:clear --env=dev
+  command: php bin/console cache:clear --env=dev
   args:
     chdir: /var/www/lc/site
   when: symfony_devel
 
 - name: Dump assetic assets (production)
-  command: php app/console assetic:dump --env=prod --no-debug
+  command: php bin/console assetic:dump --env=prod --no-debug
   args:
     chdir: /var/www/lc/site
   when: not symfony_devel
@@ -179,6 +179,6 @@
 - name: Run all database migrations (also creates initial tables if necessary)
   sudo: yes
   sudo_user: "{{ web_user }}"
-  command: php app/console doctrine:migrations:migrate -n
+  command: php bin/console doctrine:migrations:migrate -n
   args:
     chdir: /var/www/lc/site

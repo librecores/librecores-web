@@ -4,14 +4,14 @@
 - name: Insert database fixtures
   sudo: yes
   sudo_user: "{{ web_user }}"
-  command: php app/console doctrine:fixtures:load -n
+  command: php bin/console doctrine:fixtures:load -n
   args:
     chdir: /var/www/lc/site
 
 - name: Update all projects from their source repository
   sudo: yes
   sudo_user: "{{ web_user }}"
-  command: php app/console librecores:update-repos
+  command: php bin/console librecores:update-repos
   args:
     chdir: /var/www/lc/site
 
