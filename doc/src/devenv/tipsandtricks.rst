@@ -24,13 +24,13 @@ Rebuild ORM (Doctrine) Entity
   vm$> cd /var/www/lc/site
 
   # for only one class
-  vm$> ./app/console doctrine:generate:entities LibrecoresProjectRepoBundle:Project
+  vm$> ./bin/console doctrine:generate:entities LibrecoresProjectRepoBundle:Project
 
   # for all classes
-  vm$> ./app/console doctrine:generate:entities LibrecoresProjectRepoBundle
+  vm$> ./bin/console doctrine:generate:entities LibrecoresProjectRepoBundle
 
   # finally, update the MySQL DB
-  vm$> ./app/console doctrine:schema:update --force
+  vm$> ./bin/console doctrine:schema:update --force
 
 
 Asynchronous Processing with RabbitMQ
@@ -49,7 +49,7 @@ Run the consumer
 .. code-block:: bash
 
   vm$> cd /var/www/lc/site
-  vm$> ./app/console rabbitmq:consumer -m 1 update_project_info
+  vm$> ./bin/console rabbitmq:consumer -m 1 update_project_info
 
 Test the producer: update one project
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -58,7 +58,7 @@ Test the producer: update one project
 
   vm$> cd /var/www/lc/site
   # update the project information of project 1 (needs the consumer!)
-  vm$> echo 1 | ./app/console rabbitmq:stdin-producer update_project_info
+  vm$> echo 1 | ./bin/console rabbitmq:stdin-producer update_project_info
 
 Empty the queue
 ~~~~~~~~~~~~~~~
@@ -73,7 +73,7 @@ Clean the Symfony caches
 .. code-block:: bash
 
   vm$> cd /var/www/lc/site
-  vm$> ./app/console cache:clear
+  vm$> ./bin/console cache:clear
 
 
 Access the MySQL database
