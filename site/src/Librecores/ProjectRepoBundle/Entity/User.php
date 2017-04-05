@@ -4,6 +4,7 @@ namespace Librecores\ProjectRepoBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use FOS\UserBundle\Model\User as BaseUser;
+use ApiPlatform\Core\Annotation\ApiResource;
 
 /**
  * A user
@@ -13,6 +14,7 @@ use FOS\UserBundle\Model\User as BaseUser;
  * @ORM\Table("User")
  * @ORM\Entity
  * @ORM\HasLifecycleCallbacks
+ * @ApiResource(collectionOperations={"get"={"method"="GET"}}, itemOperations={"get"={"method"="GET"}})
  */
 class User extends BaseUser
 {

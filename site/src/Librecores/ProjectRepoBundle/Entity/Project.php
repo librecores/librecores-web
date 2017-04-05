@@ -5,6 +5,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Librecores\ProjectRepoBundle\Entity\SourceRepo;
+use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 /**
  * A project
@@ -24,6 +26,7 @@ use Librecores\ProjectRepoBundle\Entity\SourceRepo;
  *     message="A project with that name already exists.",
  *     ignoreNull=false
  * )
+ * @ApiResource(collectionOperations={"get"={"method"="GET"}}, itemOperations={"get"={"method"="GET"}})
  */
 class Project
 {

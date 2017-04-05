@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Librecores\ProjectRepoBundle\Validator\Constraints as LcAssert;
+use ApiPlatform\Core\Annotation\ApiResource;
 
 /**
  * An organization
@@ -22,6 +23,7 @@ use Librecores\ProjectRepoBundle\Validator\Constraints as LcAssert;
  *     errorPath="name",
  *     message="The organization already exists, please try a different name."
  * )
+ * @ApiResource(collectionOperations={"get"={"method"="GET"}}, itemOperations={"get"={"method"="GET"}})
  */
 class Organization
 {

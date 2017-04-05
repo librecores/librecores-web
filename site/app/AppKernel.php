@@ -26,6 +26,7 @@ class AppKernel extends Kernel
             new Librecores\PlanetBundle\LibrecoresPlanetBundle(),
             new Exercise\HTMLPurifierBundle\ExerciseHTMLPurifierBundle(),
             new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle(),
+            new ApiPlatform\Core\Bridge\Symfony\Bundle\ApiPlatformBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

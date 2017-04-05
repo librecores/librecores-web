@@ -64,6 +64,11 @@ librecores_planet:
     resource: "@LibrecoresPlanetBundle/Resources/config/routing.yml"
     prefix:   /planet
 
+api:
+    resource: '.'
+    type:     'api_platform'
+    prefix:   '/api/v1' # Optional
+
 # Project Repository Routes
 librecores_project_repo:
     resource: "@LibrecoresProjectRepoBundle/Resources/config/routing.yml"

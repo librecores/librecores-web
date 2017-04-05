@@ -33,7 +33,8 @@
 		"patchwork/jsqueeze" : "^2.0",
 		"exercise/htmlpurifier-bundle" : "*",
 		"doctrine/doctrine-migrations-bundle" : "^1.0",
-		"symfony/http-kernel" : "~3.2.3"
+		"symfony/http-kernel" : "~3.2.3",
+		"api-platform/core" : "~2.0"
 	},
 	"scripts" : {
 		"post-install-cmd" : [
