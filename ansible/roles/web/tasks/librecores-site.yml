@@ -129,7 +129,7 @@
 # run this last to ensure all deployment-created directories are covered
 - name: Ensure directory permissions of Symfony log and cache directories
   file:
-    path: "/var/www/lc/site/app/{{ item }}"
+    path: "/var/www/lc/site/var/{{ item }}"
     owner: "{{ web_user }}"
     recurse: yes
   with_items:
