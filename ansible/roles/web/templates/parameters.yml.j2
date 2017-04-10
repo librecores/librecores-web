@@ -4,7 +4,7 @@ parameters:
     database_port:     ~
     database_name:     librecores
     database_user:     librecores
-    database_password: {{ site_mysql_password }}
+    database_password: '{{ site_mysql_password }}'
 
     mailer_transport:  smtp
     mailer_host:       127.0.0.1
@@ -14,21 +14,21 @@ parameters:
     locale:            en
 
     # A secret key that's used to generate certain security-related tokens
-    secret:            {{ site_symfony_secret_token }}
+    secret:            '{{ site_symfony_secret_token }}'
 
     # RabbitMQ configuration
     rabbitmq_host:     localhost
     rabbitmq_port:     5672
     rabbitmq_user:     librecores
-    rabbitmq_password: {{ site_rabbitmq_password }}
+    rabbitmq_password: '{{ site_rabbitmq_password }}'
 
     # OAuth configuration: GitHub
     # Register at https://github.com/settings/applications
-    github_app_id:     {{ site_github_app_id }}
-    github_app_secret: {{ site_github_app_secret }}
+    github_app_id:     '{{ site_github_app_id }}'
+    github_app_secret: '{{ site_github_app_secret }}'
 
     # OAuth configuration: Google
     # Register at https://console.developers.google.com/
     # https://console.developers.google.com/project/librecores/apiui/credential/oauthclient
-    google_app_id:     {{ site_google_app_id }}
-    google_app_secret: {{ site_google_app_secret }}
+    google_app_id:     '{{ site_google_app_id }}'
+    google_app_secret: '{{ site_google_app_secret }}'
