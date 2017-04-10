@@ -83,33 +83,27 @@
   command: composer install
   args:
     chdir: /var/www/lc/site
-  when: symfony_devel
+  when: symfony_config.SYMFONY_ENV == 'dev'
 
 - name: Install dependencies through composer (production)
   command: composer install --no-dev --optimize-autoloader
-  environment:
-    SYMFONY_ENV: prod
   args:
     chdir: /var/www/lc/site
-  when: not symfony_devel
+  when: symfony_config.SYMFONY_ENV == 'prod'
 
 - name: Clear symfony cache (production)
-  command: php bin/console cache:clear --env=prod --no-debug
+  command: php bin/console cache:clear
+  environment: "{{ symfony_config }}"
   args:
     chdir: /var/www/lc/site
-  when: not symfony_devel
-
-- name: Clear symfony cache (development)
-  command: php bin/console cache:clear --env=dev
-  args:
-    chdir: /var/www/lc/site
-  when: symfony_devel
+  when: symfony_config.SYMFONY_ENV == 'prod'
 
 - name: Dump assetic assets (production)
-  command: php bin/console assetic:dump --env=prod --no-debug
+  command: php bin/console assetic:dump
+  environment: "{{ symfony_config }}"
   args:
     chdir: /var/www/lc/site
-  when: not symfony_devel
+  when: symfony_config.SYMFONY_ENV == 'prod'
 
 - name: Add systemd service for RabbitMQ
   template:
@@ -180,5 +174,6 @@
   sudo: yes
   sudo_user: "{{ web_user }}"
   command: php bin/console doctrine:migrations:migrate -n
+  environment: "{{ symfony_config }}"
   args:
     chdir: /var/www/lc/site

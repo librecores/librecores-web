@@ -2,8 +2,11 @@
 librecores_domain: "librecores.devel"
 mysql_host: "localhost"
 web_user: "{{ ansible_ssh_user }}"
-symfony_devel: true
 use_https: false
+
+symfony_config:
+  SYMFONY_ENV: dev
+  SYMFONY_DEBUG: 1
 
 # all secrets have dummy values for the local development setup
 rabbitmq_admin_password: "password"

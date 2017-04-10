@@ -12,5 +12,8 @@ ip_public: "52.19.183.36"
 librecores_domain: "librecores.org"
 web_user: "www-data"
 mysql_host: "localhost"
-symfony_devel: false
 use_https: true
+
+symfony_config:
+  SYMFONY_ENV: prod
+  SYMFONY_DEBUG: 0

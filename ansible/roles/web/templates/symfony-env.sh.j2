@@ -1,7 +1,3 @@
-{% if symfony_devel %}
-SYMFONY_ENV=dev
-SYMFONY_DEBUG=1
-{% else %}
-SYMFONY_ENV=prod
-SYMFONY_DEBUG=0
-{% endif %}
+# source this file before running any Symfony CLI tools
+export SYMFONY_ENV={{ symfony_config.SYMFONY_ENV }}
+export SYMFONY_DEBUG={{ symfony_config.SYMFONY_DEBUG }}
