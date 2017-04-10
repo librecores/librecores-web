@@ -2,15 +2,15 @@
 
 ## Content Policy
 
-This policy is intended to clarify the acceptable use of LibreCores.org.
+This policy is intended to clarify the acceptable use of LibreCores.
 
 ### Project Licenses
 
-LibreCores.org only allows sharing projects that are free and open. Only projects licensed under terms compatible with [Open Source Definition](https://opensource.org/osd-annotated) or the [Free Software Definition](https://www.gnu.org/philosophy/free-sw.html).
+Only projects which are free and open are allowed on LibreCores, i.e. projects which are licensed under terms compatible with [Open Source Definition](https://opensource.org/osd-annotated) or the [Free Software Definition](https://www.gnu.org/philosophy/free-sw.html).
 
 ### Inappropriate and Illegal Use
 
-LibreCores.org is intended for sharing open source IP, EDA tools and related projects. It is not intended to be used as an all-purpose content hosting site. LibreCores.org may not be used for illegal purposes, for fraudulent purposes, for the purposes of phishing (obtaining account and password information) or for Spam. Projects or Users publishing inappropriate or illegal content, using deceptive means to generate revenue or traffic, or whose primary purpose is affiliate marketing, will be suspended.
+LibreCores is intended for sharing open source IP, EDA tools and related projects. It is not intended to be used as an all-purpose content hosting site. LibreCores may not be used for illegal purposes, for fraudulent purposes, for the purposes of phishing (obtaining account and password information) or for Spam. Projects or Users publishing inappropriate or illegal content, using deceptive means to generate revenue or traffic, or whose primary purpose is affiliate marketing, will be suspended.
 
 ### Identity Theft and Privacy
 
@@ -37,7 +37,7 @@ If you are found to be in violation of any of the above policies, you will recei
 
 ## Privacy Policy
 
-This privacy policy sets out how the Free and Open Source Silicon Foundation CiC ("FOSSi Foundation") uses and protects any information that you give the Free and Open Source Silicon Foundation CiC when using librecores.org (the "Website").
+This privacy policy sets out how the Free and Open Source Silicon Foundation CiC ("FOSSi Foundation") uses and protects any information that you give the Free and Open Source Silicon Foundation CiC when using LibreCores (the "Website").
 
 FOSSi Foundation is committed to ensuring that your privacy is protected. Should we ask you to provide certain information by which you can be identified when using this website, then you can be assured that it will only be used in accordance with this privacy statement.
 
@@ -97,9 +97,9 @@ If you believe that any information we are holding on you is incorrect or incomp
 
 Terms and conditions for using the LibreCores website ("Service"). For the purposes of these terms and conditions the term Service also includes the API and any other data source supplying the website.
 
-## Agreement between the user and LibreCores.org
+## Agreement between the user and LibreCores
 
-LibreCores.org is a website by Free and Open Source Silicon Foundation C.i.C. ("FOSSi Foundation", "we", "us" or "our" for short), a community-interest company registers in England (No. 09848956). Our registeres office is at 71-75 Shelton Street, London, WC2H 9JQ.
+LibreCores is a website by Free and Open Source Silicon Foundation C.i.C. ("FOSSi Foundation", "we", "us" or "our" for short), a community-interest company registers in England (No. 09848956). Our registeres office is at 71-75 Shelton Street, London, WC2H 9JQ.
 
 The following terms and conditions govern all use of the Service and all content, services and products available at or through the Service. The Service is owned and operated by FOSSi Foundation. The Service is offered subject to your acceptance without modification of all of the terms and conditions contained herein and all other operating rules, policies and procedures that may be published from time to time on this website by FOSSi Foundation (collectively, the “Agreement”).
 
@@ -135,7 +135,7 @@ If you maintain a project, contribute to a project, post material to the Service
 
 * you have, in the case of Content that includes computer software and programmable logic code, accurately categorized and/or described the type, nature, uses and effects of the materials, whether requested to do so by FOSSi Foundation or otherwise.
 
-By submitting Content to LibreCores.org for inclusion in a Project, you grant FOSSi Foundation a world-wide, royalty-free, and non-exclusive license to reproduce, modify, adapt and publish the Content solely for the purpose of displaying, distributing and promoting the project.
+By submitting Content to LibreCores for inclusion in a Project, you grant FOSSi Foundation a world-wide, royalty-free, and non-exclusive license to reproduce, modify, adapt and publish the Content solely for the purpose of displaying, distributing and promoting the project.
 
 Without limiting any of those representations or warranties, FOSSi Foundation has the right (though not the obligation) to, in FOSSi Foundation's sole discretion (i) refuse or remove any content that, in FOSSi Foundation's reasonable opinion, violates any FOSSi Foundation policy or is in any way harmful or objectionable, or (ii) terminate or deny access to and use of the Service to any individual or entity for any reason, in FOSSi Foundation's sole discretion. FOSSi Foundation will have no obligation to provide a refund of any amounts previously paid.
 
@@ -153,7 +153,7 @@ As FOSSi Foundation asks others to respect its intellectual property rights, it 
 
 ## Intellectual Property
 
-This Agreement does not transfer from LibreCores.org to you any FOSSi Foundation or third party intellectual property, and all right, title and interest in and to such property will remain (as between the parties) solely with FOSSi Foundation. Trademarks, service marks, graphics and logos used in connection with the Service may be the trademarks of other third parties. Your use of the Service grants you no right or license to reproduce or otherwise use any FOSSi Foundation or third-party trademarks.
+This Agreement does not transfer from LibreCores to you any FOSSi Foundation or third party intellectual property, and all right, title and interest in and to such property will remain (as between the parties) solely with FOSSi Foundation. Trademarks, service marks, graphics and logos used in connection with the Service may be the trademarks of other third parties. Your use of the Service grants you no right or license to reproduce or otherwise use any FOSSi Foundation or third-party trademarks.
 
 ## Changes
 
@@ -161,7 +161,7 @@ FOSSi Foundation reserves the right, at its sole discretion, to modify or replac
 
 ## Termination
 
-FOSSi Foundation may terminate your access to all or any part of the Service at any time, with or without cause, with or without notice, effective immediately. If you wish to terminate this Agreement or your LibreCores.org account (if you have one), you may simply discontinue using the Service. All provisions of this Agreement which by their nature should survive termination shall survive termination, including, without limitation, ownership provisions, warranty disclaimers, indemnity and limitations of liability.
+FOSSi Foundation may terminate your access to all or any part of the Service at any time, with or without cause, with or without notice, effective immediately. If you wish to terminate this Agreement or your LibreCores account (if you have one), you may simply discontinue using the Service. All provisions of this Agreement which by their nature should survive termination shall survive termination, including, without limitation, ownership provisions, warranty disclaimers, indemnity and limitations of liability.
 
 ## Disclaimer of Warranties
 
