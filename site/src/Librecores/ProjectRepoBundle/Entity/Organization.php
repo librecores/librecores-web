@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Librecores\ProjectRepoBundle\Validator\Constraints as LcAssert;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * An organization
@@ -51,6 +52,7 @@ class Organization
      *
      * @var string
      *
+     * @Assert\Length(max = 255)
      * @ORM\Column(name="displayName", type="string", length=255)
      */
     private $displayName;
