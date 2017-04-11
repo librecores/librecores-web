@@ -1,6 +1,6 @@
 # Imprint
 
-LibreCores is a project of the Free and Open Source Silicon Foundation.
+LibreCores is a project of the [https://www.fossi-foundation.org](Free and Open Source Silicon Foundation).
 
 The Free and Open Source Silicon Foundation C.i.C.<br/>
 71-75 Shelton Street<br/>
