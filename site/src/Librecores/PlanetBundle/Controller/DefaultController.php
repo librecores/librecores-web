@@ -41,16 +41,30 @@ class DefaultController extends Controller
         $this->blogposts = array();
         foreach ($feed->get_items(0) as $item) {
             $this->blogposts[] = array(
-                'author' => $item->get_author()->get_name(),
+                'author' => $this->decodeHtmlEntities($item->get_author()->get_name()),
                 'date' => \DateTime::createFromFormat('U', $item->get_gmdate('U'), new \DateTimeZone('UTC')),
-                'title' => $item->get_title(),
+                'title' => $this->decodeHtmlEntities($item->get_title()),
                 'teaser' => $this->extractTeaser($item->get_content()),
                 'teaser_img_url' => $this->extractTeaserImage($item->get_content()),
                 'url' => $item->get_link(),
-                'source_title' => $item->get_source()->get_title(),
+                'source_title' => $this->decodeHtmlEntities($item->get_source()->get_title()),
                 'source_link' => $item->get_source()->get_link(),
             );
         }
+    }
+
+    /**
+     * Decode HTML entities into an UTF-8 string
+     *
+     * Use this method instead of calling html_entity_decode() directly to benefit
+     * from setting the necessary parameters only once.
+     *
+     * @param string $string
+     * @return string string in UTF-8 format with all XML entities removed
+     */
+    private function decodeHtmlEntities($string)
+    {
+        return html_entity_decode($string, ENT_QUOTES | ENT_XML1, 'UTF-8');
     }
 
     /**
@@ -83,7 +97,7 @@ class DefaultController extends Controller
         $maxLength = 500;
 
         $content = strip_tags($content);
-        $content = html_entity_decode($content);
+        $content = $this->decodeHtmlEntities($content);
         $content = trim($content);
 
         // If the text is longer than $maxLength, we try to cut it at the
