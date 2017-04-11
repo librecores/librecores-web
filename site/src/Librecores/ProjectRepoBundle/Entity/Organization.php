@@ -37,6 +37,8 @@ class Organization
     private $id;
 
     /**
+     * The short name of the organization (used e.g. for the URL fragment)
+     *
      * @var string
      *
      * @LcAssert\UserOrgName(payload = {"type" = "org"})
@@ -45,6 +47,8 @@ class Organization
     private $name;
 
     /**
+     * The "human readable" name of the organization (used for display purposes)
+     *
      * @var string
      *
      * @ORM\Column(name="displayName", type="string", length=255)
@@ -59,6 +63,8 @@ class Organization
     private $description;
 
     /**
+     * The projects owned by this organization
+     *
      * @var ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="Project", mappedBy="parentOrganization")
@@ -67,6 +73,8 @@ class Organization
     private $projects;
 
     /**
+     * Members of this organization
+     *
      * @var ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="OrganizationMember", mappedBy="organization", cascade={"remove"}))
@@ -74,6 +82,8 @@ class Organization
     protected $members;
 
     /**
+     * Initial creator of the organization
+     *
      * @var User
      *
      * @ORM\ManyToOne(targetEntity="User", inversedBy="organizationsCreated")

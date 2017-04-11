@@ -31,6 +31,8 @@ class Project
     const STATUS_UNASSIGNED = 'UNASSIGNED';
 
     /**
+     * Internal project ID
+     *
      * @var integer
      *
      * @ORM\Column(name="id", type="integer")
@@ -40,6 +42,8 @@ class Project
     private $id;
 
     /**
+     * Status of the project
+     *
      * @var string
      *
      * @Assert\Choice(choices = {"ASSIGNED", "UNASSIGNED"})
@@ -48,6 +52,8 @@ class Project
     private $status = self::STATUS_ASSIGNED;
 
     /**
+     * User owning this project
+     *
      * @var User
      *
      * @ORM\ManyToOne(targetEntity="User", inversedBy="projects")
@@ -55,6 +61,8 @@ class Project
     private $parentUser;
 
     /**
+     * Organization owning this project
+     *
      * @var Organization
      *
      * @ORM\ManyToOne(targetEntity="Organization", inversedBy="projects")
