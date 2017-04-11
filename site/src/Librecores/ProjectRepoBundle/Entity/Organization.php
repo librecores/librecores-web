@@ -81,7 +81,7 @@ class Organization
      *
      * @ORM\OneToMany(targetEntity="OrganizationMember", mappedBy="organization", cascade={"remove"}))
      **/
-    protected $members;
+    private $members;
 
     /**
      * Initial creator of the organization
@@ -100,7 +100,7 @@ class Organization
      * @var \DateTime
      * @ORM\Column(type="datetime", nullable=false)
      */
-    protected $createdAt;
+    private $createdAt;
 
     /**
      * When was this organization last updated?
@@ -108,7 +108,7 @@ class Organization
      * @var \DateTime
      * @ORM\Column(type="datetime", nullable=false)
      */
-    protected $updatedAt;
+    private $updatedAt;
 
     /**
      * Constructor
