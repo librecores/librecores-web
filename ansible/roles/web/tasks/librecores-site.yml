@@ -6,7 +6,7 @@
   when: use_https
 
 - name: Obtain initial SSL certificate from Let's Encrypt
-  command: letsencrypt certonly --pre-hook "service nginx stop" --non-interactive --standalone --standalone-supported-challenges http-01 --keep -m info@fossi-foundation.org --agree-tos -w /var/www/letsencrypt -d {{ librecores_domain }} -d www.{{ librecores_domain }}
+  command: letsencrypt certonly --pre-hook "service nginx stop" --non-interactive --standalone --standalone-supported-challenges http-01 --keep -m philipp@fossi-foundation.org --agree-tos -w /var/www/letsencrypt -d {{ librecores_domain }} -d www.{{ librecores_domain }}
   args:
     creates: /etc/letsencrypt/live/{{ librecores_domain }}/cert.pem
   when: use_https
