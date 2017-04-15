@@ -234,7 +234,7 @@ class LibreCoresUserProvider implements UserProviderInterface,
             $response->getUsername());
 
         // validate newly created user entity
-        $errors = $this->validator->validate($user, array('Registration'));
+        $errors = $this->validator->validate($user, null, 'Registration');
 
         // the auto-created user is not valid
         // fall back to our failure path: redirect the user to the registration
