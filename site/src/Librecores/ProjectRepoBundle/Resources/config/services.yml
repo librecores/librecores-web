@@ -20,6 +20,11 @@ services:
             - '@librecores.util.markuptohtmlconverter'
             - '@logger'
 
+    librecores.util.githubapiservice:
+        class: Librecores\ProjectRepoBundle\Util\GithubApiService
+        arguments:
+            - '@security.token_storage'
+
     # Forms
     app.form.type.project:
         class: Librecores\ProjectRepoBundle\Form\Type\ProjectType
