@@ -61,6 +61,7 @@ class LoadProjectData extends AbstractFixture
         // project openrisc/mor1kx
         $projectMor1kx = new Project();
         $projectMor1kx->setName('mor1kx');
+        $projectMor1kx->setDisplayName('mor1kx: the successor of OR1200');
         $projectMor1kx->setParentOrganization($orgOpenrisc);
         $projectMor1kx->setDateAdded(new \DateTime('2017-01-01'));
         $projectMor1kx->setDateLastModified(new \DateTime('2017-01-01'));
@@ -81,6 +82,7 @@ class LoadProjectData extends AbstractFixture
         // project test2/optimsoc
         $projectOptimsoc = new Project();
         $projectOptimsoc->setName('optimsoc');
+        $projectOptimsoc->setDisplayName('OpTiMSoC');
         $projectOptimsoc->setParentUser($userTest2);
         $projectOptimsoc->setDateAdded(new \DateTime('2017-01-01'));
         $projectOptimsoc->setDateLastModified(new \DateTime('2017-01-01'));
@@ -88,7 +90,7 @@ class LoadProjectData extends AbstractFixture
         $projectOptimsoc->setLicenseTextAutoUpdate(true);
         $projectOptimsoc->setTagline("Open Tiled Manycores System-on-Chip");
         $projectOptimsoc->setIssueTracker('https://github.com/optimsoc/sources/issues');
-        $projectOptimsoc->setProjectUrl('http://optimsoc.org');
+        $projectOptimsoc->setProjectUrl('https://www.optimsoc.org');
         $projectOptimsoc->setLicenseName('MIT');
         $projectOptimsoc->setSourceRepo($sourcerepoOptimsoc);
         $manager->persist($projectOptimsoc);

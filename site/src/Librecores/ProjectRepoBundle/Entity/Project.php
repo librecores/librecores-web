@@ -66,21 +66,43 @@ class Project
      * @var Organization
      *
      * @ORM\ManyToOne(targetEntity="Organization", inversedBy="projects")
-     **/
+     */
     private $parentOrganization;
 
     /**
+     * Short name of the project
+     *
+     * This field is used for the URL component (e.g.
+     * http://librecores.org/parent/name). It's user-visible, but is limited
+     * in the allowed characters and length. Think of it like a project's
+     * username.
+     *
      * @var string
      *
+     * @Assert\Regex("/^[a-z][a-z0-9-]+$/")
      * @Assert\Length(min = 4, max = 30)
      * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
 
     /**
+     * Display name of the project
+     *
+     * This is the "more human-readable" version of Project::$name. Think of it
+     * like the real name of a user.
+     *
+     * @var string
+     *
+     * @Assert\Length(min = 0, max = 100)
+     * @ORM\Column(name="displayName", type="string", length=100)
+     */
+    private $displayName;
+
+    /**
      * The tagline of the project
      *
-     * A tagline is a short and to the point description of what the project does.
+     * A tagline is a short and to the point description of what the project
+     * does.
      *
      * @var string
      *
@@ -133,7 +155,7 @@ class Project
     private $licenseName;
 
     /**
-     * Full license text in Markdown format
+     * Full license text in HTML
      *
      * @var string
      *
@@ -152,7 +174,7 @@ class Project
     private $licenseTextAutoUpdate = true;
 
     /**
-     * Project description in Markdown format
+     * Project description in HTML
      *
      * @var string
      *
@@ -208,7 +230,8 @@ class Project
     /**
      * Constructor
      */
-    public function __construct() {
+    public function __construct()
+    {
         // record the date/time of the project creation
         $this->setDateAdded(new \DateTime());
         $this->setDateLastModified(new \DateTime());
@@ -222,7 +245,8 @@ class Project
      * @ORM\PrePersist()
      * @ORM\PreUpdate()
      */
-    public function updateDateLastModified() {
+    public function updateDateLastModified()
+    {
         $this->setDateLastModified(new \DateTime());
     }
 
@@ -688,5 +712,29 @@ class Project
     public function getSourceRepo()
     {
         return $this->sourceRepo;
+    }
+
+    /**
+     * Set displayName
+     *
+     * @param string $displayName
+     *
+     * @return Project
+     */
+    public function setDisplayName($displayName)
+    {
+        $this->displayName = $displayName;
+
+        return $this;
+    }
+
+    /**
+     * Get displayName
+     *
+     * @return string
+     */
+    public function getDisplayName()
+    {
+        return $this->displayName;
     }
 }
