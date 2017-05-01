@@ -24,6 +24,7 @@ services:
         class: Librecores\ProjectRepoBundle\Util\GithubApiService
         arguments:
             - '@security.token_storage'
+            - '@app.cache.githubapi'
 
     # Forms
     app.form.type.project:

@@ -4,6 +4,7 @@ namespace Librecores\ProjectRepoBundle\Util;
 use Librecores\ProjectRepoBundle\Entity\User;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Github;
+use Symfony\Component\Cache\Adapter\AdapterInterface;
 
 /**
  * Wrap the KnpLabs/php-github-api GitHub API as Symfony service
@@ -13,6 +14,8 @@ use Github;
  * constructing the client manually, the getClient() and
  * getAuthenticatedClient() methods of this class initialize the object for our
  * use case, including authenticating with a user's GitHub OAuth access token.
+ *
+ * All requests are cached if a cache pool is given.
  */
 class GithubApiService
 {
@@ -20,6 +23,11 @@ class GithubApiService
      * @var User
      */
     protected $user;
+
+    /**
+     * @var AdapterInterface
+     */
+    protected $cachePool;
 
     /**
      * GitHub client API wrapper
@@ -45,15 +53,20 @@ class GithubApiService
      * user object since it contains the necessary methods to work with Github
      * access tokens.
      *
+     * All requests are cached in the given cache pool.
+     *
      * @param TokenStorageInterface $tokenStorage token storage service
+     * @param AdapterInterface $cachePool the cache pool to use for all requests
      */
-    public function __construct(TokenStorageInterface $tokenStorage)
+    public function __construct(TokenStorageInterface $tokenStorage,
+                                AdapterInterface $cachePool)
     {
         $user = $tokenStorage->getToken()->getUser();
         if (!$user instanceof \Librecores\ProjectRepoBundle\Entity\User) {
             $this->user = null;
         }
         $this->user = $user;
+        $this->cachePool = $cachePool;
     }
 
     /**
@@ -107,6 +120,7 @@ class GithubApiService
     protected function initClient()
     {
         $this->client= new \Github\Client();
+        $this->client->addCache($this->cachePool);
         $this->clientIsAuthenticated = false;
 
         // try to authenticate as user with its access token

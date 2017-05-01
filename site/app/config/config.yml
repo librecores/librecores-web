@@ -26,7 +26,13 @@ framework:
     fragments:       ~
     http_method_override: true
     assets: ~
-    
+    cache:
+        pools:
+            # Cache pool for all GitHub API requests done through
+            # GithubApiService
+            app.cache.githubapi:
+                adapter: cache.app
+
 # Twig Configuration
 twig:
     debug:            "%kernel.debug%"

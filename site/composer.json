@@ -35,7 +35,8 @@
 		"doctrine/doctrine-migrations-bundle" : "^1.0",
 		"symfony/http-kernel" : "~3.2.3",
 		"knplabs/github-api": "^2.3",
-		"php-http/guzzle6-adapter": "^1.1"
+		"php-http/guzzle6-adapter": "^1.1",
+		"symfony/cache": "^3.2"
 	},
 	"scripts" : {
 		"post-install-cmd" : [
