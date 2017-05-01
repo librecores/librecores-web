@@ -8,11 +8,27 @@ use Librecores\ProjectRepoBundle\RepoCrawler\GitRepoCrawler;
 use Librecores\ProjectRepoBundle\Util\MarkupToHtmlConverter;
 use Librecores\ProjectRepoBundle\RepoCrawler\RepoCrawler;
 
+/**
+ * Repository crawler factory: get an appropriate repository crawler instance
+ */
 class RepoCrawlerFactory
 {
+    /**
+     * @var MarkupToHtmlConverter
+     */
     private $markupConverter;
+
+    /**
+     * @var LoggerInterface
+     */
     private $logger;
 
+    /**
+     * Constructor: create a new instance
+     *
+     * @param MarkupToHtmlConverter $markupConverter
+     * @param LoggerInterface $logger
+     */
     public function __construct(MarkupToHtmlConverter $markupConverter,
         LoggerInterface $logger)
     {
