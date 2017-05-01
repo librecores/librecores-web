@@ -20,6 +20,16 @@ class GitSourceRepo extends SourceRepo
     protected $stats;
 
     /**
+     * Create a new GitSourceRepo instance
+     *
+     * @param string? $url repository URL
+     */
+    public function __construct($url = null)
+    {
+        $this->url = $url;
+    }
+
+    /**
      * {@inheritDoc}
      * @see \Librecores\ProjectRepoBundle\Entity\SourceRepo::getType()
      */
