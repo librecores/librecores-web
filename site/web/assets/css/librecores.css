@@ -315,6 +315,12 @@ h1 a:hover, h1 a:active {
   margin-bottom: 5px;
 }
 
+.librecores-new-project-label {
+  margin-top: 20px;
+  margin-bottom: 10px;
+  font-size: 1.2em;
+}
+
 /* LOGIN/SIGNUP CSS */
 .librecores-user-signupin-panel {
   width: 280px;

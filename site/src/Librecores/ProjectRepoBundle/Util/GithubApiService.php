@@ -2,8 +2,10 @@
 namespace Librecores\ProjectRepoBundle\Util;
 
 use Librecores\ProjectRepoBundle\Entity\User;
+use Librecores\ProjectRepoBundle\Entity\Project;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Github;
+use Librecores\ProjectRepoBundle\Entity\GitSourceRepo;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 
 /**
@@ -133,5 +135,33 @@ class GithubApiService
         }
 
         return true;
+    }
+
+
+    /**
+     * Populate a Project with data obtained from the GitHub API
+     *
+     * @param Project $project
+     * @param string $owner
+     * @param string $repo
+     */
+    public function populateProject(Project $project, string $owner, string $repo)
+    {
+        $repo = $this->getClient()->repo()->show($owner, $repo);
+
+        if ($repo['has_issues']) {
+            // the web URL for issues it not part of the API response
+            $project->setIssueTracker($repo['html_url'].'/issues');
+        }
+
+        if ($repo['homepage']) {
+            $project->setProjectUrl($repo['homepage']);
+        } else {
+            $project->setProjectUrl($repo['html_url']);
+        }
+
+        $project->setTagline($repo['description']);
+
+        $project->setSourceRepo(new GitSourceRepo($repo['clone_url']));
     }
 }

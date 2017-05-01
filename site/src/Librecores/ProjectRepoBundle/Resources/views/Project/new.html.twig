@@ -9,35 +9,115 @@ Add your project to LibreCores
 {% block content %}
 <h1>Add your project to LibreCores</h1>
 
-<p>Adding your project to LibreCores is easy: just give us the name of your
-project and the location of the source code, and we'll take care of
-the rest.</p>
+<p>Adding your project to LibreCores is easy: after you've given us the name and
+source code location of your project, we'll scan your source code and get all
+other information about your project automatically.</p>
 
 {{ form_start(form) }}
   <div class="form-group">
-    {{ form_label(form.name, "What's the name of your project?") }}
+    {{ form_label(form.displayName, "What's the name of your project?", {'label_attr': {'class': 'librecores-new-project-label'}}) }}
+
+    {{ form_errors(form.displayName) }}
+
+    <div class="form-inline">
+      {{ form_widget(form.displayName, {'attr': {'placeholder': 'Johns awesome FIFO'}}) }}
+    </div>
+  </div>
+
+  <div class="form-group">
+    {{ form_label(form.name, "Where would you like to find your project on LibreCores?", {'label_attr': {'class': 'librecores-new-project-label'}}) }}
 
     {{ form_errors(form.parentName) }}
     {{ form_errors(form.name) }}
 
     <div class="form-inline">
+      {{ app.request.getSchemeAndHttpHost() }}/
       {{ form_label(form.parentName, null, {'label_attr': {'class': 'sr-only'}}) }}
       {{ form_widget(form.parentName) }} /
-      {{ form_widget(form.name, {'attr': {'placeholder': 'project name'}}) }}
+      {{ form_widget(form.name, {'attr': {'placeholder': 'awesome-fifo'}}) }}
     </div>
   </div>
+
 
   <div class="form-group">
-    {{ form_label(form.sourceRepo.url, "Where can we find the source code of your project?") }}
-    {{ form_errors(form.sourceRepo) }}
+    <label class="librecores-new-project-label">Where can we find the source
+    code for your project?</label>
 
-    <div class="form-inline">
-      Git repository URL
-      {{ form_widget(form.sourceRepo.url, {'attr': {'style': 'width:500px', 'placeholder': 'URL, e.g. https://github.com/yourname/project'}}) }}
+    <p>LibreCores scans the source code of your project and extracts things
+    like the README or the license out of it.</p>
+
+    {{ form_errors(form.gitSourceRepoUrl) }}
+
+    <ul class="nav nav-tabs">
+      <li role="presentation" class="{{ isGithubConnected ? 'active'}}">
+        <a href="#github" aria-controls="settings" role="tab" data-toggle="tab">
+          <i class="fa fa-github" aria-hidden="true"></i>
+          GitHub
+        </a>
+      </li>
+      <li role="presentation" class="{{ not isGithubConnected ? 'active'}}">
+        <a href="#git" aria-controls="settings" role="tab" data-toggle="tab">
+          <i class="fa fa-git" aria-hidden="true"></i>
+          Other Git repository
+        </a>
+      </li>
+      <li role="presentation">
+        <a href="#other" aria-controls="settings" role="tab" data-toggle="tab">
+          Other
+        </a>
+      </li>
+    </ul>
+
+    <div class="tab-content">
+      <div role="tabpanel" class="tab-pane {{ isGithubConnected ? 'active'}}" id="github">
+        {% if isGithubConnected %}
+          {% if noGithubRepos %}
+            <p>You don't have access to any repository on GitHub (or haven't granted us access).
+            Please add the project to LibreCores by entering the Git repository URL manually.</p>
+          {% else %}
+            {{ form_row(form.githubSourceRepo, {'label': 'Select a project from your GitHub account'}) }}
+            {{ form_row(form.saveGithubSourceRepo) }}
+          {% endif %}
+        {% else %}
+          <p>We cannot import projects from your GitHub account because your
+          LibreCores account is not connected to GitHub.
+          Either
+          <a href="{{ path('librecores.user.settings.connections') }}">connect your account</a>
+          or enter the repository URL manually.</p>
+        {% endif %}
+      </div>
+
+
+      <div role="tabpanel" class="tab-pane {{ not isGithubConnected ? 'active'}}" id="git">
+        {{ form_row(form.gitSourceRepoUrl, {'label': 'Enter a Git repository URL', 'attr': {'style': 'width:500px', 'placeholder': 'URL, e.g. https://github.com/yourname/project'}}) }}
+
+        {{ form_row(form.saveGitSourceRepoUrl) }}
+      </div>
+
+      <div role="tabpanel" class="tab-pane" id="other">
+        <p>Currently LibreCores only supportes Git repositories.</p>
+        <p>How about taking the chance and migrating to Git?
+        In addition to many advanced version-control features, you can
+        collaborate easier on platforms like GitHub.</p>
+        <p>Start now!
+        <a href="https://github.com/new/import">Import a Subversion (SVN) or
+        Mercurial (hg) to GitHub</a> and return to this page to add your
+        project to LibreCores.</p>
+      </div>
     </div>
   </div>
-
-  {{ form_row(form.save) }}
 {{ form_end(form) }}
 
+{% endblock %}
+
+{% block pagejs %}
+// propose a name from the displayName
+// The name does not follow all validation rules for simplicity, i.e. it's 
+// possible for a proposed name to fail validation.
+$('#{{ form.displayName.vars.id|e('js') }}')
+  .keyup(function() {
+    var nodeName = $('#{{ form.name.vars.id|e('js') }}')
+    var proposedName = $(this).val().replace(/[\s_]/g, '-').replace(/[^a-z0-9-]/ig, '').toLowerCase();
+    nodeName.val(proposedName);
+  });
 {% endblock %}
