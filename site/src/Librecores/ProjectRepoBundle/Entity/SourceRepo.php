@@ -30,7 +30,7 @@ abstract class SourceRepo
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * The URL to clone/checkout the repository.
@@ -40,7 +40,7 @@ abstract class SourceRepo
      * @Assert\Length(max = 255)
      * @ORM\Column(type="string", length=255)
      */
-    private $url;
+    protected $url;
 
     /**
      * Project associated with this source repository
@@ -49,7 +49,7 @@ abstract class SourceRepo
      *
      * @ORM\OneToOne(targetEntity="Project", mappedBy="sourceRepo", cascade={"persist"})
      */
-    private $project;
+    protected $project;
 
     /**
      * Get the type of source repository

@@ -17,7 +17,7 @@ class GitSourceRepo extends SourceRepo
      *
      * @ORM\OneToOne(targetEntity="SourceStats")
      */
-    private $stats;
+    protected $stats;
 
     /**
      * {@inheritDoc}
