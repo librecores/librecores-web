@@ -25,7 +25,7 @@ class UserManager extends BaseUserManager
      */
     public function findUserByUsernameOrEmail2($username, $email)
     {
-        return $this->repository->createQueryBuilder('u')
+        return $this->getRepository()->createQueryBuilder('u')
             ->where('u.usernameCanonical = :username')
             ->orWhere('u.emailCanonical = :email')
             ->setParameter('username', $this->getCanonicalFieldsUpdater()->canonicalizeUsername($username))
@@ -45,7 +45,7 @@ class UserManager extends BaseUserManager
     public function findUserByOAuth($oAuthService, $oAuthUserId)
     {
         $columnName = $oAuthService.'OAuthUserId';
-        return $this->repository->createQueryBuilder('u')
+        return $this->getRepository()->createQueryBuilder('u')
             ->where("u.$columnName = :oAuthUserId")
             ->setParameter('oAuthUserId', $oAuthUserId)
             ->getQuery()
@@ -71,7 +71,7 @@ class UserManager extends BaseUserManager
         $tokens = explode(' ', $searchString);
         $tokens = array_map('trim', $tokens);
 
-        $q = $this->repository->createQueryBuilder('u');
+        $q = $this->getRepository()->createQueryBuilder('u');
 
         // XXX: using ?$i is not really nice, but that's true for this method
         // as a whole.
