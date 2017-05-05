@@ -64,6 +64,12 @@
       <h3 class="panel-title">Description</h3>
     </div>
     <div class="panel-body">
+      <p><i>This is the description that will be visible on the project description page. You have the choice between
+      loading it from the README, README.md, README.asc or similar file in your source repository, or editing it manually.</i></p>
+      <p class="bg-warning panel-body"><i><strong>Important:</strong>
+        If you switch between the two options, be careful: Switching from "Extract the project description" to
+        "Enter the project description" will result in asynchronous descriptions. The content at your repository
+        will not be updated with the content you enter here.</i></p>
       {{  form_row(form.descriptionTextAutoUpdate, {'label': false}) }}
       <div id="descriptionText_div"
            style="padding-left: 15px; display: {% if form.vars.value.descriptionTextAutoUpdate %}none{% else %}block{% endif %};">
@@ -77,6 +83,7 @@
       <h3 class="panel-title">Resources</h3>
     </div>
     <div class="panel-body">
+     <p><i>Those are the links from the LibreCores project overview to your resources.</i></p>
       {{ form_row(form.projectUrl) }}
       {{ form_row(form.issueTracker) }}
     </div>
@@ -87,6 +94,8 @@
       <h3 class="panel-title">Source Code Repository</h3>
     </div>
     <div class="panel-body">
+    <p><i>The link to your source code repository. This will be added as link on the project overview and
+    will be used to automatically extract information if chosen.</i></p>
       {{ form_row(form.sourceRepo, {'label': false}) }}
     </div>
   </div>
