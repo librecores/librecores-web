@@ -26,6 +26,11 @@ services:
             - '@security.token_storage'
             - '@app.cache.githubapi'
 
+    librecores.util.queuedispatcherservice:
+        class: Librecores\ProjectRepoBundle\Util\QueueDispatcherService
+        calls:
+            - [setContainer, ['@service_container']]
+
     # Forms
     app.form.type.project:
         class: Librecores\ProjectRepoBundle\Form\Type\ProjectType
