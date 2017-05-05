@@ -7,6 +7,7 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 use Github;
 use Librecores\ProjectRepoBundle\Entity\GitSourceRepo;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
+use Symfony\Component\Routing\RouterInterface;
 
 /**
  * Wrap the KnpLabs/php-github-api GitHub API as Symfony service
@@ -30,6 +31,11 @@ class GithubApiService
      * @var AdapterInterface
      */
     protected $cachePool;
+
+    /**
+     * @var RouterInterface
+     */
+    protected $router;
 
     /**
      * GitHub client API wrapper
@@ -61,7 +67,8 @@ class GithubApiService
      * @param AdapterInterface $cachePool the cache pool to use for all requests
      */
     public function __construct(TokenStorageInterface $tokenStorage,
-                                AdapterInterface $cachePool)
+                                AdapterInterface $cachePool,
+                                RouterInterface $router)
     {
         $user = $tokenStorage->getToken()->getUser();
         if (!$user instanceof \Librecores\ProjectRepoBundle\Entity\User) {
@@ -69,6 +76,7 @@ class GithubApiService
         }
         $this->user = $user;
         $this->cachePool = $cachePool;
+        $this->router = $router;
     }
 
     /**
@@ -145,7 +153,8 @@ class GithubApiService
      * @param string $owner
      * @param string $repo
      */
-    public function populateProject(Project $project, string $owner, string $repo)
+    public function populateProject(Project $project, string $owner,
+                                    string $repo)
     {
         $repo = $this->getClient()->repo()->show($owner, $repo);
 
@@ -163,5 +172,36 @@ class GithubApiService
         $project->setTagline($repo['description']);
 
         $project->setSourceRepo(new GitSourceRepo($repo['clone_url']));
+    }
+
+    /**
+     * Install a webhook on a GitHub repository for a given project
+     *
+     * @param Project $project
+     * @param string $owner
+     * @param string $repo
+     */
+    public function installHook(Project $project, string $owner, string $repo)
+    {
+        $webhookUrl = $this->router->generate(
+            'librecores_project_repo_project_update',
+            [
+                'parentName' => $project->getParentName(),
+                'projectName' => $project->getName()
+            ],
+            RouterInterface::ABSOLUTE_URL
+        );
+        // see https://developer.github.com/v3/repos/hooks/#create-a-hook for
+        // a parameter documentation
+        $params = [
+            'name' => 'web',
+            'config' => [
+                'url' => $webhookUrl,
+            ],
+            'events' => [ 'push' ],
+        ];
+
+        $this->getAuthenticatedClient()->repo()
+            ->hooks()->create($owner, $repo, $params);
     }
 }

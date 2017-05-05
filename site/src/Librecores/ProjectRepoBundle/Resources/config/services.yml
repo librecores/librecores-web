@@ -25,6 +25,7 @@ services:
         arguments:
             - '@security.token_storage'
             - '@app.cache.githubapi'
+            - '@router'
 
     librecores.util.queuedispatcherservice:
         class: Librecores\ProjectRepoBundle\Util\QueueDispatcherService
