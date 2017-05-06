@@ -1,33 +1,27 @@
 {% extends 'layout.html.twig' %}
 
 {% block title %}
-{{ project.getFullName() }} @ LibreCores
+{{ project.displayName }} @ LibreCores
 {% endblock %}
 
-{% block pagepath %}Home &raquo; Projects &raquo; {{ project.getFullName() }}{% endblock %}
+{% block pagepath %}Home &raquo; Projects &raquo; {{ project.displayName }}{% endblock %}
 
 {% block content %}
-<h1 style="margin-bottom:5px">{{ project.getFullName() }}</h1>
-{% if project.isAssigned() %}
-  {% if project.getParentOrganization() != null %}
-    <p>by {{ project.getParentOrganization().getName() }}</p>
-  {% else %}
-    <p>by {{ project.getParentUser().getUsername() }}</p>
+<div class="librecores-project-header">
+  <h1>
+    {{ project.displayName }}
+    <small> by <a href="{{ path('librecores_project_repo_user_org_view', {'userOrOrganization': project.parentName }) }}">{{ project.parentName }}</a></small>
+  </h1>
+
+  {% if project.tagline %}
+  <div class="tagline">
+    {{ project.tagline }}
+  </div>
   {% endif %}
-{% else %}
-  <p><i>This project is currently not claimed by anyone. <a href="#">Is it yours?</a></i></p>
-{% endif %}
+</div>
 
 <div class="row">
 <div class="col-sm-8">
-
-
-{% if project.getTagline() %}
-<p style="margin-top:20px; margin-bottom:20px;">
-  {{ project.getTagline() }}
-</p>
-{% endif %}
-
 
 <ul class="nav nav-tabs">
   <li role="presentation" class="active">
@@ -44,8 +38,7 @@
   </li>
   {% if is_granted("edit", project) %}
   <li>
-    <a href="{{ path('librecores_project_repo_project_settings', {'parentName':
-  project.getParentName(), 'projectName': project.getName()}) }}" aria-controls="settings" role="tab">
+    <a href="{{ path('librecores_project_repo_project_settings', {'parentName': project.parentName, 'projectName': project.name}) }}" aria-controls="settings" role="tab">
       <i class="fa fa-cogs fa-fw" aria-hidden="true"></i>
       Settings
     </a>
@@ -55,10 +48,10 @@
 
 <div class="tab-content">
   <div role="tabpanel" class="tab-pane active" id="README">
-  {{  project.getDescriptionText()|raw }}
+  {{  project.descriptionText|raw }}
   </div>
   <div role="tabpanel" class="tab-pane" id="LICENSE">
-  {{  project.getLicenseText()|raw }}
+  {{  project.licenseText|raw }}
   </div>
 </div>
 
@@ -67,31 +60,35 @@
   <div class="librecores-project-infobox" style="background-color: #f7f7f7; padding: 10px; border-radius: 3px;">
     <p><b>Data Sheet</b></p>
     <p>
-      {% if project.getProjectUrl() %}
+      {% if project.projectUrl %}
       <i class="fa fa-home" aria-hidden="true"></i>
-      <a href="{{ project.getProjectUrl()|escape('html_attr') }}">Project Web Site</a>
+      <a href="{{ project.projectUrl|escape('html_attr') }}">Project Web Site</a>
       <br/>
       {% endif %}
 
-      {% if project.getSourceRepo() %}
-      {% if project.getSourceRepo().getType() == 'git'  %}
-        <i class="fa fa-git-square" aria-hidden="true"></i>
+      {% if project.sourceRepo %}
+      {% if project.sourceRepo.type == 'git'  %}
+        <i class="fa fa-git" aria-hidden="true"></i>
       {% else %}
-        {{ project.getSourceRepo().getType() }}:
+        {{ project.sourceRepo.type }}:
       {% endif %}
-      {{ project.getSourceRepo().getUrl() }}
+      {% if project.sourceRepo.webViewUrl %}
+      <a href="{{ project.sourceRepo.webViewUrl }}">{{ project.sourceRepo.url }}</a>
+      {% else %}
+      {{ project.sourceRepo.url }}
+      {% endif %}
       <br/>
       {% endif %}
 
-      {% if project.getLicenseName() %}
+      {% if project.licenseName %}
       <i class="fa fa-copyright" aria-hidden="true"></i>
-      {{ project.getLicenseName() }}
+      {{ project.licenseName }}
       <br/>
       {% endif %}
 
-      {% if project.getIssueTracker() %}
+      {% if project.issueTracker %}
       <i class="fa fa-bug" aria-hidden="true"></i>
-      <a href="{{ project.getIssueTracker()|escape('html_attr') }}">Issue Tracker</a>
+      <a href="{{ project.issueTracker|escape('html_attr') }}">Issue Tracker</a>
       <br/>
       {% endif %}
     </p>
