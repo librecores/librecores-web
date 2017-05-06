@@ -79,6 +79,10 @@ librecores_project_repo_project_settings:
     path:     /{parentName}/{projectName}/settings
     defaults: { _controller: LibrecoresProjectRepoBundle:Project:settings }
 
+librecores_project_repo_project_update:
+    path: /{parentName}/{projectName}/update
+    defaults:
+        _controller: 'LibrecoresProjectRepoBundle:Project:update'
 
 
 # Organization routes

@@ -218,6 +218,38 @@ class ProjectController extends Controller
     }
 
     /**
+     * Update all data associated with the project from external sources
+     *
+     * This action triggers a re-scan of associated source repositories, and
+     * gets other data from 3rd-party services as needed.
+     *
+     * Note that this action only *triggers* the update -- the update itself is
+     * done asynchronously through RabbitMQ.
+     *
+     * @param Request $req
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function updateAction(Request $req, $parentName, $projectName)
+    {
+        if ($ghEvent = $req->headers->has('X-GitHub-Event')) {
+            if ($ghEvent != 'push') {
+                // We only react to push events, all other events signal any
+                // change we are interested in.
+                return;
+            }
+            // XXX: In the future, this could be extended to use information
+            // contained in the notification directly.
+        }
+
+        // queue an update of the project's information
+        $p = $this->getProject($parentName, $projectName);
+        $this->getQueueDispatcherService()->updateProjectInfo($p);
+
+        return new Response('project update queued', 200,
+            [ 'Content-Type' => 'text/plain' ]);
+    }
+
+    /**
      * @return GithubApiService
      */
     private function getGithubApiService()
