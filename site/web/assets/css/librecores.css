@@ -84,6 +84,11 @@ h1 a:hover, h1 a:active {
   font-weight: bold;
 }
 
+.form-desc {
+  font-style: italic;
+  padding-bottom: 5px;
+}
+
 /* top navigation bar */
 .librecores-nav {
   background-color: #fff;

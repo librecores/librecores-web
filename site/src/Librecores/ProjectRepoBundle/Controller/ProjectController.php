@@ -174,7 +174,6 @@ class ProjectController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($p);
             $em->flush();
-            //return $this->redirectToRoute('task_success');
         }
 
         return $this->render('LibrecoresProjectRepoBundle:Project:settings.html.twig',

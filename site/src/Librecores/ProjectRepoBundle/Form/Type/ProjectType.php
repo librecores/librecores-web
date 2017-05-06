@@ -14,6 +14,7 @@ class ProjectType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('displayName', TextType::class, array('label' => 'Display name', 'required' => false))
             ->add('tagline', TextType::class, array('label' => 'Tagline', 'required' => false))
             ->add('descriptionTextAutoUpdate', ChoiceType::class, array(
                 'choices' => array(
@@ -39,7 +40,7 @@ class ProjectType extends AbstractType
                 'expanded' => true,
                 'multiple' => false))
             ->add('licenseText', PurifiedTextareaType::class, array('label' => false, 'required' => false))
-            ->add('save', SubmitType::class, array('label' => 'Update Project'))
+            ->add('save', SubmitType::class, array('label' => 'Update Project', 'attr' => ['class' => 'btn-primary']))
         ;
     }
 
