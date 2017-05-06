@@ -93,7 +93,8 @@ class Project
      *
      * @var string
      *
-     * @Assert\Length(min = 0, max = 100)
+     * @Assert\NotBlank
+     * @Assert\Length(min = 5, max = 100)
      * @ORM\Column(name="displayName", type="string", length=100)
      */
     private $displayName;
