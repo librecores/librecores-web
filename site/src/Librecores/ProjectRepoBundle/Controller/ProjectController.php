@@ -356,6 +356,8 @@ class ProjectController extends Controller
                 [$owner, $name] = explode('/', $githubSourceRepoName);
                 // populate the project with some data from GitHub
                 $this->getGithubApiService()->populateProject($p, $owner, $name);
+                // and install a webhook to notify us of all pushes to the repo
+                $this->getGithubApiService()->installHook($p, $owner, $name);
             }
         }
 
