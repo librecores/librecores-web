@@ -15,6 +15,7 @@ use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Librecores\ProjectRepoBundle\Entity\GitSourceRepo;
 use Symfony\Component\Form\FormInterface;
 use Librecores\ProjectRepoBundle\Util\GithubApiService;
+use Librecores\ProjectRepoBundle\Util\QueueDispatcherService;
 
 class ProjectController extends Controller
 {
@@ -100,8 +101,7 @@ class ProjectController extends Controller
             $em->flush();
 
             // queue data collection from repository
-            $this->get('old_sound_rabbit_mq.update_project_info_producer')
-                 ->publish(serialize($p->getId()));
+            $this->getQueueDispatcherService()->updateProjectInfo($p);
 
             // redirect user to "view project" page
             return $this->redirectToRoute(
@@ -133,13 +133,7 @@ class ProjectController extends Controller
      */
     public function viewAction(Request $request, $parentName, $projectName)
     {
-        $p = $this->getDoctrine()
-        ->getRepository('LibrecoresProjectRepoBundle:Project')
-        ->findProjectWithParent($parentName, $projectName);
-
-        if (!$p) {
-            throw $this->createNotFoundException('No project found with that name.');
-        }
+        $p = $this->getProject($parentName, $projectName);
 
         // redirect to wait page until processing is done
         if ($p->getInProcessing()) {
@@ -167,13 +161,7 @@ class ProjectController extends Controller
      */
     public function settingsAction(Request $request, $parentName, $projectName)
     {
-        $p = $this->getDoctrine()
-        ->getRepository('LibrecoresProjectRepoBundle:Project')
-        ->findProjectWithParent($parentName, $projectName);
-
-        if (!$p) {
-            throw $this->createNotFoundException('No project found with that name.');
-        }
+        $p = $this->getProject($parentName, $projectName);
 
         // check permissions
         $this->denyAccessUnlessGranted('edit', $p);
@@ -203,13 +191,7 @@ class ProjectController extends Controller
      */
     public function settingsTeamAction($parentName, $projectName)
     {
-        $p = $this->getDoctrine()
-            ->getRepository('LibrecoresProjectRepoBundle:Project')
-            ->findProjectWithParent($parentName, $projectName);
-
-        if (!$p) {
-            throw $this->createNotFoundException('No project found with that name.');
-        }
+        $p = $this->getProject($parentName, $projectName);
 
         return $this->render('LibrecoresProjectRepoBundle:Project:settings_team.html.twig',
             array('project' => $p));
@@ -236,13 +218,49 @@ class ProjectController extends Controller
     }
 
     /**
+     * @return GithubApiService
+     */
+    private function getGithubApiService()
+    {
+        return $this->get('librecores.util.githubapiservice');
+    }
+
+    /**
+     * @return QueueDispatcherService
+     */
+    private function getQueueDispatcherService()
+    {
+        return $this->get('librecores.util.queuedispatcherservice');
+    }
+
+    /**
+     * Get project object from parentName and projectName
+     *
+     * @param string $parentName
+     * @param string $projectName
+     * @return Project
+     * @throws NotFoundHttpException
+     */
+    private function getProject($parentName, $projectName)
+    {
+        $p = $this->getDoctrine()
+            ->getRepository('LibrecoresProjectRepoBundle:Project')
+            ->findProjectWithParent($parentName, $projectName);
+
+        if (!$p) {
+            throw $this->createNotFoundException('No project found with that name.');
+        }
+        return $p;
+    }
+
+    /**
      * Get all GitHub repositories accessible by the current user
      *
      * @return array
      */
     private function getGithubRepos()
     {
-        $githubClient = $this->get('librecores.util.githubapiservice')->getAuthenticatedClient();
+        $githubClient = $this->getGithubApiService()->getAuthenticatedClient();
         if (!$githubClient) {
             return [];
         }
@@ -304,8 +322,8 @@ class ProjectController extends Controller
             $githubSourceRepoName = $form->get('githubSourceRepo')->getData();
             if (!empty($githubSourceRepoName)) {
                 [$owner, $name] = explode('/', $githubSourceRepoName);
-                $this->get('librecores.util.githubapiservice')->populateProject($p, $owner, $name);
-                // TODO: install commit hook here
+                // populate the project with some data from GitHub
+                $this->getGithubApiService()->populateProject($p, $owner, $name);
             }
         }
 
@@ -339,7 +357,7 @@ class ProjectController extends Controller
 
         if ($formParentType === 'u') {
             $user = $this->container->get('fos_user.user_manager')
-            ->findUserByUsername($formParentName);
+                ->findUserByUsername($formParentName);
 
             if (null === $user)
                 throw new \Exception("form manipulated");
@@ -348,8 +366,8 @@ class ProjectController extends Controller
 
         } else if ($formParentType === 'o') {
             $organization = $this->getDoctrine()
-            ->getRepository('LibrecoresProjectRepoBundle:Organization')
-            ->findOneByName($formParentName);
+                ->getRepository('LibrecoresProjectRepoBundle:Organization')
+                ->findOneByName($formParentName);
 
             if (null === $organization)
                 throw new \Exception("form manipulated");
