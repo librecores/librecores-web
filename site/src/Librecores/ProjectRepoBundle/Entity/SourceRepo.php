@@ -35,12 +35,30 @@ abstract class SourceRepo
     /**
      * The URL to clone/checkout the repository.
      *
+     * XXX: We don't add a Assert\Url validator here since we don't know
+     * which protocols are supported by classes inheriting from this class.
+     * For example, in GitSourceRepo, git:// URLs are valid. Once we figure out
+     * a way to add validators in child classes, that should be added.
+     *
      * @var string
      *
+     * @Assert\NotBlank()
      * @Assert\Length(max = 255)
      * @ORM\Column(type="string", length=255)
      */
     protected $url;
+
+    /**
+     * URL of the web site where the repository contents can be viewed with a
+     * regular web browser
+     *
+     * @var string?
+     *
+     * @Assert\Url()
+     * @Assert\Length(max = 255)
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    protected $webViewUrl = null;
 
     /**
      * Project associated with this source repository
@@ -116,5 +134,29 @@ abstract class SourceRepo
     public function getProject()
     {
         return $this->project;
+    }
+
+    /**
+     * Set webViewUrl
+     *
+     * @param string $webViewUrl
+     *
+     * @return SourceRepo
+     */
+    public function setWebViewUrl($webViewUrl)
+    {
+        $this->webViewUrl = $webViewUrl;
+
+        return $this;
+    }
+
+    /**
+     * Get webViewUrl
+     *
+     * @return string
+     */
+    public function getWebViewUrl()
+    {
+        return $this->webViewUrl;
     }
 }

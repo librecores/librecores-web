@@ -20,7 +20,8 @@ class SourceRepoType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('url', UrlType::class, array('label' => 'Git URL', 'required' => true))
+            ->add('url', UrlType::class, array('label' => 'Git clone URL', 'required' => true))
+            ->add('webViewUrl', UrlType::class, array('label' => 'Repository web view URL', 'required' => false))
         ;
     }
 

@@ -171,7 +171,9 @@ class GithubApiService
 
         $project->setTagline($repo['description']);
 
-        $project->setSourceRepo(new GitSourceRepo($repo['clone_url']));
+        $sourceRepo = new GitSourceRepo($repo['clone_url']);
+        $sourceRepo->setWebViewUrl($repo['html_url']);
+        $project->setSourceRepo($sourceRepo);
     }
 
     /**
