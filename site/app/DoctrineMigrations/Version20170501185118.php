@@ -19,6 +19,7 @@ class Version20170501185118 extends AbstractMigration
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
         $this->addSql('ALTER TABLE Project ADD displayName VARCHAR(100) NOT NULL');
+        $this->addSql('UPDATE Project SET displayName = name');
     }
 
     /**
