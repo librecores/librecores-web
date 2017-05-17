@@ -16,6 +16,11 @@ use Librecores\ProjectRepoBundle\Entity\GitSourceRepo;
 use Symfony\Component\Form\FormInterface;
 use Librecores\ProjectRepoBundle\Util\GithubApiService;
 use Librecores\ProjectRepoBundle\Util\QueueDispatcherService;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Librecores\ProjectRepoBundle\Entity\Project;
+use Librecores\ProjectRepoBundle\Entity\OrganizationMember;
+use Librecores\ProjectRepoBundle\Form\Type\ProjectType;
 
 class ProjectController extends Controller
 {
