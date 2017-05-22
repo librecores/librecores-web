@@ -72,6 +72,13 @@
         <div id="descriptionText_div"
              style="padding-left: 15px; display: {% if form.vars.value.descriptionTextAutoUpdate %}none{% else %}block{% endif %};">
           {{ form_row(form.descriptionText) }}
+          <div class="alert alert-info" role="alert">
+            <strong>Note!</strong>
+            Editing the description text here doesn't update it in your code
+            repository. To keep the descriptions in your source repository and
+            on LibreCores in sync, update the README file in your source code
+            repository and switch to the auto-update mode above.
+          </div>
         </div>
       </div>
     </div>
@@ -106,6 +113,13 @@
       {{ form_row(form.licenseTextAutoUpdate) }}
       <div id="licenseText_div" style="padding-left: 15px; display: {% if  form.vars.value.licenseTextAutoUpdate %}none{% else %}block{% endif %};">
         {{ form_row(form.licenseText) }}
+        <div class="alert alert-info" role="alert">
+          <strong>Note!</strong>
+          Editing the license text here doesn't update it in your code
+          repository. To keep the license texts in your source repository and
+          on LibreCores in sync, update the LICENSE file in your source code
+          repository and switch to the auto-update mode above.
+        </div>
       </div>
     </div>
   </div>
