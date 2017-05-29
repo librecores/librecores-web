@@ -51,3 +51,18 @@ assetic:
 
 #swiftmailer:
 #    delivery_address: me@example.com
+
+easy_admin:
+    site_name: 'LibreCores Admin'
+    design:
+        form_theme:   'horizontal'
+        color_scheme: 'dark'
+    entities:
+        - Librecores\ProjectRepoBundle\Entity\GitSourceRepo
+        - Librecores\ProjectRepoBundle\Entity\Organization
+        - Librecores\ProjectRepoBundle\Entity\OrganizationMember
+        - Librecores\ProjectRepoBundle\Entity\Project
+#        - Librecores\ProjectRepoBundle\Entity\SourceStats
+#        - Librecores\ProjectRepoBundle\Entity\SourceStatsAuthor
+#        - Librecores\ProjectRepoBundle\Entity\SourceStatsCommitHistogram
+        - Librecores\ProjectRepoBundle\Entity\User

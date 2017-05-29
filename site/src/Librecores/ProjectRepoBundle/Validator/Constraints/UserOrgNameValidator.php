@@ -39,7 +39,7 @@ class UserOrgNameValidator extends ConstraintValidator
      * @var string[]
      */
     const RESERVED_NAMES = [ 'org', 'orgs', 'planet', 'project', 'projects',
-                             'search', 'static', 'unassigned', 'user' ];
+                             'search', 'static', 'unassigned', 'user', 'admin', 'administrator' ];
 
     /**
      * Routes that are excluded from checking for a match in userOrgReserved()
