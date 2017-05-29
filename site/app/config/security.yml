@@ -50,6 +50,9 @@ security:
                 domain: ~ # Defaults to the current domain from $_SERVER
 
     access_control:
+        # only admins should be able to access the easy admin panel
+        - { path: ^/admin, role: ROLE_ADMIN }
+
         # login and registration pages should work for non-logged-in users
         - { path: ^/user/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/user/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
