@@ -79,6 +79,25 @@ If you don't use NFS, ...
 
 - Open the file ``vagrant/Vagrantfile`` and uncomment the corresponding lines of configuration.
 
+**Customizing Vagrant Configuration**
+
+If you need to customize Vagrant configuration, such as adding networks or  you can add a ``Vagrantfile.private`` under the `vagrant` folder with your customizations. However, not all settings in ``Vagrantfile`` can be overridden.
+
+Example: The following configuration uses SSHFS in place of NFS (you need to disable NFS in your host though) and attaches the VM to a bridged network to acquire a public IP.
+
+.. code-block:: ruby
+
+    Vagrant.configure("2") do |config|
+        config.vm.synced_folder ".",  "/vagrant", id: "vagrant-root",type: 'sshfs'
+        config.vm.synced_folder "..", "/var/www/lc", id: "application", type: 'sshfs'
+        config.vm.define 'librecores' do |node|
+            node.vm.network :public_network, ip: '10.42.0.99'
+        end
+        config.vm.provider :virtualbox do |v|
+            v.cpus = 2
+            v.memory = 2048
+        end
+    end
 
 Step 4: Develop!
 ----------------
