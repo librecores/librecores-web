@@ -1,5 +1,8 @@
 *~
 
+# IntelliJ IDEA project files
+.idea
+
 # Eclipse project files
 .buildpath
 .project
@@ -9,3 +12,6 @@
 
 # secrets of all kinds
 /aws-secrets.include
+
+# private vagrant configutation
+/vagrant/Vagrantfile.private
