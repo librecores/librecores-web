@@ -3,3 +3,7 @@
 - name: Install nginx
   sudo: yes
   apt:  pkg=nginx state=installed
+
+- name: Add gzip compression config
+  template: src=nginx/conf-gzip.conf.tpl dest=/etc/nginx/conf.d/conf-gzip.conf
+  notify: restart nginx
