@@ -4,7 +4,7 @@ namespace Librecores\ProjectRepoBundle\RepoCrawler;
 use Psr\Log\LoggerInterface;
 use Librecores\ProjectRepoBundle\Entity\SourceRepo;
 use Librecores\ProjectRepoBundle\Util\MarkupToHtmlConverter;
-use Librecores\ProjectRepoBundle\Entity\Project;
+
 
 /**
  * Repository crawler base class
@@ -13,16 +13,40 @@ use Librecores\ProjectRepoBundle\Entity\Project;
  */
 abstract class RepoCrawler
 {
+    /**
+     * @var SourceRepo
+     */
     protected $repo;
+
+    /**
+     * @var MarkupToHtmlConverter
+     */
     protected $markupConverter;
+
+    /**
+     * @var LoggerInterface
+     */
     protected $logger;
 
+    /**
+     * @var OutputParserInterface
+     */
+    protected $outputParser;
+
+    /**
+     * RepoCrawler constructor.
+     * @param SourceRepo $repo
+     * @param MarkupToHtmlConverter $markupConverter
+     * @param LoggerInterface $logger
+     * @param OutputParserInterface $outputParser
+     */
     public function __construct(SourceRepo $repo,
-        MarkupToHtmlConverter $markupConverter, LoggerInterface $logger)
+        MarkupToHtmlConverter $markupConverter, LoggerInterface $logger, OutputParserInterface $outputParser)
     {
         $this->repo = $repo;
         $this->markupConverter = $markupConverter;
         $this->logger = $logger;
+        $this->outputParser = $outputParser;
 
         if (!$this->isValidRepoType()) {
             throw new \RuntimeException("Repository type is not supported by this crawler.");
@@ -91,5 +115,21 @@ abstract class RepoCrawler
     public function updateSourceRepo()
     {
         // the default implementation is empty
+    }
+
+    /**
+     * Get all commits in the repository since a specified commit ID or all if
+     * not specified
+     *
+     * Implementations supporting extraction of commits are required to return an
+     * array of `SourceCommit` objects or an empty array if otherwise. The default
+     * behavior is to return an empty array.
+     *
+     * @param string|null $sinceId ID of commit after which the commits are to be
+     *                              returned
+     * @return array all commits in the repository
+     */
+    public function getCommits(string $sinceId = null) : array {
+        return [];
     }
 }

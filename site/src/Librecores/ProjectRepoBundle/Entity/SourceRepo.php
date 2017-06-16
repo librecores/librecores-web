@@ -2,6 +2,7 @@
 namespace Librecores\ProjectRepoBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -75,9 +76,10 @@ abstract class SourceRepo
     /**
      * Contributors of this source repository
      *
-     * @var ArrayCollection
+     * @var Collection
      *
-     * @ORM\OneToMany(targetEntity="Contributor", mappedBy="sourceRepo")
+     * @ORM\OneToMany(targetEntity="Contributor", mappedBy="sourceRepo", cascade={"persist", "remove"},
+     *                orphanRemoval=true)
      */
     protected $contributors;
 

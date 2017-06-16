@@ -5,10 +5,31 @@ use Librecores\ProjectRepoBundle\Util\FileUtil;
 use Symfony\Component\Process\Process;
 use Librecores\ProjectRepoBundle\Entity\GitSourceRepo;
 
+/**
+ * Crawls and extracts metadata from a remote git repository
+ *
+ * This implementation performs a shallow clone of the git repository
+ * and uses ordinary git commands to fetch metadata
+ *
+ * @package Librecores\ProjectRepoBundle\RepoCrawler
+ */
 class GitRepoCrawler extends RepoCrawler
 {
-    /** git clone timeout in seconds */
+    /**
+     * Git clone timeout in seconds
+     *
+     * @internal
+     * @var int
+     */
     const TIMEOUT_GIT_CLONE = 3*60;
+
+    /**
+     * Git log timeout in seconds
+     *
+     * @internal
+     * @var int
+     */
+    const TIMEOUT_GIT_LOG = 60;
 
     /**
      * Case-insensitive basenames without file extensions of files used for the
@@ -163,5 +184,30 @@ class GitRepoCrawler extends RepoCrawler
         }
 
         return $sanitizedHtml;
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see RepoCrawler::getCommits()
+     */
+    public function getCommits(string $sinceId = null): array
+    {
+        $since = ' ' .$sinceId ? $sinceId. '...' : '';
+        $cmd = 'git log --reverse --format="%h|%aN|%aE|%aD" --shortstat'. $since;
+        $cwd = $this->getRepoClonePath();
+
+        $this->logger->info("Fetching commits in $cwd - $cmd");
+
+        $process = new Process($cmd);
+        $process->setWorkingDirectory($cwd);
+        $process->setTimeout(self::TIMEOUT_GIT_CLONE);
+        $process->run();
+
+        if (!$process->isSuccessful()) {
+            throw new \RuntimeException("Unable to fetch commits from $cwd : ".$process->getErrorOutput());
+        }
+
+        $this->logger->debug("Fetched commmits from $cwd");
+        return $this->outputParser->parseCommits($this->repo, $process->getOutput());
     }
 }

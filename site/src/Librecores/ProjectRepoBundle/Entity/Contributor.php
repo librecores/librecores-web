@@ -2,6 +2,7 @@
 namespace Librecores\ProjectRepoBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -65,9 +66,9 @@ class Contributor
     /**
      * Commits by this contributor
      *
-     * @var ArrayCollection
+     * @var Collection
      *
-     * @ORM\OneToMany(targetEntity="Librecores\ProjectRepoBundle\Entity\Commit", mappedBy="contributor")
+     * @ORM\OneToMany(targetEntity="Librecores\ProjectRepoBundle\Entity\Commit", mappedBy="contributor", cascade={"persist"})
      */
     private $commits;
 
