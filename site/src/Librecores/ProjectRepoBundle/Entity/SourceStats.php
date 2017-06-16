@@ -1,6 +1,7 @@
 <?php
 namespace Librecores\ProjectRepoBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -22,7 +23,7 @@ class SourceStats
 
 
     /**
-     * @ORM\OneToMany(targetEntity="SourceStatsAuthor", mappedBy="sourceStats")
+     * @ORM\OneToMany(targetEntity="Librecores\ProjectRepoBundle\Entity\Contributor", mappedBy="sourceStats")
      */
     private $authors;
 
@@ -36,8 +37,8 @@ class SourceStats
      */
     public function __construct()
     {
-        $this->authors = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->commitHistogramEntries = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->authors = new ArrayCollection();
+        $this->commitHistogramEntries = new ArrayCollection();
     }
 
     /**
@@ -53,10 +54,10 @@ class SourceStats
     /**
      * Add authors
      *
-     * @param \Librecores\ProjectRepoBundle\Entity\SourceStatsAuthor $authors
+     * @param Contributor $authors
      * @return SourceStats
      */
-    public function addAuthor(\Librecores\ProjectRepoBundle\Entity\SourceStatsAuthor $authors)
+    public function addAuthor(Contributor $authors)
     {
         $this->authors[] = $authors;
 
@@ -66,9 +67,9 @@ class SourceStats
     /**
      * Remove authors
      *
-     * @param \Librecores\ProjectRepoBundle\Entity\SourceStatsAuthor $authors
+     * @param Contributor $authors
      */
-    public function removeAuthor(\Librecores\ProjectRepoBundle\Entity\SourceStatsAuthor $authors)
+    public function removeAuthor(Contributor $authors)
     {
         $this->authors->removeElement($authors);
     }
@@ -86,10 +87,10 @@ class SourceStats
     /**
      * Add commitHistogramEntries
      *
-     * @param \Librecores\ProjectRepoBundle\Entity\SourceStatsCommitHistogram $commitHistogramEntries
+     * @param SourceStatsCommitHistogram $commitHistogramEntries
      * @return SourceStats
      */
-    public function addCommitHistogramEntry(\Librecores\ProjectRepoBundle\Entity\SourceStatsCommitHistogram $commitHistogramEntries)
+    public function addCommitHistogramEntry(SourceStatsCommitHistogram $commitHistogramEntries)
     {
         $this->commitHistogramEntries[] = $commitHistogramEntries;
 
@@ -99,9 +100,9 @@ class SourceStats
     /**
      * Remove commitHistogramEntries
      *
-     * @param \Librecores\ProjectRepoBundle\Entity\SourceStatsCommitHistogram $commitHistogramEntries
+     * @param SourceStatsCommitHistogram $commitHistogramEntries
      */
-    public function removeCommitHistogramEntry(\Librecores\ProjectRepoBundle\Entity\SourceStatsCommitHistogram $commitHistogramEntries)
+    public function removeCommitHistogramEntry(SourceStatsCommitHistogram $commitHistogramEntries)
     {
         $this->commitHistogramEntries->removeElement($commitHistogramEntries);
     }

@@ -1,6 +1,7 @@
 <?php
 namespace Librecores\ProjectRepoBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -24,6 +25,8 @@ abstract class SourceRepo
     const REPO_TYPE_SVN = 'svn';
 
     /**
+     * Unique ID to identify this entity in the database
+     *
      * @var integer
      *
      * @ORM\Column(name="id", type="integer")
@@ -49,6 +52,15 @@ abstract class SourceRepo
     protected $url;
 
     /**
+     * Project associated with this source repository
+     *
+     * @var Project
+     *
+     * @ORM\OneToOne(targetEntity="Project", mappedBy="sourceRepo", cascade={"persist"})
+     */
+    protected $project;
+
+    /**
      * URL of the web site where the repository contents can be viewed with a
      * regular web browser
      *
@@ -61,13 +73,21 @@ abstract class SourceRepo
     protected $webViewUrl = null;
 
     /**
-     * Project associated with this source repository
+     * Contributors of this source repository
      *
-     * @var Project
+     * @var ArrayCollection
      *
-     * @ORM\OneToOne(targetEntity="Project", mappedBy="sourceRepo", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="Contributor", mappedBy="sourceRepo")
      */
-    protected $project;
+    protected $contributors;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->contributors = new ArrayCollection();
+    }
 
     /**
      * Get the type of source repository
@@ -116,10 +136,10 @@ abstract class SourceRepo
     /**
      * Set project
      *
-     * @param \Librecores\ProjectRepoBundle\Entity\Project $project
+     * @param Project $project
      * @return SourceRepo
      */
-    public function setProject(\Librecores\ProjectRepoBundle\Entity\Project $project = null)
+    public function setProject(Project $project = null)
     {
         $this->project = $project;
 
@@ -129,7 +149,7 @@ abstract class SourceRepo
     /**
      * Get project
      *
-     * @return \Librecores\ProjectRepoBundle\Entity\Project
+     * @return Project
      */
     public function getProject()
     {
@@ -158,5 +178,39 @@ abstract class SourceRepo
     public function getWebViewUrl()
     {
         return $this->webViewUrl;
+    }
+
+    /**
+     * Add contributor
+     *
+     * @param Contributor $contributor
+     *
+     * @return SourceRepo
+     */
+    public function addContributor(Contributor $contributor)
+    {
+        $this->contributors[] = $contributor;
+
+        return $this;
+    }
+
+    /**
+     * Remove contributor
+     *
+     * @param Contributor $contributor
+     */
+    public function removeContributor(Contributor $contributor)
+    {
+        $this->contributors->removeElement($contributor);
+    }
+
+    /**
+     * Get contributors
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getContributors()
+    {
+        return $this->contributors;
     }
 }

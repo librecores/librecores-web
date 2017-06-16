@@ -1,5 +1,5 @@
 <?php
-namespace Librecores\ProjectRepoBundle\Entity;
+namespace Librecores\ProjectRepoBundle\Repository;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityRepository;

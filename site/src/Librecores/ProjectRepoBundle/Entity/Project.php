@@ -16,7 +16,7 @@ use Librecores\ProjectRepoBundle\Entity\SourceRepo;
  *     @ORM\UniqueConstraint(name="projectname_full",
  *         columns={"name", "parentUser_id", "parentOrganization_id"})
  * })
- * @ORM\Entity(repositoryClass="Librecores\ProjectRepoBundle\Entity\ProjectRepository")
+ * @ORM\Entity(repositoryClass="Librecores\ProjectRepoBundle\Repository\ProjectRepository")
  * @ORM\HasLifecycleCallbacks
  * @UniqueEntity(
  *     fields={"parentUser", "parentOrganization", "name"},
