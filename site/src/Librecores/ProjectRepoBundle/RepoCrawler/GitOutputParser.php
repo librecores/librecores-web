@@ -7,6 +7,7 @@ use InvalidArgumentException;
 use Librecores\ProjectRepoBundle\Entity\Commit;
 use Librecores\ProjectRepoBundle\Entity\SourceRepo;
 use Librecores\ProjectRepoBundle\Repository\ContributorRepository;
+use Psr\Log\LoggerInterface;
 
 class GitOutputParser implements OutputParserInterface
 {
@@ -15,9 +16,21 @@ class GitOutputParser implements OutputParserInterface
      */
     private $contributors;
 
-    public function __construct(ContributorRepository $contributors)
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
+     * GitOutputParser constructor.
+     * @param ContributorRepository $contributors
+     * @param LoggerInterface $logger
+     */
+
+    public function __construct(ContributorRepository $contributors, LoggerInterface $logger)
     {
         $this->contributors = $contributors;
+        $this->logger = $logger;
     }
 
     /**
@@ -29,33 +42,42 @@ class GitOutputParser implements OutputParserInterface
         $outputString = preg_replace('/^\h*\v+/m', '', trim($outputString));    // remove blank lines
         $output = explode("\n",$outputString);  // explode lines into array
 
-        // every commit takes 2 lines
-        //
-        // commit info
-        // files modified
-        //
-        // thus length of $output must be a multiple of 2
-        $len = count($output);
-        if ($len % 2 !== 0) {
-            throw new InvalidArgumentException('Insufficient lines. Possibly corrupt output');
-        }
-
         $commits = []; // stores the array of commits
-        for ($i = 0; $i < $len; $i += 2) {
+        $len = count($output);
+        for ($i = 0; $i < $len; $i++) {
 
             // Every commit has 4 parts, id, author name, email, commit timestamp
             // in the format id|name|email|timestamp
-            // explode to get 4 parts of the output line
-            $parts = explode('|', trim($output[$i]), 4);
-            $contributor = $this->contributors->getContributorForRepository($repo, $parts[2], $parts[1]);
-
-            $commit = new Commit();
-            $commit->setCommitId($parts[0])
-                    ->setDateCommitted(new \DateTime($parts[3]))
+            // followed by an optional line for modifications
+            $commitMatches = [];
+            if(preg_match('/^([\da-f]+)\|(.+)\|(.+@.+)\|(.+)$/', $output[$i], $commitMatches)) {
+                $contributor = $this->contributors->getContributorForRepository($repo, $commitMatches[3], $commitMatches[2]);
+                $commit = new Commit();
+                $commit->setCommitId($commitMatches[1])
+                    ->setDateCommitted(new \DateTime($commitMatches[4]))
                     ->setContributor($contributor);
 
-            $commits[] = $commit;
+                //XXX: Find a better way to find file modifications in each commit
+                $modificationMatches = [];
+                if ($i < $len - 1 && preg_match('/(\d+) files? changed(?:, (\d+) insertions?\(\+\))?(?:, (\d+) deletions?\(-\))?/',
+                    $output[$i + 1], $modificationMatches)) {
+                    $commit->setFilesModified($modificationMatches[1]);
+
+                    if(array_key_exists(2, $modificationMatches) && count($modificationMatches[2])) {
+                        $commit->setLinesAdded($modificationMatches[2]);
+                    }
+                    if(array_key_exists(3, $modificationMatches) && count($modificationMatches[3])) {
+                        $commit->setLinesRemoved($modificationMatches[3]);
+                    }
+                    $i++;   // skip the next line
+                }
+
+                $commits[] = $commit;
+            }
         }
+
+        // handle root commit without modification
+
 
         return $commits;
     }

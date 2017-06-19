@@ -25,14 +25,17 @@ class ContributorRepository extends EntityRepository
      */
     public function getContributorForRepository(SourceRepo $repo, string $email, ?string $name = null): ?Contributor
     {
-        $contributor = $this->findOneBy(['sourceRepo' => $repo]);
+        $contributor = $this->findOneBy([
+            'repository' => $repo,
+            'email' => $email
+        ]);
 
         // create and return and entity only when the name is specified
         if (null === $contributor && $name !== null) {
             $contributor = new Contributor();
             $contributor->setName($name)
-                        ->setEmail($email)
-                        ->setSourceRepo($repo);
+                ->setEmail($email)
+                ->setRepository($repo);
 
             // we mark the entity for persisting but do not perform the flush
             // as this entity is inevitably going to be used as a part of a

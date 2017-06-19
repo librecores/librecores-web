@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @author Amitosh Swain Mahapatra <amitosh.swain@gmail.com>
  *
  * @ORM\Table
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Librecores\ProjectRepoBundle\Repository\CommitRepository")
  */
 class Commit
 {
@@ -29,11 +29,20 @@ class Commit
     private $id;
 
     /**
+     * Repository to which this commit belongs
+     *
+     * @var SourceRepo
+     *
+     * @ORM\ManyToOne(targetEntity="Librecores\ProjectRepoBundle\Entity\SourceRepo", inversedBy="commits")
+     */
+    private $repository;
+
+    /**
      * Unique ID assigned by the underlying SCM to this specific commit
      *
      * @var string
      *
-     * @ORM\Column(name="commitId", type="string", length=255, nullable=false, unique=true)
+     * @ORM\Column(type="string", length=255, nullable=false, unique=true)
      */
     private $commitId;
 
@@ -51,27 +60,36 @@ class Commit
      *
      * @var \DateTime
      *
-     * @ORM\Column(name="dateCommitted", type="datetime", nullable=false)
+     * @ORM\Column(type="datetime", nullable=false)
      */
     private $dateCommitted;
+
+    /**
+     * Number of files modified in this commit
+     *
+     * @var int
+     *
+     * @ORM\Column(type="integer", nullable=false)
+     */
+    private $filesModified = 0;
 
     /**
      * Number of lines added in this commit
      *
      * @var int
      *
-     * @ORM\Column(name="linesAdded", type="integer", nullable=false)
+     * @ORM\Column(type="integer", nullable=false)
      */
-    private $linesAdded;
+    private $linesAdded = 0;
 
     /**
      * Number of lines removed in this commit
      *
      * @var int
      *
-     * @ORM\Column(name="linesRemoved", type="integer", nullable=false)
+     * @ORM\Column(type="integer", nullable=false)
      */
-    private $linesRemoved;
+    private $linesRemoved = 0;
 
     /**
      * Get id
@@ -81,6 +99,30 @@ class Commit
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set repository
+     *
+     * @param SourceRepo $repository
+     *
+     * @return Commit
+     */
+    public function setRepository(SourceRepo $repository = null)
+    {
+        $this->repository = $repository;
+        $repository->addCommit($this);
+        return $this;
+    }
+
+    /**
+     * Get repository
+     *
+     * @return SourceRepo
+     */
+    public function getRepository()
+    {
+        return $this->repository;
     }
 
     /**
@@ -117,7 +159,7 @@ class Commit
     public function setContributor(Contributor $contributor = null)
     {
         $this->contributor = $contributor;
-
+        $contributor->addCommit($this);
         return $this;
     }
 
@@ -153,6 +195,30 @@ class Commit
     public function getDateCommitted()
     {
         return $this->dateCommitted;
+    }
+
+    /**
+     * Set filesModified
+     *
+     * @param integer $filesModified
+     *
+     * @return Commit
+     */
+    public function setFilesModified($filesModified)
+    {
+        $this->filesModified = $filesModified;
+
+        return $this;
+    }
+
+    /**
+     * Get filesModifies
+     *
+     * @return int
+     */
+    public function getFilesModified()
+    {
+        return $this->filesModified;
     }
 
     /**

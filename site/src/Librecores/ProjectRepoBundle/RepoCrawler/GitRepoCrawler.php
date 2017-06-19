@@ -103,7 +103,7 @@ class GitRepoCrawler extends RepoCrawler
         $repoUrl = $this->repo->getUrl();
         $this->repoClonePath = FileUtil::createTemporaryDirectory('lc-gitrepocrawler-');
 
-        $cmd = 'git clone --depth 1 '.escapeshellarg($repoUrl).' '.escapeshellarg($this->repoClonePath);
+        $cmd = 'git clone '.escapeshellarg($repoUrl).' '.escapeshellarg($this->repoClonePath);
         $this->logger->info('Cloning repository: '.$cmd);
         $process = new Process($cmd);
         $process->setTimeout(self::TIMEOUT_GIT_CLONE);
@@ -188,11 +188,11 @@ class GitRepoCrawler extends RepoCrawler
 
     /**
      * {@inheritDoc}
-     * @see RepoCrawler::getCommits()
+     * @see RepoCrawler::fetchCommits()
      */
-    public function getCommits(string $sinceId = null): array
+    public function fetchCommits(?string $sinceId = null): array
     {
-        $since = ' ' .$sinceId ? $sinceId. '...' : '';
+        $since = $sinceId !== null ? ' ' . escapeshellarg($sinceId) . '...' : '';
         $cmd = 'git log --reverse --format="%h|%aN|%aE|%aD" --shortstat'. $since;
         $cwd = $this->getRepoClonePath();
 
@@ -200,14 +200,41 @@ class GitRepoCrawler extends RepoCrawler
 
         $process = new Process($cmd);
         $process->setWorkingDirectory($cwd);
-        $process->setTimeout(self::TIMEOUT_GIT_CLONE);
+        $process->setTimeout(self::TIMEOUT_GIT_LOG);
         $process->run();
 
         if (!$process->isSuccessful()) {
             throw new \RuntimeException("Unable to fetch commits from $cwd : ".$process->getErrorOutput());
         }
 
-        $this->logger->debug("Fetched commmits from $cwd");
+        $this->logger->debug("Fetched commits from $cwd");
         return $this->outputParser->parseCommits($this->repo, $process->getOutput());
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see RepoCrawler::commitExists()
+     */
+    public function commitExists(string $id) : bool
+    {
+        // Stolen from https://stackoverflow.com/a/13526591
+        $cmd = 'git merge-base --is-ancestor ' . escapeshellarg($id) . ' HEAD';
+        $cwd = $this->getRepoClonePath();
+        $this->logger->info("Checking commits in $cwd - $cmd");
+
+        $process = new Process($cmd, $cwd);
+        $process->setTimeout(self::TIMEOUT_GIT_LOG);
+        $process->run();
+
+        $code = $process->getExitCode();
+        switch ($code)
+        {
+            case 0:     // successful, commit exists
+            case 1:     // commit does not exist
+                $this->logger->debug("Checked commits from $cwd");
+                return $code === 0;
+            default:    // anything other than 0 or 1 is error
+                throw new \RuntimeException("Unable to fetch commits from $cwd : ".$process->getErrorOutput());
+        }
     }
 }

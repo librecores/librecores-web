@@ -42,7 +42,7 @@ class Contributor
      *
      * @ORM\ManyToOne(targetEntity="SourceRepo", inversedBy="contributors")
      */
-    private $sourceRepo;
+    private $repository;
 
     /**
      * The name of the contributor
@@ -74,10 +74,14 @@ class Contributor
 
     /**
      * Constructor
+     * @param null|string $name
+     * @param null|string $email
      */
-    public function __construct()
+    public function __construct(?string $name = null, ?string $email = null)
     {
         $this->commits = new ArrayCollection();
+        $this->name = $name;
+        $this->email = $email;
     }
 
     /**
@@ -91,27 +95,27 @@ class Contributor
     }
 
     /**
-     * Set sourceRepo
+     * Set repository
      *
-     * @param SourceRepo $sourceRepo
+     * @param SourceRepo $repository
      *
      * @return Contributor
      */
-    public function setSourceRepo(SourceRepo $sourceRepo = null)
+    public function setRepository(SourceRepo $repository = null)
     {
-        $this->sourceRepo = $sourceRepo;
-
+        $this->repository = $repository;
+        $repository->addContributor($this);
         return $this;
     }
 
     /**
-     * Get sourceRepo
+     * Get repository
      *
      * @return SourceRepo
      */
-    public function getSourceRepo()
+    public function getRepository()
     {
-        return $this->sourceRepo;
+        return $this->repository;
     }
 
     /**

@@ -78,10 +78,20 @@ abstract class SourceRepo
      *
      * @var Collection
      *
-     * @ORM\OneToMany(targetEntity="Contributor", mappedBy="sourceRepo", cascade={"persist", "remove"},
+     * @ORM\OneToMany(targetEntity="Contributor", mappedBy="repository", cascade={"persist", "remove"},
      *                orphanRemoval=true)
      */
     protected $contributors;
+
+    /**
+     * Commits of this source repository
+     *
+     * @var Collection
+     *
+     * @ORM\OneToMany(targetEntity="Commit", mappedBy="repository", cascade={"persist", "remove"},
+     *                orphanRemoval=true)
+     */
+    protected $commits;
 
     /**
      * Constructor
@@ -89,6 +99,7 @@ abstract class SourceRepo
     public function __construct()
     {
         $this->contributors = new ArrayCollection();
+        $this->commits = new ArrayCollection();
     }
 
     /**
@@ -214,5 +225,39 @@ abstract class SourceRepo
     public function getContributors()
     {
         return $this->contributors;
+    }
+
+    /**
+     * Add commit
+     *
+     * @param Commit $commit
+     *
+     * @return SourceRepo
+     */
+    public function addCommit(Commit $commit)
+    {
+        $this->commits[] = $commit;
+
+        return $this;
+    }
+
+    /**
+     * Remove commit
+     *
+     * @param Commit $commit
+     */
+    public function removeCommit(Commit $commit)
+    {
+        $this->commits->removeElement($commit);
+    }
+
+    /**
+     * Get commits
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCommits()
+    {
+        return $this->commits;
     }
 }

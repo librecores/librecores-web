@@ -1,12 +1,12 @@
 <?php
+
 namespace Librecores\ProjectRepoBundle\RepoCrawler;
 
-use Psr\Log\LoggerInterface;
-use Librecores\ProjectRepoBundle\Entity\SourceRepo;
+use Doctrine\Common\Persistence\ObjectManager;
 use Librecores\ProjectRepoBundle\Entity\GitSourceRepo;
-use Librecores\ProjectRepoBundle\RepoCrawler\GitRepoCrawler;
+use Librecores\ProjectRepoBundle\Entity\SourceRepo;
 use Librecores\ProjectRepoBundle\Util\MarkupToHtmlConverter;
-use Librecores\ProjectRepoBundle\RepoCrawler\RepoCrawler;
+use Psr\Log\LoggerInterface;
 
 /**
  * Repository crawler factory: get an appropriate repository crawler instance
@@ -24,16 +24,30 @@ class RepoCrawlerFactory
     private $logger;
 
     /**
+     * @var ObjectManager
+     */
+    private $manager;
+
+    /**
+     * @var array
+     */
+    private $outputParsers;
+
+    /**
      * Constructor: create a new instance
      *
      * @param MarkupToHtmlConverter $markupConverter
      * @param LoggerInterface $logger
+     * @param ObjectManager $manager
+     * @param array $outputParsers
      */
     public function __construct(MarkupToHtmlConverter $markupConverter,
-        LoggerInterface $logger)
+                                LoggerInterface $logger, ObjectManager $manager, array $outputParsers)
     {
         $this->markupConverter = $markupConverter;
         $this->logger = $logger;
+        $this->outputParsers = $outputParsers;
+        $this->manager = $manager;
     }
 
     /**
@@ -46,12 +60,13 @@ class RepoCrawlerFactory
      */
     public function getCrawlerForSourceRepo(SourceRepo $repo): RepoCrawler
     {
+        // XXX: Investigate a better method for IoC in this situation
         if ($repo instanceof GitSourceRepo) {
             return new GitRepoCrawler($repo,
-                $this->markupConverter, $this->logger);
+                $this->markupConverter, $this->logger, $this->outputParsers['git'], $this->manager);
         }
 
-        throw new \InvalidArgumentException("No crawler for source repository ".
-            "of type ".get_class($repo)." found.");
+        throw new \InvalidArgumentException("No crawler for source repository " .
+            "of type " . get_class($repo) . " found.");
     }
 }

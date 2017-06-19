@@ -1,9 +1,12 @@
 <?php
+
 namespace Librecores\ProjectRepoBundle\RepoCrawler;
 
-use Psr\Log\LoggerInterface;
+use Doctrine\Common\Persistence\ObjectManager;
+use Librecores\ProjectRepoBundle\Entity\Commit;
 use Librecores\ProjectRepoBundle\Entity\SourceRepo;
 use Librecores\ProjectRepoBundle\Util\MarkupToHtmlConverter;
+use Psr\Log\LoggerInterface;
 
 
 /**
@@ -34,19 +37,27 @@ abstract class RepoCrawler
     protected $outputParser;
 
     /**
+     * @var ObjectManager
+     */
+    protected $manager;
+
+    /**
      * RepoCrawler constructor.
      * @param SourceRepo $repo
      * @param MarkupToHtmlConverter $markupConverter
      * @param LoggerInterface $logger
      * @param OutputParserInterface $outputParser
+     * @param ObjectManager $manager
      */
     public function __construct(SourceRepo $repo,
-        MarkupToHtmlConverter $markupConverter, LoggerInterface $logger, OutputParserInterface $outputParser)
+                                MarkupToHtmlConverter $markupConverter, LoggerInterface $logger,
+                                OutputParserInterface $outputParser, ObjectManager $manager)
     {
         $this->repo = $repo;
         $this->markupConverter = $markupConverter;
         $this->logger = $logger;
         $this->outputParser = $outputParser;
+        $this->manager = $manager;
 
         if (!$this->isValidRepoType()) {
             throw new \RuntimeException("Repository type is not supported by this crawler.");
@@ -85,39 +96,6 @@ abstract class RepoCrawler
     abstract public function getDescriptionSafeHtml(): ?string;
 
     /**
-     * Update the project associated with the crawled repository with
-     * information extracted from the repo
-     *
-     * @return bool operation successful?
-     */
-    public function updateProject()
-    {
-        $project = $this->repo->getProject();
-        if ($project === null) {
-            $this->logger->debug('No project associated with source '.
-                'repository '.$this->repo->getId());
-            return false;
-        }
-
-        if ($project->getDescriptionTextAutoUpdate()) {
-            $project->setDescriptionText($this->getDescriptionSafeHtml());
-        }
-        if ($project->getLicenseTextAutoUpdate()) {
-            $project->setLicenseText($this->getLicenseTextSafeHtml());
-        }
-        return true;
-    }
-
-    /**
-     * Update the source repository entity with information obtained through
-     * the crawler
-     */
-    public function updateSourceRepo()
-    {
-        // the default implementation is empty
-    }
-
-    /**
      * Get all commits in the repository since a specified commit ID or all if
      * not specified
      *
@@ -129,7 +107,75 @@ abstract class RepoCrawler
      *                              returned
      * @return array all commits in the repository
      */
-    public function getCommits(string $sinceId = null) : array {
+    public function fetchCommits(?string $sinceId = null) : array
+    {
+        // default operation does noting
         return [];
+    }
+
+    /**
+     * Checks whether the given commit ID exists on the default tree of the repository
+     *
+     * @param string $id ID of the commit to search
+     * @return bool commit exists in the tree ?
+     */
+    public function commitExists(string $id): bool
+    {
+        return false;
+    }
+
+    /**
+     * Update the project associated with the crawled repository with
+     * information extracted from the repo
+     *
+     * @return bool operation successful?
+     */
+    public function updateProject()
+    {
+        $project = $this->repo->getProject();
+        if ($project === null) {
+            $this->logger->debug('No project associated with source ' .
+                'repository ' . $this->repo->getId());
+            return false;
+        }
+
+        if ($project->getDescriptionTextAutoUpdate()) {
+            $project->setDescriptionText($this->getDescriptionSafeHtml());
+        }
+        if ($project->getLicenseTextAutoUpdate()) {
+            $project->setLicenseText($this->getLicenseTextSafeHtml());
+        }
+
+        $commitRepository = $this->manager->getRepository(Commit::class);
+        $sinceId = $commitRepository->getLatestCommit()
+                                    ->getCommitId();
+
+        $commits = [];
+
+        if ($this->commitExists($sinceId)) {            // determine if our latest commit exists
+            $commits = $this->fetchCommits($sinceId);   // fetch new commits since what we have on DB
+        } else {
+            // there has been a history rewrite
+            // we drop everything and persist all commits to the DB
+            //XXX: Find a way to find the common ancestor and do partial rewrites
+            $commitRepository->clearAllCommits($this->repo);
+            $this->repo->getCommits()->clear();
+            $commits = $this->fetchCommits();
+        }
+
+        foreach ($commits as $commit) {
+            $this->manager->persist($commit);
+        }
+
+        return true;
+    }
+
+    /**
+     * Update the source repository entity with information obtained through
+     * the crawler
+     */
+    public function updateSourceRepo()
+    {
+        // the default implementation is empty
     }
 }
