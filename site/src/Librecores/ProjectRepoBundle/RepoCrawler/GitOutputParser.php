@@ -54,6 +54,7 @@ class GitOutputParser implements OutputParserInterface
                 $contributor = $this->contributors->getContributorForRepository($repo, $commitMatches[3], $commitMatches[2]);
                 $commit = new Commit();
                 $commit->setCommitId($commitMatches[1])
+                    ->setRepository($repo)
                     ->setDateCommitted(new \DateTime($commitMatches[4]))
                     ->setContributor($contributor);
 

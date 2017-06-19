@@ -91,6 +91,12 @@
       <a href="{{ project.issueTracker|escape('html_attr') }}">Issue Tracker</a>
       <br/>
       {% endif %}
+
+      {#%  if project.sourceRepo.commits.count %#}
+      <i class="fa fa-info-circle" aria-hidden="true"></i>
+      <span>{% transchoice project.sourceRepo.commits.count %}1 commit|%count% commits{% endtranschoice %} by {% transchoice project.sourceRepo.contributors.count %}1 contributor|%count% contributors{% endtranschoice %}</span>
+      <br/>
+      {#%  endif %#}
     </p>
   </div>
 
