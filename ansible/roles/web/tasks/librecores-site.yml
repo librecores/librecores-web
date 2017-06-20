@@ -53,17 +53,20 @@
 # we need to work around ansible trying to chown a file on NFS, which
 # is not possible. See https://github.com/ansible/ansible/issues/7372
 
+- name: Create directory for generated Symfony files
+  command: mkdir -p /opt/lc/site/app/config/
+
 - name: Create Symfony environment shell file (part I, populate template in temp folder)
   template: src=symfony-env.sh.j2 dest=/tmp/symfony-env.sh
 
 - name: Create Symfony environment shell file (part II, move to destination)
-  command: mv /tmp/symfony-env.sh /var/www/lc/site/app/config/symfony-env.sh
+  command: mv /tmp/symfony-env.sh /opt/lc/site/app/config/symfony-env.sh
 
 - name: Create Symfony configuration (part I, populate template in temp folder)
   template: src=parameters.yml.j2 dest=/tmp/parameters.yml
 
 - name: Create symfony configuration (part II, move to destination)
-  command: mv /tmp/parameters.yml /var/www/lc/site/app/config/parameters.yml
+  command: mv /tmp/parameters.yml /opt/lc/site/app/config/parameters.yml
 
 - name: "Create composer configuration directory for user {{ web_user }}"
   file:
@@ -79,11 +82,11 @@
     owner: "{{ web_user }}"
     mode: 0644
 
-- name: Install dependencies through composer (development)
+- name: Install dependencies through composer (development in Vagrant)
   command: composer install
   args:
     chdir: /var/www/lc/site
-  when: symfony_config.SYMFONY_ENV == 'dev'
+  when: symfony_config.SYMFONY_ENV == 'dev' and is_vagrant_environment
 
 - name: Install dependencies through composer (production)
   command: composer install --no-dev --optimize-autoloader
@@ -129,7 +132,7 @@
   with_items:
     - logs
     - cache
-  when: not is_vagrant_environment
+  when: not is_dev_environment
 
 # The services need to pick up the code changes by being restarted.
 # Thanks to RabbitMQ we don't loose any messages in this case.
@@ -153,11 +156,11 @@
 
 - name: Ensure directory permissions of planet cache directories
   command: chown -R {{ web_user }} /var/www/lc/planet/cache
-  when: not is_vagrant_environment
+  when: not is_dev_environment
 
 - name: Ensure directory permissions of web-accessible planet output directory
   command: chown -R {{ web_user }} /var/www/lc/site/web/planet
-  when: not is_vagrant_environment
+  when: not is_dev_environment
 
 
 - name: ensure nginx is running (and enable it at boot)
@@ -177,3 +180,4 @@
   environment: "{{ symfony_config }}"
   args:
     chdir: /var/www/lc/site
+  when: not is_docker_environment
