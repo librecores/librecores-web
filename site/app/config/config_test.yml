@@ -1,6 +1,13 @@
 imports:
     - { resource: config_dev.yml }
 
+parameters:
+    # Dummy OAuth API keys for testing
+    github_app_id:     DUMMY
+    github_app_secret: DUMMY
+    google_app_id:     DUMMY
+    google_app_secret: DUMMY
+
 framework:
     test: ~
     session:

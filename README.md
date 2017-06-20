@@ -1,6 +1,8 @@
 LibreCores Web Site
 ===================
 
+**Website**: [![Build Status](https://travis-ci.org/librecores/librecores-web.svg?branch=master)](https://travis-ci.org/librecores/librecores-web)
+
 This is the code running on https://www.librecores.org.
 
 The LibreCores web site is written in PHP and uses the Symfony framework.
