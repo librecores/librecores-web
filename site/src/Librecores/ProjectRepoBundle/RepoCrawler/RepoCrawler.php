@@ -147,13 +147,12 @@ abstract class RepoCrawler
         }
 
         $commitRepository = $this->manager->getRepository(Commit::class);
-        $sinceId = $commitRepository->getLatestCommit()
-                                    ->getCommitId();
+        $lastCommit = $commitRepository->getLatestCommitForRepository($this->repo);
 
         $commits = [];
 
-        if ($this->commitExists($sinceId)) {            // determine if our latest commit exists
-            $commits = $this->fetchCommits($sinceId);   // fetch new commits since what we have on DB
+        if ($lastCommit && $this->commitExists($lastCommit->getCommitId())) {   // determine if our latest commit exists
+            $commits = $this->fetchCommits($lastCommit->getCommitId());         // fetch new commits since what we have on DB
         } else {
             // there has been a history rewrite
             // we drop everything and persist all commits to the DB

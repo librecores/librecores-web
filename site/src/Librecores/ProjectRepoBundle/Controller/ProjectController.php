@@ -2,20 +2,19 @@
 
 namespace Librecores\ProjectRepoBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-
-use Librecores\ProjectRepoBundle\Entity\Project;
-use Librecores\ProjectRepoBundle\Entity\OrganizationMember;
-use Librecores\ProjectRepoBundle\Form\Type\ProjectType;
-use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Librecores\ProjectRepoBundle\Entity\GitSourceRepo;
-use Symfony\Component\Form\FormInterface;
+use Librecores\ProjectRepoBundle\Entity\OrganizationMember;
+use Librecores\ProjectRepoBundle\Entity\Project;
+use Librecores\ProjectRepoBundle\Form\Type\ProjectType;
 use Librecores\ProjectRepoBundle\Util\GithubApiService;
 use Librecores\ProjectRepoBundle\Util\QueueDispatcherService;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\UrlType;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class ProjectController extends Controller
 {
@@ -42,7 +41,8 @@ class ProjectController extends Controller
         $parentChoices = array($username => 'u_' . $username);
         foreach ($this->getUser()->getOrganizationMemberships() as $organizationMembership) {
             if ($organizationMembership->getPermission() === OrganizationMember::PERMISSION_MEMBER or
-                $organizationMembership->getPermission() === OrganizationMember::PERMISSION_ADMIN) {
+                $organizationMembership->getPermission() === OrganizationMember::PERMISSION_ADMIN
+            ) {
                 $parentChoices[$organizationMembership->getOrganization()->getName()] =
                     'o_' . $organizationMembership->getOrganization()->getName();
             }
@@ -141,13 +141,35 @@ class ProjectController extends Controller
             $response = new Response(
                 $this->renderView($waitTemplate, array('project' => $p)),
                 Response::HTTP_OK);
-            $response->headers->set('refresh', '5;url='.$request->getUri());
+            $response->headers->set('refresh', '5;url=' . $request->getUri());
             return $response;
         }
 
+        // fetch project metadata
+        $manager = $this->get('librecores.repository_metadata_manager');
+        $topContributors = [];
+
+        foreach ($manager->getTopContributors($p) as $contributor) {
+            $topContributors[] = [
+                'name' => $contributor->getName(),
+                'commitCount' => $manager->getCommitCountForContributor($contributor),
+                'avatar' => $manager->getContributorAvatar($contributor)
+            ];
+        }
+        $metadata = [
+            'latestCommit' => $manager->getLatestCommit($p),
+            'firstCommit' => $manager->getFirstCommit($p),
+            'contributorCount' => $manager->getContributorsCount($p),
+            'commitCount' => $manager->getCommitCount($p),
+            'topContributors' => $topContributors
+
+        ];
         // the actual project page
         return $this->render('LibrecoresProjectRepoBundle:Project:view.html.twig',
-            array('project' => $p));
+            [
+                'project' => $p,
+                'metadata' => $metadata
+            ]);
     }
 
     /**
@@ -245,7 +267,7 @@ class ProjectController extends Controller
         $this->getQueueDispatcherService()->updateProjectInfo($p);
 
         return new Response('project update queued', 200,
-            [ 'Content-Type' => 'text/plain' ]);
+            ['Content-Type' => 'text/plain']);
     }
 
     /**
@@ -308,7 +330,7 @@ class ProjectController extends Controller
             'per_page' => 100,
         );
         if (count($parameters) > 0) {
-            $path .= '?'.http_build_query($parameters);
+            $path .= '?' . http_build_query($parameters);
         }
 
         $response = $githubClient->getHttpClient()->get($path);
@@ -395,7 +417,7 @@ class ProjectController extends Controller
             if (null === $user)
                 throw new \Exception("form manipulated");
 
-                $p->setParentUser($user);
+            $p->setParentUser($user);
 
         } else if ($formParentType === 'o') {
             $organization = $this->getDoctrine()
@@ -405,7 +427,7 @@ class ProjectController extends Controller
             if (null === $organization)
                 throw new \Exception("form manipulated");
 
-                $p->setParentOrganization($organization);
+            $p->setParentOrganization($organization);
         }
     }
 }

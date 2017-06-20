@@ -101,6 +101,13 @@ services:
         arguments:
             - Librecores\ProjectRepoBundle\Entity\Contributor
 
+    librecores.repository.commit:
+            public: false
+            class: Librecores\ProjectRepoBundle\Repository\ContributorRepository
+            factory: ['@doctrine.orm.default_entity_manager', 'getRepository']
+            arguments:
+                - Librecores\ProjectRepoBundle\Entity\Commit
+
     librecores.outputparser.git:
         public: false
         class: Librecores\ProjectRepoBundle\RepoCrawler\GitOutputParser
@@ -116,3 +123,8 @@ services:
             - '@doctrine.orm.default_entity_manager'
             - git: '@librecores.outputparser.git'
 
+    librecores.repository_metadata_manager:
+        class: Librecores\ProjectRepoBundle\RepoCrawler\DefaultMetadataManager
+        arguments:
+            - '@librecores.repository.commit'
+            - '@librecores.repository.contributor'

@@ -4,6 +4,7 @@ namespace Librecores\ProjectRepoBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\UniqueConstraint;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -11,7 +12,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * Most source code repositories store the name and email of the committer.
  *
- * @ORM\Table()
+ * @ORM\Table(uniqueConstraints={@UniqueConstraint(columns={"email", "repository_id"})})
  * @ORM\Entity(repositoryClass="Librecores\ProjectRepoBundle\Repository\ContributorRepository")
  */
 class Contributor

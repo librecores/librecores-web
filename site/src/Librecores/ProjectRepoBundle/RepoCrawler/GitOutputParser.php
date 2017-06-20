@@ -3,7 +3,6 @@
 
 namespace Librecores\ProjectRepoBundle\RepoCrawler;
 
-use InvalidArgumentException;
 use Librecores\ProjectRepoBundle\Entity\Commit;
 use Librecores\ProjectRepoBundle\Entity\SourceRepo;
 use Librecores\ProjectRepoBundle\Repository\ContributorRepository;
@@ -64,10 +63,10 @@ class GitOutputParser implements OutputParserInterface
                     $output[$i + 1], $modificationMatches)) {
                     $commit->setFilesModified($modificationMatches[1]);
 
-                    if(array_key_exists(2, $modificationMatches) && count($modificationMatches[2])) {
+                    if(array_key_exists(2, $modificationMatches) && strlen($modificationMatches[2])) {
                         $commit->setLinesAdded($modificationMatches[2]);
                     }
-                    if(array_key_exists(3, $modificationMatches) && count($modificationMatches[3])) {
+                    if(array_key_exists(3, $modificationMatches) && strlen($modificationMatches[3])) {
                         $commit->setLinesRemoved($modificationMatches[3]);
                     }
                     $i++;   // skip the next line

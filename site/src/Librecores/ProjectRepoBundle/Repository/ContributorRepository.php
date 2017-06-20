@@ -37,12 +37,65 @@ class ContributorRepository extends EntityRepository
                 ->setEmail($email)
                 ->setRepository($repo);
 
-            // we mark the entity for persisting but do not perform the flush
-            // as this entity is inevitably going to be used as a part of a
-            // UnitOfWork on which flush will be ultimately called
             $this->getEntityManager()->persist($contributor);
+            $this->getEntityManager()->flush();     // we flush here as this value is queried elsewhere
+            $this->getEntityManager()->refresh($contributor);
         }
 
         return $contributor;
+    }
+
+    /**
+     * Gets all contributors for the given repository
+     *
+     * @param SourceRepo $repo repository to query for
+     * @return array
+     */
+    public function getContributorsForRepository(SourceRepo $repo)
+    {
+        return $this->findBy([
+            'repository' => $repo
+        ]);
+    }
+
+    /**
+     * Gets the number of contributors of the given repository
+     *
+     * @param SourceRepo $repo repository to query for
+     * @return mixed
+     */
+    public function getContributorCountForRepository(SourceRepo $repo): int
+    {
+        return $this->createQueryBuilder('c')
+            ->select('COUNT(1)')
+            ->where('c.repository = :repo')
+            ->setParameter('repo', $repo)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    /**
+     * Gets top n contributors from repositories by commit count, lines added and lines removed
+     * @param SourceRepo $repo repository to query for
+     * @param int $count number of top contributors to return
+     * @return array
+     */
+    public function getTopContributorsForRepository(SourceRepo $repo, int $count)
+    {
+        return $this->createQueryBuilder('c')
+            ->join('c.commits', 'co')
+            ->select('c')
+            ->addSelect('COUNT(co.id) AS HIDDEN commits')
+            ->addSelect('SUM(co.linesAdded) AS HIDDEN linesAdded')
+            ->addSelect('SUM(co.linesRemoved) AS HIDDEN linesRemoved')
+            ->groupBy('c.id')
+            ->having('c.repository = :repo')
+            ->addOrderBy('commits', 'DESC')
+            ->addOrderBy('linesAdded', 'DESC')
+            ->addOrderBy('linesRemoved', 'ASC')
+            ->setParameter('repo', $repo)
+            ->getQuery()
+            ->setMaxResults($count)
+            ->getResult();
     }
 }
