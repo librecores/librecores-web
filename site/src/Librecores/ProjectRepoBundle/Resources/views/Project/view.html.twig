@@ -112,6 +112,12 @@
         <img class="librecores-project-contributor-avatar" src="{{ contributor.avatar }}" alt="{{ contributor.name }}" data-toggle="tooltip" title="{{ contributor.name }} ({% transchoice contributor.commitCount %}1 commit|%count% commits{% endtranschoice %})" />
         {%  endfor %}
       </div>
+      <div class="librecores-project-activity">
+        <div class="librecores-project-activity-graph">
+          {{  metadata.activityHistogram | join(',')  }}
+        </div>
+        <p>Activity in last 1 year</p>
+      </div>
       <p class="librecores-project-updated">
         Updated {{ project.dateLastModified | time_diff }}
       </p>
@@ -133,5 +139,7 @@
 {% block pagejs %}
   $(function(){
     $('[data-toggle="tooltip"]').tooltip();
+    var $chart = $('.librecores-project-activity-graph');
+    $chart.height('100px').peity('line', { height: $chart.height(), width: $chart.width() });
   });
 {% endblock %}

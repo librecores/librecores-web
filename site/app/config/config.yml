@@ -69,6 +69,7 @@ assetic:
                 - "assets/js/bootstrap.min.js"
                 - "assets/js/moment.min.js"
                 - "assets/js/livestamp.js"
+                - "assets/js/jquery.peity.js"
 
 # Doctrine Configuration
 doctrine:
@@ -87,6 +88,14 @@ doctrine:
     orm:
         auto_generate_proxy_classes: "%kernel.debug%"
         auto_mapping: true
+        dql:
+            datetime_functions:
+                DAY: DoctrineExtensions\Query\Mysql\Day
+                WEEK: DoctrineExtensions\Query\Mysql\Week
+                MONTH: DoctrineExtensions\Query\Mysql\Month
+                YEAR: DoctrineExtensions\Query\Mysql\Year
+          hydrators:
+              group: Librecores\ProjectRepoBundle\Doctrine\Hydrators\GroupHydrator
 
 # Doctrine Migrations
 doctrine_migrations:

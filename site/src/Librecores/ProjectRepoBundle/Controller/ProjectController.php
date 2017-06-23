@@ -2,10 +2,12 @@
 
 namespace Librecores\ProjectRepoBundle\Controller;
 
+use Librecores\ProjectRepoBundle\Entity\Contributor;
 use Librecores\ProjectRepoBundle\Entity\GitSourceRepo;
 use Librecores\ProjectRepoBundle\Entity\OrganizationMember;
 use Librecores\ProjectRepoBundle\Entity\Project;
 use Librecores\ProjectRepoBundle\Form\Type\ProjectType;
+use Librecores\ProjectRepoBundle\Util\Dates;
 use Librecores\ProjectRepoBundle\Util\GithubApiService;
 use Librecores\ProjectRepoBundle\Util\QueueDispatcherService;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -15,6 +17,7 @@ use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ProjectController extends Controller
 {
@@ -33,58 +36,87 @@ class ProjectController extends Controller
         // construct choices for GitHub repository list
         $githubSourceRepoChoices = [];
         foreach ($this->getGithubRepos() as $repo) {
-            $githubSourceRepoChoices[$repo['owner']['login']][$repo['full_name']] = $repo['full_name'];
+            $githubSourceRepoChoices[$repo['owner']['login']]
+            [$repo['full_name']] = $repo['full_name'];
         }
 
         // construct choices for the owner
         $username = $this->getUser()->getUsername();
-        $parentChoices = array($username => 'u_' . $username);
-        foreach ($this->getUser()->getOrganizationMemberships() as $organizationMembership) {
-            if ($organizationMembership->getPermission() === OrganizationMember::PERMISSION_MEMBER or
-                $organizationMembership->getPermission() === OrganizationMember::PERMISSION_ADMIN
+        $parentChoices = array($username => 'u_'.$username);
+        foreach ($this->getUser()->getOrganizationMemberships(
+        ) as $organizationMembership) {
+            /* @var $organizationMembership OrganizationMember */
+
+            if ($organizationMembership->getPermission(
+                ) === OrganizationMember::PERMISSION_MEMBER or
+                $organizationMembership->getPermission(
+                ) === OrganizationMember::PERMISSION_ADMIN
             ) {
-                $parentChoices[$organizationMembership->getOrganization()->getName()] =
-                    'o_' . $organizationMembership->getOrganization()->getName();
+                $parentChoices[$organizationMembership->getOrganization(
+                )->getName()] =
+                    'o_'.$organizationMembership->getOrganization()->getName();
             }
         }
 
         // build form
         $formBuilder = $this->createFormBuilder($p)
-            ->add('parentName', ChoiceType::class, [
-                'mapped' => false,
-                'choices' => $parentChoices,
-                'multiple' => false
-            ])
+            ->add(
+                'parentName',
+                ChoiceType::class,
+                [
+                    'mapped' => false,
+                    'choices' => $parentChoices,
+                    'multiple' => false,
+                ]
+            )
             ->add('name')
             ->add('displayName')
-            ->add('gitSourceRepoUrl', UrlType::class, [
-                'mapped' => false,
-                'label' => 'Git URL',
-                'required' => false
-            ])
-            ->add('saveGitSourceRepoUrl', SubmitType::class, [
-                'label' => 'Create Project from Git repository',
-                'attr' => [
-                    'class' => 'btn-primary'
+            ->add(
+                'gitSourceRepoUrl',
+                UrlType::class,
+                [
+                    'mapped' => false,
+                    'label' => 'Git URL',
+                    'required' => false,
                 ]
-            ]);
+            )
+            ->add(
+                'saveGitSourceRepoUrl',
+                SubmitType::class,
+                [
+                    'label' => 'Create Project from Git repository',
+                    'attr' => [
+                        'class' => 'btn-primary',
+                    ],
+                ]
+            );
 
         // only add GitHub repository selection if the user can actually select
         // something
-        $isGithubConnected = $this->getUser()->isConnectedToOAuthService('github');
+        $isGithubConnected = $this->getUser()->isConnectedToOAuthService(
+            'github'
+        );
         $noGithubRepos = empty($githubSourceRepoChoices);
         if ($isGithubConnected && !$noGithubRepos) {
             $formBuilder
-                ->add('githubSourceRepo', ChoiceType::class, [
-                    'mapped' => false,
-                    'choices' => $githubSourceRepoChoices,
-                    'multiple' => false,
-                    'required' => true,
-                ])
-                ->add('saveGithubSourceRepo', SubmitType::class, [
-                    'label' => 'Import project from GitHub',
-                    'attr' => ['class' => 'btn-primary']
-                ]);
+                ->add(
+                    'githubSourceRepo',
+                    ChoiceType::class,
+                    [
+                        'mapped' => false,
+                        'choices' => $githubSourceRepoChoices,
+                        'multiple' => false,
+                        'required' => true,
+                    ]
+                )
+                ->add(
+                    'saveGithubSourceRepo',
+                    SubmitType::class,
+                    [
+                        'label' => 'Import project from GitHub',
+                        'attr' => ['class' => 'btn-primary'],
+                    ]
+                );
         }
 
         $form = $formBuilder->getForm();
@@ -109,7 +141,8 @@ class ProjectController extends Controller
                 array(
                     'parentName' => $p->getParentName(),
                     'projectName' => $p->getName(),
-                ));
+                )
+            );
         }
 
         return $this->render(
@@ -119,7 +152,8 @@ class ProjectController extends Controller
                 'form' => $form->createView(),
                 'isGithubConnected' => $isGithubConnected,
                 'noGithubRepos' => $noGithubRepos,
-            ));
+            )
+        );
     }
 
     /**
@@ -140,36 +174,56 @@ class ProjectController extends Controller
             $waitTemplate = 'LibrecoresProjectRepoBundle:Project:view_wait_processing.html.twig';
             $response = new Response(
                 $this->renderView($waitTemplate, array('project' => $p)),
-                Response::HTTP_OK);
-            $response->headers->set('refresh', '5;url=' . $request->getUri());
+                Response::HTTP_OK
+            );
+            $response->headers->set('refresh', '5;url='.$request->getUri());
+
             return $response;
         }
 
         // fetch project metadata
         $manager = $this->get('librecores.repository_metadata_manager');
         $topContributors = [];
-
         foreach ($manager->getTopContributors($p) as $contributor) {
+            /* @var $contributor Contributor */
+
             $topContributors[] = [
                 'name' => $contributor->getName(),
-                'commitCount' => $manager->getCommitCountForContributor($contributor),
-                'avatar' => $manager->getContributorAvatar($contributor)
+                'commitCount' => $manager->getCommitCountForContributor(
+                    $contributor
+                ),
+                'avatar' => $manager->getContributorAvatar($contributor),
             ];
         }
+
+        $current = new \DateTimeImmutable();
+
         $metadata = [
             'latestCommit' => $manager->getLatestCommit($p),
             'firstCommit' => $manager->getFirstCommit($p),
             'contributorCount' => $manager->getContributorsCount($p),
             'commitCount' => $manager->getCommitCount($p),
-            'topContributors' => $topContributors
-
+            'topContributors' => $topContributors,
+            'activityHistogram' => $this->flattenHistogram(
+                $manager->getCommitHistogram(
+                    $p,
+                    $current->sub(
+                        \DateInterval::createFromDateString('1 year')
+                    ),
+                    $current,
+                    Dates::INTERVAL_WEEK
+                )
+            ),
         ];
+
         // the actual project page
-        return $this->render('LibrecoresProjectRepoBundle:Project:view.html.twig',
+        return $this->render(
+            'LibrecoresProjectRepoBundle:Project:view.html.twig',
             [
                 'project' => $p,
-                'metadata' => $metadata
-            ]);
+                'metadata' => $metadata,
+            ]
+        );
     }
 
     /**
@@ -198,8 +252,10 @@ class ProjectController extends Controller
             $em->flush();
         }
 
-        return $this->render('LibrecoresProjectRepoBundle:Project:settings.html.twig',
-            array('project' => $p, 'form' => $form->createView()));
+        return $this->render(
+            'LibrecoresProjectRepoBundle:Project:settings.html.twig',
+            array('project' => $p, 'form' => $form->createView())
+        );
     }
 
     /**
@@ -214,8 +270,10 @@ class ProjectController extends Controller
     {
         $p = $this->getProject($parentName, $projectName);
 
-        return $this->render('LibrecoresProjectRepoBundle:Project:settings_team.html.twig',
-            array('project' => $p));
+        return $this->render(
+            'LibrecoresProjectRepoBundle:Project:settings_team.html.twig',
+            array('project' => $p)
+        );
     }
 
     /**
@@ -232,10 +290,12 @@ class ProjectController extends Controller
             ->getRepository('LibrecoresProjectRepoBundle:Project')
             ->findAll();
 
-        return $this->render('LibrecoresProjectRepoBundle:Project:list.html.twig',
+        return $this->render(
+            'LibrecoresProjectRepoBundle:Project:list.html.twig',
             [
                 'projects' => $projects,
-            ]);
+            ]
+        );
     }
 
     /**
@@ -256,7 +316,7 @@ class ProjectController extends Controller
             if ($ghEvent != 'push') {
                 // We only react to push events, all other events signal any
                 // change we are interested in.
-                return;
+                return new Response();
             }
             // XXX: In the future, this could be extended to use information
             // contained in the notification directly.
@@ -266,8 +326,10 @@ class ProjectController extends Controller
         $p = $this->getProject($parentName, $projectName);
         $this->getQueueDispatcherService()->updateProjectInfo($p);
 
-        return new Response('project update queued', 200,
-            ['Content-Type' => 'text/plain']);
+        return new Response(
+            'project update queued', 200,
+            ['Content-Type' => 'text/plain']
+        );
     }
 
     /**
@@ -301,8 +363,11 @@ class ProjectController extends Controller
             ->findProjectWithParent($parentName, $projectName);
 
         if (!$p) {
-            throw $this->createNotFoundException('No project found with that name.');
+            throw $this->createNotFoundException(
+                'No project found with that name.'
+            );
         }
+
         return $p;
     }
 
@@ -330,11 +395,14 @@ class ProjectController extends Controller
             'per_page' => 100,
         );
         if (count($parameters) > 0) {
-            $path .= '?' . http_build_query($parameters);
+            $path .= '?'.http_build_query($parameters);
         }
 
         $response = $githubClient->getHttpClient()->get($path);
-        return \Github\HttpClient\Message\ResponseMediator::getContent($response);
+
+        return \Github\HttpClient\Message\ResponseMediator::getContent(
+            $response
+        );
     }
 
     /**
@@ -359,7 +427,9 @@ class ProjectController extends Controller
         } elseif ($form->get('saveGithubSourceRepo')->isClicked()) {
             $sourceType = 'github';
         } else {
-            new \Exception('No submit button with associated source type clicked?');
+            new \Exception(
+                'No submit button with associated source type clicked?'
+            );
         }
 
         // Repository is specified as Git URL
@@ -376,7 +446,11 @@ class ProjectController extends Controller
             if (!empty($githubSourceRepoName)) {
                 [$owner, $name] = explode('/', $githubSourceRepoName);
                 // populate the project with some data from GitHub
-                $this->getGithubApiService()->populateProject($p, $owner, $name);
+                $this->getGithubApiService()->populateProject(
+                    $p,
+                    $owner,
+                    $name
+                );
                 // and install a webhook to notify us of all pushes to the repo
                 $this->getGithubApiService()->installHook($p, $owner, $name);
             }
@@ -411,23 +485,45 @@ class ProjectController extends Controller
         list($formParentType, $formParentName) = explode('_', $formParent, 2);
 
         if ($formParentType === 'u') {
-            $user = $this->container->get('fos_user.user_manager')
+            $user = $this->get('fos_user.user_manager')
                 ->findUserByUsername($formParentName);
 
-            if (null === $user)
+            if (null === $user) {
                 throw new \Exception("form manipulated");
+            }
 
             $p->setParentUser($user);
 
-        } else if ($formParentType === 'o') {
-            $organization = $this->getDoctrine()
-                ->getRepository('LibrecoresProjectRepoBundle:Organization')
-                ->findOneByName($formParentName);
+        } else {
+            if ($formParentType === 'o') {
+                $organization = $this->getDoctrine()
+                    ->getRepository('LibrecoresProjectRepoBundle:Organization')
+                    ->findOneByName($formParentName);
 
-            if (null === $organization)
-                throw new \Exception("form manipulated");
+                if (null === $organization) {
+                    throw new \Exception("form manipulated");
+                }
 
-            $p->setParentOrganization($organization);
+                $p->setParentOrganization($organization);
+            }
         }
+    }
+
+    /**
+     * Discards any labels and retains the value of a histogram
+     * @param $histogram
+     * @return array
+     */
+    private function flattenHistogram($histogram)
+    {
+        $values = [];
+
+        foreach ($histogram as $i) {
+            foreach ($i as $j) {
+                $values[] = $j[0];
+            }
+        }
+
+        return $values;
     }
 }

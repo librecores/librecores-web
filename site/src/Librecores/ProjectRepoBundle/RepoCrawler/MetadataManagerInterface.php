@@ -16,9 +16,10 @@ use Librecores\ProjectRepoBundle\Entity\Project;
 /**
  * Interface for Metadata manager which stores and provides metadata for Projects
  *
- * This interface is meant to provide a transparent API to fetch project metadata from
- * a meta-data storage. Implementations are expected to perform appropriate optimizations
- * such as caching.
+ * This interface is meant to provide a transparent API to fetch project metadata
+ * from a meta-data storage. Implementations are expected to perform appropriate
+ * optimizations such as caching.
+ *
  * @package Librecores\ProjectRepoBundle\RepoCrawler
  */
 interface MetadataManagerInterface
@@ -26,8 +27,9 @@ interface MetadataManagerInterface
     /**
      * Forces a reload of all project metadata
      *
-     * For implementations performing caching, invocation of this method should clear their
-     * caches and reload the data from the primary data-source
+     * For implementations performing caching, invocation of this method should
+     * clear their caches and reload the data from the primary data-source
+     *
      * @param Project $project
      * @return mixed
      */
@@ -105,6 +107,24 @@ interface MetadataManagerInterface
      * @param Contributor $contributor
      * @return string URL to contributor avatar
      */
-    function getContributorAvatar(Contributor $contributor) : string;
+    function getContributorAvatar(Contributor $contributor): string;
 
+    /**
+     * Get a histogram of commits over a range of dates
+     *
+     * @param Project $project
+     * @param \DateTimeImmutable $start start date of commits
+     * @param \DateTimeImmutable $end end date of commits
+     * @param int $bucket one of the constants 'INTERVAL_DAY', 'INTERVAL_WEEK'
+     *                    'INTERVAL_MONTH', 'INTERVAL_YEAR', which specifies
+     *                     the histogram bucket size
+     * @return array associative array of a time span index and commits in that
+     *               time span
+     */
+    function getCommitHistogram(
+        Project $project,
+        \DateTimeImmutable $start,
+        \DateTimeImmutable $end,
+        int $bucket
+    ): array;
 }

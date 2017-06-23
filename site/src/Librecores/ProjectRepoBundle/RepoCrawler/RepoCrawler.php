@@ -99,9 +99,9 @@ abstract class RepoCrawler
      * Get all commits in the repository since a specified commit ID or all if
      * not specified
      *
-     * Implementations supporting extraction of commits are required to return an
-     * array of `SourceCommit` objects or an empty array if otherwise. The default
-     * behavior is to return an empty array.
+     * Implementations supporting extraction of commits are required to return
+     * an array of `SourceCommit` objects or an empty array if otherwise. The
+     * default behavior is to return an empty array.
      *
      * @param string|null $sinceId ID of commit after which the commits are to be
      *                              returned
@@ -114,7 +114,8 @@ abstract class RepoCrawler
     }
 
     /**
-     * Checks whether the given commit ID exists on the default tree of the repository
+     * Checks whether the given commit ID exists on the default tree of the
+     * repository
      *
      * @param string $id ID of the commit to search
      * @return bool commit exists in the tree ?
@@ -147,21 +148,25 @@ abstract class RepoCrawler
         }
 
         $commitRepository = $this->manager->getRepository(Commit::class);
-        $lastCommit = $commitRepository->getLatestCommitForRepository($this->repo);
+        $lastCommit = $commitRepository->latest($this->repo);
 
         $commits = [];
 
-        if ($lastCommit && $this->commitExists($lastCommit->getCommitId())) {   // determine if our latest commit exists
-            $commits = $this->fetchCommits($lastCommit->getCommitId());         // fetch new commits since what we have on DB
+        // determine if our latest commit exists and fetch new commits since
+        // what we have on DB
+        if ($lastCommit && $this->commitExists($lastCommit->getCommitId())) {
+            $commits = $this->fetchCommits($lastCommit->getCommitId());
         } else {
             // there has been a history rewrite
             // we drop everything and persist all commits to the DB
             //XXX: Find a way to find the common ancestor and do partial rewrites
-            $commitRepository->clearAllCommits($this->repo);
+            $commitRepository->removeAll($this->repo);
             $this->repo->getCommits()->clear();
             $commits = $this->fetchCommits();
         }
 
+        // XXX: This is probably wrong, we should mock the execution instead of
+        // the task of commit parsing, it is
         foreach ($commits as $commit) {
             $this->manager->persist($commit);
         }

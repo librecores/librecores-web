@@ -38,8 +38,10 @@ class DefaultMetadataManager implements MetadataManagerInterface
      * @param CommitRepository $commitRepository
      * @param ContributorRepository $contributorRepository
      */
-    public function __construct(CommitRepository $commitRepository, ContributorRepository $contributorRepository)
-    {
+    public function __construct(
+        CommitRepository $commitRepository,
+        ContributorRepository $contributorRepository
+    ) {
         $this->commitRepository = $commitRepository;
         $this->contributorRepository = $contributorRepository;
     }
@@ -58,7 +60,9 @@ class DefaultMetadataManager implements MetadataManagerInterface
      */
     public function getCommits(Project $project): array
     {
-        return $this->commitRepository->getCommitsForRepository($project->getSourceRepo());
+        return $this->commitRepository->get(
+            $project->getSourceRepo()
+        );
     }
 
     /**
@@ -66,7 +70,9 @@ class DefaultMetadataManager implements MetadataManagerInterface
      */
     public function getCommitCount(Project $project): int
     {
-        return $this->commitRepository->getCommitCountForRepository($project->getSourceRepo());
+        return $this->commitRepository->count(
+            $project->getSourceRepo()
+        );
     }
 
     /**
@@ -74,7 +80,9 @@ class DefaultMetadataManager implements MetadataManagerInterface
      */
     public function getLatestCommit(Project $project): Commit
     {
-        return $this->commitRepository->getLatestCommitForRepository($project->getSourceRepo());
+        return $this->commitRepository->latest(
+            $project->getSourceRepo()
+        );
     }
 
     /**
@@ -82,7 +90,9 @@ class DefaultMetadataManager implements MetadataManagerInterface
      */
     function getFirstCommit(Project $project): Commit
     {
-        return $this->commitRepository->getFirstCommitForRepository($project->getSourceRepo());
+        return $this->commitRepository->first(
+            $project->getSourceRepo()
+        );
     }
 
     /**
@@ -90,7 +100,9 @@ class DefaultMetadataManager implements MetadataManagerInterface
      */
     public function getContributors(Project $project): array
     {
-        return $this->contributorRepository->getContributorsForRepository($project->getSourceRepo());
+        return $this->contributorRepository->getContributorsForRepository(
+            $project->getSourceRepo()
+        );
     }
 
     /**
@@ -98,7 +110,9 @@ class DefaultMetadataManager implements MetadataManagerInterface
      */
     public function getContributorsCount(Project $project): int
     {
-        return $this->contributorRepository->getContributorCountForRepository($project->getSourceRepo());
+        return $this->contributorRepository->getContributorCountForRepository(
+            $project->getSourceRepo()
+        );
     }
 
     /**
@@ -106,7 +120,10 @@ class DefaultMetadataManager implements MetadataManagerInterface
      */
     public function getTopContributors(Project $project, int $count = 5): array
     {
-        return $this->contributorRepository->getTopContributorsForRepository($project->getSourceRepo(), 5);
+        return $this->contributorRepository->getTopContributorsForRepository(
+            $project->getSourceRepo(),
+            5
+        );
     }
 
     /**
@@ -114,7 +131,9 @@ class DefaultMetadataManager implements MetadataManagerInterface
      */
     public function getCommitCountForContributor(Contributor $contributor): int
     {
-        return $this->commitRepository->getCommitCountForContributor($contributor);
+        return $this->commitRepository->commitsByContributor(
+            $contributor
+        );
     }
 
     /**
@@ -123,9 +142,30 @@ class DefaultMetadataManager implements MetadataManagerInterface
     public function getContributorAvatar(Contributor $contributor): string
     {
         // https://en.gravatar.com/site/implement/images/php/
-        // We use 32x32 px images and a 8 bit retro image as fallback, similar to github
+        // We use 32x32 px images and a 8 bit retro image as fallback
+        // similar to Github
         return 'https://www.gravatar.com/avatar/'
-            . md5(strtolower(trim($contributor->getEmail())))
-            . '?s=32&d=retro';
+            .md5(strtolower(trim($contributor->getEmail())))
+            .'?s=32&d=retro';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCommitHistogram(
+        Project $project,
+        \DateTimeImmutable $start,
+        \DateTimeImmutable $end,
+        int $bucket
+    ): array {
+        // TODO: This function badly needs some form of caching
+        // aggregation queries in mysql are very expensive, this function
+        // will never use an index and always perform a full table scan
+        return $this->commitRepository->histogram(
+            $project->getSourceRepo(),
+            $start,
+            $end,
+            $bucket
+        );
     }
 }
