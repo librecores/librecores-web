@@ -7,8 +7,6 @@ use Librecores\ProjectRepoBundle\Entity\SourceRepo;
 /**
  * Provides an interface to parse output generated during repository crawling
  *
- * @package Librecores\ProjectRepoBundle\OutputParser
- *
  * @author Amitosh Swain Mahapatra <amitosh.swain@gmail.com>
  */
 interface OutputParserInterface

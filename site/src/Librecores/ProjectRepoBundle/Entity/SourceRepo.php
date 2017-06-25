@@ -94,12 +94,21 @@ abstract class SourceRepo
     protected $commits;
 
     /**
+     * Statistics about the source code of this repository
+     * @var SourceStats
+     *
+     * @ORM\Embedded(class="SourceStats", columnPrefix="source_stats_")
+     */
+    protected $sourceStats;
+
+    /**
      * Constructor
      */
     public function __construct()
     {
         $this->contributors = new ArrayCollection();
         $this->commits = new ArrayCollection();
+        $this->sourceStats = new SourceStats();
     }
 
     /**
@@ -254,10 +263,35 @@ abstract class SourceRepo
     /**
      * Get commits
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getCommits()
     {
         return $this->commits;
+    }
+
+
+    /**
+     * Set sourceStats
+     *
+     * @param SourceStats $sourceStats
+     *
+     * @return SourceRepo
+     */
+    public function setSourceStats(SourceStats $sourceStats)
+    {
+        $this->sourceStats = $sourceStats;
+
+        return $this;
+    }
+
+    /**
+     * Get sourceStats
+     *
+     * @return SourceStats
+     */
+    public function getSourceStats()
+    {
+        return $this->sourceStats;
     }
 }

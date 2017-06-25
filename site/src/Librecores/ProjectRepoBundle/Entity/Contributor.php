@@ -12,6 +12,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * Most source code repositories store the name and email of the committer.
  *
+ * @author Amitosh Swain Mahapatra <amitosh.swain@gmail.com>
+ *
  * @ORM\Table(uniqueConstraints={@UniqueConstraint(columns={"email", "repository_id"})})
  * @ORM\Entity(repositoryClass="Librecores\ProjectRepoBundle\Repository\ContributorRepository")
  */

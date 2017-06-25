@@ -1,0 +1,41 @@
+{
+  "header": {
+    "cloc_url": "github.com/AlDanial/cloc",
+    "cloc_version": "1.70",
+    "elapsed_seconds": 1.56325197219849,
+    "n_files": 102,
+    "n_lines": 10963,
+    "files_per_second": 65.248598315569,
+    "lines_per_second": 7012.94493464296
+  },
+  "PHP": {
+    "nFiles": 68,
+    "blank": 1089,
+    "comment": 3498,
+    "code": 4295
+  },
+  "Twig": {
+    "nFiles": 27,
+    "blank": 216,
+    "comment": 48,
+    "code": 1335
+  },
+  "YAML": {
+    "nFiles": 6,
+    "blank": 61,
+    "comment": 43,
+    "code": 184
+  },
+  "XML": {
+    "nFiles": 1,
+    "blank": 12,
+    "comment": 1,
+    "code": 181
+  },
+  "SUM": {
+    "blank": 1378,
+    "comment": 3590,
+    "code": 5995,
+    "nFiles": 102
+  }
+}

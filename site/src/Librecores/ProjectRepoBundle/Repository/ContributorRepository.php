@@ -10,6 +10,8 @@ use Librecores\ProjectRepoBundle\Entity\SourceRepo;
  * ContributorRepository
  *
  * Extends the default repository with custom functionality.
+ *
+ * @author Amitosh Swain Mahapatra <amitosh.swain@gmail.com>
  */
 class ContributorRepository extends EntityRepository
 {

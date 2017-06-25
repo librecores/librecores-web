@@ -8,6 +8,11 @@ use Librecores\ProjectRepoBundle\Entity\SourceRepo;
 use Librecores\ProjectRepoBundle\Repository\ContributorRepository;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Parses output of git
+ *
+ * @author Amitosh Swain Mahapatra <amitosh.swain@gmail.com>
+ */
 class GitOutputParser implements OutputParserInterface
 {
     /**

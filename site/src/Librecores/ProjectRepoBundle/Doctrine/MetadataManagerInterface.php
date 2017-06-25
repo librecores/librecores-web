@@ -19,8 +19,6 @@ use Librecores\ProjectRepoBundle\Entity\Project;
  * This interface is meant to provide a transparent API to fetch project metadata
  * from a meta-data storage. Implementations are expected to perform appropriate
  * optimizations such as caching.
- *
- * @package Librecores\ProjectRepoBundle\RepoCrawler
  */
 interface MetadataManagerInterface
 {

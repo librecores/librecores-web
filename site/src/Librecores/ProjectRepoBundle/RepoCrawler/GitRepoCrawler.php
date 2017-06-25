@@ -8,10 +8,8 @@ use Librecores\ProjectRepoBundle\Entity\GitSourceRepo;
 /**
  * Crawls and extracts metadata from a remote git repository
  *
- * This implementation performs a shallow clone of the git repository
+ * This implementation performs a clone of the git repository
  * and uses ordinary git commands to fetch metadata
- *
- * @package Librecores\ProjectRepoBundle\RepoCrawler
  */
 class GitRepoCrawler extends RepoCrawler
 {
@@ -235,6 +233,16 @@ class GitRepoCrawler extends RepoCrawler
                 return $code === 0;
             default:    // anything other than 0 or 1 is error
                 throw new \RuntimeException("Unable to fetch commits from $cwd : ".$process->getErrorOutput());
+        }
+    }
+
+    /**
+     * Run configured source crawlers on the repository.
+     */
+    public function runCrawlers()
+    {
+        foreach ($this->sourceCrawlers as $crawler) {
+            $crawler->crawl($this->repo, $this->getRepoClonePath());
         }
     }
 }

@@ -90,19 +90,19 @@ doctrine:
         auto_mapping: true
         dql:
             datetime_functions:
-                DAY: DoctrineExtensions\Query\Mysql\Day
-                WEEK: DoctrineExtensions\Query\Mysql\Week
-                MONTH: DoctrineExtensions\Query\Mysql\Month
-                YEAR: DoctrineExtensions\Query\Mysql\Year
-          hydrators:
-              group: Librecores\ProjectRepoBundle\Doctrine\Hydrators\GroupHydrator
+                DAY: 'DoctrineExtensions\Query\Mysql\Day'
+                WEEK: 'DoctrineExtensions\Query\Mysql\Week'
+                MONTH: 'DoctrineExtensions\Query\Mysql\Month'
+                YEAR: 'DoctrineExtensions\Query\Mysql\Year'
+        hydrators:
+            group: 'Librecores\ProjectRepoBundle\Doctrine\Hydrators\GroupHydrator'
 
 # Doctrine Migrations
 doctrine_migrations:
     dir_name: "%kernel.root_dir%/DoctrineMigrations"
-    namespace: Application\Migrations
+    namespace: 'Application\Migrations'
     table_name: migration_versions
-    name: LibreCores Migrations
+    name: 'LibreCores Migrations'
 
 # Swiftmailer Configuration
 swiftmailer:
@@ -153,12 +153,12 @@ old_sound_rabbit_mq:
 fos_user:
     db_driver: orm
     firewall_name: main
-    user_class: Librecores\ProjectRepoBundle\Entity\User
+    user_class: 'Librecores\ProjectRepoBundle\Entity\User'
     service:
         user_manager: librecores_user_manager
     from_email:
-        address:        noreply@librecores.org
-        sender_name:    LibreCores
+        address:        'noreply@librecores.org'
+        sender_name:    'LibreCores'
 
 # HWI OAuth Configuration
 hwi_oauth:

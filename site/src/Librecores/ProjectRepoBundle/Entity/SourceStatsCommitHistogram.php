@@ -8,8 +8,6 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * Commit histogram of a source code repository
  *
- * @ORM\Table()
- * @ORM\Entity
  */
 class SourceStatsCommitHistogram
 {
@@ -20,10 +18,10 @@ class SourceStatsCommitHistogram
      */
     private $id;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="SourceStats", inversedBy="commitHistogramEntries")
-     */
-    private $sourceStats;
+//    /**
+//     * @ORM\ManyToOne(targetEntity="SourceStats", inversedBy="commitHistogramEntries")
+//     */
+//    private $sourceStats;
 
     /**
      * @ORM\Column(type="integer")

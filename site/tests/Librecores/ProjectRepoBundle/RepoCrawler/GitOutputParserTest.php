@@ -1,14 +1,8 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: amitosh
- * Date: 12/6/17
- * Time: 10:40 PM
- */
 
 namespace Tests\Librecores\ProjectRepoBundle\RepoCrawler;
 
-use Doctrine\ORM\EntityManager;
+use Librecores\ProjectRepoBundle\Entity\Commit;
 use Librecores\ProjectRepoBundle\Entity\Contributor;
 use Librecores\ProjectRepoBundle\Entity\GitSourceRepo;
 use Librecores\ProjectRepoBundle\RepoCrawler\GitOutputParser;
@@ -16,6 +10,13 @@ use Librecores\ProjectRepoBundle\Repository\ContributorRepository;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Tests for GitOutputParser
+ *
+ * @author Amitosh Swain Mahapatra <amitosh.swain@gmail.com>
+ *
+ * @see GitOutputParser
+ */
 class GitOutputParserTest extends TestCase
 {
     public function testParseCommits()
@@ -37,9 +38,13 @@ class GitOutputParserTest extends TestCase
                 return $contributors[$criteria['email']];
             });
 
-        $parser = new GitOutputParser($repository, $this->createMock(LoggerInterface::class));
-        $mockOutput = file_get_contents(join(DIRECTORY_SEPARATOR, [__DIR__, 'Resources', 'output.txt']));
+        /** @var LoggerInterface $logger */
+        $logger = $this->createMock(LoggerInterface::class);
 
+        $parser = new GitOutputParser($repository, $logger);
+        $mockOutput = file_get_contents(join(DIRECTORY_SEPARATOR, [__DIR__,'..', 'Resources', 'output.txt']));
+
+        /** @var Commit[] $commits */
         $commits = $parser->parseCommits(new GitSourceRepo(), $mockOutput);
 
         $this->assertEquals($commits[0]->getCommitId(), 'e0889c6');

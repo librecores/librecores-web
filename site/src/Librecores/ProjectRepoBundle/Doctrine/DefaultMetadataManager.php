@@ -17,7 +17,6 @@ use Librecores\ProjectRepoBundle\Repository\ContributorRepository;
 
 /**
  * Implementation of MetadataManagerInterface
- * @package Librecores\ProjectRepoBundle\RepoCrawler
  */
 class DefaultMetadataManager implements MetadataManagerInterface
 {

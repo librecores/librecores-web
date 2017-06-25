@@ -3,7 +3,6 @@
 namespace Librecores\ProjectRepoBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
-use Librecores\ProjectRepoBundle\Entity\Project;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;

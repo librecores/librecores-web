@@ -34,6 +34,11 @@ class RepoCrawlerFactory
     private $outputParsers;
 
     /**
+     * @var array
+     */
+    private $sourceCrawlers;
+
+    /**
      * Constructor: create a new instance
      *
      * @param MarkupToHtmlConverter $markupConverter
@@ -42,7 +47,8 @@ class RepoCrawlerFactory
      * @param array $outputParsers
      */
     public function __construct(MarkupToHtmlConverter $markupConverter,
-                                LoggerInterface $logger, ObjectManager $manager, array $outputParsers)
+                                LoggerInterface $logger, ObjectManager $manager,
+                                array $outputParsers, array $sourceCrawlers)
     {
         $this->markupConverter = $markupConverter;
         $this->logger = $logger;
@@ -63,7 +69,7 @@ class RepoCrawlerFactory
         // XXX: Investigate a better method for IoC in this situation
         if ($repo instanceof GitSourceRepo) {
             return new GitRepoCrawler($repo,
-                $this->markupConverter, $this->logger, $this->outputParsers['git'], $this->manager);
+                $this->markupConverter, $this->logger, $this->outputParsers['git'], $this->sourceCrawlers, $this->manager);
         }
 
         throw new \InvalidArgumentException("No crawler for source repository " .

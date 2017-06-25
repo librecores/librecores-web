@@ -7,6 +7,7 @@ use Librecores\ProjectRepoBundle\Entity\Commit;
 use Librecores\ProjectRepoBundle\Entity\SourceRepo;
 use Librecores\ProjectRepoBundle\Util\MarkupToHtmlConverter;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Security\Http\Firewall\AbstractAuthenticationListener;
 
 
 /**
@@ -37,6 +38,11 @@ abstract class RepoCrawler
     protected $outputParser;
 
     /**
+     * @var SourceCrawlerInterface[]
+     */
+    protected $sourceCrawlers;
+
+    /**
      * @var ObjectManager
      */
     protected $manager;
@@ -47,11 +53,13 @@ abstract class RepoCrawler
      * @param MarkupToHtmlConverter $markupConverter
      * @param LoggerInterface $logger
      * @param OutputParserInterface $outputParser
+     * @param SourceCrawlerInterface[] $sourceCrawlers
      * @param ObjectManager $manager
      */
     public function __construct(SourceRepo $repo,
                                 MarkupToHtmlConverter $markupConverter, LoggerInterface $logger,
-                                OutputParserInterface $outputParser, ObjectManager $manager)
+                                OutputParserInterface $outputParser, array $sourceCrawlers,
+                                ObjectManager $manager)
     {
         $this->repo = $repo;
         $this->markupConverter = $markupConverter;
@@ -107,7 +115,7 @@ abstract class RepoCrawler
      *                              returned
      * @return array all commits in the repository
      */
-    public function fetchCommits(?string $sinceId = null) : array
+    public function fetchCommits(string $sinceId = null) : array
     {
         // default operation does noting
         return [];
@@ -165,11 +173,13 @@ abstract class RepoCrawler
             $commits = $this->fetchCommits();
         }
 
-        // XXX: This is probably wrong, we should mock the execution instead of
-        // the task of commit parsing, it is
+        // XXX: This is probably wrong, we should abstract the execution instead of
+        // the task of commit parsing
         foreach ($commits as $commit) {
             $this->manager->persist($commit);
         }
+
+        $this->runCrawlers();
 
         return true;
     }
@@ -179,6 +189,16 @@ abstract class RepoCrawler
      * the crawler
      */
     public function updateSourceRepo()
+    {
+        // the default implementation is empty
+    }
+
+    /**
+     * Run configured source crawlers on the repository.
+     *
+     * Implementations supporting source crawlers should override this
+     */
+    public function runCrawlers()
     {
         // the default implementation is empty
     }
