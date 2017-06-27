@@ -45,6 +45,7 @@ class RepoCrawlerFactory
      * @param LoggerInterface $logger
      * @param ObjectManager $manager
      * @param array $outputParsers
+     * @param array $sourceCrawlers
      */
     public function __construct(MarkupToHtmlConverter $markupConverter,
                                 LoggerInterface $logger, ObjectManager $manager,
@@ -54,6 +55,7 @@ class RepoCrawlerFactory
         $this->logger = $logger;
         $this->outputParsers = $outputParsers;
         $this->manager = $manager;
+        $this->sourceCrawlers = $sourceCrawlers;
     }
 
     /**

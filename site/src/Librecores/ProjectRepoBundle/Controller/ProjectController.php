@@ -214,6 +214,12 @@ class ProjectController extends Controller
                     Dates::INTERVAL_WEEK
                 )
             ),
+            'languageGraph' => [
+                'options' => [
+                    'fill' => ['red', 'yellow', 'orange', 'lightblue', 'green'],
+                ],
+                'values' => $manager->getMajorLanguages($p),
+            ],
         ];
 
         // the actual project page

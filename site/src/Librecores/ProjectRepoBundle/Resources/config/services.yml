@@ -102,11 +102,17 @@ services:
             - Librecores\ProjectRepoBundle\Entity\Contributor
 
     librecores.repository.commit:
-            public: false
-            class: Librecores\ProjectRepoBundle\Repository\ContributorRepository
-            factory: ['@doctrine.orm.default_entity_manager', 'getRepository']
-            arguments:
-                - Librecores\ProjectRepoBundle\Entity\Commit
+        public: false
+        class: Librecores\ProjectRepoBundle\Repository\ContributorRepository
+        factory: ['@doctrine.orm.default_entity_manager', 'getRepository']
+        arguments:
+            - Librecores\ProjectRepoBundle\Entity\Commit
+
+    librecores.executor.shell:
+        public: false
+        class: Librecores\ProjectRepoBundle\Util\DefaultExecutor
+        arguments:
+          - '@logger'
 
     librecores.outputparser.git:
         public: false
@@ -115,6 +121,13 @@ services:
             - '@librecores.repository.contributor'
             - '@logger'
 
+    librecores.source_crawler.cloc:
+        public: false
+        class: Librecores\ProjectRepoBundle\RepoCrawler\ClocCrawler
+        arguments:
+            - '@librecores.executor.shell'
+            - '@doctrine.orm.default_entity_manager'
+
     librecores.repocrawlerfactory:
         class: Librecores\ProjectRepoBundle\RepoCrawler\RepoCrawlerFactory
         arguments:
@@ -122,9 +135,10 @@ services:
             - '@logger'
             - '@doctrine.orm.default_entity_manager'
             - git: '@librecores.outputparser.git'
+            - cloc: '@librecores.source_crawler.cloc'
 
     librecores.repository_metadata_manager:
-        class: Librecores\ProjectRepoBundle\RepoCrawler\DefaultMetadataManager
+        class: Librecores\ProjectRepoBundle\Doctrine\DefaultMetadataManager
         arguments:
             - '@librecores.repository.commit'
             - '@librecores.repository.contributor'

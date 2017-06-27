@@ -80,7 +80,7 @@ class SourceStats
 
     /**
      * Stats about all other languages used by this repository
-     * @var ArrayCollection
+     * @var LanguageStat[]
      *
      * @ORM\Column(type="array")
      */
@@ -88,7 +88,7 @@ class SourceStats
 
     public function __construct()
     {
-        $this->languageStats = new ArrayCollection();
+        $this->languageStats = [];
     }
 
     /**
@@ -202,13 +202,18 @@ class SourceStats
      */
     public function removeLanguageStat(LanguageStat $language)
     {
-        return $this->languageStats->removeElement($language);
+        if(($key = array_search($language, $this->languageStats)) !== false) {
+            unset($this->languageStats[$key]);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
-     * @return Collection
+     * @return LanguageStat[]
      */
-    public function getLanguageStats(): Collection
+    public function getLanguageStats(): array
     {
         return $this->languageStats;
     }
@@ -232,29 +237,34 @@ class SourceStats
     }
     /**
      * The most used language in this repository
-     * @return string
+     * @return string|false
      */
-    public function getMajorLanguage(): string
+    public function getMajorLanguage()
     {
-        /** @var LanguageStat[] $langStats */
-        $langStats = $this->languageStats->toArray();
+        dump($this->languageStats);
 
-        usort(
-            $langStats,
-            function (LanguageStat $a, LanguageStat $b) {
-                // we compare using file count, not loc
-                $aCount = $a->getFileCount();
-                $bCount = $b->getFileCount();
+        if (0 !== count($this->languageStats)) {
+            $langStats = $this->languageStats;
 
-                if ($aCount === $bCount) {
-                    return 0;
+            usort(
+                $langStats,
+                function (LanguageStat $a, LanguageStat $b) {
+                    // we compare using file count, not loc
+                    $aCount = $a->getFileCount();
+                    $bCount = $b->getFileCount();
+
+                    if ($aCount === $bCount) {
+                        return 0;
+                    }
+
+                    return ($aCount > $bCount) ? -1 : 1;
                 }
+            );
 
-                return ($aCount < $bCount) ? -1 : 1;
-            }
-        );
-
-        return $langStats[0]->getLanguage();
+            return $langStats[0]->getLanguage();
+        } else {
+            return false;
+        }
     }
     // Estimation of project effort in man-months and development time in
 

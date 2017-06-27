@@ -6,11 +6,12 @@
  * Time: 9:46 PM
  */
 
-namespace Librecores\ProjectRepoBundle\RepoCrawler;
+namespace Librecores\ProjectRepoBundle\Doctrine;
 
 
 use Librecores\ProjectRepoBundle\Entity\Commit;
 use Librecores\ProjectRepoBundle\Entity\Contributor;
+use Librecores\ProjectRepoBundle\Entity\LanguageStat;
 use Librecores\ProjectRepoBundle\Entity\Project;
 use Librecores\ProjectRepoBundle\Repository\CommitRepository;
 use Librecores\ProjectRepoBundle\Repository\ContributorRepository;
@@ -77,7 +78,7 @@ class DefaultMetadataManager implements MetadataManagerInterface
     /**
      * {@inheritdoc}
      */
-    public function getLatestCommit(Project $project): Commit
+    public function getLatestCommit(Project $project): ?Commit
     {
         return $this->commitRepository->latest(
             $project->getSourceRepo()
@@ -87,7 +88,7 @@ class DefaultMetadataManager implements MetadataManagerInterface
     /**
      * {@inheritdoc}
      */
-    function getFirstCommit(Project $project): Commit
+    function getFirstCommit(Project $project): ?Commit
     {
         return $this->commitRepository->first(
             $project->getSourceRepo()
@@ -166,5 +167,49 @@ class DefaultMetadataManager implements MetadataManagerInterface
             $end,
             $bucket
         );
+    }
+
+    /**
+     * @{inheritdoc}
+     */
+    public function getMajorLanguages(Project $project)
+    {
+        $langStats = $project->getSourceRepo()->getSourceStats()->getLanguageStats();
+
+        usort(
+            $langStats,
+            function (LanguageStat $a, LanguageStat $b) {
+                // we compare using file count, not loc
+                $aCount = $a->getFileCount();
+                $bCount = $b->getFileCount();
+
+                if ($aCount === $bCount) {
+                    return 0;
+                }
+
+                return ($aCount > $bCount) ? -1 : 1;
+            }
+        );
+
+        /** @var LanguageStat[] $topLangs */
+        $topLangs = array_slice($langStats, 0, 4);
+
+        $result = [];
+        if (count($langStats) > 4) {
+            $others = 0;
+
+            for($i = 4; $i < count($langStats); $i++) {
+                $others += $langStats[$i]->getLinesOfCode();
+            }
+            $result['others'] = $others;
+        }
+
+        foreach ($topLangs as $lang) {
+            $result[$lang->getLanguage()] = $lang->getLinesOfCode();
+        }
+
+        sort($result, SORT_NUMERIC);
+
+        return $result;
     }
 }

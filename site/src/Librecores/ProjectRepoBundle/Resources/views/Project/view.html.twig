@@ -92,36 +92,62 @@
       <br/>
       {% endif %}
 
-      <i class="fa fa-star" aria-hidden="true"></i>
+      {% if project.sourceRepo.sourceStats.available %}
+          {%  if project.sourceRepo.sourceStats.languageStats is not empty %}
+      <i class="fa fa-code" aria-hidden="true"></i>
+      Project language: {{ project.sourceRepo.sourceStats.majorLanguage }}
+      <br/>
+          {%  endif %}
+      {% endif %}
+
+      <i class="fa fa-plus-circle" aria-hidden="true"></i>
       <span>Registered {{ project.dateAdded | time_diff }}</span>
       <br/>
 
-      <i class="fa fa-clock-o" aria-hidden="true"></i>
+      {% if metadata.firstCommit %}
+      <i class="fa fa-bookmark" aria-hidden="true"></i>
       <span>Started {{ metadata.firstCommit.dateCommitted | time_diff }}</span>
       <br/>
+      {% endif %}
 
+      {% if metadata.latestCommit %}
       <i class="fa fa-refresh" aria-hidden="true"></i>
       <span>Last updated {{ metadata.latestCommit.dateCommitted | time_diff }}</span>
       <br/>
+      {% endif %}
 
+      {% if metadata.commitCount %}
       <i class="fa fa-info-circle" aria-hidden="true"></i>
       <span>{% transchoice metadata.commitCount %}1 commit|%count% commits{% endtranschoice %} by {% transchoice metadata.contributorCount %}1 contributor|%count% contributors{% endtranschoice %}</span>
       <br/>
+      {% endif %}
+
       <div class="librecores-project-contributor-avatar-box">
         {%  for contributor in metadata.topContributors %}
         <img class="librecores-project-contributor-avatar" src="{{ contributor.avatar }}" alt="{{ contributor.name }}" data-toggle="tooltip" title="{{ contributor.name }} ({% transchoice contributor.commitCount %}1 commit|%count% commits{% endtranschoice %})" />
         {%  endfor %}
       </div>
+
+      {% if metadata.commitCount %}
       <div class="librecores-project-activity">
         <div class="librecores-project-activity-graph">
           {{  metadata.activityHistogram | join(',')  }}
         </div>
         <p>Activity in last 1 year</p>
       </div>
+      {% endif %}
+
+      {#{% if metadata.languageGraph.values is not empty %}#}
+        {#<div class="librecores-project-languages">#}
+          {#<div data-peity='{{ metadata.languageGraph.options | json_encode }}' class="librecores-project-languages-graph">#}
+              {#{{  metadata.languageGraph.values | join(',')  }}#}
+          {#</div>#}
+          {#<p>Languages used in the project</p>#}
+        {#</div>#}
+      {#{%  endif %}#}
       <p class="librecores-project-updated">
         Updated {{ project.dateLastModified | time_diff }}
       </p>
-
     </div>
   </div>
 
@@ -141,5 +167,7 @@
     $('[data-toggle="tooltip"]').tooltip();
     var $chart = $('.librecores-project-activity-graph');
     $chart.height('100px').peity('line', { height: $chart.height(), width: $chart.width() });
+    {#var $langChart = $('.librecores-project-languages-graph');#}
+    {#$langChart.height('100px').peity('pie', { height: $langChart.height(), width: $langChart.height()  });#}
   });
 {% endblock %}

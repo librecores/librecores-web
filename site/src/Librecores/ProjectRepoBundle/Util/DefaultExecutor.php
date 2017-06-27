@@ -2,6 +2,8 @@
 
 namespace Librecores\ProjectRepoBundle\Util;
 
+use Psr\Log\LoggerInterface;
+
 use Symfony\Component\Process\ProcessBuilder;
 
 /**
@@ -12,7 +14,28 @@ use Symfony\Component\Process\ProcessBuilder;
  */
 class DefaultExecutor implements ExecutorInterface
 {
-    const CLOC_TIMEOUT = 300;
+    /**
+     * Default timeout for commands
+     *
+     * @var int
+     */
+    const DEFAULT_TIMEOUT = 300;
+
+    /**
+     * logger for this service
+     *
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
+     * DefaultExecutor constructor.
+     * @param LoggerInterface $logger
+     */
+    public function __construct(LoggerInterface $logger)
+    {
+       $this->logger = $logger;
+    }
 
     /**
      * {@inheritdoc}
@@ -22,10 +45,13 @@ class DefaultExecutor implements ExecutorInterface
         array $args = [],
         array $options = []
     ) : string {
+
+        $timeout = array_key_exists('timeout', $options) ? $options['timeout'] : static::DEFAULT_TIMEOUT;
         $builder = new ProcessBuilder();
         $builder->setPrefix($command)
             ->setArguments($args)
-            ->setTimeout(static::CLOC_TIMEOUT);
+            ->setTimeout($timeout);
+
         if (array_key_exists('cwd', $options)) {
             $builder->setWorkingDirectory($options['cwd']);
         }
@@ -39,7 +65,10 @@ class DefaultExecutor implements ExecutorInterface
         }
 
         $process = $builder->getProcess();
+
+        $this->logger->debug('Starting process ' . $process->getCommandLine());
         $process->mustRun();
+        $this->logger->debug("Process $command exited succesfuly");
 
         return $process->getOutput();
     }

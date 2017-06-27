@@ -6,3 +6,4 @@
 - include: github-markup.yml
 - include: librecores-site.yml
 - include: librecores-blog.yml
+- include: repocrawler.yml

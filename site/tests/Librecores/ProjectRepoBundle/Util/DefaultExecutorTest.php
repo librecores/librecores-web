@@ -4,6 +4,7 @@ namespace Tests\Librecores\Util;
 
 use Librecores\ProjectRepoBundle\Util\DefaultExecutor;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 
 /**
@@ -16,7 +17,10 @@ class DefaultExecutorTest extends TestCase
 {
     public function testExecSuccess()
     {
-        $executor = new DefaultExecutor();
+        /** @var LoggerInterface $logger */
+        $logger = $this->createMock(LoggerInterface::class);
+        $executor = new DefaultExecutor($logger);
+        
         $output = $executor->exec('echo', ['hello']);
 
         $this->assertEquals("hello\n", $output);
@@ -24,7 +28,9 @@ class DefaultExecutorTest extends TestCase
 
     public function testExecNoExecVulnerebility()
     {
-        $executor = new DefaultExecutor();
+        /** @var LoggerInterface $logger */
+        $logger = $this->createMock(LoggerInterface::class);
+        $executor = new DefaultExecutor($logger);
         $output = $executor->exec('echo', ['&& false']);
 
         $this->assertEquals("&& false\n", $output);
@@ -34,7 +40,10 @@ class DefaultExecutorTest extends TestCase
 
     public function testExecSuccessNoOutput()
     {
-        $executor = new DefaultExecutor();
+        /** @var LoggerInterface $logger */
+        $logger = $this->createMock(LoggerInterface::class);
+        $executor = new DefaultExecutor($logger);
+
         $output = $executor->exec('true');
 
         $this->assertEquals('', $output);
@@ -42,7 +51,10 @@ class DefaultExecutorTest extends TestCase
 
     public function testExecSuccessWithOptions()
     {
-        $executor = new DefaultExecutor();
+        /** @var LoggerInterface $logger */
+        $logger = $this->createMock(LoggerInterface::class);
+        $executor = new DefaultExecutor($logger);
+
         $output = $executor->exec(
             'cat',
             ['file.txt'],
@@ -61,7 +73,10 @@ class DefaultExecutorTest extends TestCase
     {
         $this->expectException(ProcessFailedException::class);
 
-        $executor = new DefaultExecutor();
+        /** @var LoggerInterface $logger */
+        $logger = $this->createMock(LoggerInterface::class);
+        $executor = new DefaultExecutor($logger);
+
         $executor->exec('false');
     }
 }

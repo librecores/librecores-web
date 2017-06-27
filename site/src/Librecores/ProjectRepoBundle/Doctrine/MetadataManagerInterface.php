@@ -6,7 +6,7 @@
  * Time: 9:46 PM
  */
 
-namespace Librecores\ProjectRepoBundle\RepoCrawler;
+namespace Librecores\ProjectRepoBundle\Doctrine;
 
 
 use Librecores\ProjectRepoBundle\Entity\Commit;
@@ -54,7 +54,7 @@ interface MetadataManagerInterface
      * @param Project $project
      * @return Commit
      */
-    function getLatestCommit(Project $project): Commit;
+    function getLatestCommit(Project $project): ?Commit;
 
     /**
      * Gets first commit recorded in meta-data storage
@@ -62,7 +62,7 @@ interface MetadataManagerInterface
      * @param Project $project
      * @return Commit
      */
-    function getFirstCommit(Project $project): Commit;
+    function getFirstCommit(Project $project): ?Commit;
 
     /**
      * Gets the contributors to a project
@@ -125,4 +125,13 @@ interface MetadataManagerInterface
         \DateTimeImmutable $end,
         int $bucket
     ): array;
+
+    /**
+     * Get the major languages used in a project
+     *
+     * @param $project
+     *
+     * @return int[string]
+     */
+    function getMajorLanguages(Project $project);
 }

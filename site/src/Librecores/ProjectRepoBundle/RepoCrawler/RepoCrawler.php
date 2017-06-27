@@ -66,6 +66,7 @@ abstract class RepoCrawler
         $this->logger = $logger;
         $this->outputParser = $outputParser;
         $this->manager = $manager;
+        $this->sourceCrawlers = $sourceCrawlers;
 
         if (!$this->isValidRepoType()) {
             throw new \RuntimeException("Repository type is not supported by this crawler.");
@@ -155,6 +156,7 @@ abstract class RepoCrawler
             $project->setLicenseText($this->getLicenseTextSafeHtml());
         }
 
+        $this->logger->info('Fetching commits for the project ' . $project->getFqname());
         $commitRepository = $this->manager->getRepository(Commit::class);
         $lastCommit = $commitRepository->latest($this->repo);
 
@@ -179,7 +181,11 @@ abstract class RepoCrawler
             $this->manager->persist($commit);
         }
 
+        $this->logger->info('Running source code crawlers for the project ' . $project->getFqname());
         $this->runCrawlers();
+
+        $this->manager->persist($project);
+        $this->manager->flush();
 
         return true;
     }
