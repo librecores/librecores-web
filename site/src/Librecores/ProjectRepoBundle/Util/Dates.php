@@ -1,14 +1,14 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: amitosh
- * Date: 22/6/17
- * Time: 10:52 PM
- */
 
 namespace Librecores\ProjectRepoBundle\Util;
 
+use Symfony\Component\Finder\Iterator\DateRangeFilterIterator;
 
+/**
+ * Utility methods for dates
+ *
+ * @author Amitosh Swain Mahapatra <amitosh.swain@gmail.com>
+ */
 class Dates
 {
     /**
@@ -66,4 +66,5 @@ class Dates
      * @var int
      */
     const INTERVAL_CUSTOM = 99999;
+
 }

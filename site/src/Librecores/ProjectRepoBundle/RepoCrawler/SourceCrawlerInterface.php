@@ -8,6 +8,8 @@ use Librecores\ProjectRepoBundle\Entity\SourceRepo;
 /**
  * Generic interface for all services that scan the repositories source code
  * and extract metrics.
+ *
+ * @author Amitosh Swain Mahapatra <amitosh.swain@gmail.com>
  */
 interface SourceCrawlerInterface
 {

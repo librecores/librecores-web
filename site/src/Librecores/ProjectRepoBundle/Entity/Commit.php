@@ -33,7 +33,8 @@ class Commit
      *
      * @var SourceRepo
      *
-     * @ORM\ManyToOne(targetEntity="Librecores\ProjectRepoBundle\Entity\SourceRepo", inversedBy="commits")
+     * @ORM\ManyToOne(targetEntity="SourceRepo", inversedBy="commits")
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private $repository;
 
@@ -42,7 +43,7 @@ class Commit
      *
      * @var string
      *
-     * @ORM\Column(type="string", length=255, nullable=false, unique=true)
+     * @ORM\Column(type="string", length=255, unique=true)
      */
     private $commitId;
 
@@ -51,7 +52,8 @@ class Commit
      *
      * @var Contributor
      *
-     * @ORM\ManyToOne(targetEntity="Librecores\ProjectRepoBundle\Entity\Contributor", inversedBy="commits")
+     * @ORM\ManyToOne(targetEntity="Contributor", inversedBy="commits")
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private $contributor;
 
@@ -60,7 +62,7 @@ class Commit
      *
      * @var \DateTime
      *
-     * @ORM\Column(type="datetime", nullable=false)
+     * @ORM\Column(type="datetime")
      */
     private $dateCommitted;
 
@@ -69,7 +71,7 @@ class Commit
      *
      * @var int
      *
-     * @ORM\Column(type="integer", nullable=false)
+     * @ORM\Column(type="integer", options={"default" : 0})
      */
     private $filesModified = 0;
 
@@ -78,7 +80,7 @@ class Commit
      *
      * @var int
      *
-     * @ORM\Column(type="integer", nullable=false)
+     * @ORM\Column(type="integer", options={"default" : 0})
      */
     private $linesAdded = 0;
 
@@ -87,7 +89,7 @@ class Commit
      *
      * @var int
      *
-     * @ORM\Column(type="integer", nullable=false)
+     * @ORM\Column(type="integer", options={"default" : 0})
      */
     private $linesRemoved = 0;
 

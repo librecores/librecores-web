@@ -117,7 +117,7 @@
         <p>
           <i class="fa fa-star" aria-hidden="true"></i>
           {{ project.name }} consists of {{ project.sourceRepo.sourceStats.totalLinesOfCode }} lines of code,
-          which would take an estimated* time of {{ project.sourceRepo.sourceStats.cocomoDuration | round(0, 'ceil') }} months by {{ project.sourceRepo.sourceStats.cocomoTeamSize | round(0, 'ceil') }} developers.
+          which would take an estimated* time of {{ project.sourceRepo.sourceStats.cocomoDuration | round(0, 'ceil') }} months by {{ project.sourceRepo.sourceStats.cocomoTeamSize }} developers.
         </p>
       {% endif %}
 

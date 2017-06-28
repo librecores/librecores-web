@@ -9,6 +9,8 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Statistics about the source code of a repository
  *
+ * @author Amitosh Swain Mahapatra <amitosh.swain@gmail.com>
+ *
  * @ORM\Embeddable()
  */
 class SourceStats
@@ -283,8 +285,8 @@ class SourceStats
      * @param int $type Development type of the repository
      * @return float effort in man-months
      */
-    public function getCocomoEffort(int $type = self::DEVELOPMENT_TYPE_EMBEDDED
-    ): float {
+    public function getCocomoEffort(int $type = self::DEVELOPMENT_TYPE_EMBEDDED): float
+    {
         $kLoc = $this->totalLinesOfCode / 1000;
 
         switch ($type) {
@@ -314,9 +316,8 @@ class SourceStats
      * @param int $type Development type of the repository
      * @return float effort in man-months
      */
-    public function getCocomoDuration(
-        int $type = self::DEVELOPMENT_TYPE_EMBEDDED
-    ): float {
+    public function getCocomoDuration(int $type = self::DEVELOPMENT_TYPE_EMBEDDED): float
+    {
         $kLoc = $this->totalLinesOfCode / 1000;
 
         switch ($type) {
@@ -338,11 +339,12 @@ class SourceStats
 
     /**
      * Get estimated number of developers
+     * @param int $type Development type of the repository
+     * @return int estimated number of developers
      */
-    public function getCocomoTeamSize(
-        int $type = self::DEVELOPMENT_TYPE_EMBEDDED
-    ): float {
-        return $this->getCocomoEffort($type) / $this->getCocomoDuration($type);
+    public function getCocomoTeamSize(int $type = self::DEVELOPMENT_TYPE_EMBEDDED): int
+    {
+        return ceil($this->getCocomoEffort($type) / $this->getCocomoDuration($type));
     }
 
     // TODO: Cost estimation by man-hours * median monthly wages of developers

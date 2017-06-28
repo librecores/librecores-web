@@ -1,15 +1,11 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: amitosh
- * Date: 23/6/17
- * Time: 11:43 PM
- */
 
 namespace Librecores\ProjectRepoBundle\Util;
 
 /**
  * Interface ExecutorInterface
+ *
+ * @author Amitosh Swain Mahapatra <amitosh.swain@gmail.com>
  */
 interface ExecutorInterface
 {

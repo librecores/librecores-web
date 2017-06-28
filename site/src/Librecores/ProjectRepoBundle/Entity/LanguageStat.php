@@ -11,31 +11,37 @@ namespace Librecores\ProjectRepoBundle\Entity;
 class LanguageStat
 {
     /**
+     * The language represented by this entity
      * @var string
      */
     private $language;
 
     /**
+     * Number of files of this language in the repository
      * @var int
      */
     private $fileCount;
 
     /**
+     * Number of lines of code of this language in the repository
      * @var int
      */
     private $linesOfCode;
 
     /**
+     * Number of lines consisting of this language in the repository
      * @var int
      */
     private $commentLineCount;
 
     /**
+     * Number of blank lines in files of this language in the repository
      * @var int
      */
     private $blankLineCount;
 
     /**
+     * Set language
      * @param string $language
      * @return LanguageStat
      */
@@ -47,6 +53,7 @@ class LanguageStat
     }
 
     /**
+     * Get language
      * @return string
      */
     public function getLanguage(): string
@@ -55,6 +62,7 @@ class LanguageStat
     }
 
     /**
+     * Set fileCount
      * @param int $fileCount
      * @return LanguageStat
      */

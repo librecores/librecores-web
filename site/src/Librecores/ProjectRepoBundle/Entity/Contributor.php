@@ -44,6 +44,7 @@ class Contributor
      * @var SourceRepo
      *
      * @ORM\ManyToOne(targetEntity="SourceRepo", inversedBy="contributors")
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private $repository;
 
@@ -52,7 +53,7 @@ class Contributor
      *
      * @var string
      *
-     * @ORM\Column(type="string", length=255, nullable=false)
+     * @ORM\Column(type="string")
      */
     private $name;
 
@@ -62,7 +63,7 @@ class Contributor
      * @var string
      *
      * @Assert\Email()
-     * @ORM\Column(type="string", length=255, nullable=false)
+     * @ORM\Column(type="string")
      */
     private $email;
 
@@ -71,7 +72,7 @@ class Contributor
      *
      * @var Collection
      *
-     * @ORM\OneToMany(targetEntity="Librecores\ProjectRepoBundle\Entity\Commit", mappedBy="contributor", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="Commit", mappedBy="contributor", cascade={"persist"})
      */
     private $commits;
 

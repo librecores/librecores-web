@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: amitosh
- * Date: 12/6/17
- * Time: 9:46 PM
- */
 
 namespace Librecores\ProjectRepoBundle\Doctrine;
 

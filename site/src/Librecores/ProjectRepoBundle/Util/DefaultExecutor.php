@@ -11,6 +11,7 @@ use Symfony\Component\Process\ProcessBuilder;
  *
  * Uses Symfony ProcessBuilder component to build the process.
  *
+ * @author Amitosh Swain Mahapatra <amitosh.swain@gmail.com>
  */
 class DefaultExecutor implements ExecutorInterface
 {

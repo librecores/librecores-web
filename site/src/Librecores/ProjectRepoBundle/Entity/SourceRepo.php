@@ -58,6 +58,7 @@ abstract class SourceRepo
      * @var Project
      *
      * @ORM\OneToOne(targetEntity="Project", mappedBy="sourceRepo", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=false, onDelete="cascade")
      */
     protected $project;
 
@@ -78,7 +79,7 @@ abstract class SourceRepo
      *
      * @var Collection
      *
-     * @ORM\OneToMany(targetEntity="Contributor", mappedBy="repository", cascade={"persist", "remove"},
+     * @ORM\OneToMany(targetEntity="Contributor", mappedBy="repository",  cascade={"persist", "remove"},
      *                orphanRemoval=true)
      */
     protected $contributors;
@@ -185,7 +186,7 @@ abstract class SourceRepo
      *
      * @return SourceRepo
      */
-    public function setWebViewUrl($webViewUrl)
+    public function setWebViewUrl(?string $webViewUrl)
     {
         $this->webViewUrl = $webViewUrl;
 
