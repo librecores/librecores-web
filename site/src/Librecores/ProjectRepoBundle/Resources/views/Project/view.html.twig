@@ -92,12 +92,10 @@
       <br/>
       {% endif %}
 
-      {% if project.sourceRepo.sourceStats.available %}
-          {%  if project.sourceRepo.sourceStats.languageStats is not empty %}
-      <i class="fa fa-code" aria-hidden="true"></i>
-      Project language: {{ project.sourceRepo.sourceStats.majorLanguage }}
-      <br/>
-          {%  endif %}
+      {% if metadata.latestCommit %}
+        <i class="fa fa-refresh" aria-hidden="true"></i>
+        <span>Last updated {{ metadata.latestCommit.dateCommitted | time_diff }}</span>
+        <br/>
       {% endif %}
 
       <i class="fa fa-plus-circle" aria-hidden="true"></i>
@@ -110,10 +108,17 @@
       <br/>
       {% endif %}
 
-      {% if metadata.latestCommit %}
-      <i class="fa fa-refresh" aria-hidden="true"></i>
-      <span>Last updated {{ metadata.latestCommit.dateCommitted | time_diff }}</span>
-      <br/>
+      {% if project.sourceRepo.sourceStats.available %}
+        {%  if project.sourceRepo.sourceStats.languageStats is not empty %}
+          <i class="fa fa-code" aria-hidden="true"></i>
+          Language: {{ project.sourceRepo.sourceStats.majorLanguage }}
+          <br/>
+        {%  endif %}
+        <p>
+          <i class="fa fa-star" aria-hidden="true"></i>
+          {{ project.name }} consists of {{ project.sourceRepo.sourceStats.totalLinesOfCode }} lines of code,
+          which would take an estimated* time of {{ project.sourceRepo.sourceStats.cocomoDuration | round(0, 'ceil') }} months by {{ project.sourceRepo.sourceStats.cocomoTeamSize | round(0, 'ceil') }} developers.
+        </p>
       {% endif %}
 
       {% if metadata.commitCount %}
@@ -136,17 +141,9 @@
         <p>Activity in last 1 year</p>
       </div>
       {% endif %}
-
-      {#{% if metadata.languageGraph.values is not empty %}#}
-        {#<div class="librecores-project-languages">#}
-          {#<div data-peity='{{ metadata.languageGraph.options | json_encode }}' class="librecores-project-languages-graph">#}
-              {#{{  metadata.languageGraph.values | join(',')  }}#}
-          {#</div>#}
-          {#<p>Languages used in the project</p>#}
-        {#</div>#}
-      {#{%  endif %}#}
-      <p class="librecores-project-updated">
-        Updated {{ project.dateLastModified | time_diff }}
+      <p class="librecores-project-disclaimer">
+        Updated {{ project.dateLastModified | time_diff }}<br />
+        * Estimated as per the <a href="https://en.wikipedia.org/wiki/COCOMO">COCOMO model</a> for embedded projects.
       </p>
     </div>
   </div>
@@ -167,7 +164,5 @@
     $('[data-toggle="tooltip"]').tooltip();
     var $chart = $('.librecores-project-activity-graph');
     $chart.height('100px').peity('line', { height: $chart.height(), width: $chart.width() });
-    {#var $langChart = $('.librecores-project-languages-graph');#}
-    {#$langChart.height('100px').peity('pie', { height: $langChart.height(), width: $langChart.height()  });#}
   });
 {% endblock %}

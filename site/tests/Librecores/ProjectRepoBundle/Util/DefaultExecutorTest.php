@@ -20,7 +20,7 @@ class DefaultExecutorTest extends TestCase
         /** @var LoggerInterface $logger */
         $logger = $this->createMock(LoggerInterface::class);
         $executor = new DefaultExecutor($logger);
-        
+
         $output = $executor->exec('echo', ['hello']);
 
         $this->assertEquals("hello\n", $output);

@@ -237,12 +237,13 @@ class SourceStats
     }
     /**
      * The most used language in this repository
-     * @return string|false
+     *
+     * @return string|false the primary language of this repository or false if
+     *                      such information does not exist
      */
     public function getMajorLanguage()
     {
-        dump($this->languageStats);
-
+        // only sort if language entries are present
         if (0 !== count($this->languageStats)) {
             $langStats = $this->languageStats;
 
@@ -335,7 +336,16 @@ class SourceStats
         return 2.5 * pow($kLoc, $d);
     }
 
-    // TODO: Cost estimation by man-hours * 160 * hourly_wages
+    /**
+     * Get estimated number of developers
+     */
+    public function getCocomoTeamSize(
+        int $type = self::DEVELOPMENT_TYPE_EMBEDDED
+    ): float {
+        return $this->getCocomoEffort($type) / $this->getCocomoDuration($type);
+    }
+
+    // TODO: Cost estimation by man-hours * median monthly wages of developers
 
     /**
      * Set languageStats
