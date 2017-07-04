@@ -4,7 +4,7 @@ namespace Librecores\ProjectRepoBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Librecores\ProjectRepoBundle\Entity\SourceRepo;
+
 
 /**
  * A project
@@ -47,7 +47,7 @@ class Project
      * @var string
      *
      * @Assert\Choice(choices = {"ASSIGNED", "UNASSIGNED"})
-     * @ORM\Column(type="string", options={"default" : self::STATUS_ASSIGNED})
+     * @ORM\Column(type="string", options={"default" : Project::STATUS_ASSIGNED})
      */
     private $status = self::STATUS_ASSIGNED;
 

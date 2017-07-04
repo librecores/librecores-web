@@ -10,14 +10,10 @@ env:
 git:
   depth: 1
 
-cache:
-  directories:
-   - site/vendor
-
 install:
-  - cd site && composer install --no-scripts --ignore-platform-reqs
+  - cd site && composer install --ignore-platform-reqs
 
 script:
-  - ./vendor/bin/phpunit
+  - ./test
 
 
