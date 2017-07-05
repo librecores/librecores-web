@@ -1,8 +1,8 @@
 <?php
 namespace Librecores\ProjectRepoBundle\RepoCrawler;
 
+use Librecores\ProjectRepoBundle\Entity\Commit;
 use Librecores\ProjectRepoBundle\Util\FileUtil;
-use Symfony\Component\Process\Process;
 use Librecores\ProjectRepoBundle\Entity\GitSourceRepo;
 
 /**
@@ -101,15 +101,11 @@ class GitRepoCrawler extends RepoCrawler
         $repoUrl = $this->repo->getUrl();
         $this->repoClonePath = FileUtil::createTemporaryDirectory('lc-gitrepocrawler-');
 
-        $cmd = 'git clone '.escapeshellarg($repoUrl).' '.escapeshellarg($this->repoClonePath);
-        $this->logger->info('Cloning repository: '.$cmd);
-        $process = new Process($cmd);
-        $process->setTimeout(self::TIMEOUT_GIT_CLONE);
-        $process->run();
-        if (!$process->isSuccessful()) {
-            throw new \RuntimeException("Unable to clone git repository: ".$process->getErrorOutput());
-        }
-        $this->logger->debug("Cloned repository $repoUrl");
+        $this->logger->info('Cloning repository: ' . $repoUrl);
+
+        $args = ['clone', $repoUrl, $this->repoClonePath];
+        $this->executor->exec('git', $args, ['timeout' => self::TIMEOUT_GIT_CLONE]);
+        $this->logger->debug('Cloned repository ' . $repoUrl);
     }
 
     /**
@@ -188,25 +184,29 @@ class GitRepoCrawler extends RepoCrawler
      * {@inheritDoc}
      * @see RepoCrawler::fetchCommits()
      */
-    public function fetchCommits(?string $sinceId = null): array
+    public function fetchCommits(?string $sinceId = null)
     {
-        $since = $sinceId !== null ? ' ' . escapeshellarg($sinceId) . '...' : '';
-        $cmd = 'git log --reverse --format="%h|%aN|%aE|%aD" --shortstat'. $since;
-        $cwd = $this->getRepoClonePath();
 
-        $this->logger->info("Fetching commits in $cwd - $cmd");
+        $args = ['log', '--reverse', '--format=%h|%aN|%aE|%aD', '--shortstat'];
 
-        $process = new Process($cmd);
-        $process->setWorkingDirectory($cwd);
-        $process->setTimeout(self::TIMEOUT_GIT_LOG);
-        $process->run();
-
-        if (!$process->isSuccessful()) {
-            throw new \RuntimeException("Unable to fetch commits from $cwd : ".$process->getErrorOutput());
+        if (null !== $sinceId) {
+            // we don't need escapeshellargs here
+            // it is performed internally by ProcessBuilder
+            $args[] = $sinceId;
+            $args[] = '...';
         }
 
+        $cwd = $this->getRepoClonePath();
+
+        $this->logger->info("Fetching commits in $cwd");
+
+        $output = $this->executor->exec('git', $args, [
+            'cwd' => $cwd,
+            'timeout' => self::TIMEOUT_GIT_LOG
+        ]);
+
         $this->logger->debug("Fetched commits from $cwd");
-        return $this->outputParser->parseCommits($this->repo, $process->getOutput());
+        $this->parseCommits($output);
     }
 
     /**
@@ -216,23 +216,26 @@ class GitRepoCrawler extends RepoCrawler
     public function commitExists(string $id) : bool
     {
         // Stolen from https://stackoverflow.com/a/13526591
-        $cmd = 'git merge-base --is-ancestor ' . escapeshellarg($id) . ' HEAD';
+        $args = [ 'merge-base', '--is-ancestor', $id, 'HEAD' ];
         $cwd = $this->getRepoClonePath();
-        $this->logger->info("Checking commits in $cwd - $cmd");
 
-        $process = new Process($cmd, $cwd);
-        $process->setTimeout(self::TIMEOUT_GIT_LOG);
-        $process->run();
+        $this->logger->info('Checking commits in ' . $cwd);
 
-        $code = $process->getExitCode();
+        $this->executor->exec('git', $args, [
+            'timeout' => self::TIMEOUT_GIT_LOG,
+            'cwd' => $cwd,
+            'errors' => true
+        ], $code, $errors);
         switch ($code)
         {
             case 0:     // successful, commit exists
-            case 1:     // commit does not exist
+            case 1:     // commit does not exist in branch
+            case 128:   // commit does not exist in repository
                 $this->logger->debug("Checked commits from $cwd");
                 return $code === 0;
             default:    // anything other than 0 or 1 is error
-                throw new \RuntimeException("Unable to fetch commits from $cwd : ".$process->getErrorOutput());
+                //die($code);
+                throw new \RuntimeException("Unable to fetch commits from $cwd : ".$errors);
         }
     }
 
@@ -244,5 +247,56 @@ class GitRepoCrawler extends RepoCrawler
         foreach ($this->sourceCrawlers as $crawler) {
             $crawler->crawl($this->repo, $this->getRepoClonePath());
         }
+    }
+
+    /**
+     * Parses commits from the output from git
+     *
+     * @param string $outputString raw output from git
+     */
+    private function parseCommits(string $outputString)
+    {
+        $this->logger->info('Parsing commits for repo ' . $this->getRepoClonePath());
+
+        $outputString = preg_replace('/^\h*\v+/m', '', trim($outputString));    // remove blank lines
+        $output = explode("\n",$outputString);  // explode lines into array
+
+        $commits = []; // stores the array of commits
+        $len = count($output);
+        for ($i = 0; $i < $len; $i++) {
+
+            // Every commit has 4 parts, id, author name, email, commit timestamp
+            // in the format id|name|email|timestamp
+            // followed by an optional line for modifications
+            $commitMatches = [];
+            if(preg_match('/^([\da-f]+)\|(.+)\|(.+@.+)\|(.+)$/', $output[$i], $commitMatches)) {
+                $contributor = $this->manager->getRepository('LibrecoresProjectRepoBundle:Contributor')->getContributorForRepository($this->repo, $commitMatches[3], $commitMatches[2]);
+                $date = new \DateTime($commitMatches[4]);
+                $date->setTimezone(new \DateTimeZone('UTC'));
+                $commit = new Commit();
+                $commit->setCommitId($commitMatches[1])
+                    ->setRepository($this->repo)
+                    ->setDateCommitted($date)
+                    ->setContributor($contributor);
+
+                $modificationMatches = [];
+                if ($i < $len - 1 && preg_match('/(\d+) files? changed(?:, (\d+) insertions?\(\+\))?(?:, (\d+) deletions?\(-\))?/',
+                        $output[$i + 1], $modificationMatches)) {
+                    $commit->setFilesModified($modificationMatches[1]);
+
+                    if(array_key_exists(2, $modificationMatches) && strlen($modificationMatches[2])) {
+                        $commit->setLinesAdded($modificationMatches[2]);
+                    }
+                    if(array_key_exists(3, $modificationMatches) && strlen($modificationMatches[3])) {
+                        $commit->setLinesRemoved($modificationMatches[3]);
+                    }
+                    $i++;   // skip the next line
+                }
+                $this->manager->persist($commit);
+                $commits[] = $commit;
+            }
+        }
+
+        $this->logger->debug('Parsed ' . count($commits) . ' commits for repo ' . $this->getRepoClonePath());
     }
 }

@@ -8,7 +8,7 @@ use Doctrine\DBAL\Schema\Schema;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-class Version20170704152100 extends AbstractMigration
+class Version20170705103144 extends AbstractMigration
 {
     /**
      * @param Schema $schema
@@ -30,11 +30,11 @@ class Version20170704152100 extends AbstractMigration
         $this->addSql('DROP TABLE SourceStatsAuthor');
         $this->addSql('DROP TABLE SourceStatsCommitHistogram');
         $this->addSql('DROP INDEX IDX_AFAC0BAA70AA3482 ON SourceRepo');
-        $this->addSql('ALTER TABLE SourceRepo ADD project_id INT NOT NULL, ADD source_stats_available TINYINT(1) NOT NULL, ADD source_stats_totalFiles INT NOT NULL, ADD source_stats_totalLinesOfCode INT NOT NULL, ADD source_stats_totalLinesOfComments INT NOT NULL, ADD source_stats_totalBlankLines INT NOT NULL, ADD source_stats_languageStats LONGTEXT NOT NULL COMMENT \'(DC2Type:array)\', DROP stats_id');
-        $this->addSql('ALTER TABLE SourceRepo ADD CONSTRAINT FK_AFAC0BAA166D1F9C FOREIGN KEY (project_id) REFERENCES Project (id) ON DELETE CASCADE');
-        $this->addSql('CREATE INDEX IDX_AFAC0BAA166D1F9C ON SourceRepo (project_id)');
+        $this->addSql('ALTER TABLE SourceRepo ADD source_stats_available TINYINT(1) NOT NULL, ADD source_stats_totalFiles INT NOT NULL, ADD source_stats_totalLinesOfCode INT NOT NULL, ADD source_stats_totalLinesOfComments INT NOT NULL, ADD source_stats_totalBlankLines INT NOT NULL, ADD source_stats_languageStats LONGTEXT NOT NULL COMMENT \'(DC2Type:array)\', DROP stats_id');
+        $this->addSql('ALTER TABLE Project DROP FOREIGN KEY FK_E00EE9723D4460D4');
         $this->addSql('ALTER TABLE Project DROP FOREIGN KEY FK_E00EE972DEF3CE4C');
         $this->addSql('ALTER TABLE Project CHANGE status status VARCHAR(255) DEFAULT \'ASSIGNED\' NOT NULL, CHANGE licenseTextAutoUpdate licenseTextAutoUpdate TINYINT(1) DEFAULT \'1\' NOT NULL, CHANGE descriptionTextAutoUpdate descriptionTextAutoUpdate TINYINT(1) DEFAULT \'1\' NOT NULL, CHANGE inProcessing inProcessing TINYINT(1) DEFAULT \'1\' NOT NULL');
+        $this->addSql('ALTER TABLE Project ADD CONSTRAINT FK_E00EE9723D4460D4 FOREIGN KEY (sourceRepo_id) REFERENCES SourceRepo (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE Project ADD CONSTRAINT FK_E00EE972DEF3CE4C FOREIGN KEY (parentUser_id) REFERENCES User (id) ON DELETE SET NULL');
     }
 
@@ -55,11 +55,11 @@ class Version20170704152100 extends AbstractMigration
         $this->addSql('DROP TABLE Commit');
         $this->addSql('DROP TABLE Contributor');
         $this->addSql('ALTER TABLE Project DROP FOREIGN KEY FK_E00EE972DEF3CE4C');
+        $this->addSql('ALTER TABLE Project DROP FOREIGN KEY FK_E00EE9723D4460D4');
         $this->addSql('ALTER TABLE Project CHANGE status status VARCHAR(255) NOT NULL COLLATE utf8mb4_unicode_520_ci, CHANGE licenseTextAutoUpdate licenseTextAutoUpdate TINYINT(1) NOT NULL, CHANGE descriptionTextAutoUpdate descriptionTextAutoUpdate TINYINT(1) NOT NULL, CHANGE inProcessing inProcessing TINYINT(1) NOT NULL');
         $this->addSql('ALTER TABLE Project ADD CONSTRAINT FK_E00EE972DEF3CE4C FOREIGN KEY (parentUser_id) REFERENCES User (id)');
-        $this->addSql('ALTER TABLE SourceRepo DROP FOREIGN KEY FK_AFAC0BAA166D1F9C');
-        $this->addSql('DROP INDEX IDX_AFAC0BAA166D1F9C ON SourceRepo');
-        $this->addSql('ALTER TABLE SourceRepo ADD stats_id INT DEFAULT NULL, DROP project_id, DROP source_stats_available, DROP source_stats_totalFiles, DROP source_stats_totalLinesOfCode, DROP source_stats_totalLinesOfComments, DROP source_stats_totalBlankLines, DROP source_stats_languageStats');
+        $this->addSql('ALTER TABLE Project ADD CONSTRAINT FK_E00EE9723D4460D4 FOREIGN KEY (sourceRepo_id) REFERENCES SourceRepo (id)');
+        $this->addSql('ALTER TABLE SourceRepo ADD stats_id INT DEFAULT NULL, DROP source_stats_available, DROP source_stats_totalFiles, DROP source_stats_totalLinesOfCode, DROP source_stats_totalLinesOfComments, DROP source_stats_totalBlankLines, DROP source_stats_languageStats');
         $this->addSql('ALTER TABLE SourceRepo ADD CONSTRAINT FK_AFAC0BAA70AA3482 FOREIGN KEY (stats_id) REFERENCES SourceStats (id)');
         $this->addSql('CREATE INDEX IDX_AFAC0BAA70AA3482 ON SourceRepo (stats_id)');
     }

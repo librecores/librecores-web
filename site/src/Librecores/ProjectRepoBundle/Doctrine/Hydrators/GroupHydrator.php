@@ -29,19 +29,19 @@ class GroupHydrator extends AbstractHydrator
      * Recursively group a 2D array to form a nested associative array
      *
      * @param $rows
-     * @return array|mixed
+     * @return mixed
      */
-    private function group($rows)
+    private function group(array $rows)
     {
-        if (!is_array($rows)) {
+        // must be a 2d array with more than 2 columns
+        if(empty($rows) || !is_array($rows[0]) || count($rows[0]) < 2) {
             return $rows;
-        } elseif (count($rows) === 1) {
-            return $rows[0];
         }
 
         $result = [];
         foreach ($rows as $row) {
-            $result[$row[0]][] = array_slice($row, 1);
+            $value = array_slice($row, 1);
+            $result[$row[0]][] = count($value) > 1 ? $value : $value[0];
         }
 
         foreach ($result as $key => $item) {

@@ -5,9 +5,9 @@ namespace Librecores\ProjectRepoBundle\RepoCrawler;
 use Doctrine\Common\Persistence\ObjectManager;
 use Librecores\ProjectRepoBundle\Entity\Commit;
 use Librecores\ProjectRepoBundle\Entity\SourceRepo;
+use Librecores\ProjectRepoBundle\Util\ExecutorInterface;
 use Librecores\ProjectRepoBundle\Util\MarkupToHtmlConverter;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Security\Http\Firewall\AbstractAuthenticationListener;
 
 
 /**
@@ -33,9 +33,9 @@ abstract class RepoCrawler
     protected $logger;
 
     /**
-     * @var OutputParserInterface
+     * @var ExecutorInterface
      */
-    protected $outputParser;
+    protected $executor;
 
     /**
      * @var SourceCrawlerInterface[]
@@ -51,20 +51,24 @@ abstract class RepoCrawler
      * RepoCrawler constructor.
      * @param SourceRepo $repo
      * @param MarkupToHtmlConverter $markupConverter
-     * @param LoggerInterface $logger
-     * @param OutputParserInterface $outputParser
-     * @param SourceCrawlerInterface[] $sourceCrawlers
+     * @param ExecutorInterface $executor
      * @param ObjectManager $manager
+     * @param LoggerInterface $logger
+     * @param SourceCrawlerInterface[] $sourceCrawlers
      */
-    public function __construct(SourceRepo $repo,
-                                MarkupToHtmlConverter $markupConverter, LoggerInterface $logger,
-                                OutputParserInterface $outputParser, array $sourceCrawlers,
-                                ObjectManager $manager)
+    public function __construct(
+        SourceRepo $repo,
+        MarkupToHtmlConverter $markupConverter,
+        ExecutorInterface $executor,
+        ObjectManager $manager,
+        LoggerInterface $logger,
+        array $sourceCrawlers
+    )
     {
         $this->repo = $repo;
         $this->markupConverter = $markupConverter;
         $this->logger = $logger;
-        $this->outputParser = $outputParser;
+        $this->executor = $executor;
         $this->manager = $manager;
         $this->sourceCrawlers = $sourceCrawlers;
 
@@ -114,12 +118,10 @@ abstract class RepoCrawler
      *
      * @param string|null $sinceId ID of commit after which the commits are to be
      *                              returned
-     * @return array all commits in the repository
      */
-    public function fetchCommits(string $sinceId = null) : array
+    public function fetchCommits(string $sinceId = null)
     {
         // default operation does noting
-        return [];
     }
 
     /**
@@ -160,30 +162,23 @@ abstract class RepoCrawler
         $commitRepository = $this->manager->getRepository(Commit::class);
         $lastCommit = $commitRepository->latest($this->repo);
 
-        $commits = [];
-
         // determine if our latest commit exists and fetch new commits since
         // what we have on DB
         if ($lastCommit && $this->commitExists($lastCommit->getCommitId())) {
-            $commits = $this->fetchCommits($lastCommit->getCommitId());
+            $this->fetchCommits($lastCommit->getCommitId());
         } else {
             // there has been a history rewrite
             // we drop everything and persist all commits to the DB
             //XXX: Find a way to find the common ancestor and do partial rewrites
             $commitRepository->removeAll($this->repo);
             $this->repo->getCommits()->clear();
-            $commits = $this->fetchCommits();
-        }
-
-        // XXX: This is probably wrong, we should abstract the execution instead of
-        // the task of commit parsing
-        foreach ($commits as $commit) {
-            $this->manager->persist($commit);
+            $this->fetchCommits();
         }
 
         $this->logger->info('Running source code crawlers for the project ' . $project->getFqname());
         $this->runCrawlers();
 
+        $this->manager->persist($this->repo);
         $this->manager->persist($project);
         $this->manager->flush();
 

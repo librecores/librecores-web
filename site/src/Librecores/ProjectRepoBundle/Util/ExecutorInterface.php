@@ -16,8 +16,10 @@ interface ExecutorInterface
      *
      * @param string $cmd
      * @param string[] $args
-     * @param sring[] $opts
+     * @param string[] $opts
+     * @param int|null $exitCode
+     * @param null|string $errorOutput
      * @return string
      */
-    function exec(string $cmd, array $args = [], array $opts = [] ) : string;
+    function exec(string $cmd, array $args = [], array $opts = [], &$exitCode = null, &$errorOutput = null) : string;
 }

@@ -114,13 +114,6 @@ services:
         arguments:
           - '@logger'
 
-    librecores.outputparser.git:
-        public: false
-        class: Librecores\ProjectRepoBundle\RepoCrawler\GitOutputParser
-        arguments:
-            - '@librecores.repository.contributor'
-            - '@logger'
-
     librecores.source_crawler.cloc:
         public: false
         class: Librecores\ProjectRepoBundle\RepoCrawler\ClocCrawler
@@ -134,7 +127,7 @@ services:
             - '@librecores.util.markuptohtmlconverter'
             - '@logger'
             - '@doctrine.orm.default_entity_manager'
-            - git: '@librecores.outputparser.git'
+            - '@librecores.executor.shell'
             - cloc: '@librecores.source_crawler.cloc'
 
     librecores.repository_metadata_manager:

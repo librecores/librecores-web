@@ -3,6 +3,7 @@
 namespace Tests\Librecores\Util;
 
 use Librecores\ProjectRepoBundle\Util\DefaultExecutor;
+use Librecores\ProjectRepoBundle\Util\ExecutorInterface;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Process\Exception\ProcessFailedException;
@@ -17,20 +18,14 @@ class DefaultExecutorTest extends TestCase
 {
     public function testExecSuccess()
     {
-        /** @var LoggerInterface $logger */
-        $logger = $this->createMock(LoggerInterface::class);
-        $executor = new DefaultExecutor($logger);
-
-        $output = $executor->exec('echo', ['hello']);
+        $output = $this->createExecutor()->exec('echo', ['hello']);
 
         $this->assertEquals("hello\n", $output);
     }
 
     public function testExecNoExecVulnerebility()
     {
-        /** @var LoggerInterface $logger */
-        $logger = $this->createMock(LoggerInterface::class);
-        $executor = new DefaultExecutor($logger);
+        $executor = $this->createExecutor();
         $output = $executor->exec('echo', ['&& false']);
 
         $this->assertEquals("&& false\n", $output);
@@ -40,22 +35,14 @@ class DefaultExecutorTest extends TestCase
 
     public function testExecSuccessNoOutput()
     {
-        /** @var LoggerInterface $logger */
-        $logger = $this->createMock(LoggerInterface::class);
-        $executor = new DefaultExecutor($logger);
-
-        $output = $executor->exec('true');
+        $output = $this->createExecutor()->exec('true');
 
         $this->assertEquals('', $output);
     }
 
     public function testExecSuccessWithOptions()
     {
-        /** @var LoggerInterface $logger */
-        $logger = $this->createMock(LoggerInterface::class);
-        $executor = new DefaultExecutor($logger);
-
-        $output = $executor->exec(
+        $output = $this->createExecutor()->exec(
             'cat',
             ['file.txt'],
             [
@@ -72,11 +59,24 @@ class DefaultExecutorTest extends TestCase
     public function testExecFail()
     {
         $this->expectException(ProcessFailedException::class);
+        $this->createExecutor()->exec('false');
+    }
 
+    public function testExecWithErrorsOption()
+    {
+        $output = $this->createExecutor()->exec(join(
+            DIRECTORY_SEPARATOR,
+            ['tests', 'Librecores', 'ProjectRepoBundle', 'Resources', 'failing-script.sh']),[],['errors' => true],$exitCode, $error);
+
+        $this->assertEquals($output, "Output\n");
+        $this->assertEquals($exitCode,1);
+        $this->assertEquals($error,"Failed\n");
+    }
+
+    private function createExecutor() : ExecutorInterface
+    {
         /** @var LoggerInterface $logger */
         $logger = $this->createMock(LoggerInterface::class);
-        $executor = new DefaultExecutor($logger);
-
-        $executor->exec('false');
+        return new DefaultExecutor($logger);
     }
 }

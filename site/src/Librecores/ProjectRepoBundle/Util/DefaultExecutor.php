@@ -41,15 +41,14 @@ class DefaultExecutor implements ExecutorInterface
     /**
      * {@inheritdoc}
      */
-    public function exec(
-        string $command,
-        array $args = [],
-        array $options = []
-    ) : string {
+    public function exec(string $cmd, array $args = [], array $options = [], &$exitCode = null, &$errorOutput = null) : string
+    {
 
         $timeout = array_key_exists('timeout', $options) ? $options['timeout'] : static::DEFAULT_TIMEOUT;
+        $errors = array_key_exists('errors', $options) ? $options['errors'] : false;
+
         $builder = new ProcessBuilder();
-        $builder->setPrefix($command)
+        $builder->setPrefix($cmd)
             ->setArguments($args)
             ->setTimeout($timeout);
 
@@ -68,8 +67,16 @@ class DefaultExecutor implements ExecutorInterface
         $process = $builder->getProcess();
 
         $this->logger->debug('Starting process ' . $process->getCommandLine());
-        $process->mustRun();
-        $this->logger->debug("Process $command exited succesfuly");
+
+        if ($errors) {
+            $process->run();
+            $exitCode = $process->getExitCode();
+            $errorOutput = $process->getErrorOutput();
+        } else {
+            $process->mustRun();
+        }
+
+        $this->logger->debug("Process $cmd exited succesfuly");
 
         return $process->getOutput();
     }

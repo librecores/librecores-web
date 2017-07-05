@@ -58,7 +58,6 @@ abstract class SourceRepo
      * @var Project
      *
      * @ORM\OneToOne(targetEntity="Project", mappedBy="sourceRepo", cascade={"persist"})
-     * @ORM\JoinColumn(nullable=false, onDelete="cascade")
      */
     protected $project;
 
@@ -162,10 +161,10 @@ abstract class SourceRepo
      * @param Project $project
      * @return SourceRepo
      */
-    public function setProject(Project $project = null)
+    public function setProject(Project $project)
     {
         $this->project = $project;
-
+        $project->setSourceRepo($this);
         return $this;
     }
 

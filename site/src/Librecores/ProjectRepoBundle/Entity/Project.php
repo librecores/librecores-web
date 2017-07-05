@@ -142,8 +142,8 @@ class Project
      * @Assert\Type(type="Librecores\ProjectRepoBundle\Entity\SourceRepo")
      * @Assert\Valid()
      *
-     * @ORM\OneToOne(targetEntity="SourceRepo", inversedBy="project", cascade={"persist"})
-     * @ORM\JoinColumn(name="sourceRepo_id", referencedColumnName="id", nullable=true)
+     * @ORM\OneToOne(targetEntity="SourceRepo", inversedBy="project", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(name="sourceRepo_id", referencedColumnName="id", nullable=true, onDelete="cascade")
      */
     private $sourceRepo;
 

@@ -464,13 +464,11 @@ class ProjectController extends Controller
     private function flattenHistogram($histogram)
     {
         $values = [];
-
         foreach ($histogram as $i) {
             foreach ($i as $j) {
                 $values[] = $j[0];
             }
         }
-
         return $values;
     }
 }

@@ -5,6 +5,7 @@ namespace Librecores\ProjectRepoBundle\RepoCrawler;
 use Doctrine\Common\Persistence\ObjectManager;
 use Librecores\ProjectRepoBundle\Entity\GitSourceRepo;
 use Librecores\ProjectRepoBundle\Entity\SourceRepo;
+use Librecores\ProjectRepoBundle\Util\ExecutorInterface;
 use Librecores\ProjectRepoBundle\Util\MarkupToHtmlConverter;
 use Psr\Log\LoggerInterface;
 
@@ -29,9 +30,9 @@ class RepoCrawlerFactory
     private $manager;
 
     /**
-     * @var array
+     * @var ExecutorInterface
      */
-    private $outputParsers;
+    private $executor;
 
     /**
      * @var array
@@ -44,17 +45,17 @@ class RepoCrawlerFactory
      * @param MarkupToHtmlConverter $markupConverter
      * @param LoggerInterface $logger
      * @param ObjectManager $manager
-     * @param array $outputParsers
+     * @param ExecutorInterface $executor
      * @param array $sourceCrawlers
      */
     public function __construct(MarkupToHtmlConverter $markupConverter,
                                 LoggerInterface $logger, ObjectManager $manager,
-                                array $outputParsers, array $sourceCrawlers)
+                                ExecutorInterface $executor, array $sourceCrawlers)
     {
         $this->markupConverter = $markupConverter;
         $this->logger = $logger;
-        $this->outputParsers = $outputParsers;
         $this->manager = $manager;
+        $this->executor = $executor;
         $this->sourceCrawlers = $sourceCrawlers;
     }
 
@@ -71,7 +72,7 @@ class RepoCrawlerFactory
         // XXX: Investigate a better method for IoC in this situation
         if ($repo instanceof GitSourceRepo) {
             return new GitRepoCrawler($repo,
-                $this->markupConverter, $this->logger, $this->outputParsers['git'], $this->sourceCrawlers, $this->manager);
+                $this->markupConverter, $this->executor, $this->manager, $this->logger, $this->sourceCrawlers);
         }
 
         throw new \InvalidArgumentException("No crawler for source repository " .

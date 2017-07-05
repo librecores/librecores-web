@@ -2,24 +2,26 @@
 
 namespace Tests\Librecores\ProjectRepoBundle\RepoCrawler;
 
-use Librecores\ProjectRepoBundle\Entity\Commit;
+use Doctrine\Common\Persistence\ObjectManager;
 use Librecores\ProjectRepoBundle\Entity\Contributor;
 use Librecores\ProjectRepoBundle\Entity\GitSourceRepo;
-use Librecores\ProjectRepoBundle\RepoCrawler\GitOutputParser;
+use Librecores\ProjectRepoBundle\RepoCrawler\GitRepoCrawler;
 use Librecores\ProjectRepoBundle\Repository\ContributorRepository;
+use Librecores\ProjectRepoBundle\Util\ExecutorInterface;
+use Librecores\ProjectRepoBundle\Util\MarkupToHtmlConverter;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
 /**
- * Tests for GitOutputParser
+ * Tests for GitRepoCrawlerTest
  *
  * @author Amitosh Swain Mahapatra <amitosh.swain@gmail.com>
  *
  * @see GitOutputParser
  */
-class GitOutputParserTest extends TestCase
+class GitRepoCrawlerTest extends TestCase
 {
-    public function testParseCommits()
+    public function testFetchCommits()
     {
         $contributors = [
             'janedoe@example.com' => new Contributor('Jane Doe', 'janedoe@example.com'),
@@ -38,14 +40,27 @@ class GitOutputParserTest extends TestCase
                 return $contributors[$criteria['email']];
             });
 
-        /** @var LoggerInterface $logger */
-        $logger = $this->createMock(LoggerInterface::class);
+        /** @var LoggerInterface $mockLogger */
+        $mockLogger = $this->createMock(LoggerInterface::class);
 
-        $parser = new GitOutputParser($repository, $logger);
+        /** @var MarkupToHtmlConverter $mockMarkupConverter */
+        $mockMarkupConverter = $this->createMock(MarkupToHtmlConverter::class);
+
+        /** @var ObjectManager $mockManager */
+        $mockManager = $this->createMock(ObjectManager::class);
+        $mockManager->method('getRepository')->willReturn($repository);
+
         $mockOutput = file_get_contents(join(DIRECTORY_SEPARATOR, [__DIR__,'..', 'Resources', 'output.txt']));
 
-        /** @var Commit[] $commits */
-        $commits = $parser->parseCommits(new GitSourceRepo(), $mockOutput);
+        /** @var ExecutorInterface $mockExecutor */
+        $mockExecutor = $this->createMock(ExecutorInterface::class);
+        $mockExecutor->method('exec')->willReturn($mockOutput);
+
+        $repo = new GitSourceRepo();
+        $crawler = new GitRepoCrawler($repo, $mockMarkupConverter, $mockExecutor, $mockManager, $mockLogger, []);
+        $crawler->fetchCommits();
+
+        $commits = $repo->getCommits();
 
         $this->assertEquals($commits[0]->getCommitId(), 'e0889c6');
         $this->assertEquals($commits[1]->getCommitId(), '22b8123');
