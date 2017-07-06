@@ -162,62 +162,109 @@
   </div>
 </div>
 
-<!-- 3 columns with main messages -->
 <div class="container" style="padding-top: 30px;">
   <div class="row">
     <div class="col-sm-6">
-      <h2>What is LibreCores?</h2>
-      <p>Digital devices (or commonly "chips") are the basic building
-      blocks of electronic systems. Such devices are for
-      application-specific devices like a USB controller. But also
-      programmable "System-on-Chip" are found in embedded
-      systems. Both tastes of a chip are composed of basic building
-      blocks, so called IP (Intellectual Property) cores.
-
-      A "LibreCore" is such an IP core that is created and
-      distributed in the open source spirit. And LibreCores.org is
-      like a good neighborhood pub, a place to meet the community
-      and &mdash;most importantly&mdash; find such cores.</p>
-      <p><a class="btn btn-default" href="{{ path('librecores_site_page', {'page': 'about'}) }}">Learn more about LibreCores &raquo;</a></p>
-    </div>
-    <div class="col-sm-6">
-      <h2>Getting started with your LibreCore</h2>
-      <p>We are heavily working on making LibreCores.org the community
-      hub where you can attract the attention of like-minded
-      developers to your LibreCore or find a fitting core for your
-      project. While we are working on it, you are maybe working on a
-      LibreCore or about to start one. To give you a quick start we
-      have assembled some information about project handling and
-      licensing:</p>
-      <p><a class="btn btn-default" href="{{ path('librecores_site_page', {'page': 'docs'}) }}">Getting started with your own LibreCore &raquo;</a></p>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col-sm-6">
-      <h2>Feel the pulse</h2>
-      <p>What's going on in the digital hardware design community?
-      <a href="{{ path('librecores_planet_homepage') }}">Planet Librecores</a> collects blog posts from different
-      community members. Subscribe to it in your feed reader,
-      or <a href="{{ path('librecores_planet_homepage') }}">read it online</a>.</p>
-
-      <p><a class="btn btn-default" href="{{ path('librecores_planet_homepage') }}">Read Planet LibreCores &raquo;</a></p>
-
-      {#
-      {% for post in blogposts %}
+      <div class="row">
+        <div class="col-sm-12">
+          <h2>What is LibreCores?</h2>
+          <p>Digital devices (or commonly "chips") are the basic
+            building blocks of electronic systems. Such devices are for
+            application-specific devices like a USB controller. But also
+            programmable "System-on-Chip" are found in embedded systems.
+            Both tastes of a chip are composed of basic building blocks,
+            so called IP (Intellectual Property) cores. A "LibreCore" is
+            such an IP core that is created and distributed in the open
+            source spirit. And LibreCores.org is like a good
+            neighborhood pub, a place to meet the community and
+            &mdash;most importantly&mdash; find such cores.</p>
           <p>
-            <div><a rel="nofollow" href="{{ post.url }}"><b>{{ post.author }}: {{ post.title }}</b></a></div>
-            <div>{{ post.teaser }}</div>
+            <a class="btn btn-default"
+              href="{{ path('librecores_site_page', {'page': 'about'}) }}">Learn
+              more about LibreCores &raquo;</a>
           </p>
-      {% endfor %}
-      #}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
+          <h2>Getting started with your LibreCore</h2>
+          <p>We are heavily working on making LibreCores.org the
+            community hub where you can attract the attention of
+            like-minded developers to your LibreCore or find a fitting
+            core for your project. While we are working on it, you are
+            maybe working on a LibreCore or about to start one. To give
+            you a quick start we have assembled some information about
+            project handling and licensing:</p>
+          <p>
+            <a class="btn btn-default"
+              href="{{ path('librecores_site_page', {'page': 'docs'}) }}">Getting
+              started with your own LibreCore &raquo;</a>
+          </p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
+          <h2>Feel the pulse</h2>
+          <p>
+            What's going on in the digital hardware design community? <a
+              href="{{ path('librecores_planet_homepage') }}">Planet
+              Librecores</a> collects blog posts from different community
+            members. Subscribe to it in your feed reader, or <a
+              href="{{ path('librecores_planet_homepage') }}">read
+              it online</a>.
+          </p>
+          <p>
+            <a class="btn btn-default"
+              href="{{ path('librecores_planet_homepage') }}">Read
+              Planet LibreCores &raquo;</a>
+          </p>
+
+          {# {% for post in blogposts %} <p> <div><a rel="nofollow"
+          href="{{ post.url }}"><b>{{ post.author }}: {{ post.title
+          }}</b></a></div> <div>{{ post.teaser }}</div> </p> {% endfor
+          %} #}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
+          <h2>Contribute to LibreCores</h2>
+          <p>LibreCores is a true community project. All development
+            is done in the open, and we're always open to new
+            contributors! If you have only a couple of minutes to spare,
+            or a full week, there's something for you to do.</p>
+          <p>Have a look at our contribution guide and get started
+            today!</p>
+          <p>
+            <a class="btn btn-default"
+              href="http://librecores-web.readthedocs.io/en/latest/contributing.html">Read
+              on how to contribute to LibreCores &raquo;</a>
+          </p>
+        </div>
+      </div>
     </div>
     <div class="col-sm-6">
-      <h2>Contribute to LibreCores</h2>
-      <p>LibreCores is a true community project. All development is done in the open, and we're always open to new contributors!
-      If you have only a couple of minutes to spare, or a full week, there's something for you to do.</p>
-      <p>Have a look at our contribution guide and get started today!</p>
-      <p><a class="btn btn-default" href="http://librecores-web.readthedocs.io/en/latest/contributing.html">Read on how to contribute to LibreCores &raquo;</a></p>
+      <h2>Recent Activity</h2>
+      {% for project in activity %}
+      <p>
+        <strong><a
+          href="{{ path('librecores_project_repo_project_view', {'parentName':
+project.getParentName(), 'projectName': project.getName()}) }}">{{ project.getFqname() }}</a></strong>
+        was
+        {% if project.getDateLastModified() == project.getDateAdded() %}
+        added
+        {% else %}
+        updated
+        {% endif %}
+        <time
+          datetime="{{ project.getDateLastModified()|date("c", "UTC") }}"
+          data-livestamp="{{ project.getDateLastModified()|date("c", "UTC") }}">
+          on
+          {{ project.getDateLastModified()|date("d F Y H:i", "UTC") }}
+          UTC
+        </time>
+        .
+      </p>
+      {% endfor %}
     </div>
   </div>
 </div>
