@@ -2,8 +2,6 @@
 
 namespace Librecores\ProjectRepoBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -16,21 +14,21 @@ use Doctrine\ORM\Mapping as ORM;
 class SourceStats
 {
     /**
-     * Represents a development by a small team with intermediate experience
+     * Development by a small team with intermediate experience
      * working on a project with less stringent requirements. Usually for small
      * software projects.
      */
     const DEVELOPMENT_TYPE_ORGANIC = 1;
 
     /**
-     * Represents development by a sizable number of developers with mixed
+     * Development by a sizable number of developers with mixed
      * experience on various parts of the system. Requirements may be range from
      * well-defined to rigid.
      */
     const DEVELOPMENT_TYPE_SEMI_DETACHED = 2;
 
     /**
-     * Represents development on projects with stringent requirements such as
+     * Development on projects with stringent requirements such as
      * embedded projects.
      */
     const DEVELOPMENT_TYPE_EMBEDDED = 3;
@@ -45,7 +43,7 @@ class SourceStats
     private $available = false;
 
     /**
-     * Total number of files in repository
+     * Total files in repository
      *
      * @var int
      *
@@ -108,6 +106,7 @@ class SourceStats
     public function setAvailable(bool $available)
     {
         $this->available = $available;
+
         return $this;
     }
 
@@ -204,12 +203,27 @@ class SourceStats
      */
     public function removeLanguageStat(LanguageStat $language)
     {
-        if(($key = array_search($language, $this->languageStats)) !== false) {
+        if (($key = array_search($language, $this->languageStats)) !== false) {
             unset($this->languageStats[$key]);
+
             return true;
         } else {
             return false;
         }
+    }
+
+    /**
+     * Set languageStats
+     *
+     * @param LanguageStat[] $languageStats
+     *
+     * @return SourceStats
+     */
+    public function setLanguageStats($languageStats)
+    {
+        $this->languageStats = $languageStats;
+
+        return $this;
     }
 
     /**
@@ -235,16 +249,25 @@ class SourceStats
      */
     public function getCommentToCodeRatio(): float
     {
-        return $this->totalLinesOfCode / $this->totalLinesOfComments;
+        if (0 === $this->totalLinesOfComments) {
+            $ratio = 0;
+        } else {
+            $ratio = $this->totalLinesOfCode / $this->totalLinesOfComments;
+        }
+
+        return $ratio;
     }
+
     /**
-     * The most used language in this repository
+     * Get the most used language in this repository
      *
-     * @return string|false the primary language of this repository or false if
+     * @return string|null the primary language of this repository or false if
      *                      such information does not exist
      */
-    public function getMajorLanguage()
+    public function getMostUsedLanguage() : ?string
     {
+        $language = null;
+
         // only sort if language entries are present
         if (0 !== count($this->languageStats)) {
             $langStats = $this->languageStats;
@@ -264,11 +287,12 @@ class SourceStats
                 }
             );
 
-            return $langStats[0]->getLanguage();
-        } else {
-            return false;
+            $language = $langStats[0]->getLanguage();
         }
+
+        return $language;
     }
+
     // Estimation of project effort in man-months and development time in
 
     // months according to Constructive Cost Model (COCOMO)
@@ -348,18 +372,4 @@ class SourceStats
     }
 
     // TODO: Cost estimation by man-hours * median monthly wages of developers
-
-    /**
-     * Set languageStats
-     *
-     * @param array $languageStats
-     *
-     * @return SourceStats
-     */
-    public function setLanguageStats($languageStats)
-    {
-        $this->languageStats = $languageStats;
-
-        return $this;
-    }
 }

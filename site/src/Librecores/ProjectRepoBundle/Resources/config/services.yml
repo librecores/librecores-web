@@ -103,23 +103,14 @@ services:
 
     librecores.repository.commit:
         public: false
-        class: Librecores\ProjectRepoBundle\Repository\ContributorRepository
+        class: Librecores\ProjectRepoBundle\Repository\CommitRepository
         factory: ['@doctrine.orm.default_entity_manager', 'getRepository']
         arguments:
             - Librecores\ProjectRepoBundle\Entity\Commit
 
-    librecores.executor.shell:
+    librecores.process_creator:
         public: false
-        class: Librecores\ProjectRepoBundle\Util\DefaultExecutor
-        arguments:
-          - '@logger'
-
-    librecores.source_crawler.cloc:
-        public: false
-        class: Librecores\ProjectRepoBundle\RepoCrawler\ClocCrawler
-        arguments:
-            - '@librecores.executor.shell'
-            - '@doctrine.orm.default_entity_manager'
+        class: Librecores\ProjectRepoBundle\Util\ProcessCreator
 
     librecores.repocrawlerfactory:
         class: Librecores\ProjectRepoBundle\RepoCrawler\RepoCrawlerFactory
@@ -127,11 +118,10 @@ services:
             - '@librecores.util.markuptohtmlconverter'
             - '@logger'
             - '@doctrine.orm.default_entity_manager'
-            - '@librecores.executor.shell'
-            - cloc: '@librecores.source_crawler.cloc'
+            - '@librecores.process_creator'
 
-    librecores.repository_metadata_manager:
-        class: Librecores\ProjectRepoBundle\Doctrine\DefaultMetadataManager
+    librecores.project_metrics_provider:
+        class: Librecores\ProjectRepoBundle\Doctrine\ProjectMetricsProvider
         arguments:
             - '@librecores.repository.commit'
             - '@librecores.repository.contributor'

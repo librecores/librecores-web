@@ -78,17 +78,17 @@ abstract class SourceRepo
      *
      * @var Collection
      *
-     * @ORM\OneToMany(targetEntity="Contributor", mappedBy="repository",  cascade={"persist", "remove"},
+     * @ORM\OneToMany(targetEntity="Contributor", mappedBy="sourceRepo",  cascade={"persist", "remove"},
      *                orphanRemoval=true)
      */
     protected $contributors;
 
     /**
-     * Commits of this source repository
+     * Commits in this source repository
      *
      * @var Collection
      *
-     * @ORM\OneToMany(targetEntity="Commit", mappedBy="repository", cascade={"persist", "remove"},
+     * @ORM\OneToMany(targetEntity="Commit", mappedBy="sourceRepo", cascade={"persist", "remove"},
      *                orphanRemoval=true)
      */
     protected $commits;

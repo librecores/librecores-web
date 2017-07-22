@@ -2,7 +2,6 @@
 
 namespace Librecores\ProjectRepoBundle\Doctrine;
 
-
 use Librecores\ProjectRepoBundle\Entity\Commit;
 use Librecores\ProjectRepoBundle\Entity\Contributor;
 use Librecores\ProjectRepoBundle\Entity\LanguageStat;
@@ -11,9 +10,14 @@ use Librecores\ProjectRepoBundle\Repository\CommitRepository;
 use Librecores\ProjectRepoBundle\Repository\ContributorRepository;
 
 /**
- * Implementation of MetadataManagerInterface
+ * Store and provide metrics for Projects
+ *
+ * Provide a transparent API to fetch project metadata from a meta-data storage
+ * with appropriate optimizations such as caching.
+ *
+ * @author Amitosh Swain Mahapatra <amitosh.swain@gmail.com>
  */
-class DefaultMetadataManager implements MetadataManagerInterface
+class ProjectMetricsProvider
 {
     // TODO: Implement caching
 
@@ -41,7 +45,12 @@ class DefaultMetadataManager implements MetadataManagerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Force a reload of all project metadata
+     *
+     * Invalidates all caches and reloads the data from the database.
+     *
+     * @param Project $project
+     * @return bool
      */
     public function refreshMetadata(Project $project): bool
     {
@@ -50,47 +59,61 @@ class DefaultMetadataManager implements MetadataManagerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Fetch the commits in a given project
+     * @param Project $project
+     * @return array
      */
     public function getCommits(Project $project): array
     {
-        return $this->commitRepository->get(
+        return $this->commitRepository->getAllCommits(
             $project->getSourceRepo()
         );
     }
 
     /**
-     * {@inheritdoc}
+     * Fetch the number of commits in a given project
+     *
+     * @param Project $project
+     * @return int
      */
     public function getCommitCount(Project $project): int
     {
-        return $this->commitRepository->count(
+        return $this->commitRepository->getCommitCount(
             $project->getSourceRepo()
         );
     }
 
     /**
-     * {@inheritdoc}
+     * Get the latest commit recorded in meta-data storage
+     *
+     * @param Project $project
+     * @return Commit
      */
     public function getLatestCommit(Project $project): ?Commit
     {
-        return $this->commitRepository->latest(
+        return $this->commitRepository->getLatestCommit(
             $project->getSourceRepo()
         );
     }
 
     /**
-     * {@inheritdoc}
+     * Get first commit recorded in meta-data storage
+     *
+     * @param Project $project
+     * @return Commit
      */
     function getFirstCommit(Project $project): ?Commit
     {
-        return $this->commitRepository->first(
+        return $this->commitRepository->getFirstCommit(
             $project->getSourceRepo()
         );
     }
 
     /**
-     * {@inheritdoc}
+     * Get the contributors to a project
+     *
+     * @param Project $project
+     * @return array
      */
     public function getContributors(Project $project): array
     {
@@ -100,7 +123,10 @@ class DefaultMetadataManager implements MetadataManagerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Get the total number of contributors to a project
+     *
+     * @param Project $project
+     * @return int
      */
     public function getContributorsCount(Project $project): int
     {
@@ -110,41 +136,46 @@ class DefaultMetadataManager implements MetadataManagerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Get the top contributors to the project
+     *
+     * Contributors are chosen as per number of commits, lines added and deleted
+     *
+     * @param Project $project
+     * @param int $count
+     * @return array
      */
     public function getTopContributors(Project $project, int $count = 5): array
     {
         return $this->contributorRepository->getTopContributorsForRepository(
             $project->getSourceRepo(),
-            5
+            $count
         );
     }
 
     /**
-     * {@inheritdoc}
+     * Get the number of commits by a project contributor
+     *
+     * @param Contributor $contributor
+     * @return int
      */
     public function getCommitCountForContributor(Contributor $contributor): int
     {
-        return $this->commitRepository->commitsByContributor(
+        return $this->commitRepository->getCommitsByContributorCount(
             $contributor
         );
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function getContributorAvatar(Contributor $contributor): string
-    {
-        // https://en.gravatar.com/site/implement/images/php/
-        // We use 32x32 px images and a 8 bit retro image as fallback
-        // similar to Github
-        return 'https://www.gravatar.com/avatar/'
-            .md5(strtolower(trim($contributor->getEmail())))
-            .'?s=32&d=retro';
-    }
-
-    /**
-     * {@inheritdoc}
+     * Get a histogram of commits over a range of dates
+     *
+     * @param Project $project
+     * @param \DateTimeImmutable $start start date of commits
+     * @param \DateTimeImmutable $end end date of commits
+     * @param int $bucket one of the constants 'INTERVAL_DAY', 'INTERVAL_WEEK'
+     *                    'INTERVAL_MONTH', 'INTERVAL_YEAR', which specifies
+     *                     the histogram bucket size
+     * @return array associative array of a time span index and commits in that
+     *               time span
      */
     public function getCommitHistogram(
         Project $project,
@@ -155,18 +186,19 @@ class DefaultMetadataManager implements MetadataManagerInterface
         // TODO: This function badly needs some form of caching
         // aggregation queries in mysql are very expensive, this function
         // will never use an index and always perform a full table scan
-        return $this->commitRepository->histogram(
-            $project->getSourceRepo(),
-            $start,
-            $end,
-            $bucket
+        return $this->commitRepository->getCommitHistogram(
+            $project->getSourceRepo(), $start, $end, $bucket
         );
     }
 
     /**
-     * @{inheritdoc}
+     * Get the major languages used in a project
+     *
+     * @param $project
+     *
+     * @return array[string]
      */
-    public function getMajorLanguages(Project $project)
+    public function getMostUsedLanguages(Project $project): array
     {
         $langStats = $project->getSourceRepo()->getSourceStats()->getLanguageStats();
 
@@ -192,7 +224,7 @@ class DefaultMetadataManager implements MetadataManagerInterface
         if (count($langStats) > 4) {
             $others = 0;
 
-            for($i = 4; $i < count($langStats); $i++) {
+            for ($i = 4; $i < count($langStats); $i++) {
                 $others += $langStats[$i]->getLinesOfCode();
             }
             $result['others'] = $others;

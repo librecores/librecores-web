@@ -3,10 +3,9 @@
 namespace Librecores\ProjectRepoBundle\RepoCrawler;
 
 use Doctrine\Common\Persistence\ObjectManager;
-use Librecores\ProjectRepoBundle\Entity\Commit;
 use Librecores\ProjectRepoBundle\Entity\SourceRepo;
-use Librecores\ProjectRepoBundle\Util\ExecutorInterface;
 use Librecores\ProjectRepoBundle\Util\MarkupToHtmlConverter;
+use Librecores\ProjectRepoBundle\Util\ProcessCreator;
 use Psr\Log\LoggerInterface;
 
 
@@ -33,14 +32,9 @@ abstract class RepoCrawler
     protected $logger;
 
     /**
-     * @var ExecutorInterface
+     * @var ProcessCreator
      */
-    protected $executor;
-
-    /**
-     * @var SourceCrawlerInterface[]
-     */
-    protected $sourceCrawlers;
+    protected $processCreator;
 
     /**
      * @var ObjectManager
@@ -51,26 +45,23 @@ abstract class RepoCrawler
      * RepoCrawler constructor.
      * @param SourceRepo $repo
      * @param MarkupToHtmlConverter $markupConverter
-     * @param ExecutorInterface $executor
+     * @param ProcessCreator $processCreator
      * @param ObjectManager $manager
      * @param LoggerInterface $logger
-     * @param SourceCrawlerInterface[] $sourceCrawlers
      */
     public function __construct(
         SourceRepo $repo,
         MarkupToHtmlConverter $markupConverter,
-        ExecutorInterface $executor,
+        ProcessCreator $processCreator,
         ObjectManager $manager,
-        LoggerInterface $logger,
-        array $sourceCrawlers
+        LoggerInterface $logger
     )
     {
-        $this->repo = $repo;
+        $this->repo            = $repo;
         $this->markupConverter = $markupConverter;
-        $this->logger = $logger;
-        $this->executor = $executor;
-        $this->manager = $manager;
-        $this->sourceCrawlers = $sourceCrawlers;
+        $this->logger          = $logger;
+        $this->processCreator  = $processCreator;
+        $this->manager         = $manager;
 
         if (!$this->isValidRepoType()) {
             throw new \RuntimeException("Repository type is not supported by this crawler.");
@@ -82,59 +73,7 @@ abstract class RepoCrawler
      *
      * @return boolean
      */
-    abstract protected function isValidRepoType(): bool;
-
-    /**
-     * Get the license text of the repository as safe HTML
-     *
-     * Usually this license text is taken from the LICENSE or COPYING files.
-     *
-     * "Safe" HTML is stripped from all possibly malicious content, such as
-     * script tags, etc.
-     *
-     * @return string|null the license text, or null if none was found
-     */
-    abstract public function getLicenseTextSafeHtml(): ?string;
-
-    /**
-     * Get the description of the repository as safe HTML
-     *
-     * Usually this is the content of the README file.
-     *
-     * "Safe" HTML is stripped from all possibly malicious content, such as
-     * script tags, etc.
-     *
-     * @return string|null the repository description, or null if none was found
-     */
-    abstract public function getDescriptionSafeHtml(): ?string;
-
-    /**
-     * Get all commits in the repository since a specified commit ID or all if
-     * not specified
-     *
-     * Implementations supporting extraction of commits are required to return
-     * an array of `SourceCommit` objects or an empty array if otherwise. The
-     * default behavior is to return an empty array.
-     *
-     * @param string|null $sinceId ID of commit after which the commits are to be
-     *                              returned
-     */
-    public function fetchCommits(string $sinceId = null)
-    {
-        // default operation does noting
-    }
-
-    /**
-     * Checks whether the given commit ID exists on the default tree of the
-     * repository
-     *
-     * @param string $id ID of the commit to search
-     * @return bool commit exists in the tree ?
-     */
-    public function commitExists(string $id): bool
-    {
-        return false;
-    }
+    abstract public function isValidRepoType(): bool;
 
     /**
      * Update the project associated with the crawled repository with
@@ -142,48 +81,7 @@ abstract class RepoCrawler
      *
      * @return bool operation successful?
      */
-    public function updateProject()
-    {
-        $project = $this->repo->getProject();
-        if ($project === null) {
-            $this->logger->debug('No project associated with source ' .
-                'repository ' . $this->repo->getId());
-            return false;
-        }
-
-        if ($project->getDescriptionTextAutoUpdate()) {
-            $project->setDescriptionText($this->getDescriptionSafeHtml());
-        }
-        if ($project->getLicenseTextAutoUpdate()) {
-            $project->setLicenseText($this->getLicenseTextSafeHtml());
-        }
-
-        $this->logger->info('Fetching commits for the project ' . $project->getFqname());
-        $commitRepository = $this->manager->getRepository(Commit::class);
-        $lastCommit = $commitRepository->latest($this->repo);
-
-        // determine if our latest commit exists and fetch new commits since
-        // what we have on DB
-        if ($lastCommit && $this->commitExists($lastCommit->getCommitId())) {
-            $this->fetchCommits($lastCommit->getCommitId());
-        } else {
-            // there has been a history rewrite
-            // we drop everything and persist all commits to the DB
-            //XXX: Find a way to find the common ancestor and do partial rewrites
-            $commitRepository->removeAll($this->repo);
-            $this->repo->getCommits()->clear();
-            $this->fetchCommits();
-        }
-
-        $this->logger->info('Running source code crawlers for the project ' . $project->getFqname());
-        $this->runCrawlers();
-
-        $this->manager->persist($this->repo);
-        $this->manager->persist($project);
-        $this->manager->flush();
-
-        return true;
-    }
+    abstract public function updateProject();
 
     /**
      * Update the source repository entity with information obtained through
@@ -194,13 +92,5 @@ abstract class RepoCrawler
         // the default implementation is empty
     }
 
-    /**
-     * Run configured source crawlers on the repository.
-     *
-     * Implementations supporting source crawlers should override this
-     */
-    public function runCrawlers()
-    {
-        // the default implementation is empty
-    }
+
 }

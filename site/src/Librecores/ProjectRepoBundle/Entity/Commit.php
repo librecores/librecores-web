@@ -36,7 +36,7 @@ class Commit
      * @ORM\ManyToOne(targetEntity="SourceRepo", inversedBy="commits")
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
-    private $repository;
+    private $sourceRepo;
 
     /**
      * Unique ID assigned by the underlying SCM to this specific commit
@@ -67,7 +67,7 @@ class Commit
     private $dateCommitted;
 
     /**
-     * Number of files modified in this commit
+     * Files modified in this commit
      *
      * @var int
      *
@@ -76,7 +76,7 @@ class Commit
     private $filesModified = 0;
 
     /**
-     * Number of lines added in this commit
+     * Lines added in this commit
      *
      * @var int
      *
@@ -106,14 +106,15 @@ class Commit
     /**
      * Set repository
      *
-     * @param SourceRepo $repository
+     * @param SourceRepo $sourceRepo
      *
      * @return Commit
      */
-    public function setRepository(SourceRepo $repository = null)
+    public function setSourceRepo(SourceRepo $sourceRepo = null)
     {
-        $this->repository = $repository;
-        $repository->addCommit($this);
+        $this->sourceRepo = $sourceRepo;
+        $sourceRepo->addCommit($this);
+
         return $this;
     }
 
@@ -122,9 +123,9 @@ class Commit
      *
      * @return SourceRepo
      */
-    public function getRepository()
+    public function getSourceRepo()
     {
-        return $this->repository;
+        return $this->sourceRepo;
     }
 
     /**
@@ -162,6 +163,7 @@ class Commit
     {
         $this->contributor = $contributor;
         $contributor->addCommit($this);
+
         return $this;
     }
 
@@ -214,7 +216,7 @@ class Commit
     }
 
     /**
-     * Get filesModifies
+     * Get filesModified
      *
      * @return int
      */

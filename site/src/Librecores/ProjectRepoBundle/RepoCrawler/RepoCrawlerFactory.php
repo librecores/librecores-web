@@ -5,8 +5,8 @@ namespace Librecores\ProjectRepoBundle\RepoCrawler;
 use Doctrine\Common\Persistence\ObjectManager;
 use Librecores\ProjectRepoBundle\Entity\GitSourceRepo;
 use Librecores\ProjectRepoBundle\Entity\SourceRepo;
-use Librecores\ProjectRepoBundle\Util\ExecutorInterface;
 use Librecores\ProjectRepoBundle\Util\MarkupToHtmlConverter;
+use Librecores\ProjectRepoBundle\Util\ProcessCreator;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -30,14 +30,9 @@ class RepoCrawlerFactory
     private $manager;
 
     /**
-     * @var ExecutorInterface
+     * @var ProcessCreator
      */
-    private $executor;
-
-    /**
-     * @var array
-     */
-    private $sourceCrawlers;
+    private $processCreator;
 
     /**
      * Constructor: create a new instance
@@ -45,18 +40,16 @@ class RepoCrawlerFactory
      * @param MarkupToHtmlConverter $markupConverter
      * @param LoggerInterface $logger
      * @param ObjectManager $manager
-     * @param ExecutorInterface $executor
-     * @param array $sourceCrawlers
+     * @param ProcessCreator $processCreator
      */
     public function __construct(MarkupToHtmlConverter $markupConverter,
                                 LoggerInterface $logger, ObjectManager $manager,
-                                ExecutorInterface $executor, array $sourceCrawlers)
+                                ProcessCreator $processCreator)
     {
         $this->markupConverter = $markupConverter;
         $this->logger = $logger;
         $this->manager = $manager;
-        $this->executor = $executor;
-        $this->sourceCrawlers = $sourceCrawlers;
+        $this->processCreator = $processCreator;
     }
 
     /**
@@ -72,7 +65,7 @@ class RepoCrawlerFactory
         // XXX: Investigate a better method for IoC in this situation
         if ($repo instanceof GitSourceRepo) {
             return new GitRepoCrawler($repo,
-                $this->markupConverter, $this->executor, $this->manager, $this->logger, $this->sourceCrawlers);
+                $this->markupConverter, $this->processCreator, $this->manager, $this->logger);
         }
 
         throw new \InvalidArgumentException("No crawler for source repository " .

@@ -28,8 +28,8 @@ class ContributorRepository extends EntityRepository
     public function getContributorForRepository(SourceRepo $repo, string $email, ?string $name = null): ?Contributor
     {
         $contributor = $this->findOneBy([
-            'repository' => $repo,
-            'email' => $email
+            'sourceRepo' => $repo,
+            'email' => $email,
         ]);
 
         // create and return and entity only when the name is specified
@@ -37,7 +37,7 @@ class ContributorRepository extends EntityRepository
             $contributor = new Contributor();
             $contributor->setName($name)
                 ->setEmail($email)
-                ->setRepository($repo);
+                ->setSourceRepo($repo);
 
             $this->getEntityManager()->persist($contributor);
             $this->getEntityManager()->flush();     // we flush here as this value is queried elsewhere
@@ -56,7 +56,7 @@ class ContributorRepository extends EntityRepository
     public function getContributorsForRepository(SourceRepo $repo)
     {
         return $this->findBy([
-            'repository' => $repo
+            'sourceRepo' => $repo,
         ]);
     }
 
@@ -70,7 +70,7 @@ class ContributorRepository extends EntityRepository
     {
         return $this->createQueryBuilder('c')
             ->select('COUNT(1)')
-            ->where('c.repository = :repo')
+            ->where('c.sourceRepo = :repo')
             ->setParameter('repo', $repo)
             ->getQuery()
             ->getSingleScalarResult();
@@ -91,7 +91,7 @@ class ContributorRepository extends EntityRepository
             ->addSelect('SUM(co.linesAdded) AS HIDDEN linesAdded')
             ->addSelect('SUM(co.linesRemoved) AS HIDDEN linesRemoved')
             ->groupBy('c.id')
-            ->having('c.repository = :repo')
+            ->having('c.sourceRepo = :repo')
             ->addOrderBy('commits', 'DESC')
             ->addOrderBy('linesAdded', 'DESC')
             ->addOrderBy('linesRemoved', 'ASC')

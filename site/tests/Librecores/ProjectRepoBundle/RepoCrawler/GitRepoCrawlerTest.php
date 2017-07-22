@@ -5,12 +5,16 @@ namespace Tests\Librecores\ProjectRepoBundle\RepoCrawler;
 use Doctrine\Common\Persistence\ObjectManager;
 use Librecores\ProjectRepoBundle\Entity\Contributor;
 use Librecores\ProjectRepoBundle\Entity\GitSourceRepo;
+use Librecores\ProjectRepoBundle\Entity\LanguageStat;
+use Librecores\ProjectRepoBundle\Entity\Organization;
+use Librecores\ProjectRepoBundle\Entity\Project;
 use Librecores\ProjectRepoBundle\RepoCrawler\GitRepoCrawler;
 use Librecores\ProjectRepoBundle\Repository\ContributorRepository;
-use Librecores\ProjectRepoBundle\Util\ExecutorInterface;
 use Librecores\ProjectRepoBundle\Util\MarkupToHtmlConverter;
+use Librecores\ProjectRepoBundle\Util\ProcessCreator;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Process\Process;
 
 /**
  * Tests for GitRepoCrawlerTest
@@ -25,20 +29,20 @@ class GitRepoCrawlerTest extends TestCase
     {
         $contributors = [
             'janedoe@example.com' => new Contributor('Jane Doe', 'janedoe@example.com'),
-            'johndoe@example.com' => new Contributor('John Doe', 'johndoe@example.com')
+            'johndoe@example.com' => new Contributor('John Doe', 'johndoe@example.com'),
 
         ];
 
         $repository = $this->getMockBuilder(ContributorRepository::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['findOneBy', 'getEntityManager'])
-            ->getMock();
+                           ->disableOriginalConstructor()
+                           ->setMethods(['findOneBy', 'getEntityManager', 'getLatestCommit', 'removeAllCommits'])
+                           ->getMock();
 
         $repository->expects($this->exactly(7))
-            ->method('findOneBy')
-            ->willReturnCallback(function (array $criteria) use ($contributors) {
-                return $contributors[$criteria['email']];
-            });
+                   ->method('findOneBy')
+                   ->willReturnCallback(function (array $criteria) use ($contributors) {
+                       return $contributors[$criteria['email']];
+                   });
 
         /** @var LoggerInterface $mockLogger */
         $mockLogger = $this->createMock(LoggerInterface::class);
@@ -50,15 +54,55 @@ class GitRepoCrawlerTest extends TestCase
         $mockManager = $this->createMock(ObjectManager::class);
         $mockManager->method('getRepository')->willReturn($repository);
 
-        $mockOutput = file_get_contents(join(DIRECTORY_SEPARATOR, [__DIR__,'..', 'Resources', 'output.txt']));
+        $mockGitOutput  = file_get_contents(
+            join(DIRECTORY_SEPARATOR, [__DIR__, '..', 'Resources', 'output.txt']
+            ));
+        $mockClocOutput = file_get_contents(
+            join(DIRECTORY_SEPARATOR, [__DIR__, '..', 'Resources', 'cloc-mock-output.json']
+            ));
 
-        /** @var ExecutorInterface $mockExecutor */
-        $mockExecutor = $this->createMock(ExecutorInterface::class);
-        $mockExecutor->method('exec')->willReturn($mockOutput);
+        $mockGitProcess = $this->createMock(Process::class);
+        $mockGitProcess->method('getOutput')
+                       ->willReturn($mockGitOutput);
+        $mockGitProcess->method('getExitCode')
+                       ->willReturn(0);
+        $mockClocProcess = $this->createMock(Process::class);
+        $mockClocProcess->method('getOutput')
+                        ->willReturn($mockClocOutput);
+        $mockClocProcess->method('getExitCode')
+                        ->willReturn(0);
+
+        /** @var ProcessCreator $processCreator */
+        $processCreator = $this->createMock(ProcessCreator::class);
+
+        $processCreator->method('createProcess')
+                       ->willReturnCallback(function ($cmd, $args)
+                       use ($mockClocProcess, $mockGitProcess) {
+                           if ('git' === $cmd) {
+                               $output = $mockGitProcess;
+                           } else {
+                               $output = $mockClocProcess;
+                           }
+
+                           return $output;
+                       });
+
+        $org = new Organization();
+        $org->setDisplayName('example')
+            ->setName('example');
+
+        $project = new Project();
+        $project->setName('test')
+                ->setDisplayName('test')
+                ->setParentOrganization($org);
 
         $repo = new GitSourceRepo();
-        $crawler = new GitRepoCrawler($repo, $mockMarkupConverter, $mockExecutor, $mockManager, $mockLogger, []);
-        $crawler->fetchCommits();
+        $repo->setProject($project);
+
+        $project->setSourceRepo($repo);
+
+        $crawler = new GitRepoCrawler($repo, $mockMarkupConverter, $processCreator, $mockManager, $mockLogger);
+        $crawler->updateSourceRepo();
 
         $commits = $repo->getCommits();
 
@@ -109,5 +153,63 @@ class GitRepoCrawlerTest extends TestCase
         $this->assertEquals($commits[4]->getLinesRemoved(), 0);
         $this->assertEquals($commits[5]->getLinesRemoved(), 0);
         $this->assertEquals($commits[6]->getLinesRemoved(), 8);
+
+        $stats = $repo->getSourceStats();
+        // conditions
+        $this->assertEquals($stats->getTotalFiles(), 102);
+        $this->assertEquals($stats->getTotalLinesOfCode(), 5995);
+        $this->assertEquals($stats->getTotalLinesOfComments(), 3590);
+        $this->assertEquals($stats->getTotalBlankLines(), 1378);
+
+        foreach ($stats->getLanguageStats() as $languageStat) {
+            /** @var LanguageStat $languageStat */
+            switch ($languageStat->getLanguage()) {
+                case 'PHP':
+                    $this->assertEquals($languageStat->getFileCount(), 68);
+                    $this->assertEquals(
+                        $languageStat->getBlankLineCount(),
+                        1089
+                    );
+                    $this->assertEquals(
+                        $languageStat->getCommentLineCount(),
+                        3498
+                    );
+                    $this->assertEquals($languageStat->getLinesOfCode(), 4295);
+                    break;
+                case 'Twig':
+                    $this->assertEquals($languageStat->getFileCount(), 27);
+                    $this->assertEquals(
+                        $languageStat->getBlankLineCount(),
+                        216
+                    );
+                    $this->assertEquals(
+                        $languageStat->getCommentLineCount(),
+                        48
+                    );
+                    $this->assertEquals($languageStat->getLinesOfCode(), 1335);
+                    break;
+                case 'YAML':
+                    $this->assertEquals($languageStat->getFileCount(), 6);
+                    $this->assertEquals($languageStat->getBlankLineCount(), 61);
+                    $this->assertEquals(
+                        $languageStat->getCommentLineCount(),
+                        43
+                    );
+                    $this->assertEquals($languageStat->getLinesOfCode(), 184);
+                    break;
+                case 'XML':
+                    $this->assertEquals($languageStat->getFileCount(), 1);
+                    $this->assertEquals($languageStat->getBlankLineCount(), 12);
+                    $this->assertEquals(
+                        $languageStat->getCommentLineCount(),
+                        1
+                    );
+                    $this->assertEquals($languageStat->getLinesOfCode(), 181);
+                    break;
+                default:
+                    $this->fail('Unknown language encountered');
+                    break;
+            }
+        }
     }
 }

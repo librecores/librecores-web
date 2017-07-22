@@ -1,4 +1,5 @@
 <?php
+
 namespace Librecores\ProjectRepoBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -14,7 +15,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @author Amitosh Swain Mahapatra <amitosh.swain@gmail.com>
  *
- * @ORM\Table(uniqueConstraints={@UniqueConstraint(columns={"email", "repository_id"})})
+ * @ORM\Table(uniqueConstraints={@UniqueConstraint(columns={"email", "sourceRepo_id"})})
  * @ORM\Entity(repositoryClass="Librecores\ProjectRepoBundle\Repository\ContributorRepository")
  */
 class Contributor
@@ -46,7 +47,7 @@ class Contributor
      * @ORM\ManyToOne(targetEntity="SourceRepo", inversedBy="contributors")
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
-    private $repository;
+    private $sourceRepo;
 
     /**
      * The name of the contributor
@@ -72,7 +73,7 @@ class Contributor
      *
      * @var Collection
      *
-     * @ORM\OneToMany(targetEntity="Commit", mappedBy="contributor", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="Commit", mappedBy="contributor", cascade={"persist"}, fetch="EXTRA_LAZY")
      */
     private $commits;
 
@@ -81,7 +82,7 @@ class Contributor
      * @param null|string $name
      * @param null|string $email
      */
-    public function __construct(?string $name = null, ?string $email = null)
+    public function __construct($name = null, $email = null)
     {
         $this->commits = new ArrayCollection();
         $this->name = $name;
@@ -101,14 +102,15 @@ class Contributor
     /**
      * Set repository
      *
-     * @param SourceRepo $repository
+     * @param SourceRepo $sourceRepo
      *
      * @return Contributor
      */
-    public function setRepository(SourceRepo $repository = null)
+    public function setSourceRepo(SourceRepo $sourceRepo = null)
     {
-        $this->repository = $repository;
-        $repository->addContributor($this);
+        $this->sourceRepo = $sourceRepo;
+        $sourceRepo->addContributor($this);
+
         return $this;
     }
 
@@ -117,9 +119,9 @@ class Contributor
      *
      * @return SourceRepo
      */
-    public function getRepository()
+    public function getSourceRepo()
     {
-        return $this->repository;
+        return $this->sourceRepo;
     }
 
     /**
@@ -200,5 +202,22 @@ class Contributor
     public function getCommits()
     {
         return $this->commits;
+    }
+
+    /**
+     * Get avatar
+     *
+     * Uses the Gravataar service to provide user avatars
+     *
+     * @return string URL to contributor avatar
+     */
+    public function getAvatar(): string
+    {
+        // https://en.gravatar.com/site/implement/images/php/
+        // We use 32x32 px images and a 8 bit retro image as fallback
+        // similar to Github
+        return 'https://www.gravatar.com/avatar/'
+            .md5(strtolower(trim($this->email)))
+            .'?s=32&d=retro';
     }
 }

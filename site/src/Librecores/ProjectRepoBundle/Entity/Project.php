@@ -200,7 +200,7 @@ class Project
      *
      * @var boolean
      *
-     * @ORM\Column(type="boolean", options={"default" : true})
+     * @ORM\Column(type="boolean", options={"default" : false})
      */
     private $inProcessing = false;
 

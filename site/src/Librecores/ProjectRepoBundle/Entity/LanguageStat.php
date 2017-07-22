@@ -1,41 +1,40 @@
 <?php
 
-
 namespace Librecores\ProjectRepoBundle\Entity;
 
 /**
- * Statistics about a language in a repository
+ * Statistics about a programming language in a source code repository
  *
  * @author Amitosh Swain Mahapatra <amitosh.swain@gmail.com>
  */
 class LanguageStat
 {
     /**
-     * The language represented by this entity
+     * Language represented by this entity
      * @var string
      */
     private $language;
 
     /**
-     * Number of files of this language in the repository
+     * Files of this language in the repository
      * @var int
      */
     private $fileCount;
 
     /**
-     * Number of lines of code of this language in the repository
+     * Lines of code of this language in the repository
      * @var int
      */
     private $linesOfCode;
 
     /**
-     * Number of lines consisting of this language in the repository
+     * Comment lines consisting of this language in the repository
      * @var int
      */
     private $commentLineCount;
 
     /**
-     * Number of blank lines in files of this language in the repository
+     * Blank lines in files of this language in the repository
      * @var int
      */
     private $blankLineCount;

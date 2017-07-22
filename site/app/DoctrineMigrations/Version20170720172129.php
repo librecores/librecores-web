@@ -8,7 +8,7 @@ use Doctrine\DBAL\Schema\Schema;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-class Version20170705103144 extends AbstractMigration
+class Version20170720172129 extends AbstractMigration
 {
     /**
      * @param Schema $schema
@@ -21,11 +21,11 @@ class Version20170705103144 extends AbstractMigration
         $this->addSql('ALTER TABLE SourceRepo DROP FOREIGN KEY FK_AFAC0BAA70AA3482');
         $this->addSql('ALTER TABLE SourceStatsAuthor DROP FOREIGN KEY FK_F16620EBB44B0FC1');
         $this->addSql('ALTER TABLE SourceStatsCommitHistogram DROP FOREIGN KEY FK_81F3A718B44B0FC1');
-        $this->addSql('CREATE TABLE Commit (id INT AUTO_INCREMENT NOT NULL, repository_id INT NOT NULL, contributor_id INT NOT NULL, commitId VARCHAR(255) NOT NULL, dateCommitted DATETIME NOT NULL, filesModified INT DEFAULT 0 NOT NULL, linesAdded INT DEFAULT 0 NOT NULL, linesRemoved INT DEFAULT 0 NOT NULL, UNIQUE INDEX UNIQ_49782B9BEDC2C24D (commitId), INDEX IDX_49782B9B50C9D4F7 (repository_id), INDEX IDX_49782B9B7A19A357 (contributor_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci ENGINE = InnoDB');
-        $this->addSql('CREATE TABLE Contributor (id INT AUTO_INCREMENT NOT NULL, repository_id INT NOT NULL, name VARCHAR(255) NOT NULL, email VARCHAR(255) NOT NULL, INDEX IDX_5CF3184450C9D4F7 (repository_id), UNIQUE INDEX UNIQ_5CF31844E7927C7450C9D4F7 (email, repository_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci ENGINE = InnoDB');
-        $this->addSql('ALTER TABLE Commit ADD CONSTRAINT FK_49782B9B50C9D4F7 FOREIGN KEY (repository_id) REFERENCES SourceRepo (id) ON DELETE CASCADE');
+        $this->addSql('CREATE TABLE Commit (id INT AUTO_INCREMENT NOT NULL, contributor_id INT NOT NULL, commitId VARCHAR(255) NOT NULL, dateCommitted DATETIME NOT NULL, filesModified INT DEFAULT 0 NOT NULL, linesAdded INT DEFAULT 0 NOT NULL, linesRemoved INT DEFAULT 0 NOT NULL, sourceRepo_id INT NOT NULL, UNIQUE INDEX UNIQ_49782B9BEDC2C24D (commitId), INDEX IDX_49782B9B3D4460D4 (sourceRepo_id), INDEX IDX_49782B9B7A19A357 (contributor_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE Contributor (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(255) NOT NULL, email VARCHAR(255) NOT NULL, sourceRepo_id INT NOT NULL, INDEX IDX_5CF318443D4460D4 (sourceRepo_id), UNIQUE INDEX UNIQ_5CF31844E7927C743D4460D4 (email, sourceRepo_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci ENGINE = InnoDB');
+        $this->addSql('ALTER TABLE Commit ADD CONSTRAINT FK_49782B9B3D4460D4 FOREIGN KEY (sourceRepo_id) REFERENCES SourceRepo (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE Commit ADD CONSTRAINT FK_49782B9B7A19A357 FOREIGN KEY (contributor_id) REFERENCES Contributor (id) ON DELETE CASCADE');
-        $this->addSql('ALTER TABLE Contributor ADD CONSTRAINT FK_5CF3184450C9D4F7 FOREIGN KEY (repository_id) REFERENCES SourceRepo (id) ON DELETE CASCADE');
+        $this->addSql('ALTER TABLE Contributor ADD CONSTRAINT FK_5CF318443D4460D4 FOREIGN KEY (sourceRepo_id) REFERENCES SourceRepo (id) ON DELETE CASCADE');
         $this->addSql('DROP TABLE SourceStats');
         $this->addSql('DROP TABLE SourceStatsAuthor');
         $this->addSql('DROP TABLE SourceStatsCommitHistogram');
@@ -33,7 +33,7 @@ class Version20170705103144 extends AbstractMigration
         $this->addSql('ALTER TABLE SourceRepo ADD source_stats_available TINYINT(1) NOT NULL, ADD source_stats_totalFiles INT NOT NULL, ADD source_stats_totalLinesOfCode INT NOT NULL, ADD source_stats_totalLinesOfComments INT NOT NULL, ADD source_stats_totalBlankLines INT NOT NULL, ADD source_stats_languageStats LONGTEXT NOT NULL COMMENT \'(DC2Type:array)\', DROP stats_id');
         $this->addSql('ALTER TABLE Project DROP FOREIGN KEY FK_E00EE9723D4460D4');
         $this->addSql('ALTER TABLE Project DROP FOREIGN KEY FK_E00EE972DEF3CE4C');
-        $this->addSql('ALTER TABLE Project CHANGE status status VARCHAR(255) DEFAULT \'ASSIGNED\' NOT NULL, CHANGE licenseTextAutoUpdate licenseTextAutoUpdate TINYINT(1) DEFAULT \'1\' NOT NULL, CHANGE descriptionTextAutoUpdate descriptionTextAutoUpdate TINYINT(1) DEFAULT \'1\' NOT NULL, CHANGE inProcessing inProcessing TINYINT(1) DEFAULT \'1\' NOT NULL');
+        $this->addSql('ALTER TABLE Project CHANGE status status VARCHAR(255) DEFAULT \'ASSIGNED\' NOT NULL, CHANGE licenseTextAutoUpdate licenseTextAutoUpdate TINYINT(1) DEFAULT \'1\' NOT NULL, CHANGE descriptionTextAutoUpdate descriptionTextAutoUpdate TINYINT(1) DEFAULT \'1\' NOT NULL, CHANGE inProcessing inProcessing TINYINT(1) DEFAULT \'0\' NOT NULL');
         $this->addSql('ALTER TABLE Project ADD CONSTRAINT FK_E00EE9723D4460D4 FOREIGN KEY (sourceRepo_id) REFERENCES SourceRepo (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE Project ADD CONSTRAINT FK_E00EE972DEF3CE4C FOREIGN KEY (parentUser_id) REFERENCES User (id) ON DELETE SET NULL');
     }

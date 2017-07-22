@@ -6,7 +6,7 @@ use Doctrine\ORM\Internal\Hydration\AbstractHydrator;
 use PDO;
 
 /**
- * Hydrates database results into groups
+ * Hydrate a row set from the database into an associative array
  *
  * Uses the PDO::FETCH_GROUP mode to fetch results.
  * Example: [ [2017,1,12],[2017,2,14],...[2017,12,10] ... ] will be converted to
@@ -22,6 +22,7 @@ class GroupHydrator extends AbstractHydrator
     protected function hydrateAllData()
     {
         $rows = $this->_stmt->fetchAll(PDO::FETCH_NUM);
+
         return $this->group($rows);
     }
 
@@ -34,13 +35,13 @@ class GroupHydrator extends AbstractHydrator
     private function group(array $rows)
     {
         // must be a 2d array with more than 2 columns
-        if(empty($rows) || !is_array($rows[0]) || count($rows[0]) < 2) {
+        if (empty($rows) || !is_array($rows[0]) || count($rows[0]) < 2) {
             return $rows;
         }
 
         $result = [];
         foreach ($rows as $row) {
-            $value = array_slice($row, 1);
+            $value             = array_slice($row, 1);
             $result[$row[0]][] = count($value) > 1 ? $value : $value[0];
         }
 

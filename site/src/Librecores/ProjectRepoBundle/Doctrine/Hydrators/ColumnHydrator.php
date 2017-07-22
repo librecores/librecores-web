@@ -6,11 +6,14 @@ use Doctrine\ORM\Internal\Hydration\AbstractHydrator;
 use PDO;
 
 /**
- * Hydrates database results into a single column
+ * Hydrate a single-column row set from the database into an array
  *
  * Uses the PDO::FETCH_COLUMN mode to fetch results. By default it
  * fetches the 1st column, set hint 'column' in the query to fetch
  * a different column.
+ *
+ * Example: [ 1 => [ 1 ], 2 => [ 12 ], 3 => [ 31 ], 4 => [ 2 ] ]
+ * will be converted to [ 1, 12, 31, 2 ]
  *
  * @author Amitosh Swain Mahapatra <amitosh.swain@gmail.com>
  *
@@ -25,7 +28,7 @@ class ColumnHydrator extends AbstractHydrator
     protected function hydrateAllData()
     {
         $column = 0;
-        if(array_key_exists('column', $this->_hints)) {
+        if (array_key_exists('column', $this->_hints)) {
             $column = $this->_hints['column'];
         }
 

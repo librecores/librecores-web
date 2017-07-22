@@ -148,30 +148,18 @@ class ProjectController extends Controller
         }
 
         // fetch project metadata
-        $manager = $this->get('librecores.repository_metadata_manager');
-        $topContributors = [];
-        foreach ($manager->getTopContributors($p) as $contributor) {
-            /* @var $contributor Contributor */
-
-            $topContributors[] = [
-                'name' => $contributor->getName(),
-                'commitCount' => $manager->getCommitCountForContributor(
-                    $contributor
-                ),
-                'avatar' => $manager->getContributorAvatar($contributor),
-            ];
-        }
+        $projectMetricsProvider = $this->get('librecores.project_metrics_provider');
 
         $current = new \DateTimeImmutable();
 
         $metadata = [
-            'latestCommit' => $manager->getLatestCommit($p),
-            'firstCommit' => $manager->getFirstCommit($p),
-            'contributorCount' => $manager->getContributorsCount($p),
-            'commitCount' => $manager->getCommitCount($p),
-            'topContributors' => $topContributors,
+            'latestCommit' => $projectMetricsProvider->getLatestCommit($p),
+            'firstCommit' => $projectMetricsProvider->getFirstCommit($p),
+            'contributorCount' => $projectMetricsProvider->getContributorsCount($p),
+            'commitCount' => $projectMetricsProvider->getCommitCount($p),
+            'topContributors' => $projectMetricsProvider->getTopContributors($p),
             'activityHistogram' => $this->flattenHistogram(
-                $manager->getCommitHistogram(
+                $projectMetricsProvider->getCommitHistogram(
                     $p,
                     $current->sub(
                         \DateInterval::createFromDateString('1 year')
@@ -184,7 +172,7 @@ class ProjectController extends Controller
                 'options' => [
                     'fill' => ['red', 'yellow', 'orange', 'lightblue', 'green'],
                 ],
-                'values' => $manager->getMajorLanguages($p),
+                'values' => $projectMetricsProvider->getMostUsedLanguages($p),
             ],
         ];
 
