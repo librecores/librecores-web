@@ -58,8 +58,8 @@
 </div>
 <div class="col-sm-4">
   <div class="librecores-project-infobox" style="background-color: #f7f7f7; padding: 10px; border-radius: 3px;">
-    <p><b>Data Sheet</b></p>
-    <p>
+    <div><b>Data Sheet</b></div>
+    <div>
       {% if project.projectUrl %}
       <i class="fa fa-home" aria-hidden="true"></i>
       <a href="{{ project.projectUrl|escape('html_attr') }}">Project Web Site</a>
@@ -91,7 +91,61 @@
       <a href="{{ project.issueTracker|escape('html_attr') }}">Issue Tracker</a>
       <br/>
       {% endif %}
-    </p>
+
+      {% if metadata.latestCommit %}
+        <i class="fa fa-refresh" aria-hidden="true"></i>
+        <span>Last updated {{ metadata.latestCommit.dateCommitted | time_diff }}</span>
+        <br/>
+      {% endif %}
+
+      <i class="fa fa-plus-circle" aria-hidden="true"></i>
+      <span>Registered {{ project.dateAdded | time_diff }}</span>
+      <br/>
+
+      {% if metadata.firstCommit %}
+      <i class="fa fa-bookmark" aria-hidden="true"></i>
+      <span>Started {{ metadata.firstCommit.dateCommitted | time_diff }}</span>
+      <br/>
+      {% endif %}
+
+      {% if project.sourceRepo.sourceStats.available %}
+        {%  if project.sourceRepo.sourceStats.languageStats is not empty %}
+          <i class="fa fa-code" aria-hidden="true"></i>
+          Language: {{ project.sourceRepo.sourceStats.mostUsedLanguage }}
+          <br/>
+        {%  endif %}
+        {#<p>
+          <i class="fa fa-star" aria-hidden="true"></i>
+          {{ project.name }} consists of {{ project.sourceRepo.sourceStats.totalLinesOfCode }} lines of code,
+          which would take an estimated* time of {{ project.sourceRepo.sourceStats.cocomoDuration | round(0, 'ceil') }} months by {{ project.sourceRepo.sourceStats.cocomoTeamSize }} developers.
+        </p> #}
+      {% endif %}
+
+      {% if metadata.commitCount %}
+      <i class="fa fa-info-circle" aria-hidden="true"></i>
+      <span>{% transchoice metadata.commitCount %}1 commit|%count% commits{% endtranschoice %} by {% transchoice metadata.contributorCount %}1 contributor|%count% contributors{% endtranschoice %}</span>
+      <br/>
+      {% endif %}
+
+      <div class="librecores-project-contributor-avatar-box">
+        {%  for contributor in metadata.topContributors %}
+        <img class="librecores-project-contributor-avatar" src="{{ contributor.avatar }}" alt="{{ contributor.name }}" data-toggle="tooltip" title="{{ contributor.name }} ({% transchoice contributor.commits|length %}1 commit|%count% commits{% endtranschoice %})" />
+        {%  endfor %}
+      </div>
+
+      {% if metadata.commitCount %}
+      <div class="librecores-project-activity">
+        <div class="librecores-project-activity-graph">
+          {{  metadata.activityHistogram | join(',')  }}
+        </div>
+        <p>Activity in last 1 year</p>
+      </div>
+      {% endif %}
+      <p class="librecores-project-disclaimer">
+        Updated {{ project.dateLastModified | time_diff }}<br />
+        {# * Estimated as per the <a href="https://en.wikipedia.org/wiki/COCOMO">COCOMO model</a> for embedded projects. #}
+      </p>
+    </div>
   </div>
 
   {# XXX: Tags are not yet supported
@@ -103,4 +157,12 @@
 </div>
 
 </div>
+{% endblock %}
+
+{% block pagejs %}
+  $(function(){
+    $('[data-toggle="tooltip"]').tooltip();
+    var chart = $('.librecores-project-activity-graph');
+    chart.height('100px').peity('line', { height: chart.height(), width: chart.width() });
+  });
 {% endblock %}

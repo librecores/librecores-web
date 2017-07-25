@@ -6,8 +6,6 @@ use FOS\UserBundle\Doctrine\UserManager as BaseUserManager;
 /**
  * Extended user manager
  *
- * @package Librecores\ProjectRepoBundle\Doctrine
- *
  * @author Philipp Wagner <mail@philipp-wagner.com>
  */
 class UserManager extends BaseUserManager

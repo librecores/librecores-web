@@ -1,10 +1,13 @@
 <?php
+
 namespace Librecores\ProjectRepoBundle\RepoCrawler;
 
-use Psr\Log\LoggerInterface;
+use Doctrine\Common\Persistence\ObjectManager;
 use Librecores\ProjectRepoBundle\Entity\SourceRepo;
 use Librecores\ProjectRepoBundle\Util\MarkupToHtmlConverter;
-use Librecores\ProjectRepoBundle\Entity\Project;
+use Librecores\ProjectRepoBundle\Util\ProcessCreator;
+use Psr\Log\LoggerInterface;
+
 
 /**
  * Repository crawler base class
@@ -13,16 +16,52 @@ use Librecores\ProjectRepoBundle\Entity\Project;
  */
 abstract class RepoCrawler
 {
+    /**
+     * @var SourceRepo
+     */
     protected $repo;
+
+    /**
+     * @var MarkupToHtmlConverter
+     */
     protected $markupConverter;
+
+    /**
+     * @var LoggerInterface
+     */
     protected $logger;
 
-    public function __construct(SourceRepo $repo,
-        MarkupToHtmlConverter $markupConverter, LoggerInterface $logger)
+    /**
+     * @var ProcessCreator
+     */
+    protected $processCreator;
+
+    /**
+     * @var ObjectManager
+     */
+    protected $manager;
+
+    /**
+     * RepoCrawler constructor.
+     * @param SourceRepo $repo
+     * @param MarkupToHtmlConverter $markupConverter
+     * @param ProcessCreator $processCreator
+     * @param ObjectManager $manager
+     * @param LoggerInterface $logger
+     */
+    public function __construct(
+        SourceRepo $repo,
+        MarkupToHtmlConverter $markupConverter,
+        ProcessCreator $processCreator,
+        ObjectManager $manager,
+        LoggerInterface $logger
+    )
     {
-        $this->repo = $repo;
+        $this->repo            = $repo;
         $this->markupConverter = $markupConverter;
-        $this->logger = $logger;
+        $this->logger          = $logger;
+        $this->processCreator  = $processCreator;
+        $this->manager         = $manager;
 
         if (!$this->isValidRepoType()) {
             throw new \RuntimeException("Repository type is not supported by this crawler.");
@@ -34,31 +73,7 @@ abstract class RepoCrawler
      *
      * @return boolean
      */
-    abstract protected function isValidRepoType(): bool;
-
-    /**
-     * Get the license text of the repository as safe HTML
-     *
-     * Usually this license text is taken from the LICENSE or COPYING files.
-     *
-     * "Safe" HTML is stripped from all possibly malicious content, such as
-     * script tags, etc.
-     *
-     * @return string|null the license text, or null if none was found
-     */
-    abstract public function getLicenseTextSafeHtml(): ?string;
-
-    /**
-     * Get the description of the repository as safe HTML
-     *
-     * Usually this is the content of the README file.
-     *
-     * "Safe" HTML is stripped from all possibly malicious content, such as
-     * script tags, etc.
-     *
-     * @return string|null the repository description, or null if none was found
-     */
-    abstract public function getDescriptionSafeHtml(): ?string;
+    abstract public function isValidRepoType(): bool;
 
     /**
      * Update the project associated with the crawled repository with
@@ -66,23 +81,7 @@ abstract class RepoCrawler
      *
      * @return bool operation successful?
      */
-    public function updateProject()
-    {
-        $project = $this->repo->getProject();
-        if ($project === null) {
-            $this->logger->debug('No project associated with source '.
-                'repository '.$this->repo->getId());
-            return false;
-        }
-
-        if ($project->getDescriptionTextAutoUpdate()) {
-            $project->setDescriptionText($this->getDescriptionSafeHtml());
-        }
-        if ($project->getLicenseTextAutoUpdate()) {
-            $project->setLicenseText($this->getLicenseTextSafeHtml());
-        }
-        return true;
-    }
+    abstract public function updateProject();
 
     /**
      * Update the source repository entity with information obtained through
@@ -92,4 +91,6 @@ abstract class RepoCrawler
     {
         // the default implementation is empty
     }
+
+
 }

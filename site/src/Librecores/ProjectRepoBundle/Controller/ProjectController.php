@@ -2,20 +2,22 @@
 
 namespace Librecores\ProjectRepoBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-
-use Librecores\ProjectRepoBundle\Entity\Project;
-use Librecores\ProjectRepoBundle\Entity\OrganizationMember;
-use Librecores\ProjectRepoBundle\Form\Type\ProjectType;
-use Symfony\Component\Form\Extension\Core\Type\UrlType;
+use Librecores\ProjectRepoBundle\Entity\Contributor;
 use Librecores\ProjectRepoBundle\Entity\GitSourceRepo;
-use Symfony\Component\Form\FormInterface;
+use Librecores\ProjectRepoBundle\Entity\OrganizationMember;
+use Librecores\ProjectRepoBundle\Entity\Project;
+use Librecores\ProjectRepoBundle\Form\Type\ProjectType;
+use Librecores\ProjectRepoBundle\Util\Dates;
 use Librecores\ProjectRepoBundle\Util\GithubApiService;
 use Librecores\ProjectRepoBundle\Util\QueueDispatcherService;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\UrlType;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ProjectController extends Controller
 {
@@ -145,9 +147,42 @@ class ProjectController extends Controller
             return $response;
         }
 
+        // fetch project metadata
+        $projectMetricsProvider = $this->get('librecores.project_metrics_provider');
+
+        $current = new \DateTimeImmutable();
+
+        $metadata = [
+            'latestCommit' => $projectMetricsProvider->getLatestCommit($p),
+            'firstCommit' => $projectMetricsProvider->getFirstCommit($p),
+            'contributorCount' => $projectMetricsProvider->getContributorsCount($p),
+            'commitCount' => $projectMetricsProvider->getCommitCount($p),
+            'topContributors' => $projectMetricsProvider->getTopContributors($p),
+            'activityHistogram' => $this->flattenHistogram(
+                $projectMetricsProvider->getCommitHistogram(
+                    $p,
+                    $current->sub(
+                        \DateInterval::createFromDateString('1 year')
+                    ),
+                    $current,
+                    Dates::INTERVAL_WEEK
+                )
+            ),
+            'languageGraph' => [
+                'options' => [
+                    'fill' => ['red', 'yellow', 'orange', 'lightblue', 'green'],
+                ],
+                'values' => $projectMetricsProvider->getMostUsedLanguages($p),
+            ],
+        ];
+
         // the actual project page
-        return $this->render('LibrecoresProjectRepoBundle:Project:view.html.twig',
-            array('project' => $p));
+        return $this->render(
+            'LibrecoresProjectRepoBundle:Project:view.html.twig',
+            [
+                'project' => $p,
+                'metadata' => $metadata,
+            ]);
     }
 
     /**
@@ -234,7 +269,7 @@ class ProjectController extends Controller
             if ($ghEvent != 'push') {
                 // We only react to push events, all other events signal any
                 // change we are interested in.
-                return;
+                return new Response();
             }
             // XXX: In the future, this could be extended to use information
             // contained in the notification directly.
@@ -407,5 +442,21 @@ class ProjectController extends Controller
 
                 $p->setParentOrganization($organization);
         }
+    }
+
+    /**
+     * Discards any labels and retains the value of a histogram
+     * @param $histogram
+     * @return array
+     */
+    private function flattenHistogram($histogram)
+    {
+        $values = [];
+        foreach ($histogram as $i) {
+            foreach ($i as $j) {
+                $values[] = $j[0];
+            }
+        }
+        return $values;
     }
 }
