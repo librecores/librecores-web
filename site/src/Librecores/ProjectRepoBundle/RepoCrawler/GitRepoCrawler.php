@@ -101,10 +101,11 @@ class GitRepoCrawler extends RepoCrawler
         return $this->repo instanceof GitSourceRepo;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function updateSourceRepo()
     {
-        $this->logger->info('Fetching commits for the repository ' . $this->repo->getId() . ' of project ' .
-            $this->repo->getProject()->getFqname());
         $commitRepository = $this->manager->getRepository(Commit::class);
         $lastCommit = $commitRepository->getLatestCommit($this->repo);
 
@@ -129,6 +130,9 @@ class GitRepoCrawler extends RepoCrawler
         $this->manager->flush();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function updateProject()
     {
         $project = $this->repo->getProject();
@@ -215,6 +219,9 @@ class GitRepoCrawler extends RepoCrawler
      */
     protected function updateCommits(?string $sinceCommitId = null): int
     {
+        $this->logger->info('Fetching commits for the repository ' . $this->repo->getId() . ' of project ' .
+                            $this->repo->getProject()->getFqname());
+
         $args = ['log', '--reverse', '--format=%H|%aN|%aE|%aD', '--shortstat',];
         if (null !== $sinceCommitId) {
             // we don't need escapeshellargs here

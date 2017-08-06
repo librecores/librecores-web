@@ -119,6 +119,7 @@ services:
             - '@logger'
             - '@doctrine.orm.default_entity_manager'
             - '@librecores.process_creator'
+            - '@librecores.util.githubapiservice'
 
     librecores.project_metrics_provider:
         class: Librecores\ProjectRepoBundle\Doctrine\ProjectMetricsProvider
