@@ -90,7 +90,7 @@ class MarkupToHtmlConverter
                 throw new \RuntimeException("Unable to write to file $tmpFilename");
             }
 
-            $unsafeHtml = $this->markupFileToHtml($tmpFilename);
+            $unsafeHtml = $this->markupFileToUnsafeHtml($tmpFilename);
         } finally {
             unlink($tmpFilename);
         }

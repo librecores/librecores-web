@@ -70,11 +70,16 @@ class GithubApiService
                                 AdapterInterface $cachePool,
                                 RouterInterface $router)
     {
-        $user = $tokenStorage->getToken()->getUser();
-        if (!$user instanceof \Librecores\ProjectRepoBundle\Entity\User) {
-            $this->user = null;
+        $token = $tokenStorage->getToken();
+        if (null !== $token) {
+            $user = $token->getUser();
+            if ($user instanceof \Librecores\ProjectRepoBundle\Entity\User) {
+                $this->user = $user;
+            } else {
+                $this->user = null;
+            }
         }
-        $this->user = $user;
+
         $this->cachePool = $cachePool;
         $this->router = $router;
     }
@@ -119,6 +124,23 @@ class GithubApiService
         if ($this->clientIsAuthenticated) {
             return $this->client;
         }
+        return null;
+    }
+
+    public function getAuthenticatedClientForUser(User $user)
+    {
+        $client= new \Github\Client();
+        $client->addCache($this->cachePool);
+
+        // try to authenticate as user with its access token
+        if (null !== $user && $user->isConnectedToOAuthService('github')) {
+            $oauthAccessToken = $user->getGithubOAuthAccessToken();
+            $client->authenticate($oauthAccessToken, null,
+                                  Github\Client::AUTH_URL_TOKEN);
+
+            return $client;
+        }
+
         return null;
     }
 
