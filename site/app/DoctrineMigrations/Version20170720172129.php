@@ -36,6 +36,9 @@ class Version20170720172129 extends AbstractMigration
         $this->addSql('ALTER TABLE Project CHANGE status status VARCHAR(255) DEFAULT \'ASSIGNED\' NOT NULL, CHANGE licenseTextAutoUpdate licenseTextAutoUpdate TINYINT(1) DEFAULT \'1\' NOT NULL, CHANGE descriptionTextAutoUpdate descriptionTextAutoUpdate TINYINT(1) DEFAULT \'1\' NOT NULL, CHANGE inProcessing inProcessing TINYINT(1) DEFAULT \'0\' NOT NULL');
         $this->addSql('ALTER TABLE Project ADD CONSTRAINT FK_E00EE9723D4460D4 FOREIGN KEY (sourceRepo_id) REFERENCES SourceRepo (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE Project ADD CONSTRAINT FK_E00EE972DEF3CE4C FOREIGN KEY (parentUser_id) REFERENCES User (id) ON DELETE SET NULL');
+
+        // need to use this UPDATE statement as TEXT columns can not have DEFAULT values
+        $this->addSql('UPDATE SourceRepo SET source_stats_languageStats = \'a:0:{}\'');
     }
 
     /**
