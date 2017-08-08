@@ -7,9 +7,16 @@
 
 set -e
 set -x
-cd /var/www/lc/site
+
+# Start LibreCores RabbitMQ
+# Duplicates service on common deployment
+source /opt/lc/site/app/config/symfony-env.sh
+/usr/bin/php /var/www/lc/site/bin/console rabbitmq:consumer -w -l 256 -m 250 update_project_info &
 
 # Install dependencies through composer
+ps aux | grep mysql
+
+cd /var/www/lc/site
 composer install
 
 # Migrate database

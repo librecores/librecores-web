@@ -116,12 +116,15 @@
     group: root
     mode: 0644
   notify: restart librecores-rabbitmq
+  when: not is_docker_environment
 
 - name: reload systemd to pick up changes in Unit files
   command: systemctl daemon-reload
+  when: not is_docker_environment
 
 - name: ensure librecores-rabbitmq is running (and enable it at boot)
   service: name=librecores-rabbitmq state=started enabled=yes
+  when: not is_docker_environment
 
 # run this last to ensure all deployment-created directories are covered
 - name: Ensure directory permissions of Symfony log and cache directories
@@ -139,6 +142,7 @@
 - name: Restart RabbitMQ message handlers
   command: /bin/true
   notify: restart librecores-rabbitmq
+  when: not is_docker_environment
 
 # Install librecores planet generator
 - name: Install extra packages for librecores-planet
@@ -172,7 +176,12 @@
 
 - name: Restart all services (we need them from now on)
   meta: flush_handlers
-
+  when: not is_docker_environment
+  
+- name: Restart   
+  service: 
+  when: not is_docker_environment
+  
 - name: Run all database migrations (also creates initial tables if necessary)
   sudo: yes
   sudo_user: "{{ web_user }}"

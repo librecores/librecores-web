@@ -22,22 +22,40 @@
 
 FROM ubuntu:16.04
 MAINTAINER Oleg Nenashev <o.v.nenashev@gmail.com>
-LABEL Description=" LibreCores Web image for development needs" Vendor="Librecores" Version="0.1-alpha-dev"
+LABEL Description="LibreCores Web image for development needs" Vendor="Librecores" Version="0.1-alpha-dev"
 
-RUN apt-get update && apt-get update && apt-get install -y git curl
+RUN apt-get update && apt-get install -y software-properties-common && apt-add-repository ppa:ansible/ansible && apt-get update && apt-get install -y git curl ansible
+
+# Web User
+RUN useradd -ms /bin/bash webuser
+
+# Embedded Web Contents
+# They are not supposed to be actually used when you 
+# COPY site /var/www/lc/site
+# COPY planet /var/www/lc/planet
 
 # Ansible
-RUN apt-get install -y software-properties-common && apt-add-repository ppa:ansible/ansible && apt-get update && apt-get install -y ansible
 WORKDIR /opt/lc
 COPY ansible /opt/lc/ansible
+COPY sql/dev_fixtures_blog.sql /var/www/lc/sql/dev_fixtures_blog.sql
 # TODO XDG_RUNTIME_DIR is not set for the root user 
 # Fails at TASK [web : reload systemd to pick up changes in Unit files]
-RUN systemctl daemon-reload
-RUN mkdir /opt/lc/docker && touch /opt/lc/docker/docker.marker && ansible-playbook -i "localhost," -c local ./ansible/dev-vagrant.yml
+#RUN systemctl daemon-reload
+RUN mkdir /opt/lc/docker && touch /opt/lc/docker/docker.marker && ansible-playbook -i "localhost," --extra-vars "ansible_ssh_user=webuser" -c local ./ansible/dev-vagrant.yml
 
 # LibreCores content mount point
 VOLUME /var/www/lc
 EXPOSE 80 3306
 COPY docker/run.sh /opt/lc/docker/run.sh
+RUN chmod 755 /opt/lc/docker/run.sh
+RUN cp /opt/lc/site/app/config/parameters.yml /opt/lc/site/app/config/parameters.yml.dist
+RUN chmod 777 /opt/lc/site/app/config/parameters.yml && chmod 777 /opt/lc/site/app/config/parameters.yml.dist
+
+
+# Run
+USER root
+RUN mysqld -user=root -password=password &
+
+USER webuser
 CMD ["/opt/lc/docker/run.sh"]
 

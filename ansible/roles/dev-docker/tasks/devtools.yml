@@ -1,0 +1,7 @@
+---
+# Development tools on the web nodes
+- name: Download PHPUnit to /usr/local/bin/phpunit
+  get_url:
+    url: https://phar.phpunit.de/phpunit.phar
+    dest: /usr/local/bin/phpunit
+    mode: 0755
