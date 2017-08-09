@@ -3,6 +3,7 @@
 namespace Librecores\ProjectRepoBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Librecores\ProjectRepoBundle\Entity\Commit;
 use Librecores\ProjectRepoBundle\Entity\Contributor;
 use Librecores\ProjectRepoBundle\Entity\SourceRepo;
 use Librecores\ProjectRepoBundle\Util\Dates;
@@ -20,7 +21,7 @@ class CommitRepository extends EntityRepository
      * Get the latest commit on the database
      *
      * @param SourceRepo $repo
-     * @return mixed
+     * @return Commit|mixed
      */
     public function getLatestCommit(SourceRepo $repo)
     {

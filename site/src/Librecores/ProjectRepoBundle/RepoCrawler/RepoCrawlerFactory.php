@@ -72,7 +72,7 @@ class RepoCrawlerFactory
     {
         // XXX: Investigate a better method for IoC in this situation
         if ($repo instanceof GitSourceRepo) {
-            if(GithubRepoCrawler::isGithubRepoUrl($repo->getUrl())) {
+            if (GithubRepoCrawler::isGithubRepoUrl($repo->getUrl())) {
                 return new GithubRepoCrawler($repo,
                                              $this->markupConverter, $this->processCreator,
                                              $this->manager, $this->logger, $this->ghApi);

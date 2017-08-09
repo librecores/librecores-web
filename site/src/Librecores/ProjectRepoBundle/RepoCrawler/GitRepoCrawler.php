@@ -87,7 +87,7 @@ class GitRepoCrawler extends RepoCrawler
     public function __destruct()
     {
         if ($this->repoClonePath !== null) {
-            $this->logger->debug('Cleaning up repo clone directory ' . $this->repoClonePath);
+            $this->logger->debug('Cleaning up repo clone directory '.$this->repoClonePath);
             FileUtil::recursiveRmdir($this->repoClonePath);
         }
     }
@@ -106,8 +106,10 @@ class GitRepoCrawler extends RepoCrawler
      */
     public function updateSourceRepo()
     {
+        $this->logger->info('Fetching commits for the repository '.$this->repo->getId().' of project '.
+                            $this->repo->getProject()->getFqname());
         $commitRepository = $this->manager->getRepository(Commit::class);
-        $lastCommit = $commitRepository->getLatestCommit($this->repo);
+        $lastCommit       = $commitRepository->getLatestCommit($this->repo);
 
         // determine if our latest commit exists and fetch new commits since
         // what we have on DB
@@ -127,6 +129,8 @@ class GitRepoCrawler extends RepoCrawler
         }
 
         $this->manager->persist($this->repo);
+
+        // we need a explicit flush here because we query commit data later
         $this->manager->flush();
     }
 
@@ -137,17 +141,29 @@ class GitRepoCrawler extends RepoCrawler
     {
         $project = $this->repo->getProject();
         if ($project === null) {
-            $this->logger->debug('No project associated with source ' .
-                'repository ' . $this->repo->getId());
+            $this->logger->debug('No project associated with source '.
+                                 'repository '.$this->repo->getId());
 
             return false;
         }
 
-        $this->updateDescriptionText();
-        $this->updateLicenseText();
+        if ($project->getDescriptionTextAutoUpdate()) {
+            $project->setDescriptionText($this->getDescriptionSafeHtml());
+        }
+        if ($project->getLicenseTextAutoUpdate()) {
+            $project->setLicenseText($this->getLicenseTextSafeHtml());
+        }
+
+        /** @var Commit $latestCommit */
+        $latestCommit = $this->manager
+            ->getRepository('LibrecoresProjectRepoBundle:Commit')
+            ->getLatestCommit($this->repo);
+
+        if ($latestCommit) {
+            $project->setDateLastActivityOccured($latestCommit->getDateCommitted());
+        }
 
         $this->manager->persist($project);
-        $this->manager->flush();
 
         return true;
     }
@@ -181,15 +197,15 @@ class GitRepoCrawler extends RepoCrawler
 
         $cwd = $this->getRepoClonePath();
 
-        $this->logger->info('Checking commits in ' . $cwd);
+        $this->logger->info('Checking commits in '.$cwd);
 
         $process = $this->processCreator->createProcess('git',
-            [
-                'merge-base',
-                '--is-ancestor',
-                $commitId,
-                'HEAD',
-            ]);
+                                                        [
+                                                            'merge-base',
+                                                            '--is-ancestor',
+                                                            $commitId,
+                                                            'HEAD',
+                                                        ]);
         $process->setWorkingDirectory($cwd);
         $this->executeProcess($process);
         $code = $process->getExitCode();
@@ -200,7 +216,7 @@ class GitRepoCrawler extends RepoCrawler
             if (1 === $code || 128 === $code) {
                 $value = false;    // commit does not exist in repository or branch
             } else {
-                throw new \RuntimeException("Unable to fetch commits from $cwd : " . $process->getErrorOutput());
+                throw new \RuntimeException("Unable to fetch commits from $cwd : ".$process->getErrorOutput());
             }
         }
 
@@ -210,14 +226,14 @@ class GitRepoCrawler extends RepoCrawler
     }
 
     /**
-     * Update all commits in the repository since a specified commit ID or entire commit
-     * history if not specified.
+     * Get all commits in the repository since a specified commit ID or all if
+     * not specified.
      *
      * @param string|null $sinceCommitId ID of commit after which the commits are to be
      *                              returned
      * @return int Commits updated
      */
-    protected function updateCommits(?string $sinceCommitId = null): int
+    protected function updateCommits(?string $sinceCommitId = null) : int
     {
         $this->logger->info('Fetching commits for the repository ' . $this->repo->getId() . ' of project ' .
                             $this->repo->getProject()->getFqname());
@@ -252,7 +268,7 @@ class GitRepoCrawler extends RepoCrawler
     protected function countLinesOfCode()
     {
         $process = $this->processCreator->createProcess('cloc',
-            ['--json', '--skip-uniqueness', $this->getRepoClonePath()]
+                                                        ['--json', '--skip-uniqueness', $this->getRepoClonePath()]
         );
 
         $this->mustExecuteProcess($process);
@@ -262,10 +278,10 @@ class GitRepoCrawler extends RepoCrawler
 
         $sourceStats = $this->repo->getSourceStats();
         $sourceStats->setAvailable(true)
-            ->setTotalFiles($cloc['header']['n_files'])
-            ->setTotalLinesOfCode($cloc['SUM']['code'])
-            ->setTotalBlankLines($cloc['SUM']['blank'])
-            ->setTotalLinesOfComments($cloc['SUM']['comment']);
+                    ->setTotalFiles($cloc['header']['n_files'])
+                    ->setTotalLinesOfCode($cloc['SUM']['code'])
+                    ->setTotalBlankLines($cloc['SUM']['blank'])
+                    ->setTotalLinesOfComments($cloc['SUM']['comment']);
 
         unset($cloc['header'], $cloc['SUM']);
 
@@ -273,37 +289,15 @@ class GitRepoCrawler extends RepoCrawler
             $languageStat = new LanguageStat();
 
             $languageStat->setLanguage($lang)
-                ->setFileCount($value['nFiles'])
-                ->setLinesOfCode($value['code'])
-                ->setCommentLineCount($value['comment'])
-                ->setBlankLineCount($value['blank']);
+                         ->setFileCount($value['nFiles'])
+                         ->setLinesOfCode($value['code'])
+                         ->setCommentLineCount($value['comment'])
+                         ->setBlankLineCount($value['blank']);
             $sourceStats->addLanguageStat($languageStat);
         }
 
         $this->repo->setSourceStats($sourceStats);
         $this->manager->persist($this->repo);
-    }
-
-    /**
-     * Update project description text
-     */
-    protected function updateDescriptionText()
-    {
-        $project = $this->repo->getProject();
-        if ($project->getDescriptionTextAutoUpdate()) {
-            $project->setDescriptionText($this->getDescriptionSafeHtml());
-        }
-    }
-
-    /**
-     * Update project license text
-     */
-    protected function updateLicenseText()
-    {
-        $project = $this->repo->getProject();
-        if ($project->getLicenseTextAutoUpdate()) {
-            $project->setLicenseText($this->getLicenseTextSafeHtml());
-        }
     }
 
     /**
@@ -319,8 +313,8 @@ class GitRepoCrawler extends RepoCrawler
     protected function getDescriptionSafeHtml(): ?string
     {
         $descriptionFile = FileUtil::findFile($this->getRepoClonePath(),
-            self::FILES_DESCRIPTION,
-            self::FILE_EXTENSIONS);
+                                              self::FILES_DESCRIPTION,
+                                              self::FILE_EXTENSIONS);
 
         if ($descriptionFile === false) {
             $this->logger->debug('No description file found in the repository.');
@@ -328,13 +322,13 @@ class GitRepoCrawler extends RepoCrawler
             return null;
         }
 
-        $this->logger->debug('Using file ' . $descriptionFile . ' as description.');
+        $this->logger->debug('Using file '.$descriptionFile.' as description.');
 
         try {
             $sanitizedHtml = $this->markupConverter->convertFile($descriptionFile);
         } catch (\Exception $e) {
-            $this->logger->error("Unable to convert $descriptionFile to HTML " .
-                "for license text.");
+            $this->logger->error("Unable to convert $descriptionFile to HTML ".
+                                 "for license text.");
 
             return null;
         }
@@ -355,8 +349,8 @@ class GitRepoCrawler extends RepoCrawler
     protected function getLicenseTextSafeHtml(): ?string
     {
         $licenseFile = FileUtil::findFile($this->getRepoClonePath(),
-            self::FILES_LICENSE,
-            self::FILE_EXTENSIONS);
+                                          self::FILES_LICENSE,
+                                          self::FILE_EXTENSIONS);
 
         if ($licenseFile === false) {
             $this->logger->debug('Found no file containing the license text.');
@@ -369,8 +363,8 @@ class GitRepoCrawler extends RepoCrawler
         try {
             $sanitizedHtml = $this->markupConverter->convertFile($licenseFile);
         } catch (\Exception $e) {
-            $this->logger->error("Unable to convert $licenseFile.' to HTML " .
-                "for license text.");
+            $this->logger->error("Unable to convert $licenseFile.' to HTML ".
+                                 "for license text.");
 
             return null;
         }
@@ -385,15 +379,15 @@ class GitRepoCrawler extends RepoCrawler
      */
     private function cloneRepo()
     {
-        $repoUrl = $this->repo->getUrl();
+        $repoUrl             = $this->repo->getUrl();
         $this->repoClonePath = FileUtil::createTemporaryDirectory('lc-gitrepocrawler-');
 
-        $this->logger->info('Cloning repository: ' . $repoUrl);
+        $this->logger->info('Cloning repository: '.$repoUrl);
 
         $process = $this->processCreator->createProcess('git', ['clone', $repoUrl, $this->repoClonePath]);
         $process->setTimeout(static::TIMEOUT_GIT_CLONE);
         $this->mustExecuteProcess($process);
-        $this->logger->debug('Cloned repository ' . $repoUrl);
+        $this->logger->debug('Cloned repository '.$repoUrl);
     }
 
     /**
@@ -402,15 +396,15 @@ class GitRepoCrawler extends RepoCrawler
      * @param string $outputString raw output from git
      * @return int
      */
-    private function parseCommits(string $outputString): int
+    private function parseCommits(string $outputString) : int
     {
-        $this->logger->info('Parsing commits for repo ' . $this->getRepoClonePath());
+        $this->logger->info('Parsing commits for repo '.$this->getRepoClonePath());
 
         $outputString = preg_replace('/^\h*\v+/m', '', trim($outputString));    // remove blank lines
-        $output = explode("\n", $outputString);  // explode lines into array
+        $output       = explode("\n", $outputString);  // explode lines into array
 
         $commits = []; // stores the array of commits
-        $len = count($output);
+        $len     = count($output);
         for ($i = 0; $i < $len; $i++) {
 
             // Every commit has 4 parts, id, author name, email, commit timestamp
@@ -419,20 +413,20 @@ class GitRepoCrawler extends RepoCrawler
             $commitMatches = [];
             if (preg_match('/^([\da-f]+)\|(.+)\|(.+@.+)\|(.+)$/', $output[$i], $commitMatches)) {
                 $contributor = $this->manager->getRepository('LibrecoresProjectRepoBundle:Contributor')
-                    ->getContributorForRepository($this->repo,
-                        $commitMatches[3], $commitMatches[2]);
-                $date = new \DateTime($commitMatches[4]);
+                                             ->getContributorForRepository($this->repo,
+                                                                           $commitMatches[3], $commitMatches[2]);
+                $date        = new \DateTime($commitMatches[4]);
                 $date->setTimezone(new \DateTimeZone('UTC'));
                 $commit = new Commit();
                 $commit->setCommitId($commitMatches[1])
-                    ->setSourceRepo($this->repo)
-                    ->setDateCommitted($date)
-                    ->setContributor($contributor);
+                       ->setSourceRepo($this->repo)
+                       ->setDateCommitted($date)
+                       ->setContributor($contributor);
 
                 $modificationMatches = [];
                 if ($i < $len - 1 &&
                     preg_match('/(\d+) files? changed(?:, (\d+) insertions?\(\+\))?(?:, (\d+) deletions?\(-\))?/',
-                        $output[$i + 1], $modificationMatches)) {
+                               $output[$i + 1], $modificationMatches)) {
                     $commit->setFilesModified($modificationMatches[1]);
 
                     if (array_key_exists(2, $modificationMatches) && strlen($modificationMatches[2])) {
@@ -448,7 +442,7 @@ class GitRepoCrawler extends RepoCrawler
             }
         }
         $count = count($commits);
-        $this->logger->debug('Parsed ' . $count . ' commits for repo ' . $this->getRepoClonePath());
+        $this->logger->debug('Parsed '.$count.' commits for repo '.$this->getRepoClonePath());
 
         return $count;
     }
@@ -459,9 +453,9 @@ class GitRepoCrawler extends RepoCrawler
      */
     private function executeProcess(Process $process)
     {
-        $this->logger->debug('Executing ' . $process->getCommandLine() . ' in ' . $process->getWorkingDirectory());
+        $this->logger->debug('Executing '.$process->getCommandLine().' in '.$process->getWorkingDirectory());
         $process->run();
-        $this->logger->debug('Process exited with status ' . $process->getExitCode());
+        $this->logger->debug('Process exited with status '.$process->getExitCode());
     }
 
     /**
@@ -471,9 +465,9 @@ class GitRepoCrawler extends RepoCrawler
      */
     private function mustExecuteProcess(Process $process)
     {
-        $this->logger->debug('Executing ' . $process->getCommandLine() . ' in ' . $process->getWorkingDirectory());
+        $this->logger->debug('Executing '.$process->getCommandLine().' in '.$process->getWorkingDirectory());
         $process->mustRun();
-        $this->logger->debug('Process exited with status ' . $process->getExitCode());
+        $this->logger->debug('Process exited with status '.$process->getExitCode());
     }
 
 }

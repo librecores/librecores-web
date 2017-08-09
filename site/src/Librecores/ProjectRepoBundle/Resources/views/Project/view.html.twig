@@ -92,9 +92,9 @@
       <br/>
       {% endif %}
 
-      {% if metadata.latestCommit %}
+      {% if project.dateLastActivityOccured %}
         <i class="fa fa-refresh" aria-hidden="true"></i>
-        <span>Last updated {{ metadata.latestCommit.dateCommitted | time_diff }}</span>
+        <span>Last updated {{ project.dateLastActivityOccured | time_diff }}</span>
         <br/>
       {% endif %}
 
@@ -106,6 +106,12 @@
       <i class="fa fa-bookmark" aria-hidden="true"></i>
       <span>Started {{ metadata.firstCommit.dateCommitted | time_diff }}</span>
       <br/>
+      {% endif %}
+
+      {% if metadata.latestCommit %}
+        <i class="fa fa-refresh" aria-hidden="true"></i>
+        <span>Last code update {{ metadata.latestCommit.dateCommitted | time_diff }}</span>
+        <br/>
       {% endif %}
 
       {% if project.sourceRepo.sourceStats.available %}
@@ -121,10 +127,40 @@
         </p> #}
       {% endif %}
 
-      {% if metadata.commitCount %}
-      <i class="fa fa-info-circle" aria-hidden="true"></i>
-      <span>{% transchoice metadata.commitCount %}1 commit|%count% commits{% endtranschoice %} by {% transchoice metadata.contributorCount %}1 contributor|%count% contributors{% endtranschoice %}</span>
+      {% if project.openIssues %}
+      <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+      <span>{% transchoice project.openIssues %}1 open issue|%count% open issues{% endtranschoice %}</span>
       <br/>
+      {% endif %}
+
+      {% if project.openPullRequests %}
+        <i class="fa fa-code-fork librecores-icon-pr" aria-hidden="true"></i>
+        <span>{% transchoice project.openPullRequests %}1 open pull request|%count% open pull requests{% endtranschoice %}</span>
+        <br/>
+      {% endif %}
+
+      {% if project.forks %}
+        <i class="fa fa-code-fork" aria-hidden="true"></i>
+        <span>{% transchoice project.forks %}1 fork|%count% forks{% endtranschoice %}</span>
+        <br/>
+      {% endif %}
+
+      {% if project.watchers %}
+        <i class="fa fa-eye" aria-hidden="true"></i>
+        <span>{% transchoice project.watchers %}1 watcher|%count% watchers{% endtranschoice %}</span>
+        <br/>
+      {% endif %}
+
+      {% if project.stars %}
+        <i class="fa fa-star-o" aria-hidden="true"></i>
+        <span>{% transchoice project.stars %}1 star|%count% stars{% endtranschoice %}</span>
+        <br/>
+      {% endif %}
+
+      {% if metadata.commitCount %}
+        <i class="fa fa-info-circle" aria-hidden="true"></i>
+        <span>{% transchoice metadata.commitCount %}1 commit|%count% commits{% endtranschoice %} by {% transchoice metadata.contributorCount %}1 contributor|%count% contributors{% endtranschoice %}</span>
+        <br/>
       {% endif %}
 
       <div class="librecores-project-contributor-avatar-box">
