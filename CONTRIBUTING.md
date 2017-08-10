@@ -16,8 +16,32 @@
 
 
 ## Get a development environment
+
+### Classic Vagrant flow
+
 Read the [README](README.md) in this repository for more information how to
 get started.
+
+### Docker Flow
+
+:exclamation: Docker development flow is under...  development.
+It may misbehave in some cases, and the performance is far from the desired level.
+Use with caution.
+The single-container flow is also not designed for the production use.
+
+#### Building locally
+
+```shell
+docker build -t librecores/librecores-web-dev .
+```
+
+#### Running the container
+
+The sample below runs LibreCores Web in a single container.
+
+```shell
+docker run --rm -p 8080:80 -p 15672:15672 -it -v ${YOUR_LIBRECORES_WEB_REPO}:/var/www/lc librecores/librecores-web-dev
+```
 
 ## How to contribute
 - Please usually open an issue on GitHub, or assign an existing one to yourself
