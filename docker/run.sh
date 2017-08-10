@@ -65,6 +65,7 @@ else
   php bin/console doctrine:migrations:migrate -n
   php bin/console doctrine:fixtures:load -n
   php bin/console librecores:update-repos
+  php bin/console cache:warmup
   
   echo "Initializing LibreCores Planet data..."
   cd /var/www/lc/planet
