@@ -54,8 +54,6 @@ RUN chmod 777 /opt/lc/site/app/config/parameters.yml && chmod 777 /opt/lc/site/a
 
 # Run
 USER root
-RUN mysqld -user=root -password=password &
 
-USER webuser
 CMD ["/opt/lc/docker/run.sh"]
 
