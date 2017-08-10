@@ -36,7 +36,8 @@ else
   done
   # Composer will fail without DB anyway
   
-  rabbitmqctl start_app
+  #TODO: start Rabbit
+  # rabbitmqctl start_app
   /usr/bin/php /var/www/lc/site/bin/console rabbitmq:consumer -w -l 256 -m 250   update_project_info &
 
   # Install dependencies through composer
@@ -50,6 +51,6 @@ else
   # sudo_user: "{{ web_user }}"
   # environment: "{{ symfony_config }}"
   
-  sleep 100500
+  exec sleep 100500
 fi
 
