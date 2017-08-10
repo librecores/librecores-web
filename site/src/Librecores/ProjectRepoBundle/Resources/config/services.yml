@@ -14,12 +14,6 @@ services:
             - '@logger'
             - '@exercise_html_purifier.default'
 
-    librecores.repocrawlerfactory:
-        class: Librecores\ProjectRepoBundle\RepoCrawler\RepoCrawlerFactory
-        arguments:
-            - '@librecores.util.markuptohtmlconverter'
-            - '@logger'
-
     librecores.util.githubapiservice:
         class: Librecores\ProjectRepoBundle\Util\GithubApiService
         arguments:
@@ -100,3 +94,34 @@ services:
             - { name: security.voter }
         public: false
 
+    librecores.repository.contributor:
+        public: false
+        class: Librecores\ProjectRepoBundle\Repository\ContributorRepository
+        factory: ['@doctrine.orm.default_entity_manager', 'getRepository']
+        arguments:
+            - Librecores\ProjectRepoBundle\Entity\Contributor
+
+    librecores.repository.commit:
+        public: false
+        class: Librecores\ProjectRepoBundle\Repository\CommitRepository
+        factory: ['@doctrine.orm.default_entity_manager', 'getRepository']
+        arguments:
+            - Librecores\ProjectRepoBundle\Entity\Commit
+
+    librecores.process_creator:
+        public: false
+        class: Librecores\ProjectRepoBundle\Util\ProcessCreator
+
+    librecores.repocrawlerfactory:
+        class: Librecores\ProjectRepoBundle\RepoCrawler\RepoCrawlerFactory
+        arguments:
+            - '@librecores.util.markuptohtmlconverter'
+            - '@logger'
+            - '@doctrine.orm.default_entity_manager'
+            - '@librecores.process_creator'
+
+    librecores.project_metrics_provider:
+        class: Librecores\ProjectRepoBundle\Doctrine\ProjectMetricsProvider
+        arguments:
+            - '@librecores.repository.commit'
+            - '@librecores.repository.contributor'

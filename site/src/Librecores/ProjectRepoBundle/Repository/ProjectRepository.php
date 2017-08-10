@@ -1,5 +1,5 @@
 <?php
-namespace Librecores\ProjectRepoBundle\Entity;
+namespace Librecores\ProjectRepoBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 

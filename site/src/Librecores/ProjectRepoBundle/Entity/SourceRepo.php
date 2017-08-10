@@ -1,6 +1,8 @@
 <?php
 namespace Librecores\ProjectRepoBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -24,6 +26,8 @@ abstract class SourceRepo
     const REPO_TYPE_SVN = 'svn';
 
     /**
+     * Unique ID to identify this entity in the database
+     *
      * @var integer
      *
      * @ORM\Column(name="id", type="integer")
@@ -49,6 +53,15 @@ abstract class SourceRepo
     protected $url;
 
     /**
+     * Project associated with this source repository
+     *
+     * @var Project
+     *
+     * @ORM\OneToOne(targetEntity="Project", mappedBy="sourceRepo", cascade={"persist"})
+     */
+    protected $project;
+
+    /**
      * URL of the web site where the repository contents can be viewed with a
      * regular web browser
      *
@@ -61,13 +74,42 @@ abstract class SourceRepo
     protected $webViewUrl = null;
 
     /**
-     * Project associated with this source repository
+     * Contributors of this source repository
      *
-     * @var Project
+     * @var Collection
      *
-     * @ORM\OneToOne(targetEntity="Project", mappedBy="sourceRepo", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="Contributor", mappedBy="sourceRepo",  cascade={"persist", "remove"},
+     *                orphanRemoval=true)
      */
-    protected $project;
+    protected $contributors;
+
+    /**
+     * Commits in this source repository
+     *
+     * @var Collection
+     *
+     * @ORM\OneToMany(targetEntity="Commit", mappedBy="sourceRepo", cascade={"persist", "remove"},
+     *                orphanRemoval=true)
+     */
+    protected $commits;
+
+    /**
+     * Statistics about the source code of this repository
+     * @var SourceStats
+     *
+     * @ORM\Embedded(class="SourceStats", columnPrefix="source_stats_")
+     */
+    protected $sourceStats;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->contributors = new ArrayCollection();
+        $this->commits = new ArrayCollection();
+        $this->sourceStats = new SourceStats();
+    }
 
     /**
      * Get the type of source repository
@@ -116,20 +158,20 @@ abstract class SourceRepo
     /**
      * Set project
      *
-     * @param \Librecores\ProjectRepoBundle\Entity\Project $project
+     * @param Project $project
      * @return SourceRepo
      */
-    public function setProject(\Librecores\ProjectRepoBundle\Entity\Project $project = null)
+    public function setProject(Project $project)
     {
         $this->project = $project;
-
+        $project->setSourceRepo($this);
         return $this;
     }
 
     /**
      * Get project
      *
-     * @return \Librecores\ProjectRepoBundle\Entity\Project
+     * @return Project
      */
     public function getProject()
     {
@@ -143,7 +185,7 @@ abstract class SourceRepo
      *
      * @return SourceRepo
      */
-    public function setWebViewUrl($webViewUrl)
+    public function setWebViewUrl(?string $webViewUrl)
     {
         $this->webViewUrl = $webViewUrl;
 
@@ -158,5 +200,98 @@ abstract class SourceRepo
     public function getWebViewUrl()
     {
         return $this->webViewUrl;
+    }
+
+    /**
+     * Add contributor
+     *
+     * @param Contributor $contributor
+     *
+     * @return SourceRepo
+     */
+    public function addContributor(Contributor $contributor)
+    {
+        $this->contributors[] = $contributor;
+
+        return $this;
+    }
+
+    /**
+     * Remove contributor
+     *
+     * @param Contributor $contributor
+     */
+    public function removeContributor(Contributor $contributor)
+    {
+        $this->contributors->removeElement($contributor);
+    }
+
+    /**
+     * Get contributors
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getContributors()
+    {
+        return $this->contributors;
+    }
+
+    /**
+     * Add commit
+     *
+     * @param Commit $commit
+     *
+     * @return SourceRepo
+     */
+    public function addCommit(Commit $commit)
+    {
+        $this->commits[] = $commit;
+
+        return $this;
+    }
+
+    /**
+     * Remove commit
+     *
+     * @param Commit $commit
+     */
+    public function removeCommit(Commit $commit)
+    {
+        $this->commits->removeElement($commit);
+    }
+
+    /**
+     * Get commits
+     *
+     * @return Collection
+     */
+    public function getCommits()
+    {
+        return $this->commits;
+    }
+
+
+    /**
+     * Set sourceStats
+     *
+     * @param SourceStats $sourceStats
+     *
+     * @return SourceRepo
+     */
+    public function setSourceStats(SourceStats $sourceStats)
+    {
+        $this->sourceStats = $sourceStats;
+
+        return $this;
+    }
+
+    /**
+     * Get sourceStats
+     *
+     * @return SourceStats
+     */
+    public function getSourceStats()
+    {
+        return $this->sourceStats;
     }
 }

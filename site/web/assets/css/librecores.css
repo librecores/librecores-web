@@ -293,6 +293,29 @@ h1 a:hover, h1 a:active {
   margin-top: 20px;
 }
 
+.librecores-project-infobox .librecores-project-contributor-avatar-box {
+  padding: 1em;
+}
+
+.librecores-project-infobox .librecores-project-contributor-avatar-box > .librecores-project-contributor-avatar {
+  border-radius: 2px;
+}
+
+.librecores-project-infobox .librecores-project-disclaimer {
+  font-size: 0.8em;
+  margin-top: 2em;
+  color: #666666;
+}
+
+.librecores-project-infobox .librecores-project-activity > p {
+  font-size: 0.8em;
+  margin-top: 5px;
+  color: #444;
+  text-align: center;
+}
+
+
+
 /*.panel-default > .panel-heading {
   font-weight: 600;
   font-size: 20px;

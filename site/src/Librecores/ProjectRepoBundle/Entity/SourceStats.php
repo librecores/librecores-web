@@ -1,118 +1,375 @@
 <?php
+
 namespace Librecores\ProjectRepoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * SourceStats
+ * Statistics about the source code of a repository
  *
- * Statistics about a source repository
+ * @author Amitosh Swain Mahapatra <amitosh.swain@gmail.com>
  *
- * @ORM\Table()
- * @ORM\Entity
+ * @ORM\Embeddable()
  */
 class SourceStats
 {
     /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
+     * Development by a small team with intermediate experience
+     * working on a project with less stringent requirements. Usually for small
+     * software projects.
      */
-    private $id;
-
-
-    /**
-     * @ORM\OneToMany(targetEntity="SourceStatsAuthor", mappedBy="sourceStats")
-     */
-    private $authors;
+    const DEVELOPMENT_TYPE_ORGANIC = 1;
 
     /**
-     * @ORM\OneToMany(targetEntity="SourceStatsCommitHistogram", mappedBy="sourceStats")
+     * Development by a sizable number of developers with mixed
+     * experience on various parts of the system. Requirements may be range from
+     * well-defined to rigid.
      */
-    private $commitHistogramEntries;
+    const DEVELOPMENT_TYPE_SEMI_DETACHED = 2;
 
     /**
-     * Constructor
+     * Development on projects with stringent requirements such as
+     * embedded projects.
      */
+    const DEVELOPMENT_TYPE_EMBEDDED = 3;
+
+    /**
+     * Is source stats available
+     *
+     * @var bool
+     *
+     * @ORM\Column(type="boolean")
+     */
+    private $available = false;
+
+    /**
+     * Total files in repository
+     *
+     * @var int
+     *
+     * @ORM\Column(type="integer")
+     */
+    private $totalFiles = 0;
+
+    /**
+     * Total lines of code in the repository
+     *
+     * @var int
+     *
+     * @ORM\Column(type="integer")
+     */
+    private $totalLinesOfCode = 0;
+
+    /**
+     * Total comment lines in the repository
+     *
+     * @var int
+     *
+     * @ORM\Column(type="integer")
+     */
+    private $totalLinesOfComments = 0;
+
+    /**
+     * Total blank lines in the repository
+     *
+     * @var int
+     *
+     * @ORM\Column(type="integer")
+     */
+    private $totalBlankLines = 0;
+
+    /**
+     * Stats about all other languages used by this repository
+     * @var LanguageStat[]
+     *
+     * @ORM\Column(type="array")
+     */
+    private $languageStats;
+
     public function __construct()
     {
-        $this->authors = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->commitHistogramEntries = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->languageStats = [];
     }
 
     /**
-     * Get id
-     *
-     * @return integer
+     * @return bool
      */
-    public function getId()
+    public function isAvailable(): bool
     {
-        return $this->id;
+        return $this->available;
     }
 
     /**
-     * Add authors
-     *
-     * @param \Librecores\ProjectRepoBundle\Entity\SourceStatsAuthor $authors
+     * @param bool $available
      * @return SourceStats
      */
-    public function addAuthor(\Librecores\ProjectRepoBundle\Entity\SourceStatsAuthor $authors)
+    public function setAvailable(bool $available)
     {
-        $this->authors[] = $authors;
+        $this->available = $available;
 
         return $this;
     }
 
     /**
-     * Remove authors
-     *
-     * @param \Librecores\ProjectRepoBundle\Entity\SourceStatsAuthor $authors
-     */
-    public function removeAuthor(\Librecores\ProjectRepoBundle\Entity\SourceStatsAuthor $authors)
-    {
-        $this->authors->removeElement($authors);
-    }
-
-    /**
-     * Get authors
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getAuthors()
-    {
-        return $this->authors;
-    }
-
-    /**
-     * Add commitHistogramEntries
-     *
-     * @param \Librecores\ProjectRepoBundle\Entity\SourceStatsCommitHistogram $commitHistogramEntries
+     * @param int $totalFiles
      * @return SourceStats
      */
-    public function addCommitHistogramEntry(\Librecores\ProjectRepoBundle\Entity\SourceStatsCommitHistogram $commitHistogramEntries)
+    public function setTotalFiles(int $totalFiles)
     {
-        $this->commitHistogramEntries[] = $commitHistogramEntries;
+        $this->totalFiles = $totalFiles;
 
         return $this;
     }
 
     /**
-     * Remove commitHistogramEntries
-     *
-     * @param \Librecores\ProjectRepoBundle\Entity\SourceStatsCommitHistogram $commitHistogramEntries
+     * @return int
      */
-    public function removeCommitHistogramEntry(\Librecores\ProjectRepoBundle\Entity\SourceStatsCommitHistogram $commitHistogramEntries)
+    public function getTotalFiles(): int
     {
-        $this->commitHistogramEntries->removeElement($commitHistogramEntries);
+        return $this->totalFiles;
     }
 
     /**
-     * Get commitHistogramEntries
-     *
-     * @return \Doctrine\Common\Collections\Collection
+     * @param int $totalLinesOfCode
+     * @return SourceStats
      */
-    public function getCommitHistogramEntries()
+    public function setTotalLinesOfCode(int $totalLinesOfCode)
     {
-        return $this->commitHistogramEntries;
+        $this->totalLinesOfCode = $totalLinesOfCode;
+
+        return $this;
     }
+
+    /**
+     * @return int
+     */
+    public function getTotalLinesOfCode(): int
+    {
+        return $this->totalLinesOfCode;
+    }
+
+    /**
+     * @param int $totalLinesOfComments
+     * @return SourceStats
+     */
+    public function setTotalLinesOfComments(int $totalLinesOfComments)
+    {
+        $this->totalLinesOfComments = $totalLinesOfComments;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTotalLinesOfComments(): int
+    {
+        return $this->totalLinesOfComments;
+    }
+
+    /**
+     * @param int $totalBlankLines
+     * @return SourceStats
+     */
+    public function setTotalBlankLines(int $totalBlankLines)
+    {
+        $this->totalBlankLines = $totalBlankLines;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTotalBlankLines(): int
+    {
+        return $this->totalBlankLines;
+    }
+
+    /**
+     * @param $language
+     * @return SourceStats
+     */
+    public function addLanguageStat(LanguageStat $language)
+    {
+        $this->languageStats[] = $language;
+
+        return $this;
+    }
+
+    /**
+     * @param $language
+     * @return bool
+     */
+    public function removeLanguageStat(LanguageStat $language)
+    {
+        if (($key = array_search($language, $this->languageStats)) !== false) {
+            unset($this->languageStats[$key]);
+
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Set languageStats
+     *
+     * @param LanguageStat[] $languageStats
+     *
+     * @return SourceStats
+     */
+    public function setLanguageStats($languageStats)
+    {
+        $this->languageStats = $languageStats;
+
+        return $this;
+    }
+
+    /**
+     * @return LanguageStat[]
+     */
+    public function getLanguageStats(): array
+    {
+        return $this->languageStats;
+    }
+
+    /**
+     * Get the total number of lines in the codebase
+     * @return int
+     */
+    public function getTotalLines(): int
+    {
+        return $this->totalLinesOfCode + $this->totalBlankLines + $this->totalLinesOfComments;
+    }
+
+    /**
+     * Get comment to code ratio
+     * @return float
+     */
+    public function getCommentToCodeRatio(): float
+    {
+        if (0 === $this->totalLinesOfComments) {
+            $ratio = 0;
+        } else {
+            $ratio = $this->totalLinesOfCode / $this->totalLinesOfComments;
+        }
+
+        return $ratio;
+    }
+
+    /**
+     * Get the most used language in this repository
+     *
+     * @return string|null the primary language of this repository or false if
+     *                      such information does not exist
+     */
+    public function getMostUsedLanguage() : ?string
+    {
+        $language = null;
+
+        // only sort if language entries are present
+        if (0 !== count($this->languageStats)) {
+            $langStats = $this->languageStats;
+
+            usort(
+                $langStats,
+                function (LanguageStat $a, LanguageStat $b) {
+                    // we compare using file count, not loc
+                    $aCount = $a->getFileCount();
+                    $bCount = $b->getFileCount();
+
+                    if ($aCount === $bCount) {
+                        return 0;
+                    }
+
+                    return ($aCount > $bCount) ? -1 : 1;
+                }
+            );
+
+            $language = $langStats[0]->getLanguage();
+        }
+
+        return $language;
+    }
+
+    // Estimation of project effort in man-months and development time in
+
+    // months according to Constructive Cost Model (COCOMO)
+    // https://en.wikipedia.org/wiki/COCOMO
+    // Basic COCOMO is used to calculate the effort and development values.
+
+    // References:
+
+    // Roger S. Pressman, 1997. Software Engineering - A Practitioner's Approach, Fourth Edition.
+
+    /**
+     * Get estimated effort in man-months
+     *
+     * @param int $type Development type of the repository
+     * @return float effort in man-months
+     */
+    public function getCocomoEffort(int $type = self::DEVELOPMENT_TYPE_EMBEDDED): float
+    {
+        $kLoc = $this->totalLinesOfCode / 1000;
+
+        switch ($type) {
+            case self::DEVELOPMENT_TYPE_ORGANIC:
+                $a = 2.4;
+                $b = 1.05;
+                break;
+            case self::DEVELOPMENT_TYPE_SEMI_DETACHED:
+                $a = 3.0;
+                $b = 1.12;
+                break;
+            case self::DEVELOPMENT_TYPE_EMBEDDED:
+                $a = 3.6;
+                $b = 1.2;
+                break;
+            default:
+                throw new \InvalidArgumentException('Invalid development type');
+        }
+
+        return $a * pow($kLoc, $b);
+    }
+
+
+    /**
+     * Get estimated duration in man-months
+     *
+     * @param int $type Development type of the repository
+     * @return float effort in man-months
+     */
+    public function getCocomoDuration(int $type = self::DEVELOPMENT_TYPE_EMBEDDED): float
+    {
+        $kLoc = $this->totalLinesOfCode / 1000;
+
+        switch ($type) {
+            case self::DEVELOPMENT_TYPE_ORGANIC:
+                $d = 0.35;
+                break;
+            case self::DEVELOPMENT_TYPE_SEMI_DETACHED:
+                $d = 0.38;
+                break;
+            case self::DEVELOPMENT_TYPE_EMBEDDED:
+                $d = 0.32;
+                break;
+            default:
+                throw new \InvalidArgumentException('Invalid development type');
+        }
+
+        return 2.5 * pow($kLoc, $d);
+    }
+
+    /**
+     * Get estimated number of developers
+     * @param int $type Development type of the repository
+     * @return int estimated number of developers
+     */
+    public function getCocomoTeamSize(int $type = self::DEVELOPMENT_TYPE_EMBEDDED): int
+    {
+        return ceil($this->getCocomoEffort($type) / $this->getCocomoDuration($type));
+    }
+
+    // TODO: Cost estimation by man-hours * median monthly wages of developers
 }

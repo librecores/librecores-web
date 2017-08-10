@@ -4,7 +4,7 @@ namespace Librecores\ProjectRepoBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Librecores\ProjectRepoBundle\Entity\SourceRepo;
+
 
 /**
  * A project
@@ -16,7 +16,7 @@ use Librecores\ProjectRepoBundle\Entity\SourceRepo;
  *     @ORM\UniqueConstraint(name="projectname_full",
  *         columns={"name", "parentUser_id", "parentOrganization_id"})
  * })
- * @ORM\Entity(repositoryClass="Librecores\ProjectRepoBundle\Entity\ProjectRepository")
+ * @ORM\Entity(repositoryClass="Librecores\ProjectRepoBundle\Repository\ProjectRepository")
  * @ORM\HasLifecycleCallbacks
  * @UniqueEntity(
  *     fields={"parentUser", "parentOrganization", "name"},
@@ -47,7 +47,7 @@ class Project
      * @var string
      *
      * @Assert\Choice(choices = {"ASSIGNED", "UNASSIGNED"})
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", options={"default" : Project::STATUS_ASSIGNED})
      */
     private $status = self::STATUS_ASSIGNED;
 
@@ -57,6 +57,7 @@ class Project
      * @var User
      *
      * @ORM\ManyToOne(targetEntity="User", inversedBy="projects")
+     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
      */
     private $parentUser;
 
@@ -66,6 +67,7 @@ class Project
      * @var Organization
      *
      * @ORM\ManyToOne(targetEntity="Organization", inversedBy="projects")
+     * @ORM\JoinColumn(nullable=true)
      */
     private $parentOrganization;
 
@@ -140,8 +142,8 @@ class Project
      * @Assert\Type(type="Librecores\ProjectRepoBundle\Entity\SourceRepo")
      * @Assert\Valid()
      *
-     * @ORM\OneToOne(targetEntity="SourceRepo", inversedBy="project", cascade={"persist"})
-     * @ORM\JoinColumn(name="sourceRepo_id", referencedColumnName="id", nullable=true)
+     * @ORM\OneToOne(targetEntity="SourceRepo", inversedBy="project", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(name="sourceRepo_id", referencedColumnName="id", nullable=true, onDelete="cascade")
      */
     private $sourceRepo;
 
@@ -170,7 +172,7 @@ class Project
      *
      * @var boolean
      *
-     * @ORM\Column(type="boolean", nullable=false)
+     * @ORM\Column(type="boolean", options={"default" : true})
      */
     private $licenseTextAutoUpdate = true;
 
@@ -189,7 +191,7 @@ class Project
      *
      * @var boolean
      *
-     * @ORM\Column(type="boolean", nullable=false)
+     * @ORM\Column(type="boolean", options={"default" : true})
      */
     private $descriptionTextAutoUpdate = true;
 
@@ -198,7 +200,7 @@ class Project
      *
      * @var boolean
      *
-     * @ORM\Column(type="boolean", nullable=false)
+     * @ORM\Column(type="boolean", options={"default" : false})
      */
     private $inProcessing = false;
 
@@ -209,9 +211,9 @@ class Project
      *
      * @see __construct()
      *
-     * @ORM\Column(type="datetime", nullable=false)
+     * @ORM\Column(type="datetime")
      */
-    private $dateAdded = false;
+    private $dateAdded;
 
     /**
      * The date when the metadata of this project (i.e. the fields in this
@@ -224,9 +226,9 @@ class Project
      *
      * @var \DateTime date/time in UTC
      *
-     * @ORM\Column(type="datetime", nullable=false)
+     * @ORM\Column(type="datetime")
      */
-    private $dateLastModified = false;
+    private $dateLastModified;
 
     /**
      * Constructor

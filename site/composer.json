@@ -37,7 +37,8 @@
 		"knplabs/github-api": "^2.3",
 		"php-http/guzzle6-adapter": "^1.1",
 		"symfony/cache": "^3.2",
-		"javiereguiluz/easyadmin-bundle": "^1.16"
+		"javiereguiluz/easyadmin-bundle": "^1.16",
+		"beberlei/DoctrineExtensions": "^1.0"
 	},
 	"scripts" : {
 		"post-install-cmd" : [
