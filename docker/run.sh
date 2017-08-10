@@ -16,6 +16,15 @@ service rabbitmq-server start
 service php7.1-fpm start
 service nginx start
 
+echo "Initializing RabbitMQ"
+export DEV_PASSWORD=password
+rabbitmqctl add_user admin "${DEV_PASSWORD}"
+rabbitmqctl set_user_tags admin administrator
+rabbitmqctl set_permissions -p / admin ".*" ".*" ".*"
+rabbitmqctl delete_user guest
+rabbitmqctl add_user librecores "${DEV_PASSWORD}"
+rabbitmqctl set_permissions -p / librecores ".*" ".*" ".*"
+
 if [ $# -eq 1 ]; then
   # if `docker run` only has one arguments, we assume user is running alternate command like `bash` to inspect the image
   echo "Executing custom command..."
@@ -31,7 +40,7 @@ else
   fi
   
   echo "Checking MySQL status..."
-  mysql=( mysql -uroot -ppassword )
+  mysql=( mysql -uroot -p"${DEV_PASSWORD}" )
   for i in {30..0}; do
     if echo 'SELECT 1' | "${mysql[@]}" &> /dev/null; then
       break
@@ -55,7 +64,7 @@ else
   echo "Initializing LibreCores data..."
   php bin/console doctrine:migrations:migrate -n
   php bin/console doctrine:fixtures:load -n
-  # php bin/console librecores:update-repos
+  php bin/console librecores:update-repos
   
   echo "Initializing LibreCores Planet data..."
   cd /var/www/lc/planet
