@@ -20,10 +20,14 @@ if [ $# -eq 1 ]; then
   echo "Executing custom command..."
   exec "$@"
 else
-  # Start LibreCores RabbitMQ
-  # Duplicates service on common deployment
-  source /opt/lc/site/app/config/symfony-env.sh
-  
+  export SYMFONY_ENV=dev
+  if [ -n "$SYMFONY_DEBUG" ]; then
+    echo "Running Symfony with SYMFONY_DEBUG=${SYMFONY_DEBUG}"
+    export SYMFONY_DEBUG=$SYMFONY_DEBUG
+  else
+    echo "Running Symfony without Debug"
+    export SYMFONY_DEBUG=0
+  fi
   
   echo "Checking MySQL status..."
   mysql=( mysql -uroot -ppassword )
