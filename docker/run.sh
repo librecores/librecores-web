@@ -11,7 +11,8 @@ set -x
 echo "Starting services..."
 echo "listen.allowed_clients = 127.0.0.1" >> /etc/php/7.1/fpm/pool.d/www.conf
 mysqld &
-rabbitmq-server &
+
+service rabbitmq-server start
 service php7.1-fpm start
 service nginx start
 
@@ -50,10 +51,15 @@ else
   cd /var/www/lc/site
   composer install
 
-  # Migrate database
+  # Migrate database and initialize test data
+  echo "Initializing LibreCores data..."
   php bin/console doctrine:migrations:migrate -n
-  # sudo_user: "{{ web_user }}"
-  # environment: "{{ symfony_config }}"
+  php bin/console doctrine:fixtures:load -n
+  # php bin/console librecores:update-repos
+  
+  echo "Initializing LibreCores Planet data..."
+  cd /var/www/lc/planet
+  /var/www/lc/planet/generate.sh
   
   exec sleep 100500
 fi
