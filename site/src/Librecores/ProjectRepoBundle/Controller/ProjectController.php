@@ -153,6 +153,7 @@ class ProjectController extends Controller
         $current = new \DateTimeImmutable();
 
         $metadata = [
+            'qualityScore' => $projectMetricsProvider->getCodeQualityScore($p),
             'latestCommit' => $projectMetricsProvider->getLatestCommit($p),
             'firstCommit' => $projectMetricsProvider->getFirstCommit($p),
             'contributorCount' => $projectMetricsProvider->getContributorsCount($p),

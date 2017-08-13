@@ -18,6 +18,14 @@
     {{ project.tagline }}
   </div>
   {% endif %}
+
+  <div class="project-metrics">
+    <span class="code-quality-score">
+      <i class="fa fa-star" aria-hidden></i>
+      <span class="sr-only">Rated</span>
+      {{ metadata.qualityScore }}
+    </span>
+  </div>
 </div>
 
 <div class="row">

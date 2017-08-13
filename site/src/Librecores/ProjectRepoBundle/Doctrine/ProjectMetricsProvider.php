@@ -4,6 +4,7 @@ namespace Librecores\ProjectRepoBundle\Doctrine;
 
 use Librecores\ProjectRepoBundle\Entity\Commit;
 use Librecores\ProjectRepoBundle\Entity\Contributor;
+use Librecores\ProjectRepoBundle\Entity\GitSourceRepo;
 use Librecores\ProjectRepoBundle\Entity\LanguageStat;
 use Librecores\ProjectRepoBundle\Entity\Project;
 use Librecores\ProjectRepoBundle\Repository\CommitRepository;
@@ -237,5 +238,97 @@ class ProjectMetricsProvider
         sort($result, SORT_NUMERIC);
 
         return $result;
+    }
+
+    /**
+     * @param Project $project
+     * @return float
+     */
+    public function getCodeQualityScore(Project $project) : float {
+        $score = 0;
+
+        if ($project->getSourceRepo() instanceof GitSourceRepo) {
+            $score += 1;
+        }
+
+        if (null !== $project->getIssueTracker()) {
+            $score += 2;
+        } else {
+            $score -= 1;
+        }
+
+        $lastActivity = $project->getDateLastActivityOccurred();
+
+        if ($lastActivity) {
+            $now        = new \DateTime();
+            $difference = $now->diff($lastActivity);
+
+            if ($difference->days < 30) {
+                $score += 1;
+            } else {
+                if ($difference->days < 180) {
+                    $score += 0.5;
+                } else {
+                    if ($difference->y < 1) {
+                        $score += 0.25;
+                    } else {
+                        $score -= -0.25;
+                    }
+                }
+            }
+        }
+
+        if ($project->getOpenIssues()) {
+            $score += 0.5;
+        }
+
+        if($project->getOpenPullRequests()) {
+            $score += 0.25;
+        }
+
+        // TODO: +0.5 if issues/PRs were closed within last month
+        $contributors = $this->getContributorsCount($project);
+        if ($contributors > 20) {
+            $score += 3;
+        } else if ($contributors > 8) {
+            $score += 1;
+        } else if ($contributors > 3) {
+            $score += 0.5;
+        } else {
+            $score -= 1;
+        }
+
+        if ($project->getSourceRepo()->getSourceStats()->getCommentToCodeRatio() > 0.2) {
+            $score += 2;
+        } else {
+            $score -= 1;
+        }
+
+        $stars = $project->getStars();
+
+        if ($stars > 10000) {
+            $score += 2.5;
+        } else if ($stars > 1000) {
+            $score += 1;
+        } else if ($stars > 100) {
+            $score += 0.5;
+        }
+
+        // TODO: +0.5 for release tags
+        // TODO: +0.5 for CHANGELOG
+
+        if ($project->getDescriptionText()) {
+            $score += 1;
+        } else {
+            $score -= 1;
+        }
+
+        if ($project->getLicenseText()) {
+            $score += 1;
+        } else {
+            $score -= 1;
+        }
+
+        return max($score, 0);
     }
 }
