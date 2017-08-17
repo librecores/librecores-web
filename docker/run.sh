@@ -10,8 +10,7 @@ set -x
 
 echo "Starting services..."
 echo "listen.allowed_clients = 127.0.0.1" >> /etc/php/7.1/fpm/pool.d/www.conf
-mkdir /opt/mysqld/
-echo mysqld -v 1>/opt/mysqld/log.txt 2>&1 &
+mysqld -v 1>/opt/mysqld/log.txt 2>&1 &
 
 service rabbitmq-server start
 service php7.1-fpm start
