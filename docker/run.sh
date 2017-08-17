@@ -10,7 +10,8 @@ set -x
 
 echo "Starting services..."
 echo "listen.allowed_clients = 127.0.0.1" >> /etc/php/7.1/fpm/pool.d/www.conf
-mysqld &
+mkdir /opt/mysqld/
+echo mysqld -v 1>/opt/mysqld/log.txt 2>&1 &
 
 service rabbitmq-server start
 service php7.1-fpm start
@@ -41,14 +42,29 @@ else
   
   echo "Checking MySQL status..."
   mysql=( mysql -uroot -p"${DEV_PASSWORD}" )
-  for i in {30..0}; do
+  MYSQL_START_TIMEOUT=${MYSQL_START_TIMEOUT:-30}
+  for i in {${MYSQL_START_TIMEOUT}..0}; do
     if echo 'SELECT 1' | "${mysql[@]}" &> /dev/null; then
       break
+    fi
+    if ! pgrep -x "mysqld" > /dev/null
+    then
+      echo "FATAL: mysqld is not running. mysqld log:"
+      cat /opt/mysqld/log.txt
+      exit 1
     fi
     echo "Waiting for MySQL to start ($i/30s)..."
     sleep 1
   done
-  # Composer will fail without DB anyway
+
+  # If MySQL fails to start within the timeout, print a user-friendly error
+  if echo 'SELECT 1' | "${mysql[@]}" &> /dev/null; then
+    echo "MySQL has successfully started"
+  else
+    echo "FATAL: MySQL failed to startup within the timeout (${MYSQL_START_TIMEOUT}s)"
+    exit 1
+  fi
+
   
   #TODO: start Rabbit
   # rabbitmqctl start_app

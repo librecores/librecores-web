@@ -43,6 +43,10 @@ The sample below runs LibreCores Web in a single container.
 docker run --rm -p 8080:80 -p 15672:15672 -it -v ${YOUR_LIBRECORES_WEB_REPO}:/var/www/lc librecores/librecores-web-dev
 ```
 
+Extra environment variable options:
+
+* `MYSQL_START_TIMEOUT` - MySQL Startup Timeout, seconds (default: 30s)
+
 ## How to contribute
 - Please usually open an issue on GitHub, or assign an existing one to yourself
   before starting development. This helps to track who's working on what.
