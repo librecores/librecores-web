@@ -5,6 +5,7 @@ namespace Librecores\ProjectRepoBundle\RepoCrawler;
 use Librecores\ProjectRepoBundle\Entity\Commit;
 use Librecores\ProjectRepoBundle\Entity\GitSourceRepo;
 use Librecores\ProjectRepoBundle\Entity\LanguageStat;
+use Librecores\ProjectRepoBundle\Entity\ProjectRelease;
 use Librecores\ProjectRepoBundle\Util\FileUtil;
 use Symfony\Component\Process\Process;
 
@@ -154,13 +155,22 @@ class GitRepoCrawler extends RepoCrawler
             $project->setLicenseText($this->getLicenseTextSafeHtml());
         }
 
+<<<<<<< HEAD
+=======
+        $this->updateReleases();
+
+>>>>>>> Extract releases
         /** @var Commit $latestCommit */
         $latestCommit = $this->manager
             ->getRepository('LibrecoresProjectRepoBundle:Commit')
             ->getLatestCommit($this->repo);
 
         if ($latestCommit) {
+<<<<<<< HEAD
             $project->setDateLastActivityOccured($latestCommit->getDateCommitted());
+=======
+            $project->setDateLastActivityOccurred($latestCommit->getDateCommitted());
+>>>>>>> Extract releases
         }
 
         $this->manager->persist($project);
@@ -235,9 +245,14 @@ class GitRepoCrawler extends RepoCrawler
      */
     protected function updateCommits(?string $sinceCommitId = null) : int
     {
+<<<<<<< HEAD
         $this->logger->info('Fetching commits for the repository ' .
             $this->repo->getId() . ' of project ' .
             $this->repo->getProject()->getFqname());
+=======
+        $this->logger->info('Fetching commits for the repository ' . $this->repo->getId() . ' of project ' .
+                            $this->repo->getProject()->getFqname());
+>>>>>>> Extract releases
 
         $args = ['log', '--reverse', '--format=%H|%aN|%aE|%aD', '--shortstat',];
         if (null !== $sinceCommitId) {
