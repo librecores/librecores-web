@@ -50,8 +50,10 @@ class RepoCrawlerFactory
      * @param GithubApiService $ghApi
      */
     public function __construct(MarkupToHtmlConverter $markupConverter,
-                                LoggerInterface $logger, ObjectManager $manager,
-                                ProcessCreator $processCreator, GithubApiService $ghApi)
+                                LoggerInterface $logger,
+                                ObjectManager $manager,
+                                ProcessCreator $processCreator,
+                                GithubApiService $ghApi)
     {
         $this->markupConverter = $markupConverter;
         $this->logger = $logger;
@@ -73,12 +75,22 @@ class RepoCrawlerFactory
         // XXX: Investigate a better method for IoC in this situation
         if ($repo instanceof GitSourceRepo) {
             if (GithubRepoCrawler::isGithubRepoUrl($repo->getUrl())) {
-                return new GithubRepoCrawler($repo,
-                                             $this->markupConverter, $this->processCreator,
-                                             $this->manager, $this->logger, $this->ghApi);
+                return new GithubRepoCrawler(
+                    $repo,
+                    $this->markupConverter,
+                    $this->processCreator,
+                    $this->manager,
+                    $this->logger,
+                    $this->ghApi
+                );
             } else {
-                return new GitRepoCrawler($repo,
-                    $this->markupConverter, $this->processCreator, $this->manager, $this->logger);
+                return new GitRepoCrawler(
+                    $repo,
+                    $this->markupConverter,
+                    $this->processCreator,
+                    $this->manager,
+                    $this->logger
+                );
             }
         }
 

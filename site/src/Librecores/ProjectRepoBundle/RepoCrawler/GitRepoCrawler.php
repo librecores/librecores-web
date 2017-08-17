@@ -235,8 +235,9 @@ class GitRepoCrawler extends RepoCrawler
      */
     protected function updateCommits(?string $sinceCommitId = null) : int
     {
-        $this->logger->info('Fetching commits for the repository ' . $this->repo->getId() . ' of project ' .
-                            $this->repo->getProject()->getFqname());
+        $this->logger->info('Fetching commits for the repository ' .
+            $this->repo->getId() . ' of project ' .
+            $this->repo->getProject()->getFqname());
 
         $args = ['log', '--reverse', '--format=%H|%aN|%aE|%aD', '--shortstat',];
         if (null !== $sinceCommitId) {

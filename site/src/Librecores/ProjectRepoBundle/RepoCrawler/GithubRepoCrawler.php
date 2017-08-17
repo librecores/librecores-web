@@ -47,14 +47,17 @@ class GithubRepoCrawler extends GitRepoCrawler
     private $githubRepoName;
     private $githubData;
 
-    public function __construct(SourceRepo $repo, MarkupToHtmlConverter $markupConverter,
-                                ProcessCreator $processCreator, ObjectManager $manager,
-                                LoggerInterface $logger, GithubApiService $ghApi)
+    public function __construct(SourceRepo $repo,
+                                MarkupToHtmlConverter $markupConverter,
+                                ProcessCreator $processCreator,
+                                ObjectManager $manager,
+                                LoggerInterface $logger,
+                                GithubApiService $ghApi)
     {
         parent::__construct($repo, $markupConverter, $processCreator, $manager, $logger);
         $this->githubApi = $ghApi;
         preg_match(static::GH_REGEX, $this->repo->getUrl(), $matches);
-        $this->githubUser     = $matches[1];
+        $this->githubUser = $matches[1];
         $this->githubRepoName = $matches[2];
     }
 
@@ -101,15 +104,18 @@ class GithubRepoCrawler extends GitRepoCrawler
         $user = $this->repo->getProject()->getParentUser();
 
         if (null === $user) {
-            $user = $this->repo->getProject()->getParentOrganization()->getCreator();
+            $user = $this->repo->getProject()
+                ->getParentOrganization()->getCreator();
         }
 
-        $this->githubClient = $this->githubApi->getAuthenticatedClientForUser($user);
-        if (null !== $this->githubClient) {
-            return $this->githubClient;
-        } else {
+        $this->githubClient = $this->githubApi
+            ->getAuthenticatedClientForUser($user);
+
+        if (null === $this->githubClient) {
             throw new \Exception('GitHub access token not available');
         }
+
+        return $this->githubClient;
     }
 
     /**
@@ -161,13 +167,13 @@ QUERY;
 
         $res = $client->graphql()->execute($query, $variables);
 
-        if (!array_key_exists('errors', $res)) {
-            $this->githubData = $res['data']['repository'];
-
-            return $this->githubData;
-        } else {
+        if (array_key_exists('errors', $res)) {
             throw new CrawlerException($this->repo, $res['errors'][0]['message']);
         }
+
+        $this->githubData = $res['data']['repository'];
+
+        return $this->githubData;
 
     }
 
@@ -177,7 +183,7 @@ QUERY;
     protected function updateGithubMetrics()
     {
         try {
-            $data    = $this->getGithubData();
+            $data = $this->getGithubData();
             $project = $this->repo->getProject();
 
             $project->setForks($data['forks']['totalCount']);
@@ -197,7 +203,7 @@ QUERY;
             $this->logger->info('Fetched GitHub metrics successfully');
         } catch (\Exception $ex) {
             $this->logger->error('Unable to fetch data from Github: '
-                                 .$ex->getMessage());
+                . $ex->getMessage());
         }
     }
 }

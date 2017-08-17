@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: amitosh
- * Date: 13/8/17
- * Time: 7:29 PM
- */
 
 namespace Librecores\ProjectRepoBundle\RepoCrawler;
 
@@ -21,9 +15,11 @@ class CrawlerException extends \Exception
      * @param SourceRepo $repository repository on which the crawl error occured
      * @param string $message the error message
      * @param int $code error code, if available
-     * @param Throwable|null $previous the error/exception that resulted this exception
+     * @param Throwable|null $previous the error/exception that
+     *                                 resulted this exception
      */
-    public function __construct(SourceRepo $repository, $message = "", $code = 0, Throwable $previous = null)
+    public function __construct(SourceRepo $repository, $message = "",
+                                $code = 0, Throwable $previous = null)
     {
         $this->repository = $repository;
         parent::__construct('Error during crawling repository '
