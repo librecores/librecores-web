@@ -18,14 +18,6 @@
     {{ project.tagline }}
   </div>
   {% endif %}
-
-  <div class="project-metrics">
-    <span class="code-quality-score">
-      <i class="fa fa-star" aria-hidden></i>
-      <span class="sr-only">Rated</span>
-      {{ metadata.qualityScore }}
-    </span>
-  </div>
 </div>
 
 <div class="row">
@@ -67,6 +59,14 @@
 <div class="col-sm-4">
   <div class="librecores-project-infobox" style="background-color: #f7f7f7; padding: 10px; border-radius: 3px;">
     <div><b>Data Sheet</b></div>
+    <div class="code-quality-score">
+      {% for _ in range(1,metadata.qualityScore) %}
+      <span class="fa fa-2x fa-star" aria-hidden></span>
+      {% endfor %}
+      {% for _ in range(metadata.qualityScore + 1, 5) %}
+      <span class="fa fa-2x fa-star-o" aria-hidden></span>
+      {% endfor %}
+    </div>
     <div>
       {% if project.projectUrl %}
       <i class="fa fa-home" aria-hidden="true"></i>
@@ -116,21 +116,18 @@
         <br/>
       {% endif %}
 
-      <i class="fa fa-plus-circle" aria-hidden="true"></i>
-      <span>Registered {{ project.dateAdded | time_diff }}</span>
-      <br/>
-
-      {% if metadata.firstCommit %}
-      <i class="fa fa-bookmark" aria-hidden="true"></i>
-      <span>Started {{ metadata.firstCommit.dateCommitted | time_diff }}</span>
-      <br/>
-      {% endif %}
-
       {% if metadata.latestCommit %}
         <i class="fa fa-refresh" aria-hidden="true"></i>
         <span>Last code update {{ metadata.latestCommit.dateCommitted | time_diff }}</span>
         <br/>
       {% endif %}
+
+      {% if metadata.firstCommit %}
+        <i class="fa fa-bookmark" aria-hidden="true"></i>
+        <span>Started {{ metadata.firstCommit.dateCommitted | time_diff }}</span>
+        <br/>
+      {% endif %}
+
 
       {% if project.sourceRepo.sourceStats.available %}
         {%  if project.sourceRepo.sourceStats.languageStats is not empty %}

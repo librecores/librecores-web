@@ -9,6 +9,8 @@ use Librecores\ProjectRepoBundle\Entity\LanguageStat;
 use Librecores\ProjectRepoBundle\Entity\Project;
 use Librecores\ProjectRepoBundle\Repository\CommitRepository;
 use Librecores\ProjectRepoBundle\Repository\ContributorRepository;
+use Librecores\ProjectRepoBundle\Util\Dates;
+use Librecores\ProjectRepoBundle\Util\StatsUtil;
 
 /**
  * Store and provide metrics for Projects
@@ -170,25 +172,51 @@ class ProjectMetricsProvider
      * Get a histogram of commits over a range of dates
      *
      * @param Project $project
-     * @param \DateTimeImmutable $start start date of commits
-     * @param \DateTimeImmutable $end end date of commits
      * @param int $bucket one of the constants 'INTERVAL_DAY', 'INTERVAL_WEEK'
      *                    'INTERVAL_MONTH', 'INTERVAL_YEAR', which specifies
      *                     the histogram bucket size
+     * @param \DateTimeImmutable $start start date of commits
+     * @param \DateTimeImmutable $end end date of commits
      * @return array associative array of a time span index and commits in that
      *               time span
      */
     public function getCommitHistogram(
         Project $project,
-        \DateTimeImmutable $start,
-        \DateTimeImmutable $end,
-        int $bucket
+        int $bucket,
+        \DateTimeImmutable $start = null,
+        \DateTimeImmutable $end = null
     ): array {
-        // TODO: This function badly needs some form of caching
+        // TODO: This function needs some form of caching
         // aggregation queries in mysql are very expensive, this function
         // will never use an index and always perform a full table scan
         return $this->commitRepository->getCommitHistogram(
-            $project->getSourceRepo(), $start, $end, $bucket
+            $project->getSourceRepo(), $bucket, $start, $end
+        );
+    }
+
+    /**
+     * Get a histogram of contributors over a range of dates
+     *
+     * @param Project $project
+     * @param int $bucket one of the constants 'INTERVAL_DAY', 'INTERVAL_WEEK'
+     *                    'INTERVAL_MONTH', 'INTERVAL_YEAR', which specifies
+     *                     the histogram bucket size
+     * @param \DateTimeImmutable $start start date of commits
+     * @param \DateTimeImmutable $end end date of commits
+     * @return array associative array of a time span index and commits in that
+     *               time span
+     */
+    public function getContributorHistogram(
+        Project $project,
+        int $bucket,
+        \DateTimeImmutable $start = null,
+        \DateTimeImmutable $end = null
+    ): array {
+        // TODO: This function needs some form of caching
+        // aggregation queries in mysql are very expensive, this function
+        // will never use an index and always perform a full table scan
+        return $this->commitRepository->getCommitContributorHistogram(
+            $project->getSourceRepo(), $bucket, $start, $end
         );
     }
 
@@ -241,22 +269,31 @@ class ProjectMetricsProvider
     }
 
     /**
+     * Get a code quality score calculated from various other metrics
+     *
      * @param Project $project
      * @return float
      */
     public function getCodeQualityScore(Project $project) : float {
+
+        // TODO: Some day, we should use a DecisionTreeRegressor here
+        // trained on real world projects
+
         $score = 0;
 
+        // +1 for Git
         if ($project->getSourceRepo() instanceof GitSourceRepo) {
             $score += 1;
         }
 
+        // +2 for issue tracker
         if (null !== $project->getIssueTracker()) {
             $score += 2;
         } else {
             $score -= 1;
         }
 
+        // activity max = +2
         $lastActivity = $project->getDateLastActivityOccurred();
 
         if ($lastActivity) {
@@ -264,12 +301,12 @@ class ProjectMetricsProvider
             $difference = $now->diff($lastActivity);
 
             if ($difference->days < 30) {
-                $score += 1;
+                $score += 2;
             } else {
-                if ($difference->days < 180) {
-                    $score += 0.5;
+                if ($difference->y < 1) {
+                    $score += 1;
                 } else {
-                    if ($difference->y < 1) {
+                    if ($difference->y < 3) {
                         $score += 0.25;
                     } else {
                         $score -= -0.25;
@@ -278,15 +315,20 @@ class ProjectMetricsProvider
             }
         }
 
+        // +0.5 for some activity in issue trackers
         if ($project->getOpenIssues()) {
             $score += 0.5;
         }
 
+        // +0.25 for some activity in PRs.
+        // Low weight since this feature is GitHub specific
         if($project->getOpenPullRequests()) {
             $score += 0.25;
         }
 
         // TODO: +0.5 if issues/PRs were closed within last month
+
+        // all time contributors, max +3
         $contributors = $this->getContributorsCount($project);
         if ($contributors > 20) {
             $score += 3;
@@ -298,12 +340,16 @@ class ProjectMetricsProvider
             $score -= 1;
         }
 
+        // Comment to code ratio +2
         if ($project->getSourceRepo()->getSourceStats()->getCommentToCodeRatio() > 0.2) {
             $score += 2;
         } else {
             $score -= 1;
         }
 
+        // Max +2.5
+        // Even though it is GitHub specific, it is user feedback and hence
+        // a real indicator of project quality
         $stars = $project->getStars();
 
         if ($stars > 10000) {
@@ -315,20 +361,196 @@ class ProjectMetricsProvider
         }
 
         // TODO: +0.5 for release tags
-        // TODO: +0.5 for CHANGELOG
 
+        // +0.25 for changelog
+        if (preg_match('/change\s?log|release\s?(notes|history)?/i', $project->getDescriptionText()))
+        {
+            $score += 0.25;
+        }
+
+        // TODO: Handle repositories with CHANGELOG in a file
+
+        // +1 for description
+        // It is important for a project to have a description
         if ($project->getDescriptionText()) {
             $score += 1;
         } else {
-            $score -= 1;
+            $score -= 2;
         }
 
+        // +1 for a license file
+        // -3 since this is very important for open source projects
         if ($project->getLicenseText()) {
             $score += 1;
         } else {
-            $score -= 1;
+            $score -= 3;
         }
 
-        return max($score, 0);
+        // TODO: This section needs improvement
+
+        // commit activity
+        $commitActivity = $this->getCommitActivityTrend($project);
+        $averageCommits = StatsUtil::normalize($this->getCommitCountAverage($project));
+
+        // +0.5 for stable project with mid term > 0.2
+        if ($averageCommits['mid'] > 0.2) {
+            $score += 0.5;
+        } else {
+            $score -= 0.5;
+        }
+
+        // +0.5 for constant commits
+        if ($averageCommits['end'] > 0.05) {
+            $score += 0.5;
+        } else {
+            $score -= 0.5;
+        }
+
+        // +0.5 if commit activity is not decreasing
+
+        if ($commitActivity['mid'] >= 0) {
+            $score += 0.25;
+        } else {
+            $score -= 0.25;
+        }
+
+        if ($commitActivity['end'] >= 0) {
+            $score += 0.25;
+        } else {
+            $score -= 0.25;
+        }
+
+        // +0.5 if project is still interesting
+
+        if ($this->getContributorActivityTrend($project) > 0.3) {
+            $score += 0.5;
+        }
+
+        return max(ceil($score * 5/17.5), 0);
     }
+
+
+    /**
+     * Calculate trends in commit activity
+     *
+     * @param Project $project
+     * @return array
+     */
+    public function getCommitActivityTrend(Project $project)
+    {
+        $yearlyCommitCount = array_values($this->commitRepository->
+            getCommitHistogram($project->getSourceRepo(), Dates::INTERVAL_YEAR));
+
+        if (empty($yearlyCommitCount)) {
+
+            return [
+                'start' => -1,
+                'mid' => -1,
+                'end' => -1
+            ];
+        }
+
+        $length = count($yearlyCommitCount);
+
+        // It makes sense to divide a 6 year old project not a young project
+        if ($length >= 6) {
+            list($start, $mid, $end) = array_chunk($yearlyCommitCount, ceil(count($yearlyCommitCount) / 3));
+
+            return [
+                'start' => StatsUtil::averageRateOfChange($start),
+                'mid' => StatsUtil::averageRateOfChange($mid),
+                'end' => StatsUtil::averageRateOfChange($end)
+            ];
+        } else if ($length > 2) {
+            list($start, $mid) = array_chunk($yearlyCommitCount, ceil(count($yearlyCommitCount) / 2));
+
+            return [
+                'start' => StatsUtil::averageRateOfChange($start),
+                'mid' => StatsUtil::averageRateOfChange($mid),
+                'end' => -1
+            ];
+        }
+
+        return [
+            'start' => StatsUtil::averageRateOfChange($yearlyCommitCount),
+            'mid' => -1,
+            'end' => -1,
+        ];
+    }
+
+    /**
+     * Calculate trends in commit activity
+     *
+     * @param Project $project
+     * @return array
+     */
+    public function getCommitCountAverage(Project $project)
+    {
+        $yearlyCommitCount = array_values($this->commitRepository->
+        getCommitHistogram($project->getSourceRepo(), Dates::INTERVAL_YEAR));
+
+        if (empty($yearlyCommitCount)) {
+
+            return [
+                'start' => 0,
+                'mid' => 0,
+                'end' => 0
+            ];
+        }
+
+        $length = count($yearlyCommitCount);
+
+        // It makes sense to divide a 6 year old project not a young project
+        if ($length >= 6) {
+            list($start, $mid, $end) = array_chunk($yearlyCommitCount, ceil(count($yearlyCommitCount) / 3));
+
+            return [
+                'start' => StatsUtil::average($start),
+                'mid' => StatsUtil::average($mid),
+                'end' => StatsUtil::average($end)
+            ];
+        } else if ($length > 2) {
+            list($start, $mid) = array_chunk($yearlyCommitCount, ceil(count($yearlyCommitCount) / 2));
+
+            return [
+                'start' => StatsUtil::average($start),
+                'mid' => StatsUtil::average($mid),
+                'end' => 0
+            ];
+        }
+
+        return [
+            'start' => StatsUtil::average($yearlyCommitCount),
+            'mid' => -1,
+            'end' => -1,
+        ];
+    }
+
+    /**
+     * Calculate trends in unique contributors per year
+     *
+     * @param Project $project
+     * @return float
+     */
+    public function getContributorActivityTrend(Project $project)
+    {
+        $contributorsPerYear = array_values($this->getContributorHistogram($project, Dates::INTERVAL_YEAR));
+
+        return StatsUtil::averageRateOfChange($contributorsPerYear);
+    }
+
+    /**
+     * Get trend of commit activity thorughout the projects lifetime
+     *
+     * @param Project $project
+     * @return float
+     */
+    public function getCommitActivityTrendAllTime(Project $project)
+    {
+        $commits = array_values($this->getCommitHistogram($project, Dates::INTERVAL_YEAR));
+
+        return StatsUtil::averageRateOfChange($commits);
+
+    }
+
 }

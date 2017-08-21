@@ -161,13 +161,8 @@ class ProjectController extends Controller
             'topContributors' => $projectMetricsProvider->getTopContributors($p),
             'activityHistogram' => $this->flattenHistogram(
                 $projectMetricsProvider->getCommitHistogram(
-                    $p,
-                    $current->sub(
-                        \DateInterval::createFromDateString('1 year')
-                    ),
-                    $current,
-                    Dates::INTERVAL_WEEK
-                )
+                    $p, Dates::INTERVAL_WEEK, $current->sub(
+                    \DateInterval::createFromDateString('1 year')), $current)
             ),
             'languageGraph' => [
                 'options' => [
@@ -176,6 +171,8 @@ class ProjectController extends Controller
                 'values' => $projectMetricsProvider->getMostUsedLanguages($p),
             ],
         ];
+
+        dump($projectMetricsProvider->getContributorActivityTrend($p));
 
         // the actual project page
         return $this->render(
