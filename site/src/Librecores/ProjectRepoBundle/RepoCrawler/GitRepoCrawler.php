@@ -155,22 +155,15 @@ class GitRepoCrawler extends RepoCrawler
             $project->setLicenseText($this->getLicenseTextSafeHtml());
         }
 
-<<<<<<< HEAD
-=======
         $this->updateReleases();
 
->>>>>>> Extract releases
         /** @var Commit $latestCommit */
         $latestCommit = $this->manager
             ->getRepository('LibrecoresProjectRepoBundle:Commit')
             ->getLatestCommit($this->repo);
 
         if ($latestCommit) {
-<<<<<<< HEAD
-            $project->setDateLastActivityOccured($latestCommit->getDateCommitted());
-=======
             $project->setDateLastActivityOccurred($latestCommit->getDateCommitted());
->>>>>>> Extract releases
         }
 
         $this->manager->persist($project);
@@ -219,7 +212,7 @@ class GitRepoCrawler extends RepoCrawler
         $process->setWorkingDirectory($cwd);
         $this->executeProcess($process);
         $code = $process->getExitCode();
-        var_dump($code);
+
         if (0 === $code) {
             $value = true;    // commit exists in default branch
         } else {
@@ -245,14 +238,9 @@ class GitRepoCrawler extends RepoCrawler
      */
     protected function updateCommits(?string $sinceCommitId = null) : int
     {
-<<<<<<< HEAD
         $this->logger->info('Fetching commits for the repository ' .
             $this->repo->getId() . ' of project ' .
             $this->repo->getProject()->getFqname());
-=======
-        $this->logger->info('Fetching commits for the repository ' . $this->repo->getId() . ' of project ' .
-                            $this->repo->getProject()->getFqname());
->>>>>>> Extract releases
 
         $args = ['log', '--reverse', '--format=%H|%aN|%aE|%aD', '--shortstat',];
         if (null !== $sinceCommitId) {
@@ -461,6 +449,62 @@ class GitRepoCrawler extends RepoCrawler
         $this->logger->debug('Parsed '.$count.' commits for repo '.$this->getRepoClonePath());
 
         return $count;
+    }
+
+    /**
+     * Update project releases
+     *
+     * @return bool if successful
+     */
+    protected function updateReleases() {
+        $project = $this->repo->getProject();
+        $cwd = $this->getRepoClonePath();
+
+        $this->logger->info("Updating releases in $cwd");
+
+        $process = $this->processCreator
+            ->createProcess('git', [
+                                'tag', '--sort=-creatordate',
+                                '--format=%(refname:strip=2)|%(objectname:short)|%(creatordate)'
+                            ]);
+        $process->setWorkingDirectory($cwd);
+        $process->setTimeout(static::TIMEOUT_GIT_LOG);
+
+        try {
+            $this->mustExecuteProcess($process);
+            $output = $process->getOutput();
+        } catch(\Exception $e) {
+            $this->logger->error("Unable to fetch releases from $cwd" .
+             'Process execuion failed: ' . $e->getMessage());
+            return false;
+        }
+            $tagRegex = '/^([\w-]*v?.*\d+\.\d+.*)\|([[:xdigit:]]+)\|(.+)$/i';
+            $preReleaseRegex = '/.*[-_\.](alpha|beta|RC-?\d+).*/i';
+
+            $lines = explode("\n", trim($output));
+            $releases = [];
+
+            foreach($lines as $line) {
+                try {
+                if (preg_match($tagRegex, $line, $matches)) {
+                    $release = new ProjectRelease();
+                    $release->setName($matches[1])
+                            ->setPublishedAt(new \DateTime($matches[3]))
+                            ->setCommitID($matches[2])
+                            ->setIsPrerelease(preg_match($preReleaseRegex, $matches[1]));
+                    $releases[] = $release;
+                }
+                } catch (\Exception $e) {
+                    $this->logger->warning("Skipped due to parse error: $line");
+                }
+            }
+
+            $project->setReleases($releases);
+            $this->manager->persist($project);
+
+            $count = count($releases);
+            $this->logger->debug("Fetched $count releases from $cwd");
+            return true;
     }
 
     /**
