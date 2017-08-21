@@ -231,6 +231,58 @@ class Project
     private $dateLastModified;
 
     /**
+     * The date when the last activity occurred.
+     *
+     * Commits, discussions in issue trackers, releases, pull requests
+     * are treated as activity.
+     *
+     * @var \DateTime date/time in UTC
+     *
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $dateLastActivityOccurred;
+
+    /**
+     * Forks of this repository in the repository host
+     * @var int
+     *
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $forks;
+
+    /**
+     * Forks of this repository in the repository host
+     * @var int
+     *
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $openPullRequests;
+
+    /**
+     * Forks of this repository in the repository host
+     * @var int
+     *
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $openIssues;
+
+    /**
+     * Stars of this repository in the repository host
+     * @var int
+     *
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $stars;
+
+    /**
+     * Watchers of this repository in the repository host
+     * @var int
+     *
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $watchers;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -695,6 +747,29 @@ class Project
     }
 
     /**
+     * Set dateLastActivityOccured
+     *
+     * @param \DateTime $date
+     * @return Project
+     */
+    public function setDateLastActivityOccured($date)
+    {
+        $this->dateLastActivityOccurred = $date;
+
+        return $this;
+    }
+
+    /**
+     * Get dateLastActivityOccured
+     *
+     * @return \DateTime
+     */
+    public function getDateLastActivityOccured()
+    {
+        return $this->dateLastActivityOccurred;
+    }
+
+    /**
      * Set sourceRepo
      *
      * @param \Librecores\ProjectRepoBundle\Entity\SourceRepo $sourceRepo
@@ -739,5 +814,125 @@ class Project
     public function getDisplayName()
     {
         return $this->displayName;
+    }
+
+    /**
+     * Get forks
+     *
+     * @return int
+     */
+    public function getForks(): ?int
+    {
+        return $this->forks;
+    }
+
+    /**
+     * Set forks
+     *
+     * @param int $forks
+     *
+     * @return Project
+     */
+    public function setForks(int $forks)
+    {
+        $this->forks = $forks;
+
+        return $this;
+    }
+
+    /**
+     * Set openPullRequests
+     *
+     * @return int
+     */
+    public function getOpenPullRequests(): ?int
+    {
+        return $this->openPullRequests;
+    }
+
+    /**
+     * Get openPullRequests
+     *
+     * @param int $openPullRequests
+     *
+     * @return Project
+     */
+    public function setOpenPullRequests(int $openPullRequests)
+    {
+        $this->openPullRequests = $openPullRequests;
+
+        return $this;
+    }
+
+    /**
+     * Get openIssues
+     *
+     * @return int
+     */
+    public function getOpenIssues(): ?int
+    {
+        return $this->openIssues;
+    }
+
+    /**
+     * Set openIssues
+     *
+     * @param int $openIssues
+     *
+     * @return Project
+     */
+    public function setOpenIssues(int $openIssues)
+    {
+        $this->openIssues = $openIssues;
+
+        return $this;
+    }
+
+    /**
+     * Get stars
+     *
+     * @return int
+     */
+    public function getStars(): ?int
+    {
+        return $this->stars;
+    }
+
+    /**
+     * Set stars
+     *
+     * @param int $stars
+     *
+     * @return Project
+     */
+    public function setStars(int $stars)
+    {
+        $this->stars = $stars;
+
+        return $this;
+    }
+
+    /**
+     * Get watchers
+     *
+     * @return int
+     */
+    public function getWatchers(): ?int
+    {
+        return $this->watchers;
+    }
+
+    /**
+     * Set watchers
+     *
+     * @param int $watchers
+     *
+     * @return Project
+     */
+    public function setWatchers(int $watchers)
+    {
+        $this->watchers = $watchers;
+
+        return $this;
     }
 }

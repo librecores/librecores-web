@@ -5,6 +5,7 @@ namespace Librecores\ProjectRepoBundle\RepoCrawler;
 use Doctrine\Common\Persistence\ObjectManager;
 use Librecores\ProjectRepoBundle\Entity\GitSourceRepo;
 use Librecores\ProjectRepoBundle\Entity\SourceRepo;
+use Librecores\ProjectRepoBundle\Util\GithubApiService;
 use Librecores\ProjectRepoBundle\Util\MarkupToHtmlConverter;
 use Librecores\ProjectRepoBundle\Util\ProcessCreator;
 use Psr\Log\LoggerInterface;
@@ -35,21 +36,30 @@ class RepoCrawlerFactory
     private $processCreator;
 
     /**
+     * @var GithubApiService
+     */
+    private $ghApi;
+
+    /**
      * Constructor: create a new instance
      *
      * @param MarkupToHtmlConverter $markupConverter
      * @param LoggerInterface $logger
      * @param ObjectManager $manager
      * @param ProcessCreator $processCreator
+     * @param GithubApiService $ghApi
      */
     public function __construct(MarkupToHtmlConverter $markupConverter,
-                                LoggerInterface $logger, ObjectManager $manager,
-                                ProcessCreator $processCreator)
+                                LoggerInterface $logger,
+                                ObjectManager $manager,
+                                ProcessCreator $processCreator,
+                                GithubApiService $ghApi)
     {
         $this->markupConverter = $markupConverter;
         $this->logger = $logger;
         $this->manager = $manager;
         $this->processCreator = $processCreator;
+        $this->ghApi = $ghApi;
     }
 
     /**
@@ -64,8 +74,24 @@ class RepoCrawlerFactory
     {
         // XXX: Investigate a better method for IoC in this situation
         if ($repo instanceof GitSourceRepo) {
-            return new GitRepoCrawler($repo,
-                $this->markupConverter, $this->processCreator, $this->manager, $this->logger);
+            if (GithubRepoCrawler::isGithubRepoUrl($repo->getUrl())) {
+                return new GithubRepoCrawler(
+                    $repo,
+                    $this->markupConverter,
+                    $this->processCreator,
+                    $this->manager,
+                    $this->logger,
+                    $this->ghApi
+                );
+            } else {
+                return new GitRepoCrawler(
+                    $repo,
+                    $this->markupConverter,
+                    $this->processCreator,
+                    $this->manager,
+                    $this->logger
+                );
+            }
         }
 
         throw new \InvalidArgumentException("No crawler for source repository " .

@@ -86,6 +86,9 @@ class SourceStats
      */
     private $languageStats;
 
+    /**
+     * SourceStats constructor.
+     */
     public function __construct()
     {
         $this->languageStats = [];

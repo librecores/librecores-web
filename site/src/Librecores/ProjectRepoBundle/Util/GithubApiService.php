@@ -40,7 +40,7 @@ class GithubApiService
     /**
      * GitHub client API wrapper
      *
-     * @var \Github\Client
+     * @var Github\Client
      */
     private $client = null;
 
@@ -50,7 +50,6 @@ class GithubApiService
      * @var bool
      */
     private $clientIsAuthenticated = false;
-
 
 
     /**
@@ -65,16 +64,17 @@ class GithubApiService
      *
      * @param TokenStorageInterface $tokenStorage token storage service
      * @param AdapterInterface $cachePool the cache pool to use for all requests
+     * @param RouterInterface $router
      */
     public function __construct(TokenStorageInterface $tokenStorage,
                                 AdapterInterface $cachePool,
                                 RouterInterface $router)
     {
-        $user = $tokenStorage->getToken()->getUser();
-        if (!$user instanceof \Librecores\ProjectRepoBundle\Entity\User) {
-            $this->user = null;
+        $token = $tokenStorage->getToken();
+        if (null !== $token) {
+            $this->user = $token->getUser();
         }
-        $this->user = $user;
+
         $this->cachePool = $cachePool;
         $this->router = $router;
     }
@@ -87,7 +87,7 @@ class GithubApiService
      * an unauthenticated client is returned, allowing the application to make
      * anonymous API calls.
      *
-     * @return \Github\Client a GitHub client
+     * @return Github\Client a GitHub client
      */
     public function getClient()
     {
@@ -99,16 +99,10 @@ class GithubApiService
     }
 
     /**
-     * Get an authenticated GitHub API client
+     * Get an authenticated GitHub API client which acts on behalf
+     * of the current user
      *
-     * The client acts on behalf of the current user, and has permissions to
-     * all resources the user has, limited by the granted scope.
-     * The default requested scope is configured in config.yml.
-     * If no authenticated client can be returned (e.g. because no user
-     * information is available, or the user has not connected his/her GitHub
-     * account), NULL is returned.
-     *
-     * @return \Github\Client|NULL an authenticated GitHub client, or NULL
+     * @return Github\Client|NULL an authenticated GitHub client, or NULL
      */
     public function getAuthenticatedClient()
     {
@@ -123,25 +117,51 @@ class GithubApiService
     }
 
     /**
+     * Get an authenticated GitHub API client for a user
+     *
+     * The client acts on behalf of the user, and has permissions to
+     * all resources the user has, limited by the granted scope.
+     * The default requested scope is configured in config.yml.
+     * If no authenticated client can be returned (e.g. because no user
+     * information is available, or the user has not connected their GitHub
+     * account), NULL is returned.
+     *
+     * @param User $user
+     * @return Github\Client|NULL an authenticated GitHub client, or NULL
+     */
+    public function getAuthenticatedClientForUser(User $user)
+    {
+        $client= new Github\Client();
+        $client->addCache($this->cachePool);
+
+        // try to authenticate as user with its access token
+        if (null !== $user && $user->isConnectedToOAuthService('github')) {
+            $oauthAccessToken = $user->getGithubOAuthAccessToken();
+            $client->authenticate($oauthAccessToken, null,
+                                  Github\Client::AUTH_URL_TOKEN);
+
+            return $client;
+        }
+
+        return null;
+    }
+
+    /**
      * Initialize the client
      *
      * @return boolean
      */
     protected function initClient()
     {
-        $this->client= new \Github\Client();
-        $this->client->addCache($this->cachePool);
-        $this->clientIsAuthenticated = false;
+        $this->client = $this->getAuthenticatedClientForUser($this->user);
 
-        // try to authenticate as user with its access token
-        if ($this->user->isConnectedToOAuthService('github')) {
-            $oauthAccessToken = $this->user->getGithubOAuthAccessToken();
-            $this->client->authenticate($oauthAccessToken, null,
-                                        Github\Client::AUTH_URL_TOKEN);
-
+        if (null !== $this->client) {
             $this->clientIsAuthenticated = true;
+        } else {
+            $this->client = new Github\Client();
+            $this->client->addCache($this->cachePool);
+            $this->clientIsAuthenticated = false;
         }
-
         return true;
     }
 

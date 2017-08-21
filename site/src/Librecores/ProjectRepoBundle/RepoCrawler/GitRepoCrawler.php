@@ -101,6 +101,9 @@ class GitRepoCrawler extends RepoCrawler
         return $this->repo instanceof GitSourceRepo;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function updateSourceRepo()
     {
         $this->logger->info('Fetching commits for the repository '.$this->repo->getId().' of project '.
@@ -126,9 +129,14 @@ class GitRepoCrawler extends RepoCrawler
         }
 
         $this->manager->persist($this->repo);
+
+        // we need a explicit flush here because we query commit data later
         $this->manager->flush();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function updateProject()
     {
         $project = $this->repo->getProject();
@@ -146,8 +154,16 @@ class GitRepoCrawler extends RepoCrawler
             $project->setLicenseText($this->getLicenseTextSafeHtml());
         }
 
+        /** @var Commit $latestCommit */
+        $latestCommit = $this->manager
+            ->getRepository('LibrecoresProjectRepoBundle:Commit')
+            ->getLatestCommit($this->repo);
+
+        if ($latestCommit) {
+            $project->setDateLastActivityOccured($latestCommit->getDateCommitted());
+        }
+
         $this->manager->persist($project);
-        $this->manager->flush();
 
         return true;
     }
@@ -219,6 +235,10 @@ class GitRepoCrawler extends RepoCrawler
      */
     protected function updateCommits(?string $sinceCommitId = null) : int
     {
+        $this->logger->info('Fetching commits for the repository ' .
+            $this->repo->getId() . ' of project ' .
+            $this->repo->getProject()->getFqname());
+
         $args = ['log', '--reverse', '--format=%H|%aN|%aE|%aD', '--shortstat',];
         if (null !== $sinceCommitId) {
             // we don't need escapeshellargs here
@@ -429,6 +449,7 @@ class GitRepoCrawler extends RepoCrawler
     }
 
     /**
+     * Helper for executing a process
      * @param Process $process
      */
     private function executeProcess(Process $process)
@@ -439,6 +460,8 @@ class GitRepoCrawler extends RepoCrawler
     }
 
     /**
+     * Helper to execute a process and throw exception if any error occurs.
+     *
      * @param Process $process
      */
     private function mustExecuteProcess(Process $process)
