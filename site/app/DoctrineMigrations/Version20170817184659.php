@@ -18,7 +18,10 @@ class Version20170817184659 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE Project ADD dateLastActivityOccurred DATETIME DEFAULT NULL, ADD releases LONGTEXT NOT NULL COMMENT \'(DC2Type:array)\'');
+        $this->addSql('ALTER TABLE Project ADD releases LONGTEXT NOT NULL COMMENT \'(DC2Type:array)\'');
+
+        // need to use this UPDATE statement as TEXT columns can not have DEFAULT values
+        $this->addSql('UPDATE Project SET releases = \'a:0:{}\'');
     }
 
     /**
@@ -29,6 +32,6 @@ class Version20170817184659 extends AbstractMigration
         // this down() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE Project DROP dateLastActivityOccurred, DROP releases');
+        $this->addSql('ALTER TABLE Project DROP releases');
     }
 }

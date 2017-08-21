@@ -197,7 +197,7 @@ QUERY;
             $project->setWatchers($data['watchers']['totalCount']);
 
             $dateLastActivity = new \DateTime($data['updatedAt']);
-            $project->setDateLastActivityOccured($dateLastActivity);
+            $project->setDateLastActivityOccurred($dateLastActivity);
 
             $this->manager->persist($project);
             $this->logger->info('Fetched GitHub metrics successfully');

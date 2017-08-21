@@ -26,9 +26,9 @@ class ProjectRelease
     private $isPrerelease;
 
     /**
-     * Commit ID this release is based on
+     * Commit ID this release is based on, if available
      *
-     * @var string
+     * @var string|null
      */
     private $commitID;
 
@@ -106,9 +106,9 @@ class ProjectRelease
     /**
      * Get the commit id this release is based on
      *
-     * @return string
+     * @return string|null
      */
-    public function getCommitID(): string
+    public function getCommitID(): ?string
     {
         return $this->commitID;
     }

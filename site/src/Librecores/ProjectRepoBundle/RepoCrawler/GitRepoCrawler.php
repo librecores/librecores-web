@@ -456,7 +456,8 @@ class GitRepoCrawler extends RepoCrawler
      *
      * @return bool if successful
      */
-    protected function updateReleases() {
+    protected function updateReleases()
+    {
         $project = $this->repo->getProject();
         $cwd = $this->getRepoClonePath();
 
@@ -478,14 +479,15 @@ class GitRepoCrawler extends RepoCrawler
              'Process execuion failed: ' . $e->getMessage());
             return false;
         }
-            $tagRegex = '/^([\w-]*v?.*\d+\.\d+.*)\|([[:xdigit:]]+)\|(.+)$/i';
-            $preReleaseRegex = '/.*[-_\.](alpha|beta|RC-?\d+).*/i';
 
-            $lines = explode("\n", trim($output));
-            $releases = [];
+        $tagRegex = '/^([\w-]*v?.*\d+\.\d+.*)\|([[:xdigit:]]+)\|(.+)$/i';
+        $preReleaseRegex = '/.*[-_\.](alpha|beta|RC-?\d+).*/i';
 
-            foreach($lines as $line) {
-                try {
+        $lines = explode("\n", trim($output));
+        $releases = [];
+
+        foreach ($lines as $line) {
+            try {
                 if (preg_match($tagRegex, $line, $matches)) {
                     $release = new ProjectRelease();
                     $release->setName($matches[1])
@@ -494,17 +496,17 @@ class GitRepoCrawler extends RepoCrawler
                             ->setIsPrerelease(preg_match($preReleaseRegex, $matches[1]));
                     $releases[] = $release;
                 }
-                } catch (\Exception $e) {
-                    $this->logger->warning("Skipped due to parse error: $line");
-                }
+            } catch (\Exception $e) {
+                $this->logger->warning("Skipped release tag due to parse error: $line");
             }
+        }
 
-            $project->setReleases($releases);
-            $this->manager->persist($project);
+        $project->setReleases($releases);
+        $this->manager->persist($project);
 
-            $count = count($releases);
-            $this->logger->debug("Fetched $count releases from $cwd");
-            return true;
+        $count = count($releases);
+        $this->logger->debug("Fetched $count releases from $cwd");
+        return true;
     }
 
     /**

@@ -47,6 +47,10 @@ class GitRepoCrawlerTest extends TestCase
         /** @var LoggerInterface $mockLogger */
         $mockLogger = $this->createMock(LoggerInterface::class);
 
+        // create a debug channel, uncomment for debug purposes
+//        $mockLogger = new \Monolog\Logger('test');
+//        $mockLogger->pushHandler(new \Monolog\Handler\StreamHandler('php://stdout'));
+
         /** @var MarkupToHtmlConverter $mockMarkupConverter */
         $mockMarkupConverter = $this->createMock(MarkupToHtmlConverter::class);
 
@@ -54,18 +58,28 @@ class GitRepoCrawlerTest extends TestCase
         $mockManager = $this->createMock(ObjectManager::class);
         $mockManager->method('getRepository')->willReturn($repository);
 
-        $mockGitOutput  = file_get_contents(
-            join(DIRECTORY_SEPARATOR, [__DIR__, '..', 'Resources', 'output.txt']
+        $mockGitCloneOutput  = file_get_contents(
+            join(DIRECTORY_SEPARATOR, [__DIR__, '..', 'Resources', 'git-clone.txt']
+            ));
+        $mockGitTagOutput  = file_get_contents(
+            join(DIRECTORY_SEPARATOR, [__DIR__, '..', 'Resources', 'git-tag.txt']
             ));
         $mockClocOutput = file_get_contents(
             join(DIRECTORY_SEPARATOR, [__DIR__, '..', 'Resources', 'cloc-mock-output.json']
             ));
 
-        $mockGitProcess = $this->createMock(Process::class);
-        $mockGitProcess->method('getOutput')
-                       ->willReturn($mockGitOutput);
-        $mockGitProcess->method('getExitCode')
-                       ->willReturn(0);
+        $mockGitLogProcess = $this->createMock(Process::class);
+        $mockGitLogProcess->method('getOutput')
+                            ->willReturn($mockGitCloneOutput);
+        $mockGitLogProcess->method('getExitCode')
+                            ->willReturn(0);
+
+        $mockGitTagProcess = $this->createMock(Process::class);
+        $mockGitTagProcess->method('getOutput')
+                          ->willReturn($mockGitTagOutput);
+        $mockGitTagProcess->method('getExitCode')
+                            ->willReturn(0);
+
         $mockClocProcess = $this->createMock(Process::class);
         $mockClocProcess->method('getOutput')
                         ->willReturn($mockClocOutput);
@@ -77,14 +91,15 @@ class GitRepoCrawlerTest extends TestCase
 
         $processCreator->method('createProcess')
                        ->willReturnCallback(function ($cmd, $args)
-                       use ($mockClocProcess, $mockGitProcess) {
+                       use ($mockGitTagProcess, $mockClocProcess, $mockGitLogProcess) {
                            if ('git' === $cmd) {
-                               $output = $mockGitProcess;
+                               $process = ('log' === $args[0] ?
+                                   $mockGitLogProcess : $mockGitTagProcess);
                            } else {
-                               $output = $mockClocProcess;
+                               $process = $mockClocProcess;
                            }
 
-                           return $output;
+                           return $process;
                        });
 
         $org = new Organization();
@@ -94,15 +109,21 @@ class GitRepoCrawlerTest extends TestCase
         $project = new Project();
         $project->setName('test')
                 ->setDisplayName('test')
-                ->setParentOrganization($org);
+                ->setParentOrganization($org)
+                ->setDescriptionTextAutoUpdate(false)
+                ->setLicenseTextAutoUpdate(false);
 
         $repo = new GitSourceRepo();
         $repo->setProject($project);
 
         $project->setSourceRepo($repo);
 
-        $crawler = new GitRepoCrawler($repo, $mockMarkupConverter, $processCreator, $mockManager, $mockLogger);
+        $crawler = new GitRepoCrawler($repo,
+                                      $mockMarkupConverter,
+                                      $processCreator, $mockManager,
+                                      $mockLogger);
         $crawler->updateSourceRepo();
+        $crawler->updateProject();
 
         $commits = $repo->getCommits();
 
@@ -211,5 +232,63 @@ class GitRepoCrawlerTest extends TestCase
                     break;
             }
         }
+
+        $releases = $project->getReleases();
+
+        // there are 10 valid release objects
+        $this->assertEquals(count($releases), 10);
+
+        $this->assertEquals($releases[0]->getName(),'v1.1.7');
+        $this->assertEquals($releases[0]->getCommitID(),'b645cc95');
+        $this->assertEquals($releases[0]->getPublishedAt(),
+                            new \DateTime('Fri Sep 23 02:02:24 2016 +0530'));
+
+        $this->assertEquals($releases[1]->getName(),'v1.1');
+        $this->assertEquals($releases[1]->getCommitID(),'e5b62acb');
+        $this->assertEquals($releases[1]->getPublishedAt(),
+                            new \DateTime('Tue Sep 6 15:29:04 2016 +0530'));
+
+        $this->assertEquals($releases[2]->getName(),'1.1.6');
+        $this->assertEquals($releases[2]->getCommitID(),'e5b62acb');
+        $this->assertEquals($releases[2]->getPublishedAt(),
+                            new \DateTime('Tue Sep 6 15:29:04 2016 +0530'));
+
+        $this->assertEquals($releases[3]->getName(),'1.1');
+        $this->assertEquals($releases[3]->getCommitID(),'df02e241');
+        $this->assertEquals($releases[3]->getPublishedAt(),
+                            new \DateTime('Mon Sep 5 03:25:52 2016 +0530'));
+
+        $this->assertEquals($releases[4]->getName(),'v4.1.5-android');
+        $this->assertEquals($releases[4]->getCommitID(),'df02e241');
+        $this->assertEquals($releases[4]->getPublishedAt(),
+                            new \DateTime('Mon Sep 5 03:25:52 2016 +0530'));
+
+        $this->assertEquals($releases[5]->getName(),'v4.2.10-RC-2');
+        $this->assertEquals($releases[5]->getCommitID(),'6d5b3930');
+        $this->assertEquals($releases[5]->getPublishedAt(),
+                            new \DateTime('Thu Sep 1 11:45:17 2016 +0530'));
+
+        $this->assertEquals($releases[6]->getName(),'v1.1.4-alpha24');
+        $this->assertEquals($releases[6]->getCommitID(),'6d5b3930');
+        $this->assertEquals($releases[6]->getPublishedAt(),
+                            new \DateTime('Thu Sep 1 11:45:17 2016 +0530'));
+
+        $this->assertEquals($releases[7]->getName(),'android-v1.1.4-beta24');
+        $this->assertEquals($releases[7]->getCommitID(),'5452c021');
+        $this->assertEquals($releases[7]->getPublishedAt(),
+                            new \DateTime('Thu Sep 1 11:30:05 2016 +0530'));
+
+        $this->assertEquals($releases[8]->getName(),'android-1.1.3');
+        $this->assertEquals($releases[8]->getCommitID(),'4ef6195b');
+        $this->assertEquals($releases[8]->getPublishedAt(),
+                            new \DateTime('Wed Aug 31 00:50:37 2016 +0530'));
+
+        $this->assertEquals($releases[9]->getName(),'v1.1.1');
+        $this->assertEquals($releases[9]->getCommitID(),'9daa1');
+        $this->assertEquals($releases[9]->getPublishedAt(),
+                            new \DateTime('Tue Aug 23 04:11:11 2016 +0530'));
+
+        //notavalidrelease|f17341b4|Sun Aug 28 11:39:38 2016 +0530
+        //11invalidtag|f17341b4|Sun Aug 28 11:39:38 2016 +0530
     }
 }
