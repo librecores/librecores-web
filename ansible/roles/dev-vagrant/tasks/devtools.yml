@@ -5,3 +5,9 @@
     url: https://phar.phpunit.de/phpunit.phar
     dest: /usr/local/bin/phpunit
     mode: 0755
+
+- name: Copy xdebug remote debugging configuration
+  copy:
+    src: ../templates/99-librecores.ini
+    dest: "/etc/php/{{ php_version }}/fpm/conf.d"
+  notify: restart php-fpm
