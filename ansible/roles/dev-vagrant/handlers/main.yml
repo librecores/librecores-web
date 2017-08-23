@@ -3,3 +3,9 @@
     name: "php{{ php_version }}-fpm"
     enabled: yes
     state: restarted
+
+- name: restart nginx
+  service:
+    name: nginx
+    enabled: yes
+    state: restarted
