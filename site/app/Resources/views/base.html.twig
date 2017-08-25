@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <title>{% block title %}{% endblock %}</title>
 
   <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
@@ -56,7 +59,7 @@
           <li><a href="{{ path('librecores_planet_homepage') }}">Planet LibreCores</a></li>
               <li><a href="{{ path('librecores_site_page', {'page': 'community-hub'}) }}">Community Hub</a></li>
             </ul>
-          </li> 
+          </li>
           <li><a href="{{ path('librecores_site_page', {'page': 'librecores-ci'}) }}">LibreCores CI</a></li>
           <li><a href="{{ path('librecores_site_page', {'page': 'about'}) }}">About</a></li>
         </ul>
