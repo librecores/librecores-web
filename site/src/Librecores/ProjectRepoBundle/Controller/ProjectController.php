@@ -172,8 +172,6 @@ class ProjectController extends Controller
             ],
         ];
 
-        dump($projectMetricsProvider->getContributorActivityTrend($p));
-
         // the actual project page
         return $this->render(
             'LibrecoresProjectRepoBundle:Project:view.html.twig',

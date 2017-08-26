@@ -42,8 +42,9 @@ class ProjectMetricsProvider
     public function __construct(
         CommitRepository $commitRepository,
         ContributorRepository $contributorRepository
-    ) {
-        $this->commitRepository = $commitRepository;
+    )
+    {
+        $this->commitRepository      = $commitRepository;
         $this->contributorRepository = $contributorRepository;
     }
 
@@ -185,7 +186,8 @@ class ProjectMetricsProvider
         int $bucket,
         \DateTimeImmutable $start = null,
         \DateTimeImmutable $end = null
-    ): array {
+    ): array
+    {
         // TODO: This function needs some form of caching
         // aggregation queries in mysql are very expensive, this function
         // will never use an index and always perform a full table scan
@@ -211,7 +213,8 @@ class ProjectMetricsProvider
         int $bucket,
         \DateTimeImmutable $start = null,
         \DateTimeImmutable $end = null
-    ): array {
+    ): array
+    {
         // TODO: This function needs some form of caching
         // aggregation queries in mysql are very expensive, this function
         // will never use an index and always perform a full table scan
@@ -269,22 +272,21 @@ class ProjectMetricsProvider
     }
 
     /**
-     * Get a code quality score calculated from various other metrics
+     * Get the code quality score calculated from various metrics.
+     *
+     * The formula is explained here:
+     * http://www.librecores.org/static/docs/code-quality
      *
      * @param Project $project
      * @return float
      */
-    public function getCodeQualityScore(Project $project) : float {
+    public function getCodeQualityScore(Project $project): float
+    {
 
         // TODO: Some day, we should use a DecisionTreeRegressor here
         // trained on real world projects
 
         $score = 0;
-
-        // +1 for Git
-        if ($project->getSourceRepo() instanceof GitSourceRepo) {
-            $score += 1;
-        }
 
         // +2 for issue tracker
         if (null !== $project->getIssueTracker()) {
@@ -297,21 +299,17 @@ class ProjectMetricsProvider
         $lastActivity = $project->getDateLastActivityOccurred();
 
         if ($lastActivity) {
-            $now        = new \DateTime();
+            $now        = new \DateTimeImmutable();
             $difference = $now->diff($lastActivity);
 
             if ($difference->days < 30) {
                 $score += 2;
+            } else if ($difference->y < 1) {
+                $score += 1;
+            } else if ($difference->y < 3) {
+                $score += 0.25;
             } else {
-                if ($difference->y < 1) {
-                    $score += 1;
-                } else {
-                    if ($difference->y < 3) {
-                        $score += 0.25;
-                    } else {
-                        $score -= -0.25;
-                    }
-                }
+                $score -= -0.25;
             }
         }
 
@@ -322,7 +320,7 @@ class ProjectMetricsProvider
 
         // +0.25 for some activity in PRs.
         // Low weight since this feature is GitHub specific
-        if($project->getOpenPullRequests()) {
+        if ($project->getOpenPullRequests()) {
             $score += 0.25;
         }
 
@@ -363,8 +361,7 @@ class ProjectMetricsProvider
         // TODO: +0.5 for release tags
 
         // +0.25 for changelog
-        if (preg_match('/change\s?log|release\s?(notes|history)?/i', $project->getDescriptionText()))
-        {
+        if (preg_match('/change\s?log|release\s?(notes|history)?/i', $project->getDescriptionText())) {
             $score += 0.25;
         }
 
@@ -389,8 +386,8 @@ class ProjectMetricsProvider
         // TODO: This section needs improvement
 
         // commit activity
-        $commitActivity = $this->getCommitActivityTrend($project);
-        $averageCommits = StatsUtil::normalize($this->getCommitCountAverage($project));
+        $commitActivity = $this->getPhaseWiseAverageRateOfChangeOfCommits($project);
+        $averageCommits = StatsUtil::normalize($this->getPhaseWiseAverageCommitCount($project));
 
         // +0.5 for stable project with mid term > 0.2
         if ($averageCommits['mid'] > 0.2) {
@@ -422,52 +419,63 @@ class ProjectMetricsProvider
 
         // +0.5 if project is still interesting
 
-        if ($this->getContributorActivityTrend($project) > 0.3) {
+        if ($this->getAverageRateOfChangeOfYearlyContributors($project) > 0.3) {
             $score += 0.5;
         }
 
-        return max(ceil($score * 5/17.5), 0);
+        return max(ceil($score * 5 / 17.5), 0);
     }
 
 
     /**
-     * Calculate trends in commit activity
+     * Get thethe average rate of change of commits.
+     *
+     * It is calculated in 3 phases, which are roughly 1/3 of project's lifetime.
+     * For projects< 6 years and > 2years 2 phases - start and mid, are
+     * considered for averaging, each consisting of roughly half the
+     * time. For projects < 2, average of the entire time is taken as
+     * returned as the value for start.
      *
      * @param Project $project
-     * @return array
+     * @return array average rate of change of number of commits
+     *          in three phases - start, mid, end. Value of the
+     *          phases that have not been calculated is 0
      */
-    public function getCommitActivityTrend(Project $project)
+    public function getPhaseWiseAverageRateOfChangeOfCommits(Project $project)
     {
-        $yearlyCommitCount = array_values($this->commitRepository->
-            getCommitHistogram($project->getSourceRepo(), Dates::INTERVAL_YEAR));
+        $yearlyCommitCount =
+            array_values($this->commitRepository->getCommitHistogram($project->getSourceRepo(),
+                                                                     Dates::INTERVAL_YEAR));
 
         if (empty($yearlyCommitCount)) {
 
             return [
                 'start' => -1,
                 'mid' => -1,
-                'end' => -1
+                'end' => -1,
             ];
         }
 
-        $length = count($yearlyCommitCount);
+        $yearsWithCommits = count($yearlyCommitCount);
 
         // It makes sense to divide a 6 year old project not a young project
-        if ($length >= 6) {
-            list($start, $mid, $end) = array_chunk($yearlyCommitCount, ceil(count($yearlyCommitCount) / 3));
+        if ($yearsWithCommits >= 6) {
+            list($start, $mid, $end) = array_chunk($yearlyCommitCount,
+                                                   ceil(count($yearlyCommitCount) / 3));
 
             return [
                 'start' => StatsUtil::averageRateOfChange($start),
                 'mid' => StatsUtil::averageRateOfChange($mid),
-                'end' => StatsUtil::averageRateOfChange($end)
+                'end' => StatsUtil::averageRateOfChange($end),
             ];
-        } else if ($length > 2) {
-            list($start, $mid) = array_chunk($yearlyCommitCount, ceil(count($yearlyCommitCount) / 2));
+        } else if ($yearsWithCommits > 2) {
+            list($start, $mid) = array_chunk($yearlyCommitCount,
+                                             ceil(count($yearlyCommitCount) / 2));
 
             return [
                 'start' => StatsUtil::averageRateOfChange($start),
                 'mid' => StatsUtil::averageRateOfChange($mid),
-                'end' => -1
+                'end' => -1,
             ];
         }
 
@@ -479,43 +487,59 @@ class ProjectMetricsProvider
     }
 
     /**
-     * Calculate trends in commit activity
+     * Get the the average commit count per phase.
+     *
+     * The average number of commits per year in 3 phases, which are
+     * roughly 1/3 of project's lifetime. For projects < 6 years and
+     * > 2years 2 phases - start and mid, are considered for averaging,
+     * each consisting of roughly half the time. For projects < 2,
+     * average of the entire time is taken as returned as the value
+     * for start.
      *
      * @param Project $project
-     * @return array
+     * @return array averages in three phases - start,
+     *          mid, end. Value of the phases that have not been
+     *          calculated is 0
+     * @param Project $project
+     * @return array average number of commits in three phases -
+     *          start, mid, end. Value of the phases that have
+     *          not been calculated is 0
      */
-    public function getCommitCountAverage(Project $project)
+    public function getPhaseWiseAverageCommitCount(Project $project)
     {
-        $yearlyCommitCount = array_values($this->commitRepository->
-        getCommitHistogram($project->getSourceRepo(), Dates::INTERVAL_YEAR));
+        $yearlyCommitCount =
+            array_values($this->commitRepository->getCommitHistogram($project->getSourceRepo(),
+                                                                     Dates::INTERVAL_YEAR));
 
         if (empty($yearlyCommitCount)) {
 
             return [
                 'start' => 0,
                 'mid' => 0,
-                'end' => 0
+                'end' => 0,
             ];
         }
 
-        $length = count($yearlyCommitCount);
+        $yearsWithCommits = count($yearlyCommitCount);
 
         // It makes sense to divide a 6 year old project not a young project
-        if ($length >= 6) {
-            list($start, $mid, $end) = array_chunk($yearlyCommitCount, ceil(count($yearlyCommitCount) / 3));
+        if ($yearsWithCommits >= 6) {
+            list($start, $mid, $end) = array_chunk($yearlyCommitCount,
+                                                   ceil(count($yearlyCommitCount) / 3));
 
             return [
                 'start' => StatsUtil::average($start),
                 'mid' => StatsUtil::average($mid),
-                'end' => StatsUtil::average($end)
+                'end' => StatsUtil::average($end),
             ];
-        } else if ($length > 2) {
-            list($start, $mid) = array_chunk($yearlyCommitCount, ceil(count($yearlyCommitCount) / 2));
+        } else if ($yearsWithCommits > 2) {
+            list($start, $mid) = array_chunk($yearlyCommitCount,
+                                             ceil(count($yearlyCommitCount) / 2));
 
             return [
                 'start' => StatsUtil::average($start),
                 'mid' => StatsUtil::average($mid),
-                'end' => 0
+                'end' => 0,
             ];
         }
 
@@ -527,25 +551,27 @@ class ProjectMetricsProvider
     }
 
     /**
-     * Calculate trends in unique contributors per year
+     * Get the the average rate of change of yearly unique contributors
+     * through out the project lifetime.
      *
      * @param Project $project
-     * @return float
+     * @return float average rate of change of yearly contributors
      */
-    public function getContributorActivityTrend(Project $project)
+    public function getAverageRateOfChangeOfYearlyContributors(Project $project)
     {
-        $contributorsPerYear = array_values($this->getContributorHistogram($project, Dates::INTERVAL_YEAR));
+        $contributorsPerYear = array_values($this->getContributorHistogram($project,
+                                                                           Dates::INTERVAL_YEAR));
 
         return StatsUtil::averageRateOfChange($contributorsPerYear);
     }
 
     /**
-     * Get trend of commit activity thorughout the projects lifetime
+     * Get the average rate of change of commits per year.
      *
      * @param Project $project
-     * @return float
+     * @return float average rate of change of commits
      */
-    public function getCommitActivityTrendAllTime(Project $project)
+    public function getAverageRateOfChangeOfCommits(Project $project)
     {
         $commits = array_values($this->getCommitHistogram($project, Dates::INTERVAL_YEAR));
 

@@ -215,10 +215,9 @@ class CommitRepository extends EntityRepository
                     $result[$year] = [];
                 }
 
-                // we use ==  because our keys are int but
-                // $startYear and $endYear are string
-                $week     = $startYear == $year ? $startWeek : 1;
-                $weeklast = $endYear == $year ? $endWeek
+
+                $week     = (int)$startYear === $year ? $startWeek : 1;
+                $weeklast = (int)$endYear === $year ? $endWeek
                     : \DateTimeImmutable::createFromFormat('d m Y',"31 12 $year")
                                         ->format('W');
 

@@ -12,7 +12,7 @@ class StatsUtil
      * Calculate average of an array
      *
      * @param $values
-     * @return float|int
+     * @return float average of the array
      */
     public static function average($values)
     {
@@ -27,7 +27,7 @@ class StatsUtil
      * Normalize values of an array within [-1,1]
      *
      * @param $values
-     * @return array|int
+     * @return array values normalized within [-1,1]
      */
     public static function normalize($values)
     {
@@ -47,7 +47,7 @@ class StatsUtil
      * Calculate average rate of change
      *
      * @param $values
-     * @return float
+     * @return float average rate of change of values in the array
      */
     public static function averageRateOfChange($values)
     {
