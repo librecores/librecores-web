@@ -445,3 +445,9 @@ h1 a:hover, h1 a:active {
 .librecores-icon-pr {
   transform: rotate(180deg) scale(-1,1);
 }
+
+.librecores-project-list-metadata {
+  margin: 1em 0;
+  font-size: 0.8em;
+  color: #888888;
+}
