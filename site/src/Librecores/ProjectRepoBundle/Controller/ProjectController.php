@@ -4,9 +4,11 @@ namespace Librecores\ProjectRepoBundle\Controller;
 
 use Librecores\ProjectRepoBundle\Entity\Contributor;
 use Librecores\ProjectRepoBundle\Entity\GitSourceRepo;
+use Librecores\ProjectRepoBundle\Entity\LanguageStat;
 use Librecores\ProjectRepoBundle\Entity\OrganizationMember;
 use Librecores\ProjectRepoBundle\Entity\Project;
 use Librecores\ProjectRepoBundle\Form\Type\ProjectType;
+use Librecores\ProjectRepoBundle\RepoCrawler\GithubRepoCrawler;
 use Librecores\ProjectRepoBundle\Util\Dates;
 use Librecores\ProjectRepoBundle\Util\GithubApiService;
 use Librecores\ProjectRepoBundle\Util\QueueDispatcherService;
@@ -152,24 +154,41 @@ class ProjectController extends Controller
 
         $current = new \DateTimeImmutable();
 
+        $qualityScore = $projectMetricsProvider->getCodeQualityScore($p);
+        $twoTimesQualityScore = (int) ($qualityScore * 2);
         $metadata = [
-            'qualityScore' => $projectMetricsProvider->getCodeQualityScore($p),
+            'qualityScore' => [
+                'fullStars' => (int) ($twoTimesQualityScore / 2),
+                'halfStars' => $twoTimesQualityScore % 2,
+                'value' => $qualityScore
+            ],
             'latestCommit' => $projectMetricsProvider->getLatestCommit($p),
             'firstCommit' => $projectMetricsProvider->getFirstCommit($p),
             'contributorCount' => $projectMetricsProvider->getContributorsCount($p),
             'commitCount' => $projectMetricsProvider->getCommitCount($p),
             'topContributors' => $projectMetricsProvider->getTopContributors($p),
-            'activityHistogram' => $this->flattenHistogram(
+            'activityGraph' => $this->makeActivityGraph(
                 $projectMetricsProvider->getCommitHistogram(
-                    $p, Dates::INTERVAL_WEEK, $current->sub(
-                    \DateInterval::createFromDateString('1 year')), $current)
+                    $p,
+                    Dates::INTERVAL_WEEK,
+                    $current->sub(
+                        \DateInterval::createFromDateString('1 year')
+                    ),
+                    $current
+                )
             ),
-            'languageGraph' => [
-                'options' => [
-                    'fill' => ['red', 'yellow', 'orange', 'lightblue', 'green'],
-                ],
-                'values' => $projectMetricsProvider->getMostUsedLanguages($p),
-            ],
+            'commitGraph' => $this->makeGraph(
+                $projectMetricsProvider->getCommitHistogram(
+                    $p,
+                    Dates::INTERVAL_YEAR
+                )
+            ),
+            'languageGraph' => $this->makeGraph(
+                $projectMetricsProvider->getMostUsedLanguages($p),
+                false),
+            'contributorsGraph' => $this->makeGraph(
+                $projectMetricsProvider->getContributorHistogram($p, Dates::INTERVAL_YEAR)),
+            'isHostedOnGithub' => GithubRepoCrawler::isGithubRepoUrl($p->getSourceRepo()->getUrl()),
         ];
 
         // the actual project page
@@ -445,7 +464,7 @@ class ProjectController extends Controller
      * @param $histogram
      * @return array
      */
-    private function flattenHistogram($histogram)
+    private function makeActivityGraph($histogram)
     {
         $values = [];
         foreach ($histogram as $i) {
@@ -454,5 +473,30 @@ class ProjectController extends Controller
             }
         }
         return $values;
+    }
+
+    /**
+     * Make a graph data object suitable for rendering a
+     * graph in frontend.
+     *
+     * Uses array keys as labels and values as series.
+     *
+     * @param LanguageStat[] $languages
+     * @param bool $multiDim does the graph expect multidimensional
+     *              series. Defaults to true
+     *
+     * @return array data object for graph
+     */
+    private function makeGraph($languages, $multiDim = true)
+    {
+        $graph = [
+            'labels' => array_keys($languages),
+            'series' => [array_values($languages)]
+        ];
+        if (!$multiDim) {
+            $graph['series'] = $graph['series'][0];
+        }
+
+        return $graph;
     }
 }

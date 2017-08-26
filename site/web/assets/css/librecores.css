@@ -290,7 +290,27 @@ h1 a:hover, h1 a:active {
 }
 
 .librecores-project-header > .tagline {
-  margin-top: 20px;
+  margin-top: 0.5em;
+  font-style: italic;
+  color: #777777;
+}
+
+.librecores-project-header > .project-info {
+  margin: 1.5em 0;
+}
+
+.librecores-project-header > .project-info .project-quality > .stars {
+  color: gold;
+  font-size: 1.25em;
+}
+
+.librecores-project-header > .project-info .project-quality > .star-value {
+  color: #666;
+}
+
+.librecores-project-header > .project-info .project-quality > .score-help a {
+  color: #666;
+  font-size: 0.8em;
 }
 
 .librecores-project-infobox .code-quality-score {
@@ -318,7 +338,10 @@ h1 a:hover, h1 a:active {
   text-align: center;
 }
 
-
+.librecores-project-metrics .project-meta .graph-title {
+  text-align: center;
+  font-size: 0.8em;
+}
 
 /*.panel-default > .panel-heading {
   font-weight: 600;
@@ -451,3 +474,34 @@ h1 a:hover, h1 a:active {
   font-size: 0.8em;
   color: #888888;
 }
+
+.librecores-project-metrics .metrics {
+  padding: 0;
+  list-style: none;
+}
+
+.librecores-ct-bar,
+.librecores-ct-line {
+  stroke: #0f4bac;
+}
+
+.librecores-ct-bar {
+  stroke-width: 10px;
+}
+
+.librecores-ct-line {
+  fill: #0f4bac;
+  fill-opacity: 0.2;
+  stroke-width: 2px;
+}
+
+.project-commit-graph {
+  position: static;
+  display: block;
+}
+
+.librecores-lang-chart-label {
+  color: white;
+  font-size: 0.75em;
+}
+
