@@ -153,6 +153,7 @@ class ProjectController extends Controller
         $current = new \DateTimeImmutable();
 
         $metadata = [
+            'qualityScore' => $projectMetricsProvider->getCodeQualityScore($p),
             'latestCommit' => $projectMetricsProvider->getLatestCommit($p),
             'firstCommit' => $projectMetricsProvider->getFirstCommit($p),
             'contributorCount' => $projectMetricsProvider->getContributorsCount($p),
@@ -160,13 +161,8 @@ class ProjectController extends Controller
             'topContributors' => $projectMetricsProvider->getTopContributors($p),
             'activityHistogram' => $this->flattenHistogram(
                 $projectMetricsProvider->getCommitHistogram(
-                    $p,
-                    $current->sub(
-                        \DateInterval::createFromDateString('1 year')
-                    ),
-                    $current,
-                    Dates::INTERVAL_WEEK
-                )
+                    $p, Dates::INTERVAL_WEEK, $current->sub(
+                    \DateInterval::createFromDateString('1 year')), $current)
             ),
             'languageGraph' => [
                 'options' => [
