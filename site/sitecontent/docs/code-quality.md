@@ -4,7 +4,7 @@ The quality score you see on every project page is calculated from
 various metrics extracted from the project's source code, its issue
 tracker, pull requests (for GitHub projects) and project's activity.
 
-The score gives you an estimate of how good the project is, by
+The score gives you an estimate of the quality of the project by
 examining a few points.
 
 1. How long has been the project actively developed ?
@@ -16,6 +16,9 @@ examining a few points.
 
 We calculate the score by awarding or deducting points accordion to
 certain criteria on certain metrics.
+
+*We will be constantly updating this formula to reflect a more
+practical score after evaluating with more real world projects.*
 
 1. **Presence of an issue tracker**: +2 if present, -1 if not.
 2. **Activity**: Activity co\nsists of any activity such as, commits
@@ -33,6 +36,8 @@ more than 3 contributors, else -1.
 code is greater than 0.2, else -1.
 7. **GitHub stars**: +2.5 for 10000+ stars, +1 for 1000 - 10000 stars,
 +0.5 for 100 stars.
+8. **Releases**: +0.5 if project has well formatted release tags.
+9. **Recent releases**: +0.5 for releases within 3 years.
 8. **Changelog**: +0.25 for release notes or a change log.
 9. **Description**: +1 if project description is present, else -2.
 10. **License**:  +1 if a license is present or selected in project
@@ -43,3 +48,5 @@ rate since the beginning.
 13. **Trend in number of contributors**: +0.5 if new contributors actively
 join the project.
 
+The score is fit into a 5 star rating system. Partial scores are ceiled to
+nearest .5.

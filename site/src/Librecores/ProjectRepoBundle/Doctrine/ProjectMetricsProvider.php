@@ -4,7 +4,6 @@ namespace Librecores\ProjectRepoBundle\Doctrine;
 
 use Librecores\ProjectRepoBundle\Entity\Commit;
 use Librecores\ProjectRepoBundle\Entity\Contributor;
-use Librecores\ProjectRepoBundle\Entity\GitSourceRepo;
 use Librecores\ProjectRepoBundle\Entity\LanguageStat;
 use Librecores\ProjectRepoBundle\Entity\Project;
 use Librecores\ProjectRepoBundle\Repository\CommitRepository;
@@ -358,7 +357,15 @@ class ProjectMetricsProvider
             $score += 0.5;
         }
 
-        // TODO: +0.5 for release tags
+        // +0.5 for release tags
+        if (!empty($project->getReleases())) {
+            $score += 0.5;
+
+            // +0.5 for recent release
+            if ($project->getReleases()[0]->getPublishedAt()->diff(new \DateTime())->y < 3) {
+                $score += 0.5;
+            }
+        }
 
         // +0.25 for changelog
         if (preg_match('/change\s?log|release\s?(notes|history)?/i', $project->getDescriptionText())) {
@@ -428,7 +435,7 @@ class ProjectMetricsProvider
 
 
     /**
-     * Get thethe average rate of change of commits.
+     * Get the average rate of change of commits.
      *
      * It is calculated in 3 phases, which are roughly 1/3 of project's lifetime.
      * For projects< 6 years and > 2years 2 phases - start and mid, are
