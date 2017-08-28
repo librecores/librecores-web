@@ -92,9 +92,19 @@
       <br/>
       {% endif %}
 
-      {% if project.dateLastActivityOccured %}
+      {% if project.dateLastActivityOccurred %}
         <i class="fa fa-refresh" aria-hidden="true"></i>
-        <span>Last updated {{ project.dateLastActivityOccured | time_diff }}</span>
+        <span>Last updated {{ project.dateLastActivityOccurred | time_diff }}</span>
+        <br/>
+      {% endif %}
+
+      {% if project.releases | length > 0 %}
+        <i class="fa fa-tag" aria-hidden="true"></i>
+        <span>{{ project.releases[0].name }}
+          {% transchoice project.releases | length %}
+          is the first release | is the latest of %count% releases
+          {% endtranschoice %}
+        </span>
         <br/>
       {% endif %}
 

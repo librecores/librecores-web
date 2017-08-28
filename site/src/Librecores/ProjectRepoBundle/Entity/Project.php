@@ -283,6 +283,14 @@ class Project
     private $watchers;
 
     /**
+     * Releases of this project
+     * @var ProjectRelease[]
+     *
+     * @ORM\Column(type="array")
+     */
+    private $releases;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -747,12 +755,12 @@ class Project
     }
 
     /**
-     * Set dateLastActivityOccured
+     * Set dateLastActivityOccurred
      *
      * @param \DateTime $date
      * @return Project
      */
-    public function setDateLastActivityOccured($date)
+    public function setDateLastActivityOccurred($date)
     {
         $this->dateLastActivityOccurred = $date;
 
@@ -760,11 +768,11 @@ class Project
     }
 
     /**
-     * Get dateLastActivityOccured
+     * Get dateLastActivityOccurred
      *
      * @return \DateTime
      */
-    public function getDateLastActivityOccured()
+    public function getDateLastActivityOccurred()
     {
         return $this->dateLastActivityOccurred;
     }
@@ -932,6 +940,29 @@ class Project
     public function setWatchers(int $watchers)
     {
         $this->watchers = $watchers;
+
+        return $this;
+    }
+
+    /**
+     * Get releases
+     *
+     * @return ProjectRelease[]
+     */
+    public function getReleases()
+    {
+        return $this->releases;
+    }
+
+    /**
+     * Set releases
+     *
+     * @param ProjectRelease[] $releases
+     * @return Project
+     */
+    public function setReleases(array $releases)
+    {
+        $this->releases = $releases;
 
         return $this;
     }
