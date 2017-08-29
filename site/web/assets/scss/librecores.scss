@@ -1,0 +1,62 @@
+.librecores-project-list-metadata {
+  margin: 1em 0;
+  font-size: 0.8em;
+  color: #888888;
+
+  span {
+    margin-right: 1em;
+  }
+}
+
+
+.librecores-project-metrics .project-meta {
+
+  .nodata {
+    text-align: center;
+
+    .fa-ban {
+      color: red;
+    }
+  }
+
+  .graph-title {
+    text-align: center;
+    font-size: 0.8em;
+  }
+
+  &.project-releases .release-list-container {
+    min-height: 150px;
+    max-height: 300px;
+    overflow-y: scroll;
+    overflow-x: visible;
+
+    .release-list li {
+      border-bottom: 1px solid #ccc;
+      margin-top: 0.5em;
+      padding-bottom: 0.5em;
+
+      .release-name {
+        font-weight: bold;
+      }
+
+      .release-info {
+        font-size: 0.8em;
+      }
+
+      &.prerelease {
+        .release-name {
+          .fa-cube {
+            color: orange;
+          }
+
+          .prerelease-tag {
+            background: orange;
+            color: black;
+            padding: 0.125em;
+            border-radius: 2px;
+          }
+        }
+      }
+    }
+  }
+}

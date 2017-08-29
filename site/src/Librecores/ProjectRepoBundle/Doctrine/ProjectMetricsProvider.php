@@ -231,6 +231,9 @@ class ProjectMetricsProvider
      */
     public function getMostUsedLanguages(Project $project): array
     {
+        if (!$project->getSourceRepo()->getSourceStats()->isAvailable()) {
+            return [];
+        }
         $langStats = $project->getSourceRepo()->getSourceStats()->getLanguageStats();
 
         usort(
@@ -247,6 +250,7 @@ class ProjectMetricsProvider
                 return ($aCount > $bCount) ? -1 : 1;
             }
         );
+
 
         $minValue = 0.05 * $langStats[0]->getFileCount();
 

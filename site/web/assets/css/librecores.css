@@ -295,20 +295,20 @@ h1 a:hover, h1 a:active {
   color: #777777;
 }
 
-.librecores-project-header > .project-info {
+.librecores-project-header .project-info {
   margin: 1.5em 0;
 }
 
-.librecores-project-header > .project-info .project-quality > .stars {
+.librecores-project-header .project-info .project-quality > .stars {
   color: gold;
   font-size: 1.25em;
 }
 
-.librecores-project-header > .project-info .project-quality > .star-value {
+.librecores-project-header .project-info .project-quality > .star-value {
   color: #666;
 }
 
-.librecores-project-header > .project-info .project-quality > .score-help a {
+.librecores-project-header .project-info .project-quality > .score-help a {
   color: #666;
   font-size: 0.8em;
 }
@@ -336,11 +336,6 @@ h1 a:hover, h1 a:active {
   margin-top: 5px;
   color: #444;
   text-align: center;
-}
-
-.librecores-project-metrics .project-meta .graph-title {
-  text-align: center;
-  font-size: 0.8em;
 }
 
 /*.panel-default > .panel-heading {
@@ -467,17 +462,6 @@ h1 a:hover, h1 a:active {
 
 .librecores-icon-pr {
   transform: rotate(180deg) scale(-1,1);
-}
-
-.librecores-project-list-metadata {
-  margin: 1em 0;
-  font-size: 0.8em;
-  color: #888888;
-}
-
-.librecores-project-metrics .metrics {
-  padding: 0;
-  list-style: none;
 }
 
 .librecores-ct-bar,

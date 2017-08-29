@@ -22,26 +22,32 @@
     {{ project.tagline }}
   </div>
   {% endif %}
-  <div class="project-info col-md-8 col-sm-12">
-    <div class="project-quality">
-      <span class="stars">
-        {% for _ in range(1,metadata.qualityScore.fullStars) %}
-          <span class="fa fa-star" aria-hidden="true"></span>
-        {% endfor %}
-        {% if metadata.qualityScore.halfStars == 1 %}
-          <span class="fa fa-star-half-full" aria-hidden="true"></span>
+  <div class="row">
+    <div class="project-info col-md-8 col-sm-12">
+      <div class="project-quality">
+        {% if metadata.qualityScore.value > 0 %}
+        <span class="stars">
+          {% for _ in range(1,metadata.qualityScore.fullStars) %}
+            <span class="fa fa-star" aria-hidden="true"></span>
+          {% endfor %}
+          {% if metadata.qualityScore.halfStars == 1 %}
+            <span class="fa fa-star-half-full" aria-hidden="true"></span>
+          {% endif %}
+          {% for _ in range(metadata.qualityScore.fullStars + metadata.qualityScore.halfStars + 1, 5) %}
+            <span class="fa fa-star-o" aria-hidden="true"></span>
+          {% endfor %}
+        </span>
+        <span class="star-value">{{ metadata.qualityScore.value }}/5</span>
+        <span class="score-help">
+          <a href="{{ path('librecores_site_page', { 'page': 'docs/code-quality' }) }}">
+            <i class="fa fa-question-circle" aria-hidden="true" ></i>
+            <span class="sr-only">How did we calculate this score?</span>
+          </a>
+        </span>
+        {% else %}
+        <span class="nodata text-muted">We have not analyzed this project yet</span>
         {% endif %}
-        {% for _ in range(metadata.qualityScore.fullStars + metadata.qualityScore.halfStars + 1, 5) %}
-          <span class="fa fa-star-o" aria-hidden="true"></span>
-        {% endfor %}
-      </span>
-      <span class="star-value">{{ metadata.qualityScore.value }}/5</span>
-      <span class="score-help">
-        <a href="{{ path('librecores_site_page', { 'page': 'docs/code-quality' }) }}">
-          <i class="fa fa-question-circle" aria-hidden="true" ></i>
-          <span class="sr-only">How did we calculate this score?</span>
-        </a>
-      </span>
+      </div>
     </div>
   </div>
 </div>
@@ -93,29 +99,29 @@
             <h4 class="panel-title">Project Meta</h4>
           </div>
           <div class="panel-body">
-            <ul class="metrics">
+            <ul class="fa-ul">
               <li>
-                <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                <i class="fa-li fa fa-plus-circle" aria-hidden="true"></i>
                 <span>Registered {{ project.dateAdded | time_diff }}</span>
               </li>
 
               {% if metadata.firstCommit %}
                 <li>
-                  <i class="fa fa-bookmark" aria-hidden="true"></i>
+                  <i class="fa-li fa fa-bookmark" aria-hidden="true"></i>
                   <span>Started {{ metadata.firstCommit.dateCommitted | time_diff }}</span>
                 </li>
               {% endif %}
 
               {% if metadata.latestCommit %}
                 <li>
-                  <i class="fa fa-refresh" aria-hidden="true"></i>
-                  <span>Last code update {{ metadata.latestCommit.dateCommitted | time_diff }}</span>
+                  <i class="fa-li fa fa-refresh" aria-hidden="true"></i>
+                  <span>Last commit {{ metadata.latestCommit.dateCommitted | time_diff }}</span>
                 </li>
               {% endif %}
             </ul>
           </div>
         </div>
-        <div class="panel panel-default project-meta">
+        <div class="panel panel-default project-meta project-commits">
           <div class="panel-heading">
             <h4 class="panel-title">Commits</h4>
           </div>
@@ -128,7 +134,7 @@
                 </div>
               <p class="graph-title" >Commits per year</p>
               {% else %}
-              <p><i class="fa fa-ban" aria-hidden="true"></i> Data not available</p>
+              <p class="nodata"><i class="fa fa-ban" aria-hidden="true"></i> Data not available</p>
               {% endif %}
             </div>
             <div class="commit-trend">
@@ -136,9 +142,7 @@
             </div>
           </div>
         </div>
-      </div>
-      <div class="col-sm-12 col-md-6">
-        <div class="panel panel-default project-meta">
+        <div class="panel panel-default project-meta project-contributors">
           <div class="panel-heading">
             <h4 class="panel-title">Contributors</h4>
           </div>
@@ -149,16 +153,61 @@
               </div>
               <p class="graph-title" >Unique contributors per year</p>
             {% else %}
-              <p><i class="fa fa-ban" aria-hidden="true"></i> Data not available</p>
+              <p class="nodata"><i class="fa fa-ban" aria-hidden="true"></i> Data not available</p>
             {% endif %}
           </div>
         </div>
-        <div class="panel panel-default">
+      </div>
+      <div class="col-sm-12 col-md-6">
+        <div class="panel panel-default project-meta project-releases">
+          <div class="panel-heading">
+            <h4 class="panel-title">Releases</h4>
+          </div>
+          <div class="panel-body">
+            {% if project.releases | length > 0 %}
+            <div class="alert alert-info">
+              <p><i class="fa fa-cube"></i> {{ project.releases[0].name }} is
+                {% transchoice project.releases | length %}
+                is the only release.|is the latest of %count% releases.
+                {% endtranschoice %}
+              </p>
+            </div>
+            <div class="release-list-container">
+              <ul class="release-list fa-ul">
+                {% for release in project.releases %}
+                <li class="{% if release.prerelease %}prerelease{% endif %}">
+                  <div class="release-name">
+                    <i class=" fa-li fa fa-cube"></i>{{ release.name }}
+                  </div>
+                  <div class="release-info text-muted">
+                    <span> {{ release.publishedAt | date('M j, Y') }}</span>
+                    <span>{{ release.commitID }}</span>
+                    {% if release.prerelease %}
+                    <span class="prerelease-tag">
+                      prerelease
+                    </span>
+                    {% endif %}
+                  </div>
+                </li>
+                {% endfor %}
+              </ul>
+            </div>
+            {% else %}
+              <p class="nodata"><i class="fa fa-ban" aria-hidden="true"></i> Data not available</p>
+            {% endif %}
+          </div>
+        </div>
+        <div class="panel panel-default project-meta ">
           <div class="panel-heading">
             <h4 class="panel-title">Languages</h4>
           </div>
           <div class="panel-body">
+            {% if project.sourceRepo.sourceStats.available %}
             <div class="language-graph ct-perfect-fourth">{{ metadata.languageGraph | json_encode }}</div>
+            <p class="graph-title">Share of languages used</p>
+            {% else %}
+            <p class="nodata"><i class="fa fa-ban" aria-hidden="true"></i> Data not available</p>
+            {% endif %}
           </div>
         </div>
       </div>
@@ -211,7 +260,7 @@
       {% endif %}
 
       {% if project.releases | length > 0 %}
-        <i class="fa fa-tag" aria-hidden="true"></i>
+        <i class="fa fa-cube" aria-hidden="true"></i>
         <span>{{ project.releases[0].name }} released {{ project.releases[0].getPublishedAt | time_diff }}</span>
         <br/>
       {% endif %}
