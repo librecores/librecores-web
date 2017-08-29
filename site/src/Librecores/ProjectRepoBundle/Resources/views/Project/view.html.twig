@@ -8,7 +8,11 @@
 
 {% block stylesheets %}
   {{ parent() }}
-  <link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
+  {% stylesheets filter="cssrewrite"
+    "assets/css/chartist.min.css"
+  %}
+  <link rel="stylesheet" href="{{ asset_url }}" />
+  {% endstylesheets %}
 {% endblock %}
 
 {% block content %}
@@ -348,8 +352,8 @@
 
 {% block javascripts %}
   {{ parent() }}
-  <script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
   {% javascripts
+    'assets/js/chartist.min.js'
     'assets/js/metrics.js'
   filter="?jsqueeze" %}
   <script src="{{ asset_url }}"></script>

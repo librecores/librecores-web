@@ -43,3 +43,13 @@ Livestamp.js (modified)
   License: MIT
   Files:
     web/assets/js/livestamp.js (modified from upstream)
+
+Chartist.js
+  URL: http://gionkunz.github.io/chartist-js/
+  License: MIT or WTFPL
+  Files:
+    web/assets/css/chartist.css
+    web/assets/css/chartist.min.css
+    web/assets/js/chartist.js
+    web/assets/js/chartist.min.js
+    web/assets/js/chartist.min.js.map
