@@ -156,8 +156,8 @@ class CommitRepository extends EntityRepository
      */
     private function getCommitHistogramByWeek(
         SourceRepo $repo,
-        \DateTimeImmutable $start,
-        \DateTimeImmutable $end
+        ?\DateTimeImmutable $start,
+        ?\DateTimeImmutable $end
     ) {
         // for week wise histograms, we need (week,year) tuple
         $query = $this->createQueryBuilder('c')
@@ -169,31 +169,26 @@ class CommitRepository extends EntityRepository
             ->addOrderBy('week', 'ASC')
             ->addSelect('COUNT(1) as commits')
             ->where('c.sourceRepo = :repo');
+
+        $params = [ 'repo' => $repo  ];
+
         if (null !== $start) {
             $query->andWhere('c.dateCommitted >= :start');
+            // set date to first day of the week and time to midnight
+            // to include all activity in that week
+            // "obscure" date time modifications formats described in:
+            // http://php.net/manual/en/datetime.formats.relative.php
+            $params['start'] = $start->modify('midnight, this week');
         }
 
         if (null !== $end) {
             $query->andWhere('c.dateCommitted <= :end');
+            $params['end'] = $end;
         }
 
-        $result = $query->setParameters(
-                [
-                    'repo' => $repo,
-
-                    // set date to first day of the week and time to midnight
-                    // to include all activity in that week
-                    // "obscure" date time modifications formats described in:
-                    // http://php.net/manual/en/datetime.formats.relative.php
-                    'start' => $start->modify(
-                        'midnight, this week'
-                    ),
-
-                    'end' => $end,
-                ]
-            )
-            ->getQuery()
-            ->getResult('group');
+        $result = $query->setParameters($params)
+                        ->getQuery()
+                        ->getResult('group');
 
         if (!empty($result)) {
             // insert missing values

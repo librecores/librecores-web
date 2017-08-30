@@ -69,7 +69,6 @@ assetic:
                 - "assets/js/bootstrap.min.js"
                 - "assets/js/moment.min.js"
                 - "assets/js/livestamp.js"
-                - "assets/js/jquery.peity.js"
 
 # Doctrine Configuration
 doctrine:

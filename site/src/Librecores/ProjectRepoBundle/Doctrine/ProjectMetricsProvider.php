@@ -231,6 +231,9 @@ class ProjectMetricsProvider
      */
     public function getMostUsedLanguages(Project $project): array
     {
+        if (!$project->getSourceRepo()->getSourceStats()->isAvailable()) {
+            return [];
+        }
         $langStats = $project->getSourceRepo()->getSourceStats()->getLanguageStats();
 
         usort(
@@ -248,24 +251,18 @@ class ProjectMetricsProvider
             }
         );
 
-        /** @var LanguageStat[] $topLangs */
-        $topLangs = array_slice($langStats, 0, 4);
 
-        $result = [];
-        if (count($langStats) > 4) {
-            $others = 0;
+        $minValue = 0.05 * $langStats[0]->getFileCount();
 
-            for ($i = 4; $i < count($langStats); $i++) {
-                $others += $langStats[$i]->getLinesOfCode();
+        $result = ['Others' => 0];
+        foreach ($langStats as $lang) {
+            $fc = $lang->getFileCount();
+            if ($fc < $minValue) {
+                $result['Others'] += $fc;
+            } else {
+                $result[$lang->getLanguage()] = $fc;
             }
-            $result['others'] = $others;
         }
-
-        foreach ($topLangs as $lang) {
-            $result[$lang->getLanguage()] = $lang->getLinesOfCode();
-        }
-
-        sort($result, SORT_NUMERIC);
 
         return $result;
     }

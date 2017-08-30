@@ -6,18 +6,54 @@
 
 {% block pagepath %}Home &raquo; Projects &raquo; {{ project.displayName }}{% endblock %}
 
+{% block stylesheets %}
+  {{ parent() }}
+  {% stylesheets filter="cssrewrite"
+    "assets/css/chartist.min.css"
+  %}
+  <link rel="stylesheet" href="{{ asset_url }}" />
+  {% endstylesheets %}
+{% endblock %}
+
 {% block content %}
 <div class="librecores-project-header">
   <h1>
     {{ project.displayName }}
     <small> by <a href="{{ path('librecores_project_repo_user_org_view', {'userOrOrganization': project.parentName }) }}">{{ project.parentName }}</a></small>
   </h1>
-
   {% if project.tagline %}
   <div class="tagline">
     {{ project.tagline }}
   </div>
   {% endif %}
+  <div class="row">
+    <div class="project-info col-md-8 col-sm-12">
+      <div class="project-quality">
+        {% if metadata.qualityScore.value > 0 %}
+        <span class="stars">
+          {% for _ in range(1,metadata.qualityScore.fullStars) %}
+            <span class="fa fa-star" aria-hidden="true"></span>
+          {% endfor %}
+          {% if metadata.qualityScore.halfStars == 1 %}
+            <span class="fa fa-star-half-full" aria-hidden="true"></span>
+          {% endif %}
+          {% for _ in range(metadata.qualityScore.fullStars + metadata.qualityScore.halfStars + 1, 5) %}
+            <span class="fa fa-star-o" aria-hidden="true"></span>
+          {% endfor %}
+        </span>
+        <span class="star-value">{{ metadata.qualityScore.value }}/5</span>
+        <span class="score-help">
+          <a href="{{ path('librecores_site_page', { 'page': 'docs/code-quality' }) }}">
+            <i class="fa fa-question-circle" aria-hidden="true" ></i>
+            <span class="sr-only">How did we calculate this score?</span>
+          </a>
+        </span>
+        {% else %}
+        <span class="nodata text-muted">We have not analyzed this project yet</span>
+        {% endif %}
+      </div>
+    </div>
+  </div>
 </div>
 
 <div class="row">
@@ -34,6 +70,12 @@
     <a href="#LICENSE" aria-controls="settings" role="tab" data-toggle="tab">
       <i class="fa fa-copyright" aria-hidden="true"></i>
       LICENSE
+    </a>
+  </li>
+  <li role="presentation">
+    <a id="project-metrics-tab" href="#project-metrics" aria-controls="project-metrics" role="tab" data-toggle="tab">
+      <i class="fa fa-bar-chart" aria-hidden="true"></i>
+      Project metrics
     </a>
   </li>
   {% if is_granted("edit", project) %}
@@ -53,24 +95,139 @@
   <div role="tabpanel" class="tab-pane" id="LICENSE">
   {{  project.licenseText|raw }}
   </div>
+  <div role="tabpanel" class="tab-pane librecores-project-metrics" id="project-metrics">
+    <div class="row">
+      <div class="col-sm-12 col-md-6">
+        <div class="panel panel-default project-meta">
+          <div class="panel-heading">
+            <h4 class="panel-title">Project Meta</h4>
+          </div>
+          <div class="panel-body">
+            <ul class="fa-ul">
+              <li>
+                <i class="fa-li fa fa-plus-circle" aria-hidden="true"></i>
+                <span>Registered {{ project.dateAdded | time_diff }}</span>
+              </li>
+
+              {% if metadata.firstCommit %}
+                <li>
+                  <i class="fa-li fa fa-bookmark" aria-hidden="true"></i>
+                  <span>Started {{ metadata.firstCommit.dateCommitted | time_diff }}</span>
+                </li>
+              {% endif %}
+
+              {% if metadata.latestCommit %}
+                <li>
+                  <i class="fa-li fa fa-refresh" aria-hidden="true"></i>
+                  <span>Last commit {{ metadata.latestCommit.dateCommitted | time_diff }}</span>
+                </li>
+              {% endif %}
+            </ul>
+          </div>
+        </div>
+        <div class="panel panel-default project-meta project-commits">
+          <div class="panel-heading">
+            <h4 class="panel-title">Commits</h4>
+          </div>
+          <div class="panel-body">
+            <div class="librecores-project-activity">
+              {% if metadata.commitCount %}
+                <div class="commit-graph ct-perfect-fourth">
+                  {#  metadata.activityHistogramChart | json_encode  #}
+                  {{  metadata.commitGraph | json_encode }}
+                </div>
+              <p class="graph-title" >Commits per year</p>
+              {% else %}
+              <p class="nodata"><i class="fa fa-ban" aria-hidden="true"></i> Data not available</p>
+              {% endif %}
+            </div>
+            <div class="commit-trend">
+
+            </div>
+          </div>
+        </div>
+        <div class="panel panel-default project-meta project-contributors">
+          <div class="panel-heading">
+            <h4 class="panel-title">Contributors</h4>
+          </div>
+          <div class="panel-body">
+            {% if project.sourceRepo.sourceStats.available %}
+              <div class="contributors-graph ct-perfect-fourth">
+                {{  metadata.contributorsGraph | json_encode }}
+              </div>
+              <p class="graph-title" >Unique contributors per year</p>
+            {% else %}
+              <p class="nodata"><i class="fa fa-ban" aria-hidden="true"></i> Data not available</p>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-12 col-md-6">
+        <div class="panel panel-default project-meta project-releases">
+          <div class="panel-heading">
+            <h4 class="panel-title">Releases</h4>
+          </div>
+          <div class="panel-body">
+            {% if project.releases | length > 0 %}
+            <div class="alert alert-info">
+              <p><i class="fa fa-cube"></i> {{ project.releases[0].name }} is
+                {% transchoice project.releases | length %}
+                is the only release.|is the latest of %count% releases.
+                {% endtranschoice %}
+              </p>
+            </div>
+            <div class="release-list-container">
+              <ul class="release-list fa-ul">
+                {% for release in project.releases %}
+                <li class="{% if release.prerelease %}prerelease{% endif %}">
+                  <div class="release-name">
+                    <i class=" fa-li fa fa-cube"></i>{{ release.name }}
+                  </div>
+                  <div class="release-info text-muted">
+                    <span> {{ release.publishedAt | date('M j, Y') }}</span>
+                    <span>{{ release.commitID }}</span>
+                    {% if release.prerelease %}
+                    <span class="prerelease-tag">
+                      prerelease
+                    </span>
+                    {% endif %}
+                  </div>
+                </li>
+                {% endfor %}
+              </ul>
+            </div>
+            {% else %}
+              <p class="nodata"><i class="fa fa-ban" aria-hidden="true"></i> Data not available</p>
+            {% endif %}
+          </div>
+        </div>
+        <div class="panel panel-default project-meta ">
+          <div class="panel-heading">
+            <h4 class="panel-title">Languages</h4>
+          </div>
+          <div class="panel-body">
+            {% if project.sourceRepo.sourceStats.available %}
+            <div class="language-graph ct-perfect-fourth">{{ metadata.languageGraph | json_encode }}</div>
+            <p class="graph-title">Share of languages used</p>
+            {% else %}
+            <p class="nodata"><i class="fa fa-ban" aria-hidden="true"></i> Data not available</p>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
+
 
 </div>
 <div class="col-sm-4">
   <div class="librecores-project-infobox" style="background-color: #f7f7f7; padding: 10px; border-radius: 3px;">
     <div><b>Data Sheet</b></div>
-    <div class="code-quality-score">
-      {% for _ in range(1,metadata.qualityScore) %}
-      <span class="fa fa-2x fa-star" aria-hidden></span>
-      {% endfor %}
-      {% for _ in range(metadata.qualityScore + 1, 5) %}
-      <span class="fa fa-2x fa-star-o" aria-hidden></span>
-      {% endfor %}
-    </div>
     <div>
       {% if project.projectUrl %}
       <i class="fa fa-home" aria-hidden="true"></i>
-      <a href="{{ project.projectUrl|escape('html_attr') }}">Project Web Site</a>
+      <a href="{{ project.projectUrl | escape('html_attr') }}">Project Web Site</a>
       <br/>
       {% endif %}
 
@@ -107,27 +264,10 @@
       {% endif %}
 
       {% if project.releases | length > 0 %}
-        <i class="fa fa-tag" aria-hidden="true"></i>
-        <span>{{ project.releases[0].name }}
-          {% transchoice project.releases | length %}
-          is the first release | is the latest of %count% releases
-          {% endtranschoice %}
-        </span>
+        <i class="fa fa-cube" aria-hidden="true"></i>
+        <span>{{ project.releases[0].name }} released {{ project.releases[0].getPublishedAt | time_diff }}</span>
         <br/>
       {% endif %}
-
-      {% if metadata.latestCommit %}
-        <i class="fa fa-refresh" aria-hidden="true"></i>
-        <span>Last code update {{ metadata.latestCommit.dateCommitted | time_diff }}</span>
-        <br/>
-      {% endif %}
-
-      {% if metadata.firstCommit %}
-        <i class="fa fa-bookmark" aria-hidden="true"></i>
-        <span>Started {{ metadata.firstCommit.dateCommitted | time_diff }}</span>
-        <br/>
-      {% endif %}
-
 
       {% if project.sourceRepo.sourceStats.available %}
         {%  if project.sourceRepo.sourceStats.languageStats is not empty %}
@@ -186,8 +326,8 @@
 
       {% if metadata.commitCount %}
       <div class="librecores-project-activity">
-        <div class="librecores-project-activity-graph">
-          {{  metadata.activityHistogram | join(',')  }}
+        <div class="activity-graph ct-major-twelfth">
+          {{  metadata.activityGraph | join(',')  }}
         </div>
         <p>Activity in last 1 year</p>
       </div>
@@ -210,10 +350,12 @@
 </div>
 {% endblock %}
 
-{% block pagejs %}
-  $(function(){
-    $('[data-toggle="tooltip"]').tooltip();
-    var chart = $('.librecores-project-activity-graph');
-    chart.height('100px').peity('line', { height: chart.height(), width: chart.width() });
-  });
+{% block javascripts %}
+  {{ parent() }}
+  {% javascripts
+    'assets/js/chartist.min.js'
+    'assets/js/metrics.js'
+  filter="?jsqueeze" %}
+  <script src="{{ asset_url }}"></script>
+  {% endjavascripts %}
 {% endblock %}
