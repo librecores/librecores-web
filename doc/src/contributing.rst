@@ -11,15 +11,15 @@ In any case, get in contact if you have any question and remember, no question i
 All of us started small at some point in time.
 We have a couple options for you got get in contact with us.
 
-* Chat with us on IRC
-   * If you already have an IRC client, connect to the channel #librecores on the freenode network.
-   * If you don't have an IRC client, use the web chat: https://webchat.freenode.net/?channels=%23librecores You don't need to register, just pick a nickname and connect!
-   * Sometimes it take time for people to respond to a question on IRC. Maybe we're busy, or sleeping (most developers are living in Europe). Just post your question and leave the chat window open! Or drop us a mail, see below.
-* Write an e-mail to the mailing list dev@librecores.org
+* Chat with us on Gitter
+   * Join the chat at http://gitter.im/librecores/Lobby. Most of the devs hang out there.
+   * If you don't get an immediate answer just wait, most of us are based in European time zones.
+     We try to get back to your question as soon as we see it.
+* Write an e-mail to the mailing list dev@lists.librecores.org
    * You need to sign up for the mailing list first here: https://lists.librecores.org/listinfo/dev
-   * After you've signed up, you can write a mail to dev@librecores.org and will receive all replies.
+   * After you've signed up, you can write a mail to dev@lists.librecores.org and will receive all replies.
 * Talk to a human
-   * if you have trouble with IRC or the mailing list, contact Philipp (@imphil on IRC and GitHub) by dropping him a mail at mail@philipp-wagner.com.
+   * if you have trouble with the means of communication above contact Philipp (@imphil on IRC and GitHub) by dropping him a mail at mail@philipp-wagner.com.
 
 
 Work on a "Good First Bug"
