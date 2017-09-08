@@ -88,12 +88,11 @@ LibreCores Search
             {{ project.sourceRepo.sourceStats.mostUsedLanguage }}
           </span>
           {%  endif %}
-          {# Waiting for PR #167 #}
-          {#{% if project.dateLastActivityOccured %}#}
-          {#<span class="updated">#}
-          {#<i class="fa fa-history"></i> Updated {{ project.dateLastActivityOccured | time_diff }}#}
-          {#</span>#}
-          {#{% endif %}#}
+          {% if project.dateLastActivityOccured %}
+          <span class="updated">
+          <i class="fa fa-history"></i> Updated {{ project.dateLastActivityOccured | time_diff }}
+          </span>
+          {% endif %}
         </div>
         <hr/>
       {% else %}
