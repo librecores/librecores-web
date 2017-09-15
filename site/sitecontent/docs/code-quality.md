@@ -21,7 +21,7 @@ certain criteria on certain metrics.
 practical score after evaluating with more real world projects.*
 
 1. **Presence of an issue tracker**: +2 if present, -1 if not.
-2. **Activity**: Activity co\nsists of any activity such as, commits
+2. **Activity**: Activity consists of any activity such as, commits
 to the repository, comments on issue trackers, pull requests etc. +2
 if last activity took place within 1 month, +1 if last activity took
 place within last 1 year, +0.25 if last activity took place within
@@ -49,4 +49,4 @@ rate since the beginning.
 join the project.
 
 The score is fit into a 5 star rating system. Partial scores are ceiled to
-nearest .5.
+nearest 0.5.
