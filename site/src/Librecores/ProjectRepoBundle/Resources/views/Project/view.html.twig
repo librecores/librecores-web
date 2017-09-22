@@ -37,9 +37,12 @@
           {% if metadata.qualityScore.halfStars == 1 %}
             <span class="fa fa-star-half-full" aria-hidden="true"></span>
           {% endif %}
-          {% for _ in range(metadata.qualityScore.fullStars + metadata.qualityScore.halfStars + 1, 5) %}
-            <span class="fa fa-star-o" aria-hidden="true"></span>
-          {% endfor %}
+          {% set stars = metadata.qualityScore.fullStars + metadata.qualityScore.halfStars %}
+          {% if stars < 5 %}
+            {% for _ in range(stars + 1, 5) %}
+              <span class="fa fa-star-o" aria-hidden="true"></span>
+            {% endfor %}
+          {% endif %}
         </span>
         <span class="star-value">{{ metadata.qualityScore.value }}/5</span>
         <span class="score-help">
