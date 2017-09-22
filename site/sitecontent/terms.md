@@ -1,95 +1,176 @@
-# Policies 
-
-## Content Policy
+# Content Policy
 
 This policy is intended to clarify the acceptable use of LibreCores.
 
-### Project Licenses
+## Project Licenses
 
 Only projects which are free and open are allowed on LibreCores, i.e. projects which are licensed under terms compatible with [Open Source Definition](https://opensource.org/osd-annotated) or the [Free Software Definition](https://www.gnu.org/philosophy/free-sw.html).
 
-### Inappropriate and Illegal Use
+## Inappropriate and Illegal Use
 
 LibreCores is intended for sharing open source IP, EDA tools and related projects. It is not intended to be used as an all-purpose content hosting site. LibreCores may not be used for illegal purposes, for fraudulent purposes, for the purposes of phishing (obtaining account and password information) or for Spam. Projects or Users publishing inappropriate or illegal content, using deceptive means to generate revenue or traffic, or whose primary purpose is affiliate marketing, will be suspended.
 
-### Identity Theft and Privacy
+## Identity Theft and Privacy
 
 Users that misleadingly appropriate the identity of another person are not permitted. Users may not post other people's personally identifying or confidential information, including but not limited to credit card numbers, Social Security Numbers, and driver's and other licence numbers. You may not post information such as other people's passwords, usernames, phone numbers, addresses and e-mail addresses unless already publicly accessible on the Web.
 
-### Hate Content, Defamation, and Libel
+## Hate Content, Defamation, and Libel
 
 Hate speech and other objectionable content that is unlawful, defamatory, and fraudulent. Note that an allegation of defamatory expression, in and of itself, does not establish defamation. The truth or falsehood of a bit of expression is a key element in establishing defamation, and we are not in a position to make that sort of fact-based judgement. That said, if we have reason to believe that a particular statement is defamatory (a court order, for example), we will remove that statement.
 
-### Sexually Explicit Content
+## Sexually Explicit Content
 
 Accounts that use to host sexually explicit or pornographic material will be suspended.
 
-### Disruptions and Exploits
+## Disruptions and Exploits
 
 We will terminate accounts and block addresses of anyone who attempts unauthorized use of LibreCores.
 
-### Mass Registration and Automation
+## Mass Registration and Automation
 
 Accounts registered automatically or systematically will be permanently suspended.
-Suspended Accounts
 
-If you are found to be in violation of any of the above policies, you will receive a notice via email. Unless you explain or correct your behaviour within 72 hours, your account will be suspended. We will do our best to work with you and ensure a fair outcome in all cases. We reserve the right to immediately suspend, without notice, any content, account, or IP address which we determine to be systematically generated, spam, or potentially damaging to our service or infrastructure. Public access to the content of a suspended account will be blocked, and the LibreCores pages replaced with a generic page, or redirected to the LibreCores front page. The ability to add/edit content will also be disabled.
+## Suspended Accounts
 
-## Privacy Policy
+If you are found to be in violation of any of the above policies, you will receive a notice via email. Unless you explain or correct your behaviour within 72 hours, your account will be suspended. We will do our best to work with you and ensure a fair outcome in all cases. We reserve the right to immediately suspend, without notice, any content, account, or IP address which we determine to be systematically generated, spam, or potentially damaging to our service or infrastructure.
+
+# Privacy Policy
 
 This privacy policy sets out how the Free and Open Source Silicon Foundation CiC ("FOSSi Foundation") uses and protects any information that you give the Free and Open Source Silicon Foundation CiC when using LibreCores (the "Website").
 
-FOSSi Foundation is committed to ensuring that your privacy is protected. Should we ask you to provide certain information by which you can be identified when using this website, then you can be assured that it will only be used in accordance with this privacy statement.
+*Our terms of service are based on the GitHub Privacy Statement, which is licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). This privacy policy is also licensed under the same Creative Commons license and you can use it under your terms.*
 
-FOSSi Foundation may change this policy from time to time by updating this page. You should check this page from time to time to ensure that you are happy with any changes. This policy is effective from 1st April 2017.
+Thanks for entrusting LibreCores with your projects, and your personal information. Holding onto your private information is a serious responsibility, and we want you to know how we're handling it.
 
-### What we collect
+## The short version
 
-We may collect the following information:
+We collect your information only with your consent; we only collect the minimum amount of personal information that is necessary to fulfill the purpose of your interaction with us; we don't sell it to third parties; and we only use it as this Privacy Policy describes.
 
-- name
+Of course, the short version doesn't tell you everything, so please read on for more details!
 
-- contact information including email address
+## What LibreCores collects and why
 
-- other information relevant to Website usage surveys
+###  Information from website browsers
 
-### What we do with the information we gather
+If you're **just browsing the website**, we collect the same basic information that most websites collect. We use common internet technologies, such as cookies and web server logs. This is stuff we collect from everybody, whether they have an account or not.
 
-We require this information to understand your needs and provide you with a better service, and in particular for the following reasons:
+The information we collect about all visitors to our website includes the visitor's browser type, language preference, referring site, additional websites requested, and the date and time of each visitor request. We also collect potentially personally-identifying information like Internet Protocol (IP) addresses.
 
-- Internal record keeping.
+#### Why do we collect this?
 
-- We may use the information to improve our products and services.
+We collect this information to better understand how our website visitors use LibreCores, and to monitor and protect the security of the website.
 
-- We may periodically send emails about new services or other information which we think you may find interesting using the email address which you have provided.
+### Information from users with accounts
 
-- We may use the information to customise the website according to your interests.
+If you **create an account**, we require some basic information at the time of account creation. You will create your own user name and password, and we will ask you for a valid email account. You also have the option to give us more information if you want to, and this may include "User Personal Information."
 
-### Security
+"User Personal Information" is any information about one of our users which could, alone or together with other information, personally identify him or her. Information such as a user name and password, an email address, a real name, and a photograph are examples of "User Personal Information."
 
-We are committed to ensuring that your information is secure. In order to prevent unauthorised access or disclosure, we have put in place suitable physical, electronic and managerial procedures to safeguard and secure the information we collect online.
+User Personal Information does not include aggregated, non-personally identifying information. We may use aggregated, non-personally identifying information to operate, improve, and optimize our website and service.
 
-### How we use cookies
+#### Why do we collect this?
 
-A cookie is a small file which asks permission to be placed on your computer's hard drive. Once you agree, the file is added and the cookie helps analyse web traffic or lets you know when you visit a particular site. Cookies allow web applications to respond to you as an individual. The web application can tailor its operations to your needs, likes and dislikes by gathering and remembering information about your preferences.
+ * We need your User Personal Information to create your account, and to provide the services you request.
+ * We use your User Personal Information, specifically your user name, to identify you on LibreCores.
+ * We use it to fill out your profile and share that profile with other users if you ask us to.
+ * We will use your email address to communicate with you, if you've said that's okay, and only for the reasons you've said that's okay. Please see our section on email communication for more information.
+ * We limit our use of your User Personal Information to the purposes listed in this Privacy Policy. If we need to use your User Personal Information for other purposes, we will ask your permission first. You can always see what information we have, how we're using it, and what permissions you have given us in your user profile.
 
-We use traffic log cookies to identify which pages are being used. This helps us analyse data about web page traffic and improve our website in order to tailor it to customer needs. We only use this information for statistical analysis purposes and then the data is removed from the system.
+## What information LibreCores does not collect
 
-Overall, cookies help us provide you with a better website, by enabling us to monitor which pages you find useful and which you do not. A cookie in no way gives us access to your computer or any information about you, other than the data you choose to share with us.
+We do not intentionally collect **sensitive personal information**, such as social security numbers, genetic data, health information, or religious information. Although LibreCores does not request or intentionally collect any sensitive personal information, we realize that you might store this kind of information in your account, such as in a project. If you store any sensitive personal information on our servers, you are consenting to our storage of that information on our servers, which are in the United States, United Kingdom and Germany.
 
-You can choose to accept or decline cookies. Most web browsers automatically accept cookies, but you can usually modify your browser setting to decline cookies if you prefer. This may prevent you from taking full advantage of the website.
+We do not intentionally collect information that is **stored in your repositories** or other free-form content inputs. Information in your repositories belongs to you, and you are responsible for it, as well as for making sure that your content complies with our Terms of Service (see below).
 
-### Links to other websites
+As your projects are public, anyone (including us) may view its contents. If you have included private or sensitive information in your public repository, such as email addresses, that information may be indexed by search engines or used by third parties.
 
-As an essential feature the website contains links to other websites of interest. However, once you have used these links to leave our site, you should note that we do not have any control over that other website. Therefore, we cannot be responsible for the protection and privacy of any information which you provide whilst visiting such sites and such sites are not governed by this privacy statement. You should exercise caution and look at the privacy statement applicable to the website in question.
+If you're a **child under the age of 13**, you may not have an account on LibreCores. LibreCores does not knowingly collect information from or direct any of our content specifically to children under 13. If we learn or have reason to suspect that you are a user who is under the age of 13, we will unfortunately have to close your account. We don't want to discourage you from learning to code, but those are the rules. Please see our Terms of Service for information about account termination.
 
-### Controlling your personal information
+## How we share the information we collect
 
-We will not sell, distribute or lease your personal information to third parties unless we have your permission or are required by law to do so. We may use your personal information to send you information about third parties which we think you may find interesting if you tell us that you wish this to happen.
+We **do not** share, sell, rent, or trade User Personal Information with third parties for their commercial purposes.
 
-You may request details of personal information which we hold about you under the Data Protection Act 1998. A small fee will be payable. If you would like a copy of the information held on you please e-mail us at: info@fossi-foundation.org.
+We do not disclose User Personal Information outside LibreCores, except in the situations listed in this section or in the section below on Compelled Disclosure.
 
-If you believe that any information we are holding on you is incorrect or incomplete, please email us as soon as possible, at the above address. We will promptly correct any information found to be incorrect.
+We **do share** certain aggregated, non-personally identifying information with others about how our users, collectively, use LibreCores, or how our users respond to our other offerings, such as our conferences or events. For example, we may compile statistics on the usage of open source licenses across LibreCores. However, we do not sell this information to advertisers or marketers.
+
+We may share User Personal Information with your permission, so we can perform services you have requested.
+
+We may share User Personal Information if we are involved in a merger, sale, or acquisition. If any such change of ownership happens, we will ensure that it is under terms that preserve the confidentiality of User Personal Information, and we will notify you on our website or by email before any transfer of your User Personal Information. The organization receiving any User Personal Information will have to honor any promises we have made in our Privacy Policy or in our Terms of Service.
+
+### Public Information on LibreCores
+
+Much of LibreCores is public-facing. If your content is public-facing, third parties may access and use it in compliance with our Terms of Service. We do not sell that content; it is yours.
+
+If you would like to compile LibreCores data, you may only use any public-facing Personal Information you gather for the purpose for which our user has authorized it. For example, where a LibreCores user has made an email address public-facing for the purpose of identification and attribution, do not use that email address for commercial advertising. We expect you to reasonably secure any Personal Information you have gathered from LibreCores, and to respond promptly to complaints, removal requests, and "do not contact" requests from LibreCores or LibreCores users.
+
+Similarly, projects on LibreCores may include publicly available Personal Information collected as part of the collaborative process. In the event that a LibreCores project contains publicly available Personal Information that does not belong to LibreCores users, we will only use that Personal Information for the limited purpose for which it was collected, and we will secure that Personal Information as we would secure any User Personal Information. If you have a complaint about any Personal Information on LibreCores, please see our section on resolving complaints.
+
+## Our use of cookies and tracking
+
+### Cookies
+
+LibreCores uses cookies to make interactions with our service easy and meaningful. We use cookies (and similar technologies, like HTML5 localStorage) to keep you logged in, remember your preferences, and provide information for future development of LibreCores.
+
+A cookie is a small piece of text that our web server stores on your computer or mobile device, which your browser sends to us when you return to our site. Cookies do not necessarily identify you if you are merely visiting LibreCores; however, a cookie may store a unique identifier for each logged in user. The cookies LibreCores sets are essential for the operation of the website, or are used for performance or functionality. By using our website, you agree that we can place these types of cookies on your computer or device. If you disable your browser or device’s ability to accept cookies, you will not be able to log in or use LibreCores’s services.
+
+### Google Analytics
+
+We use Google Analytics as a third party tracking service, but we don’t use it to track you individually or collect your User Personal Information. We use Google Analytics to collect information about how our website performs and how our users, in general, navigate through and use LibreCores. This helps us evaluate our users' use of LibreCores; compile statistical reports on activity; and improve our content and website performance.
+
+Google Analytics gathers certain simple, non-personally identifying information over time, such as your IP address, browser type, internet service provider, referring and exit pages, time stamp, and similar data about your use of LibreCores. We do not link this information to any of your personal information such as your user name.
+
+LibreCores will not, nor will we allow any third party to, use the Google Analytics tool to track our users individually; collect any User Personal Information other than IP address; or correlate your IP address with your identity. Google provides further information about its own privacy practices and offers a browser add-on to opt out of Google Analytics tracking.
+
+Certain pages on our site may set other third party cookies. For example, we may embed content, such as videos, from another site that sets a cookie. While we try to minimize these third party cookies, we can't always control what cookies this third party content sets.
+
+### Tracking
+
+"Do Not Track" is a privacy preference you can set in your browser if you do not want online services to collect and share certain kinds of information about your online activity from third party tracking services. We do not track your online browsing activity on other online services over time and we do not permit third-party services to track your activity on our site beyond our basic Google Analytics tracking, which you may opt out of here. Because we do not share this kind of data with third party services or permit this kind of third party data collection on LibreCores for any of our users, and we do not track our users on third-party websites ourselves, we do not need to respond differently to an individual browser's Do Not Track setting.
+
+If you are interested in turning on your browser's privacy and Do Not Track settings, the Do Not Track website has browser-specific instructions.
+
+Please see our section on email communication to learn about our use of pixel tags in marketing emails.
+
+## How LibreCores secures your information
+
+LibreCores takes all measures reasonably necessary to protect User Personal Information from unauthorized access, alteration, or destruction; maintain data accuracy; and help ensure the appropriate use of User Personal Information. We follow generally accepted industry standards to protect the personal information submitted to us, both during transmission and once we receive it.
+
+No method of transmission, or method of electronic storage, is 100% secure. Therefore, we cannot guarantee its absolute security. For more information, see our security disclosures.
+
+## Resolving Complaints
+
+If you have concerns about the way LibreCores is handling your User Personal Information, please let us know immediately. We want to help. You may contact us by filling out the Privacy contact form. You may also email us directly at privacy@librecores.org with the subject line "Privacy Shield Concerns." We will respond within 45 days at the latest.
+
+## How we respond to compelled disclosure
+
+LibreCores may disclose personally-identifying information or other information we collect about you to law enforcement in response to a valid subpoena, court order, warrant, or similar government order, or when we believe in good faith that disclosure is reasonably necessary to protect our property or rights, or those of third parties or the public at large.
+
+In complying with court orders and similar legal processes, LibreCores strives for transparency. When permitted, we will make a reasonable effort to notify users of any disclosure of their information, unless we are prohibited by law or court order from doing so, or in rare, exigent circumstances.
+
+## How you can access and control the information we collect
+
+If you're already a LibreCores user, you may access, update, alter, or delete your basic user profile information by editing your user profile.
+
+### Data Retention and Deletion
+
+LibreCores will retain User Personal Information for as long as your account is active or as needed to provide you services.
+
+We may retain certain User Personal Information indefinitely, unless you delete it or request its deletion. For example, we don't automatically delete inactive user accounts, so unless you choose to delete your account, we will retain your account information indefinitely.
+
+If you would like to cancel your account or delete your User Personal Information, you may do so in your user profile. We will retain and use your information as necessary to comply with our legal obligations, resolve disputes, and enforce our agreements, but barring legal requirements, we will delete your full profile (within reason) within 30 days.
+
+## How we communicate with you
+
+We will use your email address to communicate with you, if you've said that's okay, **and only for the reasons you've said that's okay**. You have a lot of control over how your email address is used and shared on and through LibreCores. You may manage your communication preferences in your user profile.
+
+If you would like your email to remain private, even when you're commenting on public repositories, you can create a private email address in your user profile. You can also update your local Git configuration to use your private email address. This will not change how we contact you, but it will affect how others see you.
+
+Depending on your email settings, LibreCores may occasionally send notification emails about changes in a repository you're watching, new features, requests for feedback, important policy changes, or offer customer support. We also send marketing emails, but only with your consent. There's an unsubscribe link located at the bottom of each of the emails we send you.
+
+## Changes to our Privacy Policy
+
+Although most changes are likely to be minor, LibreCores may change our Privacy Policy from time to time. We will provide notification to Users of material changes to this Privacy Policy through our Website at least 30 days prior to the change taking effect by posting a notice on our home page or sending email to the email address specified in your LibreCores primary account. For changes to this Privacy Policy that do not affect your rights, we encourage visitors to check this page frequently.
 
 # Terms of Service
 
@@ -141,7 +222,7 @@ Without limiting any of those representations or warranties, FOSSi Foundation ha
 
 ## Responsibility of all Users of the Service
 
-FOSSi Foundation has not reviewed, and cannot review, all of the material, including computer software and all other types of Content, hosted using the Service, and cannot therefore be responsible for that material’s content, use or effects. By operating the Service, FOSSi Foundation does not represent or imply that it endorses the material there posted, or that it believes such material to be accurate, useful or non-harmful. You are responsible for taking precautions as necessary to protect yourself and your computer systems from viruses, worms, Trojan horses, and other harmful or destructive content. The Service may host content that is offensive, indecent, or otherwise objectionable, as well as content containing technical inaccuracies, typographical mistakes, and other errors. The Service may also host material that violates the privacy or publicity rights, or infringes the intellectual property and other proprietary rights, of third parties, or the downloading, copying or use of which is subject to additional terms and conditions, stated or unstated. FOSSi Foundation disclaims any responsibility for any harm resulting from the use of the Service, or from any downloading by users of content there posted.
+FOSSi Foundation has not reviewed, and cannot review, all of the material, including computer software and all other types of Content, hosted using the Service, and cannot therefore be responsible for that material's content, use or effects. By operating the Service, FOSSi Foundation does not represent or imply that it endorses the material there posted, or that it believes such material to be accurate, useful or non-harmful. You are responsible for taking precautions as necessary to protect yourself and your computer systems from viruses, worms, Trojan horses, and other harmful or destructive content. The Service may host content that is offensive, indecent, or otherwise objectionable, as well as content containing technical inaccuracies, typographical mistakes, and other errors. The Service may also host material that violates the privacy or publicity rights, or infringes the intellectual property and other proprietary rights, of third parties, or the downloading, copying or use of which is subject to additional terms and conditions, stated or unstated. FOSSi Foundation disclaims any responsibility for any harm resulting from the use of the Service, or from any downloading by users of content there posted.
 
 ## Content Posted on Other Websites
 
@@ -180,4 +261,4 @@ You agree to indemnify and hold harmless FOSSi Foundation, its contractors, and 
 
 ## Miscellaneous
 
-This Agreement constitutes the entire agreement between FOSSi Foundation and you concerning the subject matter hereof, and they may only be modified by a written amendment signed by an authorised executive of FOSSi Foundation, or by the posting by FOSSi Foundation of a revised version. Except to the extent applicable law, if any, provides otherwise, this Agreement, any access to or use of the Service will be governed by the laws of England and Wales. The prevailing party in any action or proceeding to enforce this Agreement shall be entitled to costs and attorneys’ fees. If any part of this Agreement is held invalid or unenforceable, that part will be construed to reflect the parties’ original intent, and the remaining portions will remain in full force and effect. A waiver by either party of any term or condition of this Agreement or any breach thereof, in any one instance, will not waive such term or condition or any subsequent breach thereof. You may assign your rights under this Agreement to any party that consents to, and agrees to be bound by, its terms and conditions; FOSSi Foundation may assign its rights under this Agreement without condition. This Agreement will be binding upon and will inure to the benefit of the parties, their successors and permitted assigns.
+This Agreement constitutes the entire agreement between FOSSi Foundation and you concerning the subject matter hereof, and they may only be modified by a written amendment signed by an authorised executive of FOSSi Foundation, or by the posting by FOSSi Foundation of a revised version. Except to the extent applicable law, if any, provides otherwise, this Agreement, any access to or use of the Service will be governed by the laws of England and Wales. The prevailing party in any action or proceeding to enforce this Agreement shall be entitled to costs and attorneys' fees. If any part of this Agreement is held invalid or unenforceable, that part will be construed to reflect the parties' original intent, and the remaining portions will remain in full force and effect. A waiver by either party of any term or condition of this Agreement or any breach thereof, in any one instance, will not waive such term or condition or any subsequent breach thereof. You may assign your rights under this Agreement to any party that consents to, and agrees to be bound by, its terms and conditions; FOSSi Foundation may assign its rights under this Agreement without condition. This Agreement will be binding upon and will inure to the benefit of the parties, their successors and permitted assigns.
