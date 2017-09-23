@@ -3,6 +3,7 @@ namespace Librecores\ProjectRepoBundle\Repository;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityRepository;
+use Librecores\ProjectRepoBundle\Entity\User;
 
 /**
  * OrganizationRepository
