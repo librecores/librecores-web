@@ -10,9 +10,9 @@
 
     <h1 style="margin-bottom:5px">{{ organization.getName() }} : {{ organization.getDisplayName() }}</h1>
 
-    <p>Name: {{ organization.getName() }}</p>
-    <p>Display Name: {{ organization.getDisplayName() }}</p>
-    <p>Description: {{ organization.getDescription() }}</p>
+    <p><b>Name:</b> {{ organization.getName() }}</p>
+    <p><b>Display Name:</b> {{ organization.getDisplayName() }}</p>
+    <p><b>Description:</b> {{ organization.getDescription() }}</p>
 
     {# Do not show the creator }
     <p>Creator: <a href="{{ path('librecores_project_repo_user_org_view',
@@ -21,8 +21,9 @@
     </p>
     {#}
 
-    <p>
+    <hr/>
     <h2>Projects</h2>
+    <p>
     {% for project in organization.getProjects() %}
         <a href="{{ path('librecores_project_repo_project_view', {'parentName':
             project.getParentName(), 'projectName': project.getName()}) }}">{{ project.getName() }}</a>
@@ -32,8 +33,24 @@
     {% endfor %}
     </p>
 
+    <hr/>
+    <h2>Supporters</h2>
     <p>
+    {% for user in supporters %}
+        <a href="{{ path('librecores_project_repo_user_org_view',
+        {'userOrOrganization': user.getUser.getUsernameCanonical()}) }}">
+            {{  user.getUser.getUsernameCanonical() }}</a> -
+        <a href="{{ path('librecores_project_repo_organization_settings_approve',
+        { 'organizationName': organization.getName(),
+            'userName': user.getUser.getUsernameCanonical() }) }}">Approve Request</a><br/>
+    {% else %}
+        {{ organization.getDisplayName() }} doesn't have any supporters.
+    {% endfor %}
+    </p>
+
+    <hr/>
     <h2>Members</h2>
+    <p>
     {% for user in members|merge(admins) %}
         <a href="{{ path('librecores_project_repo_user_org_view',
         {'userOrOrganization': user.getUser.getUsernameCanonical()}) }}">
@@ -50,23 +67,8 @@
     </p>
 
     {% if userIsMember or userIsAdmin %}
+        <h3>Join Requests</h3>
         <p>
-        <h2><a href="{{ path('librecores_project_repo_user_org_settings',
-            { 'userOrOrganization': organization.getName() }) }}">Organization Settings</a></h2>
-        </p>
-
-        <p>
-        <h2><a href="{{ path('librecores_project_repo_organization_settings_leave',
-            { 'organizationName': organization.getName() }) }}">Leave Organization</a></h2>
-        </p>
-
-        <p>
-        <h2><a href="{{ path('librecores_project_repo_organization_settings_delete',
-            { 'organizationName': organization.getName() }) }}">Delete Organization</a></h2>
-        </p>
-
-        <p>
-        <h2>Join Requests</h2>
         {% for user in requests %}
             <a href="{{ path('librecores_project_repo_user_org_view',
                 {'userOrOrganization': user.getUser.getUsernameCanonical()}) }}">
@@ -82,8 +84,8 @@
         {% endfor %}
         </p>
 
+        <h3>Denied Requests</h3>
         <p>
-        <h2>Denied Requests</h2>
         {% for user in denies %}
             <a href="{{ path('librecores_project_repo_user_org_view',
             {'userOrOrganization': user.getUser.getUsernameCanonical()}) }}">
@@ -96,35 +98,32 @@
         {% endfor %}
         </p>
 
+        <hr/>
+        <h2>Actions</h2>
         <p>
-        <h2>Supporters</h2>
-        {% for user in supporters %}
-            <a href="{{ path('librecores_project_repo_user_org_view',
-            {'userOrOrganization': user.getUser.getUsernameCanonical()}) }}">
-                {{  user.getUser.getUsernameCanonical() }}</a> -
-            <a href="{{ path('librecores_project_repo_organization_settings_approve',
-            { 'organizationName': organization.getName(),
-                'userName': user.getUser.getUsernameCanonical() }) }}">Approve Request</a><br/>
-        {% else %}
-            {{ organization.getDisplayName() }} doesn't have any supporters.
-        {% endfor %}
+        <a href="{{ path('librecores_project_repo_user_org_settings',
+            { 'userOrOrganization': organization.getName() }) }}">Organization Settings</a>
+        </p>
+
+        <p>
+        <a href="{{ path('librecores_project_repo_organization_settings_leave',
+            { 'organizationName': organization.getName() }) }}">Leave Organization</a>
+        </p>
+
+        <p>
+        <a href="{{ path('librecores_project_repo_organization_settings_delete',
+            { 'organizationName': organization.getName() }) }}">Delete Organization</a>
         </p>
     {% endif %}
 
 
     {% if not userIsMember and not userIsAdmin and not userHasRequest and not userWasDenied %}
-        <p>
         <h3><a href="{{ path('librecores_project_repo_organization_settings_join',
             { 'organizationName': organization.getName() }) }}">Join Organization</a></h3>
-        </p>
     {% elseif userHasRequest %}
-        <p>
         <h3>You request to join the organization is waiting approval by the organization's owner.</h3>
-        </p>
     {% elseif userWasDenied %}
-        <p>
         <h3>You request to join the organization was denied by the organization's owner.</h3>
-        </p>
     {% endif %}
 
 {% endblock %}
