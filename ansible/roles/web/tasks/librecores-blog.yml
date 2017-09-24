@@ -4,7 +4,7 @@
   file: dest=/var/log/nginx/librecores-blog state=directory
 
 - name: Configure nginx blog site in nginx
-  sudo: yes
+  become: true
   template: src=nginx/librecores-blog.tpl dest=/etc/nginx/sites-available/librecores-blog
   notify: restart nginx
 

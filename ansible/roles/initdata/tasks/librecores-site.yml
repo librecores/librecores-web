@@ -2,22 +2,22 @@
 # Insert development test data into all systems
 
 - name: Insert database fixtures
-  sudo: yes
-  sudo_user: "{{ web_user }}"
+  become: true
+  become_user: "{{ web_user }}"
   command: php bin/console doctrine:fixtures:load -n
   args:
     chdir: /var/www/lc/site
 
 - name: Update all projects from their source repository
-  sudo: yes
-  sudo_user: "{{ web_user }}"
+  become: true
+  become_user: "{{ web_user }}"
   command: php bin/console librecores:update-repos
   args:
     chdir: /var/www/lc/site
 
 - name: Run planet generator for the first time
-  sudo: yes
-  sudo_user: "{{ web_user }}"
+  become: true
+  become_user: "{{ web_user }}"
   shell: /var/www/lc/planet/generate.sh
   args:
     chdir: /var/www/lc/planet

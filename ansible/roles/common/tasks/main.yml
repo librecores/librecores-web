@@ -32,7 +32,7 @@
   tags: ntp
 
 - name: Install common system packages
-  sudo: yes
+  become: true
   apt:  pkg={{ item }} state=installed
   with_items:
     - curl

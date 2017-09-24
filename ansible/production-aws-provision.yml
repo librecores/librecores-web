@@ -100,7 +100,7 @@
   hosts: tag_group_librecores_production
   gather_facts: False
   user: ubuntu
-  sudo: yes
+  become: true
   tasks:
     - name: 'install python2'
       raw: sudo apt-get -y install python-simplejson
@@ -109,7 +109,7 @@
   hosts: tag_group_librecores_production
   gather_facts: True
   user: ubuntu
-  sudo: yes
+  become: true
   tasks:
     - name: Format disk
       filesystem: fstype=ext4 dev=/dev/xvdf

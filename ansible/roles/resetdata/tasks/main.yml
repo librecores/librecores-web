@@ -1,21 +1,21 @@
 ---
 - name: Drop all tables from librecores database
-  sudo: yes
-  sudo_user: "{{ web_user }}"
+  become: true
+  become_user: "{{ web_user }}"
   command: php bin/console doctrine:schema:drop --force
   args:
     chdir: /var/www/lc/site
 
 - name: Let doctrine generate database schema
-  sudo: yes
-  sudo_user: "{{ web_user }}"
+  become: true
+  become_user: "{{ web_user }}"
   command: php bin/console doctrine:schema:create
   args:
     chdir: /var/www/lc/site
 
 - name: Make sure migrations metadata is up-to-date
-  sudo: yes
-  sudo_user: "{{ web_user }}"
+  become: true
+  become_user: "{{ web_user }}"
   command: php bin/console doctrine:migrations:version --add --all
   args:
     chdir: /var/www/lc/site

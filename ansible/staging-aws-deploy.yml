@@ -5,7 +5,7 @@
   hosts: staging
   gather_facts: true
   user: ubuntu
-  sudo: yes
+  become: true
   roles:
     - staging-aws
   vars_files:
