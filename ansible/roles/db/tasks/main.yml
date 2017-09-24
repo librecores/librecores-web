@@ -1,6 +1,6 @@
 ---
 - name: Install MySQL server
-  sudo: yes
+  become: true
   apt:  pkg=mysql-server state=installed
 
 # move data directory to EBS

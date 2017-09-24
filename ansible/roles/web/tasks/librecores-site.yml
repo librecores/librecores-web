@@ -171,8 +171,8 @@
   meta: flush_handlers
 
 - name: Run all database migrations (also creates initial tables if necessary)
-  sudo: yes
-  sudo_user: "{{ web_user }}"
+  become: true
+  become_user: "{{ web_user }}"
   command: php bin/console doctrine:migrations:migrate -n
   environment: "{{ symfony_config }}"
   args:

@@ -9,15 +9,15 @@
   get_url: url=https://www.rabbitmq.com/rabbitmq-release-signing-key.asc dest=/tmp/rabbitmq-release-signing-key.asc
 
 - name: Add RabbitMQ key
-  sudo: yes
+  become: true
   command: apt-key add /tmp/rabbitmq-release-signing-key.asc
 
 - name: Update apt again
-  sudo: yes
+  become: true
   apt:  update_cache=yes
 
 - name: Install RabbitMQ
-  sudo: yes
+  become: true
   apt:  pkg=rabbitmq-server state=installed
 
 - name: Enable RabbitMQ plugins

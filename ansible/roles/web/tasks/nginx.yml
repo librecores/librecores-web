@@ -1,7 +1,7 @@
 ---
 # Install nginx web server
 - name: Install nginx
-  sudo: yes
+  become: true
   apt:  pkg=nginx state=installed
 
 - name: Add gzip compression config

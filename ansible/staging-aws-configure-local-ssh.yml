@@ -3,7 +3,6 @@
   hosts: localhost
   connection: local
   gather_facts: False
-  sudo: false
   vars:
     local_home: "{{ lookup('env','HOME') }}"
     local_user: "{{ lookup('env','USER') }}"
