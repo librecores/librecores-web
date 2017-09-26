@@ -38,7 +38,8 @@
 		"php-http/guzzle6-adapter": "^1.1",
 		"symfony/cache": "^3.2",
 		"javiereguiluz/easyadmin-bundle": "^1.16",
-		"beberlei/DoctrineExtensions": "^1.0"
+		"beberlei/DoctrineExtensions": "^1.0",
+		"algolia/algolia-search-bundle": "~2.2.0"
 	},
 	"scripts" : {
 		"post-install-cmd" : [
