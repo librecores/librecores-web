@@ -35,3 +35,6 @@ parameters:
     # https://console.developers.google.com/project/librecores/apiui/credential/oauthclient
     google_app_id:     ~
     google_app_secret: ~
+
+    algolia_app_id:    ~
+    algolia_api_key:   ~
