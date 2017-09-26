@@ -88,9 +88,9 @@ LibreCores Search
             {{ project.sourceRepo.sourceStats.mostUsedLanguage }}
           </span>
           {%  endif %}
-          {% if project.dateLastActivityOccured %}
+          {% if project.dateLastActivityOccurred %}
           <span class="updated">
-          <i class="fa fa-history"></i> Updated {{ project.dateLastActivityOccured | time_diff }}
+          <i class="fa fa-history"></i> Updated {{ project.dateLastActivityOccurred | time_diff }}
           </span>
           {% endif %}
         </div>
