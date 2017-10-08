@@ -1,0 +1,17 @@
+{% extends "@FOSUser/layout.html.twig" %}
+
+{% trans_default_domain 'FOSUserBundle' %}
+
+{% block fos_user_content %}
+    <div class="center-block">
+        <div class="panel panel-default">
+            <div class="panel-heading"><h3 class="panel-title">Reset Password</h3></div>
+            <div class="panel-body">
+                <p>
+                    {{ 'resetting.check_email'|trans({'%tokenLifetime%': tokenLifetime})|nl2br }}
+                </p>
+            </div>
+        </div>
+    </div>
+    </div>
+{% endblock fos_user_content %}

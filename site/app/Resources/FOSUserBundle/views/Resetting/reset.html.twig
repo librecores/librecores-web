@@ -1,0 +1,18 @@
+{% extends "@FOSUser/layout.html.twig" %}
+
+{% trans_default_domain 'FOSUserBundle' %}
+
+{% block fos_user_content %}
+    <div class="center-block librecores-user-signupin-panel">
+        <div class="panel panel-default">
+            <div class="panel-heading"><h3 class="panel-title">Reset Password</h3></div>
+            <div class="panel-body">
+                {{ form_start(form, { 'action': path('fos_user_resetting_reset', {'token': token}), 'attr': { 'class': 'fos_user_resetting_reset' } }) }}
+                {{ form_widget(form) }}
+                <button class="btn btn-success btn-block" type="submit" id="_submit" name="_submit">Reset Password</button>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+    </div>
+{% endblock fos_user_content %}
