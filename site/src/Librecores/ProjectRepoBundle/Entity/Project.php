@@ -4,7 +4,7 @@ namespace Librecores\ProjectRepoBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-
+use Algolia\AlgoliaSearchBundle\Mapping\Annotation as Algolia;
 
 /**
  * A project
@@ -84,6 +84,7 @@ class Project
      * @Assert\Regex("/^[a-z][a-z0-9-]+$/")
      * @Assert\Length(min = 4, max = 30)
      * @ORM\Column(name="name", type="string", length=255)
+     * @Algolia\Attribute
      */
     private $name;
 
@@ -98,6 +99,7 @@ class Project
      * @Assert\NotBlank
      * @Assert\Length(min = 5, max = 100)
      * @ORM\Column(name="displayName", type="string", length=100)
+     * @Algolia\Attribute
      */
     private $displayName;
 
@@ -111,6 +113,7 @@ class Project
      *
      * @Assert\Length(max = 140)
      * @ORM\Column(name="tagline", type="string", length=140, nullable=true)
+     * @Algolia\Attribute
      */
     private $tagline;
 
@@ -183,6 +186,7 @@ class Project
      *
      * @Assert\Length(max = 64000)
      * @ORM\Column(type="text", nullable=true, length=64000)
+     * @Algolia\Attribute
      */
     private $descriptionText;
 
