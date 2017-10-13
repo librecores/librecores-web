@@ -15,3 +15,7 @@ site_symfony_secret_token: "ThisTokenIsNotSoSecretChangeIt"
 site_rabbitmq_password: "password"
 blog_mysql_password: "password"
 mysql_root_password: "password"
+
+# sentry is disabled in development setups
+site_sentry_dsn: ""
+
