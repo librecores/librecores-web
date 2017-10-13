@@ -35,3 +35,7 @@ parameters:
     # https://console.developers.google.com/project/librecores/apiui/credential/oauthclient
     google_app_id:     ~
     google_app_secret: ~
+
+    # Sentry Configuration
+    # Register at https://sentry.io
+    sentry_dsn:        ~
