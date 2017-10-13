@@ -12,7 +12,7 @@
 
       <form name="search-form" method="get" action="{{ path('librecores_project_repo_project_search') }}">
         <div class="input-group">
-          <input type="text" class="form-control" name="q" placeholder="What IP is missing in your project?" autofocus="autofocus">
+          <input type="text" class="form-control" id="search-form-input" name="q" placeholder="What IP is missing in your project?">
           <span class="input-group-btn">
             <button class="btn btn-danger" type="submit">
             <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
@@ -221,4 +221,11 @@
     </div>
   </div>
 </div>
+{% endblock %}
+
+{% block pagejs %}
+{# do not use autofocus attribute to work around FF bug 712130 (FOUC) #}
+$(function() {
+  $("#search-form-input").focus();
+});
 {% endblock %}

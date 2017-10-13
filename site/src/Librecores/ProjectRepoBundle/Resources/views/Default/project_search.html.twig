@@ -16,7 +16,7 @@ LibreCores Search
   </div>
   <div class="col-sm-9">
     <div class="input-group" style="width:100%">
-      {{ form_widget(search_query_form.q, {'attr': {'placeholder': 'Search for ...', 'autofocus': 'autofocus'}}) }}
+      {{ form_widget(search_query_form.q, {'attr': {'placeholder': 'Search for ...'}}) }}
       <span class="input-group-btn">
         <button class="btn btn-default" type="submit">
           <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
@@ -144,4 +144,11 @@ LibreCores Search
 
 {{ form_end(search_query_form) }}
 </div>
+{% endblock %}
+
+{% block pagejs %}
+{# do not use autofocus attribute to work around FF bug 712130 (FOUC) #}
+$(function() {
+  $("#{{ search_query_form.q.vars.id }}").focus();
+});
 {% endblock %}
