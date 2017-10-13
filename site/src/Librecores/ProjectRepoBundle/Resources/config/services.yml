@@ -1,4 +1,8 @@
 services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
     # Consumer Services (called through RabbitMQ)
     update_project_info_service:
         class: Librecores\ProjectRepoBundle\Consumer\UpdateProjectInformation
