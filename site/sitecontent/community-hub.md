@@ -22,8 +22,10 @@ Everybody has questions. Let's find answers!
   [web interface](https://lists.librecores.org/listinfo/discussion), which 
   also hosts the archives.
 
-  Some questions are better suited for real-time chat. Most people use IRC for
-  that, and you can find many people hanging out on the #fossi channel on freenode.
+  Some questions are better suited for real-time chat. You will find many LibreCores
+  users and developers in the [LibreCores Gitter channel](https://gitter.im/librecores/Lobby)
+
+  There is also a LibreCores presence on IRC through the #librecores channel on freenode.
   You can connect either with a IRC client like [Hexchat](https://hexchat.github.io/),
   or use a [web interface](https://webchat.freenode.net/#fossi) to connect 
   directly from your browser.
