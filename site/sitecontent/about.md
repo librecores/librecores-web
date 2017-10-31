@@ -93,4 +93,4 @@ Code, bug tracker and project planning is done in the [librecores-web repository
 
 Development discussion happens on the [dev@lists.librecores.org](mailto:dev@lists.librecores.org) mailing list ([subscribe here](https://lists.librecores.org/listinfo/dev)).
 
-Many developers also hang out on IRC on the [#librecores channel on Freenode](http://webchat.freenode.net?channels=%23librecores&uio=d4).
+Many developers also hang out on the [LibreCores gitter channel](https://gitter.im/librecores/Lobby) or IRC on the [#librecores channel on Freenode](http://webchat.freenode.net?channels=%23librecores&uio=d4).
