@@ -2,7 +2,6 @@
 
 namespace Librecores\ProjectRepoBundle\Controller;
 
-use Librecores\ProjectRepoBundle\Entity\Contributor;
 use Librecores\ProjectRepoBundle\Entity\GitSourceRepo;
 use Librecores\ProjectRepoBundle\Entity\LanguageStat;
 use Librecores\ProjectRepoBundle\Entity\OrganizationMember;
@@ -20,6 +19,8 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Url;
 
 class ProjectController extends Controller
 {
@@ -64,13 +65,18 @@ class ProjectController extends Controller
             ->add('gitSourceRepoUrl', UrlType::class, [
                 'mapped' => false,
                 'label' => 'Git URL',
-                'required' => false
+                'required' => false,
+                'constraints' => [
+                    new NotBlank(['groups'=>["git_url"]]),
+                    new Url(['groups'=>["git_url"]]),
+                ],
             ])
             ->add('saveGitSourceRepoUrl', SubmitType::class, [
                 'label' => 'Create Project from Git repository',
                 'attr' => [
                     'class' => 'btn-primary'
-                ]
+                ],
+                'validation_groups' => ['Default', 'git_url'],
             ]);
 
         // only add GitHub repository selection if the user can actually select
@@ -87,7 +93,8 @@ class ProjectController extends Controller
                 ])
                 ->add('saveGithubSourceRepo', SubmitType::class, [
                     'label' => 'Import project from GitHub',
-                    'attr' => ['class' => 'btn-primary']
+                    'attr' => ['class' => 'btn-primary'],
+                    'validation_groups' => ['Default', 'github'],
                 ]);
         }
 
@@ -116,6 +123,16 @@ class ProjectController extends Controller
                 ));
         }
 
+        // determine which tab to show to select the source from
+        $activeSourcePanel = 'git_url';
+        if ($form->isSubmitted()) {
+            $activeSourcePanel = $this->getSourceTypeFromForm($form);
+        } else {
+            if ($isGithubConnected) {
+                $activeSourcePanel = 'github';
+            }
+        }
+
         return $this->render(
             'LibrecoresProjectRepoBundle:Project:new.html.twig',
             array(
@@ -123,6 +140,7 @@ class ProjectController extends Controller
                 'form' => $form->createView(),
                 'isGithubConnected' => $isGithubConnected,
                 'noGithubRepos' => $noGithubRepos,
+                'activeSourcePanel' => $activeSourcePanel,
             ));
     }
 
@@ -366,6 +384,25 @@ class ProjectController extends Controller
     }
 
     /**
+     * Get the type of source (repository) from the form
+     *
+     * @param FormInterface $form
+     * @return NULL|string 'git_url' or 'github'
+     */
+    private function getSourceTypeFromForm(FormInterface $form)
+    {
+        $sourceType = null;
+        if ($form->get('saveGitSourceRepoUrl')->isClicked()) {
+            $sourceType = 'git_url';
+        } elseif ($form->get('saveGithubSourceRepo')->isClicked()) {
+            $sourceType = 'github';
+        } else {
+            new \Exception('No submit button with associated source type clicked?');
+        }
+        return $sourceType;
+    }
+
+    /**
      * Map the special form fields to the Project object
      *
      * The "New project" form contains a number of special form fields, which
@@ -381,14 +418,7 @@ class ProjectController extends Controller
         // set parent (extract from string selection box)
         $this->projectSetParentFromForm($p, $form);
 
-        $sourceType = null;
-        if ($form->get('saveGitSourceRepoUrl')->isClicked()) {
-            $sourceType = 'git_url';
-        } elseif ($form->get('saveGithubSourceRepo')->isClicked()) {
-            $sourceType = 'github';
-        } else {
-            new \Exception('No submit button with associated source type clicked?');
-        }
+        $sourceType = $this->getSourceTypeFromForm($form);
 
         // Repository is specified as Git URL
         if ($sourceType == 'git_url') {

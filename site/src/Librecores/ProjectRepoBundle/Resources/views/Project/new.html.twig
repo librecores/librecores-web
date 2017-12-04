@@ -46,17 +46,15 @@ other information about your project automatically.</p>
     <p>LibreCores scans the source code of your project and extracts things
     like the README or the license out of it.</p>
 
-    {{ form_errors(form.gitSourceRepoUrl) }}
-
     <ul class="nav nav-tabs">
-      <li role="presentation" class="{{ isGithubConnected ? 'active'}}">
+      <li role="presentation" class="{{ activeSourcePanel == 'github' ? 'active'}}">
         <a href="#github" aria-controls="settings" role="tab" data-toggle="tab">
           <i class="fa fa-github" aria-hidden="true"></i>
           GitHub
         </a>
       </li>
-      <li role="presentation" class="{{ not isGithubConnected ? 'active'}}">
-        <a href="#git" aria-controls="settings" role="tab" data-toggle="tab">
+      <li role="presentation" class="{{ activeSourcePanel == 'git_url' ? 'active'}}">
+        <a href="#git_url" aria-controls="settings" role="tab" data-toggle="tab">
           <i class="fa fa-git" aria-hidden="true"></i>
           Other Git repository
         </a>
@@ -69,7 +67,7 @@ other information about your project automatically.</p>
     </ul>
 
     <div class="tab-content">
-      <div role="tabpanel" class="tab-pane {{ isGithubConnected ? 'active'}}" id="github">
+      <div role="tabpanel" class="tab-pane {{ activeSourcePanel == 'github' ? 'active'}}" id="github">
         {% if isGithubConnected %}
           {% if noGithubRepos %}
             <p>You don't have access to any repository on GitHub (or haven't granted us access).
@@ -88,7 +86,7 @@ other information about your project automatically.</p>
       </div>
 
 
-      <div role="tabpanel" class="tab-pane {{ not isGithubConnected ? 'active'}}" id="git">
+      <div role="tabpanel" class="tab-pane {{ activeSourcePanel == 'git_url' ? 'active'}}" id="git_url">
         {{ form_row(form.gitSourceRepoUrl, {'label': 'Enter a Git repository URL', 'attr': {'style': 'width:500px', 'placeholder': 'URL, e.g. https://github.com/yourname/project'}}) }}
 
         {{ form_row(form.saveGitSourceRepoUrl) }}
