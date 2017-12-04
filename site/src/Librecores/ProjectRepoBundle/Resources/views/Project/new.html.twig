@@ -75,6 +75,11 @@ other information about your project automatically.</p>
           {% else %}
             {{ form_row(form.githubSourceRepo, {'label': 'Select a project from your GitHub account'}) }}
             {{ form_row(form.saveGithubSourceRepo) }}
+
+            <p><strong>Are you missing a repository from a GitHub organization you're member of?</strong>
+            Go to the <a href="https://github.com/settings/connections/applications" target="_blank">Authorized OAuth Apps</a> page in your GitHub settings, and click on"LibreCores".
+            There you can grant access to other organizations.
+            If you're done, refresh this page to see the organization repositories in the list.</p>
           {% endif %}
         {% else %}
           <p>We cannot import projects from your GitHub account because your
