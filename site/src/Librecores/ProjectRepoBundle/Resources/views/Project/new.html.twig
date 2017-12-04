@@ -14,7 +14,7 @@ source code location of your project, we'll scan your source code and get all
 other information about your project automatically.</p>
 
 {{ form_start(form) }}
-  <div class="form-group">
+  <div class="form-group {{ form.displayName.vars.errors|length > 0 ? 'has-error' : '' }}">
     {{ form_label(form.displayName, "What's the name of your project?", {'label_attr': {'class': 'librecores-new-project-label'}}) }}
 
     {{ form_errors(form.displayName) }}
@@ -24,7 +24,7 @@ other information about your project automatically.</p>
     </div>
   </div>
 
-  <div class="form-group">
+  <div class="form-group {{ form.name.vars.errors|length > 0 ? 'has-error' : '' }}">
     {{ form_label(form.name, "Where would you like to find your project on LibreCores?", {'label_attr': {'class': 'librecores-new-project-label'}}) }}
 
     {{ form_errors(form.parentName) }}
@@ -110,7 +110,7 @@ other information about your project automatically.</p>
 
 {% block pagejs %}
 // propose a name from the displayName
-// The name does not follow all validation rules for simplicity, i.e. it's 
+// The name does not follow all validation rules for simplicity, i.e. it's
 // possible for a proposed name to fail validation.
 $('#{{ form.displayName.vars.id|e('js') }}')
   .keyup(function() {
