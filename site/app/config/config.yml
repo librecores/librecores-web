@@ -22,6 +22,12 @@ framework:
     session:
         # handler_id set to null will use default session handler from php.ini
         handler_id:  ~
+        save_path: ~
+        # On Debian/Ubuntu session files are deleted by a cron job and directory
+        # permissions prevent PHP from reading the session directory. This makes
+        # all attempts by PHP to clean the sessions itself fail. Setting
+        # gc_probability to 0 avoids such failures.
+        gc_probability: 0
     fragments:       ~
     http_method_override: true
     assets: ~
