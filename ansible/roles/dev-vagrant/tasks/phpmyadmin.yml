@@ -1,0 +1,40 @@
+- name: Debconf for phpmyadmin
+  debconf:
+    name: phpmyadmin
+    question: "{{ item.question }}"
+    value: "{{ item.value }}"
+    vtype: "{{ item.vtype }}"
+  with_items:
+    - { question: 'phpmyadmin/dbconfig-install', value: 'true', vtype: 'boolean' }
+    - { question: 'phpmyadmin/app-password-confirm', value: '{{mysql_root_password}}', vtype: 'password' }
+    - { question: 'phpmyadmin/mysql/admin-pass', value: '{{mysql_root_password}}', vtype: 'password' }
+    - { question: 'phpmyadmin/mysql/app-pass', value: '{{mysql_root_password}}', vtype: 'password' }
+    - { question: 'phpmyadmin/reconfigure-webserver', value: '', vtype: 'multiselect' }
+
+- name: Install phpmyadmin
+  apt:
+    name: phpmyadmin
+    state: present
+
+- name: Configure site for phpmyadmin
+  file:
+    path: "/var/www/phpmyadmin"
+    src: "/usr/share/phpmyadmin"
+    state: link
+
+- name: Make phpmyadmin log directory
+  file:
+    path: "/var/log/nginx/phpmyadmin"
+    state: directory
+
+- name: Add nginx config for phpmyadmin
+  template:
+    src: ../templates/phpmyadmin.tpl
+    dest: /etc/nginx/sites-available/phpmyadmin
+
+- name: Enable phpmyadmin
+  file:
+    path: "/etc/nginx/sites-enabled/phpmyadmin"
+    src: "/etc/nginx/sites-available/phpmyadmin"
+    state: link
+  notify: restart nginx
