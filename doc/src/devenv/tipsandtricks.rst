@@ -15,7 +15,6 @@ Connect to the VM
   host$> cd vagrant
   host$> vagrant ssh
 
-
 Rebuild ORM (Doctrine) Entity
 -----------------------------
 
@@ -95,3 +94,10 @@ Clean the Symfony caches
 
   vm$> cd /var/www/lc/site
   vm$> ./bin/console cache:clear
+
+Remote PHP debugging
+--------------------
+
+The development environment has Xdebug remote debugging enabled using the common default settings:
+``xdebug.remote_port`` is set to port 9000 and `xdebug.remote_connect_back` is set to ``1``.
+Please refer to your IDEs manual for further information how to make use of this functionality.
