@@ -1,4 +1,7 @@
 services:
-#    librecores_planet.example:
-#        class: Librecores\PlanetBundle\Example
+#    Librecores\PlanetBundle\Example:
 #        arguments: [@service_id, "plain_value", %parameter%]
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false

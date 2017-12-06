@@ -4,8 +4,15 @@ parameters:
 #    parameter_name: value
 
 services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
     # Twig date extension - http://twig-extensions.readthedocs.io/en/latest/date.html
-    twig.extension.date:
-       class: Twig_Extensions_Extension_Date
-       tags:
-            - { name: twig.extension }
+    Twig\Extensions\DateExtension:
+        autowire: false
+        # Autowire inject a TranslatorInterface into the constructor of the extension. If that happens, the extension
+        # thinks it can be translated -- but we don't have any translations available, therefore the autowire is set to
+        # false
+

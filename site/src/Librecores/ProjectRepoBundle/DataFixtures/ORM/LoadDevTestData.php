@@ -16,7 +16,7 @@ use Librecores\ProjectRepoBundle\Entity\GitSourceRepo;
 /**
  * Create a basic test environment
  */
-class LoadProjectData extends AbstractFixture
+class LoadDevTestData extends AbstractFixture
     implements FixtureInterface, ContainerAwareInterface
 {
     use ContainerAwareTrait;
