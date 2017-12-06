@@ -15,7 +15,6 @@ Connect to the VM
   host$> cd vagrant
   host$> vagrant ssh
 
-
 Rebuild ORM (Doctrine) Entity
 -----------------------------
 
@@ -31,6 +30,27 @@ Rebuild ORM (Doctrine) Entity
 
   # finally, update the MySQL DB
   vm$> ./bin/console doctrine:schema:update --force
+
+Access the MySQL database
+-------------------------
+.. note::
+
+  In the Vagrant development environment you can connect to the database with user "root" and password "password".
+
+To access the database through a web frontend, phpMyAdmin is your friend. You find it at http://pma.librecores.devel.
+
+If you prefer to access the MySQL database on the command line, you need to SSH into the VM.
+
+.. code-block:: bash
+
+   # use the mysql client to perform queries
+   vm$> mysql -uroot -ppassword librecores
+
+   # use mysqldump to get a dump of the whole database (or parts of it)
+   mysqldump -uroot -ppassword librecores
+
+
+(Yes, the password is "password".)
 
 
 Asynchronous Processing with RabbitMQ
@@ -75,11 +95,9 @@ Clean the Symfony caches
   vm$> cd /var/www/lc/site
   vm$> ./bin/console cache:clear
 
+Remote PHP debugging
+--------------------
 
-Access the MySQL database
--------------------------
-.. code-block:: bash
-
-  vm$> mysql -uroot librecores -ppassword
-
-(Yes, the password is "password".)
+The development environment has Xdebug remote debugging enabled using the common default settings:
+``xdebug.remote_port`` is set to port 9000 and `xdebug.remote_connect_back` is set to ``1``.
+Please refer to your IDEs manual for further information how to make use of this functionality.
