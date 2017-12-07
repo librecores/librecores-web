@@ -16,6 +16,8 @@ site_rabbitmq_password: "password"
 blog_mysql_password: "password"
 mysql_root_password: "password"
 
+# sentry configuration
 # sentry is disabled in development setups
 site_sentry_dsn: ""
+site_sentry_env: dev
 

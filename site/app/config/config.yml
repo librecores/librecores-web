@@ -187,3 +187,5 @@ hwi_oauth:
 # sentry
 sentry:
     dsn: "%sentry_dsn%"
+    options:
+        environment: "%sentry_env%"

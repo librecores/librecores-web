@@ -37,3 +37,6 @@ parameters:
     # Sentry Configuration
     # Register at https://sentry.io
     sentry_dsn:        ~
+    # Options: dev, staging, production
+    sentry_env:       'dev'
+

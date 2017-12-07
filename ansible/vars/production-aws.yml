@@ -17,3 +17,6 @@ use_https: true
 symfony_config:
   SYMFONY_ENV: prod
   SYMFONY_DEBUG: 0
+
+# sentry configuration
+site_sentry_env: production
