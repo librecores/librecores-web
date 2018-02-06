@@ -9,7 +9,7 @@
 set -e
 
 # Version of vagrant we depend on
-VAGRANT_VERSION=1.9.1
+VAGRANT_VERSION=2.0.2
 
 
 # make sure we're in the top-level dir
