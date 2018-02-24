@@ -20,3 +20,5 @@ symfony_config:
 
 # sentry configuration
 site_sentry_env: production
+
+site_user_email_confirmation_enabled: true

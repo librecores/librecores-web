@@ -6,10 +6,18 @@ parameters:
     database_user:     librecores
     database_password: '{{ site_mysql_password }}'
 
+    # Swiftmailer email configuration
+    # Docs at https://symfony.com/doc/3.4/email.html
+    mailer_encryption: '{{ site_smtp_encryption }}'
     mailer_transport:  smtp
-    mailer_host:       127.0.0.1
-    mailer_user:       ~
-    mailer_password:   ~
+    mailer_host:       '{{ site_smtp_host }}'
+    mailer_port:       '{{ site_smtp_port }}'
+    mailer_user:       '{{ site_smtp_user }}'
+    mailer_password:   '{{ site_smtp_password }}'
+
+    # Require confirmation of email address after a new user registered
+    # on LibreCores. Requires a working mailer setup.
+    user_email_confirmation_enabled: {{ site_user_email_confirmation_enabled }}
 
     locale:            en
 

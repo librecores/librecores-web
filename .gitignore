@@ -13,5 +13,5 @@
 # secrets of all kinds
 /aws-secrets.include
 
-# private vagrant configutation
+# private configuration
 /vagrant/Vagrantfile.private

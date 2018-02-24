@@ -110,11 +110,13 @@ doctrine_migrations:
 
 # Swiftmailer Configuration
 swiftmailer:
-    transport: "%mailer_transport%"
-    host:      "%mailer_host%"
-    username:  "%mailer_user%"
-    password:  "%mailer_password%"
-    spool:     { type: memory }
+    transport:  "%mailer_transport%"
+    encryption: "%mailer_encryption%"
+    host:       "%mailer_host%"
+    port:       "%mailer_port%"
+    username:   "%mailer_user%"
+    password:   "%mailer_password%"
+    spool:      { type: memory }
 
 
 # SimplePie (RSS/Atom Parser) Configuration
@@ -160,9 +162,17 @@ fos_user:
     user_class: 'Librecores\ProjectRepoBundle\Entity\User'
     service:
         user_manager: librecores_user_manager
+        mailer: fos_user.mailer.twig_swift
     from_email:
         address:        'noreply@librecores.org'
         sender_name:    'LibreCores'
+    registration:
+        confirmation:
+            from_email:
+                address:        'noreply@librecores.org'
+                sender_name:    'LibreCores'
+            enabled:    "%user_email_confirmation_enabled%"
+            template:   'FOSUserBundle:Registration:email.html.twig'
 
 # HWI OAuth Configuration
 hwi_oauth:

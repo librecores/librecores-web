@@ -7,3 +7,4 @@
   vars_files:
     - "vars/dev-vagrant.yml"
     - "secrets/dev-vagrant.secrets.yml"
+    - "vars/dev-vagrant.user.yml"

@@ -1,0 +1,11 @@
+# Customization of the settings in dev-vagrant.yml during development
+#
+# All settings here override the settings in dev-vagrant.yml. Use this file
+# to test settings which are non-default or cannot be enabled for all
+# development setups, e.g. because they require manual configuration.
+
+
+# Require confirmation of the email address of newly registered users.
+# Requires a working mailer setup. Add SMTP credentials in
+# secrets/dev-vagrant.secrets.yml before enabling this setting.
+#site_user_email_confirmation_enabled: true

@@ -1,3 +1,4 @@
+# All settings in this configuration can be overwritten in dev-vagrant.user.yml
 ---
 librecores_domain: "librecores.devel"
 mysql_host: "localhost"
@@ -21,3 +22,7 @@ mysql_root_password: "password"
 site_sentry_dsn: ""
 site_sentry_env: dev
 
+# Require confirmation of the email address of newly registered users.
+# Requires a working mailer setup. Add SMTP credentials in
+# secrets/dev-vagrant.secrets.yml before enabling this setting.
+site_user_email_confirmation_enabled: false
