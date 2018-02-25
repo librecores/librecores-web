@@ -115,7 +115,6 @@ swiftmailer:
     host:      "%mailer_host%"
     username:  "%mailer_user%"
     password:  "%mailer_password%"
-    auth_mode: "%mailer_auth_mode%"
     spool:     { type: memory }
 
 
@@ -172,7 +171,7 @@ fos_user:
                     address:        'noreply@librecores.org'
                     sender_name:    'LibreCores'
                 enabled:    true # change to true for required email confirmation
-                template:   'emailer.html.twig' #custom emailer template
+                template:   'FOSUserBundle:Registration:email.html.twig' #custom emailer template
 
 # HWI OAuth Configuration
 hwi_oauth:

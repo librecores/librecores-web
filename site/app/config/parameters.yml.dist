@@ -7,7 +7,6 @@ parameters:
     database_user:     librecores
     database_password: ~
 
-    mailer_auth_mode: login #the type of authentication the mailer is checking eg: 'login'
     mailer_encryption: ssl #the type of encryption the mailer is using eg: 'ssl'
     mailer_transport:  smtp
     mailer_host:       127.0.0.1
