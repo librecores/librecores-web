@@ -12,7 +12,7 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Librecores\ProjectRepoBundle\Security\Core\Exception\OAuthUserLinkingException;
 use Symfony\Component\HttpFoundation\Session\Session;
-use Symfony\Component\Validator\Validator\RecursiveValidator;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * Custom user provider for HWIAuth
@@ -54,7 +54,7 @@ class LibreCoresUserProvider implements UserProviderInterface,
     protected $userManager;
 
     /**
-     * @var RecursiveValidator
+     * @var ValidatorInterface
      */
     protected $validator;
 
@@ -74,7 +74,7 @@ class LibreCoresUserProvider implements UserProviderInterface,
      * @param UserManagerInterface $userManager the user manager
      */
     public function __construct(UserManagerInterface $userManager,
-        RecursiveValidator $validator, Session $session)
+        ValidatorInterface $validator, Session $session)
     {
         $this->userManager = $userManager;
         $this->validator = $validator;
