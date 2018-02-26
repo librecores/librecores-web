@@ -58,4 +58,4 @@ SaltStack
     URL: https://saltstack.com/
     License: MIT
     Files:
-        site/app/Resources/FOSUserBundle/Registration/email.txt.twig
+        site/app/Resources/FOSUserBundle/Registration/email.html.twig
