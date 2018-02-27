@@ -1,4 +1,4 @@
- 3rd-party libraries and helpers
+3rd-party libraries and helpers
 -------------------------------
 
 Bootstrap
@@ -55,7 +55,7 @@ Chartist.js
     web/assets/js/chartist.min.js.map
 
 SaltStack
-    URL: https://saltstack.com/
+    URL: https://github.com/rodriguezcommaj/salted
     License: MIT
     Files:
         site/app/Resources/FOSUserBundle/Registration/email.html.twig
