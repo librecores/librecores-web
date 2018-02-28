@@ -53,3 +53,9 @@ Chartist.js
     web/assets/js/chartist.js
     web/assets/js/chartist.min.js
     web/assets/js/chartist.min.js.map
+
+SaltStack
+    URL: https://github.com/rodriguezcommaj/salted
+    License: MIT
+    Files:
+        site/app/Resources/FOSUserBundle/Registration/email.html.twig

@@ -111,6 +111,7 @@ doctrine_migrations:
 # Swiftmailer Configuration
 swiftmailer:
     transport: "%mailer_transport%"
+    encryption: "%mailer_encryption%"
     host:      "%mailer_host%"
     username:  "%mailer_user%"
     password:  "%mailer_password%"
@@ -160,9 +161,17 @@ fos_user:
     user_class: 'Librecores\ProjectRepoBundle\Entity\User'
     service:
         user_manager: librecores_user_manager
+        mailer: fos_user.mailer.twig_swift
     from_email:
         address:        'noreply@librecores.org'
         sender_name:    'LibreCores'
+    registration:
+            confirmation:
+                from_email: # Use this node only if you don't want the global email address for the confirmation email
+                    address:        'noreply@librecores.org'
+                    sender_name:    'LibreCores'
+                enabled:    true # change to true for required email confirmation
+                template:   'FOSUserBundle:Registration:email.html.twig' #custom emailer template
 
 # HWI OAuth Configuration
 hwi_oauth:
