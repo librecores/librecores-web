@@ -6,6 +6,15 @@ Add your project to LibreCores
 
 {% block pagepath %}Home &raquo; Add Project to LibreCores{% endblock %}
 
+{% block stylesheets %}
+  {{ parent() }}
+  {% stylesheets filter="cssrewrite"
+  "assets/css/bootstrap-select.css"
+  %}
+  <link rel="stylesheet" href="{{ asset_url }}" />
+  {% endstylesheets %}
+{% endblock %}
+
 {% block content %}
 <h1>Add your project to LibreCores</h1>
 
@@ -73,7 +82,10 @@ other information about your project automatically.</p>
             <p>You don't have access to any repository on GitHub (or haven't granted us access).
             Please add the project to LibreCores by entering the Git repository URL manually.</p>
           {% else %}
-            {{ form_row(form.githubSourceRepo, {'label': 'Select a project from your GitHub account'}) }}
+            <div class="form-group">
+              {{ form_label(form.githubSourceRepo,'Select a project from your GitHub account') }}
+              {{ form_widget(form.githubSourceRepo, {'attr': {'class': 'selectpicker','data-live-search':'true'}}) }}
+            </div>
             {{ form_row(form.saveGithubSourceRepo) }}
 
             <p><strong>Are you missing a repository from a GitHub organization you're member of?</strong>
@@ -111,6 +123,13 @@ other information about your project automatically.</p>
   </div>
 {{ form_end(form) }}
 
+{% endblock %}
+
+{% block javascripts %}
+  {{ parent() }}
+  {% javascripts filter="?jsqueeze" output="js/app_body.js" 'assets/js/bootstrap-select.js' %}
+    <script src="{{ asset_url }}"></script>
+  {% endjavascripts %}
 {% endblock %}
 
 {% block pagejs %}
