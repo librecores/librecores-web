@@ -73,7 +73,10 @@ other information about your project automatically.</p>
             <p>You don't have access to any repository on GitHub (or haven't granted us access).
             Please add the project to LibreCores by entering the Git repository URL manually.</p>
           {% else %}
-            {{ form_row(form.githubSourceRepo, {'label': 'Select a project from your GitHub account'}) }}
+            <div class="form-group">
+              {{ form_label(form.githubSourceRepo,'Select a project from your GitHub account') }}
+              {{ form_widget(form.githubSourceRepo,{'attr': {'class': 'selectpicker','data-live-search':'true'}}) }}
+            </div>
             {{ form_row(form.saveGithubSourceRepo) }}
 
             <p><strong>Are you missing a repository from a GitHub organization you're member of?</strong>
