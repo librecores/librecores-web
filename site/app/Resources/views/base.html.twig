@@ -14,7 +14,6 @@
     {% stylesheets filter="scssphp,cssrewrite" output="css/app.css"
         "assets/scss/librecores.scss"
         "assets/scss/bootstrap-librecores.scss"
-        "assets/css/bootstrap-select.min.css"
         "assets/css/bootstrap-social.css"
         "assets/css/font-awesome.min.css"
         "assets/css/librecores.css"
@@ -135,7 +134,7 @@
   </footer>
 
   {% block javascripts %}
-    {% javascripts filter="?jsqueeze" output="js/app_body.js" '@js_body_end' 'assets/js/bootstrap-select.min.js' %}
+    {% javascripts filter="?jsqueeze" output="js/app_body.js" '@js_body_end' %}
       <script src="{{ asset_url }}"></script>
     {% endjavascripts %}
 
