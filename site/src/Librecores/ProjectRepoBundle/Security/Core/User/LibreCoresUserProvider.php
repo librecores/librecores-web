@@ -253,7 +253,7 @@ class LibreCoresUserProvider implements UserProviderInterface,
             $this->session->getFlashBag()->add('warning',
                 '<p>We were unable to create a new account for you '.
                 'automatically. '.
-                'Please register on LibreCores first, you can then log in'.
+                'Please register on LibreCores first, you can then log in '.
                 'through '.ucfirst($serviceName).' as you just tried to.</p>'.
                 '<p>We encountered the following problems: </p>'.$errorMsgs);
 
