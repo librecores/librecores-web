@@ -125,12 +125,29 @@
   {% block body %}{% endblock %}
 
   <!-- footer -->
-  <hr>
   <footer class="librecores-footer">
-    <p>
-      LibreCores is a project of the <a href="http://fossi-foundation.org">Free and Open Source Silicon Foundation</a> &middot;
-      <a href="{{ path('librecores_site_page', {'page': 'imprint'}) }}">Imprint</a>
-    </p>
+    <nav class="container">
+      <div class="row">
+        <ul class="social col-xs-7 col-sm-4 col-md-2 pull-right">
+          <li><a href="https://github.com/librecores/librecores-web" title="Contribute to LibreCores on GitHub"><span class="fa fa-github"></span></a></li>
+          <li><a href="https://twitter.com/librecores" title="Follow @librecores on Twitter"><span class="fa fa-twitter"></span></a></li>
+          <li><a href="mailto:librecores@fossi-foundation.org" title="Contact us via email"><span class="fa fa-envelope"></span></a></li>
+        </ul>
+        <ul class="col-sm-2">
+          <li><a href="{{ path('librecores_site_page', {'page': 'about'}) }}">About LibreCores</a></li>
+          <li><a href="https://medium.com/librecores">Blog</a></li>
+          <li><a href="{{ path('librecores_site_page', {'page': 'imprint'}) }}">Imprint</a></li>
+        </ul>
+        <ul class="col-sm-2">
+          <li><a href="{{ path('librecores_project_repo_project_search') }}">Search an IP core</a></li>
+          <li><a href="{{ path('librecores_project_repo_project_new') }}">Add a project</a></li>
+          <li><a href="https://librecores-web.readthedocs.io/en/latest/contributing.html">Contribute to this site</a></li>
+        </ul>
+      </div>
+      <div class="row">
+        <p class="col-xs-12">LibreCores is a project of the <a href="https://www.fossi-foundation.org">Free and Open Source Silicon Foundation</a>.</p>
+      </div>
+    </nav>
   </footer>
 
   {% block javascripts %}

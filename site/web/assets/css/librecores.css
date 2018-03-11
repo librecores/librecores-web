@@ -11,6 +11,15 @@ body {
 
   /* move content below top navbar */
   padding-top: 60px;
+
+  /* for sticky footer */
+  display: flex;
+  flex-direction: column;
+}
+
+#maincontent {
+  /* for sticky footer */
+  flex: 1 0 auto;
 }
 
 h1 {
@@ -252,12 +261,30 @@ h1 a:hover, h1 a:active {
   font-weight: bold;
 }
 
-
 /* footer */
 .librecores-footer {
-  color: rgba(77, 77, 77, 0.75);
+  /* for sticky footer */
+  flex-shrink: 0;
+
+  margin-top: 20px;
+  padding-top: 15px;
+  padding-bottom: 10px;
+  background-color: #eaebe5;
   font-weight: 300;
-  text-align: center;
+  border-top: 1px solid #dddfd4;
+}
+
+.librecores-footer .social {
+  font-size: 26px;
+}
+
+.librecores-footer ul {
+  list-style: none;
+}
+
+.librecores-footer .social li {
+  float: right;
+  margin-left: 15px;
 }
 
 
