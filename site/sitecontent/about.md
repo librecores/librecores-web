@@ -22,55 +22,13 @@ Therefore, we decided to give it a real fresh start under the LibreCores brand.
 
 ### <a class="anchor" name="roadmap"></a> What are the future plans for LibreCores?
 
-At the moment, LibreCores is in a preview state and we believe in "release early, release often".
-We've laid down much of the groundwork for the site, and are now able to iterate quickly on new ideas and features.
-We do this to enable everybody to get involved and shape the future of LibreCores with the goal of making it a place where the community can truly feel at home.
+We continuously add features to LibreCores to make the site more valuable to our users, and to try out new things.
+We strongly believe in "release early, release often" to enable everybody to get involved and shape the future of LibreCores.
+We want LibreCores to be a place where the community can truly feel at home!
 
-#### Basic Features
+- **Improved discoverability.** Finding a project or an IP core which exactly fits your needs is not easy. We're experimenting with multiple ways to make it easy to find the best IP core for the job. One specific thing we're planning to add is a categorization system for projects.
 
-Some of the most important features we are working on and that will be added in the near future are:
-
-<div class="row">
-  <div class="col-fa-3x">
-    <img src="/img/freepik/hierarchical-structure.png" alt="Organizations"/>
-  </div>
-  <div class="col-xs-12 col-offset-fa-3x">
-    <div class="row">
-      <b>Organizations.</b> Similar to other platforms such as Github, LibreCores can be organized in organizations. The structure is similar to the projects of a user, but with an organization being a collection of users.
-    </div>
-  </div>
-</div>
-
-<div class="row">
-  <div class="col-fa-3x"><img src="/img/freepik/label-right-arrow-outline.png" alt="Tags"/></div>
-  <div class="col-xs-12 col-offset-fa-3x">
-    <div class="row"><b>Tags.</b> A project can be tagged with keywords, such as a design language,
-    an interface, an ISA etc. This makes it easier for other users to find what they are searching for.</div>
-  </div>
-</div>
-
-<div class="row">
-  <div class="col-fa-3x"><img src="/img/freepik/rating.png" alt="Reviews"/></div>
-  <div class="col-xs-12 col-offset-fa-3x">
-    <div class="row"><b>Reviews and Ratings.</b> We envision a mix of scale-based ratings and an
-    optional comment. The goal is that other users get a better understanding of how other users
-    perceived this project before.</div>
-  </div>
-</div>
-
-<div class="row">
-  <div class="col-fa-3x"><img src="/img/freepik/molecular-bond.png" alt="Project Relations"/></div>
-  <div class="col-xs-12 col-offset-fa-3x">
-    <div class="row"><b>Project Relations.</b> Projects rarely stand for themselves, but are part
-    of a larger collection, are forked from another project or depend on other projects.</div>
-  </div>
-</div>
-
-#### Our Vision
-
-Looking ahead in addition to those basic features we want to focus on four major areas.
-
-- **Project quality metrics.** Sometimes it's hard to decide if a project is usable for a given project. To make the decision process easier, we are thinking about both user-generated quality metrics (such as comments or reviews, likes, etc.) as well as machine-generated metrics (e.g. activity metrics or build and test status from continuous integration).
+- **Even more project quality metrics.** Sometimes it's hard to decide if a project is usable for a given project. To make the decision process easier, we are thinking about both user-generated quality metrics (such as comments or reviews, likes, etc.) as well as machine-generated metrics (e.g. activity metrics or build and test status from continuous integration). Some parts of this vision have already been implemented, others are still in the making.
 - **Workflow integration.** Finding an IP core on LibreCores is just the first step of using it as part of an own project. Currently, making use of a core  involves in many cases copying the source code into the custom project. This process is tedious and makes updating a core to the latest upstream version hard.
 
   With LibreCores we want to explore different options to make this workflow more streamlined. One example is the integration of the LibreCores project repository with the [fusesoc](https://github.com/olofk/fusesoc) package manager.
