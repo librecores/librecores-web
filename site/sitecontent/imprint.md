@@ -1,10 +1,11 @@
 # Imprint
 
-LibreCores is a project of the [https://www.fossi-foundation.org](Free and Open Source Silicon Foundation).
+LibreCores is a project of the [Free and Open Source Silicon Foundation](https://www.fossi-foundation.org).
 
 The Free and Open Source Silicon Foundation C.i.C.<br/>
 71-75 Shelton Street<br/>
-London, WC2H 9JQ
+London, WC2H 9JQ<br/>
+United Kingdom
 
 [info@fossi-foundation.org](mailto:info@fossi-foundation.org)
 
