@@ -21,4 +21,7 @@ symfony_config:
 # sentry configuration
 site_sentry_env: production
 
+# Enable mail delivery
+site_mail_disable_delivery: false
+
 site_user_email_confirmation_enabled: true

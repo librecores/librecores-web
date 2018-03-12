@@ -110,13 +110,14 @@ doctrine_migrations:
 
 # Swiftmailer Configuration
 swiftmailer:
-    transport:  "%mailer_transport%"
-    encryption: "%mailer_encryption%"
-    host:       "%mailer_host%"
-    port:       "%mailer_port%"
-    username:   "%mailer_user%"
-    password:   "%mailer_password%"
-    spool:      { type: memory }
+    disable_delivery: "%mailer_disable_delivery%"
+    transport:        "%mailer_transport%"
+    encryption:       "%mailer_encryption%"
+    host:             "%mailer_host%"
+    port:             "%mailer_port%"
+    username:         "%mailer_user%"
+    password:         "%mailer_password%"
+    spool:            { type: memory }
 
 
 # SimplePie (RSS/Atom Parser) Configuration

@@ -9,12 +9,13 @@ parameters:
 
     # Swiftmailer email configuration
     # Docs at https://symfony.com/doc/3.4/email.html
-    mailer_encryption: tls
-    mailer_transport:  smtp
-    mailer_host:       127.0.0.1
-    mailer_port:       25
-    mailer_user:       ~
-    mailer_password:   ~
+    mailer_disable_delivery: false
+    mailer_encryption:       tls
+    mailer_transport:        smtp
+    mailer_host:             127.0.0.1
+    mailer_port:             25
+    mailer_user:             ~
+    mailer_password:         ~
 
     # Require confirmation of email address after a new user registered
     # on LibreCores. Requires a working mailer setup.
@@ -47,4 +48,3 @@ parameters:
     sentry_dsn:        ~
     # Options: dev, staging, production
     sentry_env:       'dev'
-

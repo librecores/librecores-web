@@ -22,6 +22,9 @@ mysql_root_password: "password"
 site_sentry_dsn: ""
 site_sentry_env: dev
 
+# Disable mail delivery in development setups
+site_mail_disable_delivery: true
+
 # Require confirmation of the email address of newly registered users.
 # Requires a working mailer setup. Add SMTP credentials in
 # secrets/dev-vagrant.secrets.yml before enabling this setting.
