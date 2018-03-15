@@ -11,6 +11,7 @@ use Doctrine\DBAL\DBALException;
 use Librecores\ProjectRepoBundle\Entity\Project;
 use Librecores\ProjectRepoBundle\Entity\SourceRepo;
 use Librecores\ProjectRepoBundle\RepoCrawler\RepoCrawlerFactory;
+use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
  * Extract and update a project's information with data from a source repository
@@ -27,7 +28,7 @@ class UpdateProjectInformation implements ConsumerInterface
     private $repoCrawlerFactory;
 
     public function __construct(RepoCrawlerFactory $repoCrawlerFactory,
-        LoggerInterface $logger, Registry $doctrine)
+        LoggerInterface $logger, ManagerRegistry $doctrine)
     {
         $this->repoCrawlerFactory = $repoCrawlerFactory;
         $this->logger = $logger;

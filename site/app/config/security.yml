@@ -31,7 +31,7 @@ security:
                 failure_path: /user/register
 
                 oauth_user_provider:
-                    service: librecores_user_provider
+                    service: 'Librecores\ProjectRepoBundle\Security\Core\User\LibreCoresUserProvider'
 
             logout:
                 path: /user/logout

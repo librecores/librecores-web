@@ -1,10 +1,10 @@
 <?php
 namespace Librecores\ProjectRepoBundle\Validator\Constraints;
 
-use Symfony\Bundle\FrameworkBundle\Routing\Router;
+use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
-use Doctrine\Bundle\DoctrineBundle\Registry;
+use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
  * Validate a user or organization name
@@ -63,16 +63,16 @@ class UserOrgNameValidator extends ConstraintValidator
     const VALID_NAME_REGEX = '/^[a-z][a-z0-9-]+$/';
 
     /**
-     * @var Doctrine\Bundle\DoctrineBundle\Registry
+     * @var Doctrine\Common\Persistence\ManagerRegistry;
      */
     private $orm;
 
     /**
-     * @var Router
+     * @var RouterInterface
      */
     private $router;
 
-    public function __construct(Registry $doctrine, Router $router)
+    public function __construct(ManagerRegistry $doctrine, RouterInterface $router)
     {
         $this->orm    = $doctrine;
         $this->router = $router;

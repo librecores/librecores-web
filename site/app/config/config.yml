@@ -154,7 +154,7 @@ old_sound_rabbit_mq:
             connection:       default
             exchange_options: {name: 'update-project-info', type: direct}
             queue_options:    {name: 'update-project-info'}
-            callback:         update_project_info_service
+            callback:         Librecores\ProjectRepoBundle\Consumer\UpdateProjectInformation
 
 # FOSUser Configuration
 fos_user:
@@ -162,7 +162,7 @@ fos_user:
     firewall_name: main
     user_class: 'Librecores\ProjectRepoBundle\Entity\User'
     service:
-        user_manager: librecores_user_manager
+        user_manager: 'Librecores\ProjectRepoBundle\Doctrine\UserManager'
         mailer: fos_user.mailer.twig_swift
     from_email:
         address:        'noreply@librecores.org'
@@ -179,7 +179,7 @@ fos_user:
 hwi_oauth:
     connect:
         confirmation: false
-        account_connector: librecores_user_provider
+        account_connector: 'Librecores\ProjectRepoBundle\Security\Core\User\LibreCoresUserProvider'
     firewall_names: [main]
     resource_owners:
         github:

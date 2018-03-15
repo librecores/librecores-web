@@ -153,7 +153,7 @@ class ProjectController extends Controller
      * @param string $projectName URL component: name of the project
      * @return Response
      */
-    public function viewAction(Request $request, $parentName, $projectName)
+    public function viewAction(Request $request, $parentName, $projectName, $projectMetricsProvider)
     {
         $p = $this->getProject($parentName, $projectName);
 
@@ -319,15 +319,15 @@ class ProjectController extends Controller
     /**
      * @return GithubApiService
      */
-    private function getGithubApiService()
+    private function getGithubApiService(GithubApiService $githubapiservice)
     {
-        return $this->get('librecores.util.githubapiservice');
+        return $githubapiservice;
     }
 
     /**
      * @return QueueDispatcherService
      */
-    private function getQueueDispatcherService()
+    private function getQueueDispatcherService(QueueDispatcherService $ueueDispatcherService)
     {
         return $this->get('librecores.util.queuedispatcherservice');
     }

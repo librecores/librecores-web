@@ -4,6 +4,7 @@ namespace Librecores\ProjectRepoBundle\Util;
 use Symfony\Component\Process\Process;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Process\Exception\ProcessFailedException;
+use Symfony\Component\Form\DataTransformerInterface;
 
 /**
  * Convert text written in a markup language to safe HTML
@@ -32,8 +33,7 @@ class MarkupToHtmlConverter
     private $logger;
     private $htmlPurifier;
 
-    public function __construct(LoggerInterface $logger,
-                                \HTMLPurifier $htmlPurifier)
+    public function __construct(LoggerInterface $logger, DataTransformerInterface $htmlPurifier)
     {
         $this->logger = $logger;
         $this->htmlPurifier = $htmlPurifier;

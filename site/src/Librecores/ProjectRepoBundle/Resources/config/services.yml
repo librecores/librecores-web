@@ -14,26 +14,21 @@ services:
     # this creates a service per class whose id is the fully-qualified class name
     Librecores\ProjectRepoBundle\:
         resource: '../../../ProjectRepoBundle/*'
-        exclude: '../../../ProjectRepoBundle/{Entity,Repository}'
+        exclude: '../../../ProjectRepoBundle/{Entity,Repository}' #Form/Type/PurifiedTextareaType.php
+    # controllers are imported separately to make sure they're public
+    # and have a tag that allows actions to type-hint services
+    Librecores\ProjectRepoBundle\Controller\:
+            resource: '../../../ProjectRepoBundle/Controller'
+            public: true
+            tags: ['controller.service_arguments']
 
     # Consumer Services (called through RabbitMQ)
     Librecores\ProjectRepoBundle\Consumer\UpdateProjectInformation:
-        arguments:
-            - '@librecores.repocrawlerfactory'
-            - '@logger'
-            - '@doctrine'
 
     # Utilities
     Librecores\ProjectRepoBundle\Util\MarkupToHtmlConverter:
-        arguments:
-            - '@logger'
-            - '@exercise_html_purifier.default'
 
     Librecores\ProjectRepoBundle\Util\GithubApiService:
-        arguments:
-            - '@security.token_storage'
-            - '@app.cache.githubapi'
-            - '@router'
 
     Librecores\ProjectRepoBundle\Util\QueueDispatcherService:
         calls:
@@ -52,42 +47,41 @@ services:
         tags:
             - { name: form.type_extension, extended_type: Symfony\Component\Form\Extension\Core\Type\ButtonType }
 
+    Exercise\HTMLPurifierBundle\Form\HTMLPurifierTransformer:
+
+    Symfony\Component\Form\DataTransformerInterface: '@Exercise\HTMLPurifierBundle\Form\HTMLPurifierTransformer'
+
     Librecores\ProjectRepoBundle\Form\Type\PurifiedTextareaType:
-        arguments:
-          - '@librecores.form.transformer.html_purifier'
         tags:
             - { name: form.type, alias: purified_textarea }
 
-    Exercise\HTMLPurifierBundle\Form\HTMLPurifierTransformer:
-        arguments:
-            - '@exercise_html_purifier.default'
-
     Librecores\ProjectRepoBundle\Validator\Constraints\UserOrgNameValidator:
-        arguments:
-            - '@doctrine'
-            - '@router'
         tags:
             - { name: validator.constraint_validator }
+
+    FOS\UserBundle\Util\PasswordUpdaterInterface  : '@fos_user.util.password_updater'
+    FOS\UserBundle\Util\CanonicalFieldsUpdater: '@fos_user.util.canonical_fields_updater'
+    Doctrine\Common\Persistence\ObjectManager: '@fos_user.object_manager'
 
     # User/auth management
     Librecores\ProjectRepoBundle\Doctrine\UserManager:
         arguments:
-          - '@fos_user.util.password_updater'
-          - '@fos_user.util.canonical_fields_updater'
-          - '@fos_user.object_manager'
-          - '%fos_user.model.user.class%'
+          $class: '%fos_user.model.user.class%'
+
+    # Librecores\ProjectRepoBundle\Doctrine\UserManager: '@fos_user.user_manager'
+    Symfony\Component\Validator\Validator\TraceableValidator: '@validator'
 
     Librecores\ProjectRepoBundle\Security\Core\User\LibreCoresUserProvider:
         arguments:
-            - '@fos_user.user_manager'
-            - '@validator'
-            - '@session'
+            $userManager: '@fos_user.user_manager'
+            $session: '@session'
+
+    # Librecores\ProjectRepoBundle\Security\Core\User\LibreCoresUserProvider: '@librecores_user_provider'
 
     Librecores\ProjectRepoBundle\EventListener\OAuthRegistrationListener:
         arguments:
-            - '@fos_user.user_manager'
-            - '@librecores_user_provider'
-            - '@session'
+            $userManager: '@fos_user.user_manager'
+            $session: '@session'
         tags:
             - { name: kernel.event_subscriber }
 
@@ -95,7 +89,6 @@ services:
     Librecores\ProjectRepoBundle\Security\ProjectVoter:
         tags:
             - { name: security.voter }
-        public: false
 
     Librecores\ProjectRepoBundle\Repository\ContributorRepository:
         factory: ['@doctrine.orm.default_entity_manager', 'getRepository']
@@ -110,14 +103,9 @@ services:
     Librecores\ProjectRepoBundle\Util\ProcessCreator: ~
 
     Librecores\ProjectRepoBundle\RepoCrawler\RepoCrawlerFactory:
-        arguments:
-            - '@librecores.util.markuptohtmlconverter'
-            - '@logger'
-            - '@doctrine.orm.default_entity_manager'
-            - '@librecores.process_creator'
-            - '@librecores.util.githubapiservice'
 
     Librecores\ProjectRepoBundle\Doctrine\ProjectMetricsProvider:
-        arguments:
-            - '@librecores.repository.commit'
-            - '@librecores.repository.contributor'
+
+    Librecores\ProjectRepoBundle\Entity\Organization:
+
+    Librecores\ProjectRepoBundle\Entity\User:
