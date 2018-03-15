@@ -8,7 +8,7 @@ parameters:
 
     # Swiftmailer email configuration
     # Docs at https://symfony.com/doc/3.4/email.html
-    mailer_disable_delivery: '{{ site_mail_disable_delivery }}'
+    mailer_disable_delivery: {{ site_mail_disable_delivery }}
     mailer_encryption:       '{{ site_smtp_encryption }}'
     mailer_transport:        smtp
     mailer_host:             '{{ site_smtp_host }}'
