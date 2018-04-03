@@ -31,99 +31,101 @@
   project.getParentName(), 'projectName': project.getName()}) }}">{{ project.getFullName() }}</a>: Settings</h1>
 
 <div class="row">
-<div class="col-sm-2">
-  <ul class="list-group">
-    <li class="list-group-item"><a href="{{ path('librecores_project_repo_project_view', {'parentName':
-  project.getParentName(), 'projectName': project.getName()}) }}">
-      <i class="fa fa-bookmark fa-fw"></i>
-      Project
-    </a></li>
-    <li class="list-group-item active"><a href="#">
-      <i class="fa fa-cogs fa-fw"></i>Settings
-    </a></li>
-  </ul>
-</div>
-<div class="col-sm-10">
+  <div class="col-sm-2">
+    <ul class="list-group">
+      <li class="list-group-item"><a href="{{ path('librecores_project_repo_project_view', {'parentName':
+    project.getParentName(), 'projectName': project.getName()}) }}">
+        <i class="fa fa-bookmark fa-fw"></i>
+        Project
+      </a></li>
+      <li class="list-group-item active"><a href="#">
+        <i class="fa fa-cogs fa-fw"></i>Settings
+      </a></li>
+    </ul>
+  </div>
+  <div class="col-sm-10">
 
-{{ form_start(form) }}
-  {{ form_errors(form) }}
+    {{ form_start(form) }}
+      {{ form_errors(form) }}
 
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h3 class="panel-title">Project Information</h3>
-    </div>
-    <div class="panel-body">
-      {{ form_row(form.displayName) }}
-
-      <div class="form-group">
-        {{ form_label(form.tagline) }}
-        <div class="form-desc">
-          A short and to-the-point (140 characters or less) description what this project is all about.
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Project Information</h3>
         </div>
-        {{ form_widget(form.tagline) }}
-      </div>
+        <div class="panel-body">
+          {{ form_row(form.displayName) }}
 
-      <div class="form-group">
-        {{ form_label(form.descriptionTextAutoUpdate) }}
-        <div class="form-desc">
-          A long description of what your project is all about and why it is useful.
-        </div>
-        {{ form_widget(form.descriptionTextAutoUpdate) }}
-        <div id="descriptionText_div"
-             style="padding-left: 15px; display: {% if form.vars.value.descriptionTextAutoUpdate %}none{% else %}block{% endif %};">
-          {{ form_row(form.descriptionText) }}
-          <div class="alert alert-info" role="alert">
-            <strong>Note!</strong>
-            Editing the description text here doesn't update it in your code
-            repository. To keep the descriptions in your source repository and
-            on LibreCores in sync, update the README file in your source code
-            repository and switch to the auto-update mode above.
+          <div class="form-group">
+            {{ form_label(form.tagline) }}
+            <div class="form-desc">
+              A short and to-the-point (140 characters or less) description what this project is all about.
+            </div>
+            {{ form_widget(form.tagline) }}
+          </div>
+
+          <div class="form-group">
+            {{ form_label(form.descriptionTextAutoUpdate) }}
+            <div class="form-desc">
+              A long description of what your project is all about and why it is useful.
+            </div>
+            {{ form_widget(form.descriptionTextAutoUpdate) }}
+            <div id="descriptionText_div"
+                 style="padding-left: 15px; display: {% if form.vars.value.descriptionTextAutoUpdate %}none{% else %}block{% endif %};">
+              {{ form_row(form.descriptionText) }}
+              <div class="alert alert-info" role="alert">
+                <strong>Note!</strong>
+                Editing the description text here doesn't update it in your code
+                repository. To keep the descriptions in your source repository and
+                on LibreCores in sync, update the README file in your source code
+                repository and switch to the auto-update mode above.
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </div>
 
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h3 class="panel-title">Resources</h3>
-    </div>
-    <div class="panel-body">
-      {{ form_row(form.projectUrl) }}
-      {{ form_row(form.issueTracker) }}
-    </div>
-  </div>
-
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h3 class="panel-title">Source Code Repository</h3>
-    </div>
-    <div class="panel-body">
-      {{ form_row(form.sourceRepo, {'label': false}) }}
-    </div>
-  </div>
-
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h3 class="panel-title">License</h3>
-    </div>
-    <div class="panel-body">
-      {{ form_row(form.licenseName) }}
-
-      {{ form_row(form.licenseTextAutoUpdate) }}
-      <div id="licenseText_div" style="padding-left: 15px; display: {% if  form.vars.value.licenseTextAutoUpdate %}none{% else %}block{% endif %};">
-        {{ form_row(form.licenseText) }}
-        <div class="alert alert-info" role="alert">
-          <strong>Note!</strong>
-          Editing the license text here doesn't update it in your code
-          repository. To keep the license texts in your source repository and
-          on LibreCores in sync, update the LICENSE file in your source code
-          repository and switch to the auto-update mode above.
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Resources</h3>
+        </div>
+        <div class="panel-body">
+          {{ form_row(form.projectUrl) }}
+          {{ form_row(form.issueTracker) }}
         </div>
       </div>
-    </div>
+
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Source Code Repository</h3>
+        </div>
+        <div class="panel-body">
+          {{ form_row(form.sourceRepo, {'label': false}) }}
+        </div>
+      </div>
+
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">License</h3>
+        </div>
+        <div class="panel-body">
+          {{ form_row(form.licenseName) }}
+
+          {{ form_row(form.licenseTextAutoUpdate) }}
+          <div id="licenseText_div" style="padding-left: 15px; display: {% if  form.vars.value.licenseTextAutoUpdate %}none{% else %}block{% endif %};">
+            {{ form_row(form.licenseText) }}
+            <div class="alert alert-info" role="alert">
+              <strong>Note!</strong>
+              Editing the license text here doesn't update it in your code
+              repository. To keep the license texts in your source repository and
+              on LibreCores in sync, update the LICENSE file in your source code
+              repository and switch to the auto-update mode above.
+            </div>
+          </div>
+        </div>
+      </div>
+    {{ form_end(form) }}
   </div>
-{{ form_end(form) }}
+</div>
 {% endblock %}
 
 {% block pagejs %}
