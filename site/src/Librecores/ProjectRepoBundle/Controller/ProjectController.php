@@ -317,6 +317,30 @@ class ProjectController extends Controller
     }
 
     /**
+     * Delete the Project from the repository
+     * @param Request $req
+     * @param string $parentName
+     * @param string $projectName
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function deleteAction(Request $req, $parentName, $projectName)
+    {
+	$p = $this->getProject($parentName, $projectName);
+
+	$entityManager = $this->getDoctrine()->getManager();
+	$entityManager->remove($p);
+	$entityManager->flush();
+
+	return $this->render(
+            'LibrecoresProjectRepoBundle:Default:delete.html.twig',[
+                'project' => $p]);
+
+	return new Response('project deleted', 200,
+            [ 'Content-Type' => 'text/plain' ]);
+	
+    }
+
+    /**
      * @return GithubApiService
      */
     private function getGithubApiService()
