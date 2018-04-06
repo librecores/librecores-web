@@ -334,9 +334,6 @@ class ProjectController extends Controller
 	return $this->render(
             'LibrecoresProjectRepoBundle:Default:delete.html.twig',[
                 'project' => $p]);
-
-	return new Response('project deleted', 200,
-            [ 'Content-Type' => 'text/plain' ]);
 	
     }
 
