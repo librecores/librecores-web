@@ -6,6 +6,12 @@
       "assets/scss/trumbowyg.scss"
   %}
     <link rel="stylesheet" href="{{ asset_url }}" />
+    <style type="text/css">
+      #delete-project-button
+      {
+         color: red;
+      }
+    </style>
   {% endstylesheets %}
   {{ parent() }}
 {% endblock %}
