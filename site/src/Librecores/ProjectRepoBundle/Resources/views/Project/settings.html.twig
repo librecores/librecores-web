@@ -16,6 +16,28 @@
     "assets/js/trumbowyg.min.js"
   %}
     <script src="{{ asset_url }}"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+      $(document).ready(function(){
+      $("#delete-project-name").keyup(function(){
+          var projectName = $("#project_displayName").val();
+          //alert(projectName);
+          var matched = false;
+          if($(this).val() != projectName){
+            matched = false;
+          }
+          else{
+            matched = true;
+          }
+
+          if (!matched) {
+            $('#delete-project-button').attr('disabled', 'disabled');
+          } else {
+            $('#delete-project-button').removeAttr('disabled');
+          }
+        });
+      });
+    </script>
   {% endjavascripts %}
 {% endblock %}
 
@@ -129,7 +151,11 @@
       <h3 class="panel-title">Delete</h3>
     </div>
     <div class="panel-body">
-<a href="{{ path('librecores_project_repo_project_delete', {'parentName':project.getParentName(), 'projectName': project.getName()}) }}" class="btn btn-default">Delete this project</a>
+      <form id="myForm" class="delete-panel-body">
+	Enter the project name as displayed: <br />
+	<input type="text" id="delete-project-name" name="project_name" /><br /><br>
+	<input type="button" id="delete-project-button" disabled="disabled" onclick="window.location.href='{{ path('librecores_project_repo_project_delete', {'parentName':project.getParentName(), 'projectName': project.getName()}) }}'" class="btn btn-default" value="Delete this project"/>
+      </form>
     </div>
   </div>
 {{ form_end(form) }}
