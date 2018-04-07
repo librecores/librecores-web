@@ -7,9 +7,31 @@
   %}
     <link rel="stylesheet" href="{{ asset_url }}" />
     <style type="text/css">
+      #delete-panel-button
+      {
+         margin-left: 15px;
+      }
       #delete-project-button
       {
          color: red;
+         width: 100%;
+      }
+      #delete-project-text
+      {
+         width: 100%;
+      }
+      #new-delete-button
+      {
+         color: red;
+      }
+      #modal-close-button
+      {
+         margin-top: -28px
+      }
+      #modal-note
+      {
+         color: #735c0f;
+         background-color: #fffbdd;
       }
     </style>
   {% endstylesheets %}
@@ -25,9 +47,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script>
       $(document).ready(function(){
-      $("#delete-project-name").keyup(function(){
+      $("#delete-project-text").keyup(function(){
           var projectName = $("#project_displayName").val();
-          //alert(projectName);
           var matched = false;
           if($(this).val() != projectName){
             matched = false;
@@ -156,15 +177,39 @@
     <div class="panel-heading">
       <h3 class="panel-title">Delete</h3>
     </div>
-    <div class="panel-body">
-      <form id="myForm" class="delete-panel-body">
-	Enter the project name as displayed: <br />
-	<input type="text" id="delete-project-name" name="project_name" /><br /><br>
-	<input type="button" id="delete-project-button" disabled="disabled"
+    <div class="panel-button" id="delete-panel-button">
+      <br>
+      <a href="#" id="new-delete-button" class="btn btn-default" data-toggle="modal" data-target="#delete-modal">Delete this project</a>
+      </br>
+      </br>
+    </div>
+    <div id="delete-modal" align="left" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="delete-modal" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="myModalLabel"><strong>Are you absolutely sure?</strong></h4>
+	    <button type="button" id="modal-close-button" class="close" data-dismiss="modal" aria-label="Close">
+	     <span aria-hidden="true">x</span>
+	    </button>
+          </div>
+	  <div class="modal-header" id="modal-note">
+	    Unexpected bad things will happen if you don't read this!
+	  </div>
+          <div class="modal-body">
+            <form id="modal-form" class="delete-panel-body">
+	      <p align="left">This action <strong>cannot</strong> be undone.
+		This will permanently delete the <strong>{{project.getName()}}</strong>
+		project, license details, project metrics, data sheet and remove all references.<br /><br>
+	    Please type in the project display name to confirm: <br /></p>
+	    <input type="text" id="delete-project-text" name="project_name" /><br>
+	    <input type="button" id="delete-project-button" disabled="disabled"
 	       onclick="window.location.href='{{ path('librecores_project_repo_project_delete', 
 			{'parentName':project.getParentName(), 'projectName': project.getName()}) }}'"
-	       class="btn btn-default" value="Delete this project"/>
-      </form>
+	       class="btn btn-default" value="I understand the consequences, delete this project"/>
+          </form>
+	  </div>
+        </div>
+      </div>
     </div>
   </div>
 {{ form_end(form) }}
