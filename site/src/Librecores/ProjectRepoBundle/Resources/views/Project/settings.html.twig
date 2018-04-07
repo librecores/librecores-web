@@ -160,7 +160,10 @@
       <form id="myForm" class="delete-panel-body">
 	Enter the project name as displayed: <br />
 	<input type="text" id="delete-project-name" name="project_name" /><br /><br>
-	<input type="button" id="delete-project-button" disabled="disabled" onclick="window.location.href='{{ path('librecores_project_repo_project_delete', {'parentName':project.getParentName(), 'projectName': project.getName()}) }}'" class="btn btn-default" value="Delete this project"/>
+	<input type="button" id="delete-project-button" disabled="disabled"
+	       onclick="window.location.href='{{ path('librecores_project_repo_project_delete', 
+			{'parentName':project.getParentName(), 'projectName': project.getName()}) }}'"
+	       class="btn btn-default" value="Delete this project"/>
       </form>
     </div>
   </div>
