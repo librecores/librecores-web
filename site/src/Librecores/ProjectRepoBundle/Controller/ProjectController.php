@@ -318,6 +318,7 @@ class ProjectController extends Controller
 
     /**
      * Delete the Project from the repository
+     *
      * @param Request $req
      * @param string $parentName
      * @param string $projectName
@@ -325,13 +326,13 @@ class ProjectController extends Controller
      */
     public function deleteAction(Request $req, $parentName, $projectName)
     {
-	$p = $this->getProject($parentName, $projectName);
+        $p = $this->getProject($parentName, $projectName);
 
-	$entityManager = $this->getDoctrine()->getManager();
-	$entityManager->remove($p);
-	$entityManager->flush();
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->remove($p);
+        $entityManager->flush();
 
-	return $this->render(
+        return $this->render(
             'LibrecoresProjectRepoBundle:Default:delete.html.twig',[
                 'project' => $p]);
 	
