@@ -6,35 +6,6 @@
       "assets/scss/trumbowyg.scss"
   %}
     <link rel="stylesheet" href="{{ asset_url }}" />
-    <style type="text/css">
-      #delete-panel-button
-      {
-         margin-left: 15px;
-      }
-      #delete-project-button
-      {
-         color: #cb2431;
-         font-weight: bold;
-         width: 100%;
-      }
-      #delete-project-text
-      {
-         width: 100%;
-      }
-      #new-delete-button
-      {
-         color: #cb2431;
-      }
-      #modal-close-button
-      {
-         margin-top: -28px
-      }
-      #modal-note
-      {
-         color: #735c0f;
-         background-color: #fffbdd;
-      }
-    </style>
   {% endstylesheets %}
   {{ parent() }}
 {% endblock %}
@@ -45,7 +16,6 @@
     "assets/js/trumbowyg.min.js"
   %}
     <script src="{{ asset_url }}"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script>
       $(document).ready(function(){
       $("#delete-project-text").keyup(function(){
@@ -174,7 +144,6 @@
         </div>
       </div>
     {{ form_end(form) }}
-  </div>
 
   <div class="panel panel-default">
     <div class="panel-heading">
@@ -182,7 +151,7 @@
     </div>
     <div class="panel-button" id="delete-panel-button">
       <br>
-      <a href="#" id="new-delete-button" class="btn btn-default" data-toggle="modal" data-target="#delete-modal"><strong>Delete this project</strong></a>
+      <a href="#" id="delete-panel-button" class="btn btn-default" data-toggle="modal" data-target="#delete-modal"><strong>Delete this project</strong></a>
       </br>
       </br>
     </div>
