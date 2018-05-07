@@ -157,19 +157,19 @@
         <div class="modal-content">
           <div class="modal-header">
             <h4 class="modal-title" id="myModalLabel"><strong>Are you absolutely sure?</strong></h4>
-	    <button type="button" id="modal-close-button" class="close" data-dismiss="modal" aria-label="Close">
-	     <span aria-hidden="true">x</span>
-	    </button>
+            <button type="button" id="modal-close-button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">x</span>
+            </button>
           </div>
           <div class="modal-header" id="modal-note">
-	    You will lose the project listing, if you don't read this!
+            You will lose the project listing, if you don't read this!
           </div>
           <div class="modal-body">
             <form id="modal-form" class="delete-panel-body">
               <p align="left">This action <strong>cannot</strong> be undone.
                 This will permanently delete the <strong>{{project.getParentName()}}/{{project.getName()}}</strong>
                 project, license details, project metrics, data sheet and remove all references.<br /><br>
-		Please type in the project display name to confirm: <br />
+                Please type in the project display name to confirm: <br />
               </p>
               <input type="text" id="delete-project-text" name="project_name" /><br>
               <input type="button" id="delete-project-button" disabled="disabled" class="btn btn-default" value="I understand the consequences, delete this project"/>
