@@ -520,29 +520,29 @@ h1 a:hover, h1 a:active {
   z-index: 1050; /* to over-ride navbar z-index*/
 }
 
-#delete-panel-button{
+#delete-panel-button {
   margin-left: 15px;
 }
 
-#delete-project-button{
+#delete-project-button {
   color: #cb2431;
   font-weight: bold;
   width: 100%;
 }
 
-#delete-project-text{
+#delete-project-text {
   width: 100%;
 }
 
-#delete-panel-button{
+#delete-panel-button {
   color: #cb2431;
 }
 
-#modal-close-button{
+#modal-close-button {
   margin-top: -28px
 }
 
-#modal-note{
+#modal-note {
   color: #735c0f;
   background-color: #fffbdd;
 }
