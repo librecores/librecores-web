@@ -327,14 +327,15 @@ class ProjectController extends Controller
     public function deleteAction(Request $req, $parentName, $projectName)
     {
         $p = $this->getProject($parentName, $projectName);
-
+        $Fqname = $p->getFqname();
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->remove($p);
         $entityManager->flush();
-
         return $this->render(
             'LibrecoresProjectRepoBundle:Default:delete.html.twig',[
-                'project' => $p]);
+                'projectName' => $projectName,
+		'parentName' => $parentName,
+		'Fqname' => $Fqname]);
 	
     }
 

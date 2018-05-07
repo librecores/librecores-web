@@ -5,6 +5,7 @@
 {% block content %}
 <h1>The following project has been deleted</h1>
 
+
 <h2><a href="{{ path('librecores_project_repo_project_view', {'parentName':
-project.getParentName(), 'projectName': project.getName()}) }}">{{ project.getFqname() }}</a></h2>
+parentName, 'projectName': projectName}) }}">{{ Fqname }}</a></h2>
 {% endblock %}
