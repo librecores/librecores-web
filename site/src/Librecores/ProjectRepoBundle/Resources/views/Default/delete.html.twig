@@ -3,9 +3,10 @@
 {% block title %}Delete project - LibreCores{% endblock %}
 
 {% block content %}
-<h1>The following project has been deleted</h1>
+<h1>Project Deleted</h1>
 
+<p>Your project {{ Fqname }} has been deleted from LibreCores.<br><br>
 
-<h2><a href="{{ path('librecores_project_repo_project_view', {'parentName':
-parentName, 'projectName': projectName}) }}">{{ Fqname }}</a></h2>
+  Do you want to add a new project? Or search for an existing one?
+</p>
 {% endblock %}
