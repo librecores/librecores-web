@@ -4,6 +4,7 @@ namespace Librecores\ProjectRepoBundle\DataFixtures\ORM;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
+use Librecores\ProjectRepoBundle\Entity\ClassificationHierarchy;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
@@ -55,6 +56,7 @@ class LoadDevTestData extends AbstractFixture implements FixtureInterface, Conta
         // source repository for openrisc/mor1kx
         $sourcerepoMor1kx = new GitSourceRepo();
         $sourcerepoMor1kx->setUrl('https://github.com/openrisc/mor1kx.git');
+        $sourcerepoMor1kx->setWebViewUrl('https://github.com/openrisc/mor1kx');
         $manager->persist($sourcerepoMor1kx);
 
         // project openrisc/mor1kx
@@ -76,6 +78,7 @@ class LoadDevTestData extends AbstractFixture implements FixtureInterface, Conta
         // source repository for test2/optimsoc
         $sourcerepoOptimsoc = new GitSourceRepo();
         $sourcerepoOptimsoc->setUrl('https://github.com/optimsoc/sources.git');
+        $sourcerepoOptimsoc->setWebViewUrl('https://github.com/optimsoc/sources');
         $manager->persist($sourcerepoOptimsoc);
 
         // project test2/optimsoc

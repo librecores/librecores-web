@@ -1,0 +1,103 @@
+# Project classifications available at LibreCores
+#
+# The classifications are specified as YAML dict, which requires a colon (":")
+# at the end of leaf nodes as well. Alternatively you can specify leaf nodes
+# as array.
+License:
+  Free and Open:
+    permissive:
+      - BSD
+      - MIT
+      - Apache License
+      - Solderpad License
+    weak copyleft:
+      Mozilla Public License (MPL):
+      GNU Lesser General Public License v2 (LGPLv2):
+      GNU Lesser General Public License v2 or later (LGPLv2+):
+      GNU Lesser General Public License v3 (LGPLv3):
+      GNU Lesser General Public License v3 or later (LGPLv3+):
+    copyleft:
+      GNU Public License v2 (GPLv2):
+      GNU Public License v2 or later (GPLv2+):
+      GNU Public License v3 (GPLv3):
+      GNU Public License v3 or later (GPLv3+):
+  Other/Proprietary License:
+  Public Domain/CC0:
+Tool:
+  Simulation:
+    Verilator:
+    Icarus Verilog:
+    GHDL:
+    Synopsys VCS:
+    Mentor ModelSim/Questa:
+    Cadence Incisive (NCsim):
+    Aldec Riviera:
+  Synthesis/Implementation:
+    Synopsys Synplify:
+    Cadence Genus:
+    Xilinx Vivado:
+    Xilinx ISE:
+    Altera Quartus:
+    Yosys:
+Target :
+  Simulation:
+  FPGA:
+    Xilinx:
+      Spartan 3:
+      Spartan 6:
+      7 series:
+      UltraScale:
+    Altera/Intel:
+    Lattice:
+    Microsemi:
+  ASIC:
+Proven on:
+  FPGA:
+  ASIC:
+Programming Language:
+  Verilog:
+    Verilog 95:
+    Verilog 2001:
+    SystemVerilog 2005 (IEEE 1800-2005):
+    SystemVerilog 2009 (IEEE 1800-2009):
+    SystemVerilog 2012 (IEEE 1800-2012):
+    SystemVerilog 2017 (IEEE 1800-2017):
+  VHDL:
+    VHDL 1987/1993/2000/2002 (IEEE 1076-1987/1993/2000/2002):
+    VHDL 2008 (IEEE 1076-2008):
+  Chisel:
+  MyHDL:
+  TL-Verilog:
+  SystemC:
+  C:
+  C++:
+  Perl:
+  Python:
+  Java:
+  TCL:
+Topic:
+  Hardware:
+    CPU:
+      OpenRISC:
+      RISC-V:
+    GPU:
+    DSP:
+    I/O:
+      UART:
+      USB:
+      PCI Express (PCIe):
+      GPIO:
+      Ethernet:
+    Interconnect:
+      Wishbone:
+      AXI:
+    Debug and Monitoring:
+    Crypto and Hashing:
+  Software:
+    Application:
+    Library:
+Support:
+  Commercially supported:
+  Community supported:
+LibreCores:
+  Featured:
