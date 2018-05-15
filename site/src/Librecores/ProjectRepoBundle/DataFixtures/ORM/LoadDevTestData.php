@@ -12,6 +12,7 @@ use Librecores\ProjectRepoBundle\Entity\Organization;
 use Librecores\ProjectRepoBundle\Entity\Project;
 use Librecores\ProjectRepoBundle\Entity\OrganizationMember;
 use Librecores\ProjectRepoBundle\Entity\GitSourceRepo;
+use Librecores\ProjectRepoBundle\Entity\ClassificationHierarchy;
 
 /**
  * Create a basic test environment
@@ -95,6 +96,12 @@ class LoadDevTestData extends AbstractFixture
         $projectOptimsoc->setSourceRepo($sourcerepoOptimsoc);
         $manager->persist($projectOptimsoc);
 
+        //classificatioin hierarchy
+        foreach ($this->classifiers as $arr) {
+            $classifier =  $this->createClassifier($arr[0], $arr[1]);
+            $manager->persist($classifier);
+        }
+
         $manager->flush();
     }
 
@@ -118,4 +125,47 @@ class LoadDevTestData extends AbstractFixture
 
         return $user;
     }
+
+    /**
+     * Populate an ClassificationHierarchy object
+     *
+     * @param integer $parent_id
+     * @param string $name
+     * @return \Librecores\ProjectRepoBundle\Entity\ClassificationHierarchy
+     */
+    private function createClassifier($parent_id,$name) {
+        $classifier = new ClassificationHierarchy();
+        $classifier->setParentId($parent_id);
+        $classifier->setName($name);
+        $classifier->prePersist();
+
+        return $classifier;
+    }
+
+   private $classifiers = array(
+        array(0,'Language'),
+        array(1,'web'),
+        array(1,'hdl'),
+        array(2,'php'),
+        array(2,'nodejs'),
+        array(2,'python'),
+        array(3,'verilog'),
+        array(3,'vhdl'),
+        array(0,'proven on'),
+        array(9,'asic'),
+        array(9,'fpga'),
+        array(11,'xilinx'),
+        array(12,'7series'),
+        array(11,'altera'),
+        array(0,'Category'),
+        array(15,'cpu'),
+        array(16,'out of order'),
+        array(0,'License'),
+        array(18,'MIT'),
+        array(0,'Interface'),
+        array(20,'spi'),
+        array(20,'wishbone'),
+        array(0,'Verification'),
+        array(23,'formal'),
+    );
 }

@@ -49,6 +49,26 @@ class ClassificationHierarchy
      */
     private $updatedAt;
 
+    /**
+     * Hook on the first storing of this object
+     *
+     * @ORM\PrePersist()
+     */
+    public function prePersist()
+    {
+        $this->createdAt = new \DateTime;
+        $this->updatedAt = new \DateTime;
+    }
+
+    /**
+     * Hook before each update
+     *
+     * @ORM\PreUpdate()
+     */
+    public function preUpdate()
+    {
+        $this->updatedAt = new \DateTime;
+    }
 
     /**
      * Get id
