@@ -94,6 +94,14 @@ class User extends BaseUser
      **/
     protected $organizationMemberships;
 
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="ProjectClassification", mappedBy="parentUser")
+     * @ORM\JoinColumn(name="projectId", referencedColumnName="id")
+     */
+    protected $projecClassification;
+
     // profile data
     /**
      * Full (real) name of the user
@@ -130,6 +138,7 @@ class User extends BaseUser
         $this->projects                = new ArrayCollection();
         $this->organizationsCreated    = new ArrayCollection();
         $this->organizationMemberships = new ArrayCollection();
+        $this->projecClassification    = new ArrayCollection();
     }
 
     /**

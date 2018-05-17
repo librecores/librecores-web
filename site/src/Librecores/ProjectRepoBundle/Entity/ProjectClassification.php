@@ -5,12 +5,12 @@ namespace Librecores\ProjectRepoBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * ProjectClassifier
+ * A
  *
- * @ORM\Table(name="project_classifier")
- * @ORM\Entity(repositoryClass="Librecores\ProjectRepoBundle\Repository\ProjectClassifierRepository")
+ * @ORM\Table(name="project_classification")
+ * @ORM\Entity
  */
-class ProjectClassifier
+class ProjectClassification
 {
     /**
      * @var int
@@ -22,11 +22,14 @@ class ProjectClassifier
     private $id;
 
     /**
-     * @var int
+     * User owning this project
      *
-     * @ORM\Column(name="parent_id", type="integer")
+     * @var User
+     *
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="projectClassification")
+     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
      */
-    private $parentId;
+    private $parentUser;
 
     /**
      * @var string
@@ -36,11 +39,14 @@ class ProjectClassifier
     private $categories;
 
     /**
-     * @var int
      *
-     * @ORM\Column(name="parentUser_id", type="integer")
+     *
+     * @var Project
+     *
+     * @ORM\ManyToOne(targetEntity="Project", inversedBy = "projects")
+     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
      */
-    private $parentUserId;
+    private $project;
 
     /**
      * @var \DateTime
@@ -48,13 +54,6 @@ class ProjectClassifier
      * @ORM\Column(name="created_at", type="datetime")
      */
     private $createdAt;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="updated_at", type="datetime")
-     */
-    private $updatedAt;
 
 
     /**
@@ -68,27 +67,27 @@ class ProjectClassifier
     }
 
     /**
-     * Set parentId
+     * Set parentUser
      *
-     * @param integer $parentId
+     * @param integer $parentUser
      *
-     * @return ProjectClassifier
+     * @return ProjectClassification
      */
-    public function setParentId($parentId)
+    public function setParentUser($parentUser)
     {
-        $this->parentId = $parentId;
+        $this->parentUser = $parentUser;
 
         return $this;
     }
 
     /**
-     * Get parentId
+     * Get parentUser
      *
      * @return int
      */
-    public function getParentId()
+    public function getParentUser()
     {
-        return $this->parentId;
+        return $this->parentUser;
     }
 
     /**
@@ -96,7 +95,7 @@ class ProjectClassifier
      *
      * @param string $categories
      *
-     * @return ProjectClassifier
+     * @return ProjectClassification
      */
     public function setCategories($categories)
     {
@@ -116,27 +115,27 @@ class ProjectClassifier
     }
 
     /**
-     * Set parentUserId
+     * Set projectId
      *
-     * @param integer $parentUserId
+     * @param integer $projectId
      *
-     * @return ProjectClassifier
+     * @return ProjectClassification
      */
-    public function setParentUserId($parentUserId)
+    public function setProjectId($projectId)
     {
-        $this->parentUserId = $parentUserId;
+        $this->projectId = $projectId;
 
         return $this;
     }
 
     /**
-     * Get parentUserId
+     * Get projectId
      *
      * @return int
      */
-    public function getParentUserId()
+    public function getProjectId()
     {
-        return $this->parentUserId;
+        return $this->projectId;
     }
 
     /**
@@ -144,7 +143,7 @@ class ProjectClassifier
      *
      * @param \DateTime $createdAt
      *
-     * @return ProjectClassifier
+     * @return ProjectClassification
      */
     public function setCreatedAt($createdAt)
     {
@@ -162,29 +161,4 @@ class ProjectClassifier
     {
         return $this->createdAt;
     }
-
-    /**
-     * Set updatedAt
-     *
-     * @param \DateTime $updatedAt
-     *
-     * @return ProjectClassifier
-     */
-    public function setUpdatedAt($updatedAt)
-    {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
-    }
-
-    /**
-     * Get updatedAt
-     *
-     * @return \DateTime
-     */
-    public function getUpdatedAt()
-    {
-        return $this->updatedAt;
-    }
 }
-

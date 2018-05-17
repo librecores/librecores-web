@@ -71,6 +71,15 @@ class Project
      */
     private $parentOrganization;
 
+    // Associations
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="ProjectClassification", mappedBy="project")
+     * @ORM\JoinColumn(name="projectId", referencedColumnName="id")
+     */
+    protected $projects;
+
     /**
      * Short name of the project
      *

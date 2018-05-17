@@ -5,10 +5,13 @@ namespace Librecores\ProjectRepoBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * ClassificationHierarchy
+ * A classification hierarchy for the projects
+ *
+ *It contains classification categories that can be use to classify the IP Cores
+ * for better categorization
  *
  * @ORM\Table(name="classification_hierarchy")
- * @ORM\Entity(repositoryClass="Librecores\ProjectRepoBundle\Repository\ClassificationHierarchyRepository")
+ * @ORM\Entity
  */
 class ClassificationHierarchy
 {
@@ -49,24 +52,9 @@ class ClassificationHierarchy
      */
     private $updatedAt;
 
-    /**
-     * Hook on the first storing of this object
-     *
-     * @ORM\PrePersist()
-     */
-    public function prePersist()
+    public function __construct()
     {
         $this->createdAt = new \DateTime;
-        $this->updatedAt = new \DateTime;
-    }
-
-    /**
-     * Hook before each update
-     *
-     * @ORM\PreUpdate()
-     */
-    public function preUpdate()
-    {
         $this->updatedAt = new \DateTime;
     }
 

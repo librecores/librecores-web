@@ -96,9 +96,9 @@ class LoadDevTestData extends AbstractFixture
         $projectOptimsoc->setSourceRepo($sourcerepoOptimsoc);
         $manager->persist($projectOptimsoc);
 
-        //classificatioin hierarchy
-        foreach ($this->classifiers as $arr) {
-            $classifier =  $this->createClassifier($arr[0], $arr[1]);
+        // classification hierarchy
+        foreach (self::classifiers as $category) {
+            $classifier =  $this->createClassifier($category[0], $category[1]);
             $manager->persist($classifier);
         }
 
@@ -133,39 +133,39 @@ class LoadDevTestData extends AbstractFixture
      * @param string $name
      * @return \Librecores\ProjectRepoBundle\Entity\ClassificationHierarchy
      */
-    private function createClassifier($parent_id,$name) {
+    private function createClassifier($parentId, $name)
+    {
         $classifier = new ClassificationHierarchy();
-        $classifier->setParentId($parent_id);
+        $classifier->setParentId($parentId);
         $classifier->setName($name);
-        $classifier->prePersist();
 
         return $classifier;
     }
 
-   private $classifiers = array(
-        array(0,'Language'),
-        array(1,'web'),
-        array(1,'hdl'),
-        array(2,'php'),
-        array(2,'nodejs'),
-        array(2,'python'),
-        array(3,'verilog'),
-        array(3,'vhdl'),
-        array(0,'proven on'),
-        array(9,'asic'),
-        array(9,'fpga'),
-        array(11,'xilinx'),
-        array(12,'7series'),
-        array(11,'altera'),
-        array(0,'Category'),
-        array(15,'cpu'),
-        array(16,'out of order'),
-        array(0,'License'),
-        array(18,'MIT'),
-        array(0,'Interface'),
-        array(20,'spi'),
-        array(20,'wishbone'),
-        array(0,'Verification'),
-        array(23,'formal'),
-    );
+   const classifiers = [
+       [0, 'Language'],
+       [1, 'web'],
+       [1, 'hdl'],
+       [2, 'php'],
+       [2, 'nodejs'],
+       [2, 'python'],
+       [3, 'verilog'],
+       [3, 'vhdl'],
+       [0, 'proven on'],
+       [9, 'asic'],
+       [9, 'fpga'],
+       [11, 'xilinx'],
+       [12, '7series'],
+       [11, 'altera'],
+       [0, 'Category'],
+       [15, 'cpu'],
+       [16, 'out of order'],
+       [0, 'License'],
+       [18, 'MIT'],
+       [0, 'Interface'],
+       [20, 'spi'],
+       [20, 'wishbone'],
+       [0, 'Verification'],
+       [23, 'formal']
+   ];
 }
