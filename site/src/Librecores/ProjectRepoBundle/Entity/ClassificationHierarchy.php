@@ -164,4 +164,3 @@ class ClassificationHierarchy
         return $this->updatedAt;
     }
 }
-

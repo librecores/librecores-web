@@ -975,4 +975,38 @@ class Project
 
         return $this;
     }
+
+    /**
+     * Add project
+     *
+     * @param \Librecores\ProjectRepoBundle\Entity\ProjectClassification $project
+     *
+     * @return Project
+     */
+    public function addProject(\Librecores\ProjectRepoBundle\Entity\ProjectClassification $project)
+    {
+        $this->projects[] = $project;
+
+        return $this;
+    }
+
+    /**
+     * Remove project
+     *
+     * @param \Librecores\ProjectRepoBundle\Entity\ProjectClassification $project
+     */
+    public function removeProject(\Librecores\ProjectRepoBundle\Entity\ProjectClassification $project)
+    {
+        $this->projects->removeElement($project);
+    }
+
+    /**
+     * Get projects
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getProjects()
+    {
+        return $this->projects;
+    }
 }

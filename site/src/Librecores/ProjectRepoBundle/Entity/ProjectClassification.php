@@ -69,13 +69,20 @@ class ProjectClassification
     /**
      * Set parentUser
      *
-     * @param integer $parentUser
+     * @param User $parentUser
      *
      * @return ProjectClassification
      */
-    public function setParentUser($parentUser)
+    public function setParentUser(User $parentUser = null)
     {
-        $this->parentUser = $parentUser;
+      if ($this->parentUser !== null)
+          $this->parentUser->removeProjectClassification($this);
+
+      if ($parentUser !== null) {
+          $parentUser->addProjectClassification($this);
+      }
+
+      $this->parentUser = $parentUser;
 
         return $this;
     }
@@ -83,7 +90,7 @@ class ProjectClassification
     /**
      * Get parentUser
      *
-     * @return int
+     * @return User
      */
     public function getParentUser()
     {
@@ -115,30 +122,6 @@ class ProjectClassification
     }
 
     /**
-     * Set projectId
-     *
-     * @param integer $projectId
-     *
-     * @return ProjectClassification
-     */
-    public function setProjectId($projectId)
-    {
-        $this->projectId = $projectId;
-
-        return $this;
-    }
-
-    /**
-     * Get projectId
-     *
-     * @return int
-     */
-    public function getProjectId()
-    {
-        return $this->projectId;
-    }
-
-    /**
      * Set createdAt
      *
      * @param \DateTime $createdAt
@@ -160,5 +143,29 @@ class ProjectClassification
     public function getCreatedAt()
     {
         return $this->createdAt;
+    }
+
+    /**
+     * Set project
+     *
+     * @param \Librecores\ProjectRepoBundle\Entity\Project $project
+     *
+     * @return ProjectClassification
+     */
+    public function setProject(\Librecores\ProjectRepoBundle\Entity\Project $project = null)
+    {
+        $this->project = $project;
+
+        return $this;
+    }
+
+    /**
+     * Get project
+     *
+     * @return \Librecores\ProjectRepoBundle\Entity\Project
+     */
+    public function getProject()
+    {
+        return $this->project;
     }
 }
