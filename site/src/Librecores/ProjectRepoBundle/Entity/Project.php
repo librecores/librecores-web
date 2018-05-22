@@ -76,10 +76,11 @@ class Project
     /**
      * @var ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="ProjectClassification", mappedBy="project")
+     * @ORM\OneToMany(targetEntity="ProjectClassification", mappedBy="project",cascade={"persist", "remove"},
+     *                orphanRemoval=true)
      * @ORM\JoinColumn(name="projectId", referencedColumnName="id")
      */
-    protected $projects;
+    protected $classifications;
 
     /**
      * Short name of the project
@@ -308,7 +309,7 @@ class Project
         // record the date/time of the project creation
         $this->setDateAdded(new \DateTime());
         $this->setDateLastModified(new \DateTime());
-        $this->projects = new ArrayCollection();
+        $this->classifications = new ArrayCollection();
     }
 
     /**
@@ -979,36 +980,46 @@ class Project
     }
 
     /**
-     * Add project
+     * Add Classification
      *
-     * @param \Librecores\ProjectRepoBundle\Entity\ProjectClassification $project
+     * @param \Librecores\ProjectRepoBundle\Entity\ProjectClassification $classifications
      *
      * @return Project
      */
-    public function addProject(\Librecores\ProjectRepoBundle\Entity\ProjectClassification $project)
+    public function addClassification(\Librecores\ProjectRepoBundle\Entity\ProjectClassification $classifications)
     {
-        $this->projects[] = $project;
+        $this->classifications[] = $classifications;
 
         return $this;
     }
 
     /**
-     * Remove project
+     * Remove Classification
      *
-     * @param \Librecores\ProjectRepoBundle\Entity\ProjectClassification $project
+     * @param \Librecores\ProjectRepoBundle\Entity\ProjectClassification $classifications
      */
-    public function removeProject(\Librecores\ProjectRepoBundle\Entity\ProjectClassification $project)
+    public function removeClassification(\Librecores\ProjectRepoBundle\Entity\ProjectClassification $classifications)
     {
-        $this->projects->removeElement($project);
+        $this->classifications->removeElement($classifications);
     }
 
     /**
-     * Get projects
+     * Get Classification
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getProjects()
+    public function getClassification()
     {
-        return $this->projects;
+        return $this->classifications;
+    }
+
+    /**
+     * Get classifications
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getClassifications()
+    {
+        return $this->classifications;
     }
 }

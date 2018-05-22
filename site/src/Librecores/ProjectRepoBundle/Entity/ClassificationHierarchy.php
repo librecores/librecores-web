@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * A classification hierarchy for the projects
  *
- *It contains classification categories that can be use to classify the IP Cores
+ * It contains classification categories that can be use to classify the IP Cores
  * for better categorization
  *
  * @ORM\Table(name="ClassificationHierarchy")

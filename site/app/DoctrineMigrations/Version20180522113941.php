@@ -18,11 +18,7 @@ class Version20180522113941 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-
-//        $this->addSql('INSERT INTO ClassificationHierarchy(parent_id,name,created_at,updated_at) VALUES (null,"License","2018-05-22 12:22:05","2018-05-22 12:22:05")');
-
-        foreach (self::classifier as $categories)
-        {
+        foreach (self::classifier as $categories) {
             $date = new \DateTime;
             $dateTime = $date->format('Y-m-d H:i:s');
             $this->addSql('INSERT INTO ClassificationHierarchy(parent_id,name,created_at,updated_at) VALUES ('.$categories[0].',"'.$categories[1].'","'.$dateTime.'","'.$dateTime.'")');
@@ -41,16 +37,16 @@ class Version20180522113941 extends AbstractMigration
         $this->addSql('TRUNCATE ClassificationHierarchy');
     }
     /**
-    +     * Data for ClassificationHierarchy object
-    +     *
-    +     * Each row of the array contains two values. First parameter
-    +     * for the parent category id. It is null if the category
-    +     * does not have a parent category and the second one is
-    +     * for the category name.
-    +     *
-    +     * @var array classifiers
-    +     *
-    +     */
+     * Data for ClassificationHierarchy object
+     *
+     * Each row of the array contains two values. First parameter
+     * for the parent category id. It is null if the category
+     * does not have a parent category and the second one is
+     * for the category name.
+     *
+     * @var array classifiers
+     *
+     */
     const classifier = [
         ['null', "License"],
         [1, "Free and Open"],

@@ -26,15 +26,15 @@ class ProjectClassification
      *
      * @ORM\Column(name="categories", type="text")
      */
-    private $categories;
+    private $classification;
 
     /**
      *
      *
      * @var Project
      *
-     * @ORM\ManyToOne(targetEntity="Project", inversedBy = "projects")
-     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
+     * @ORM\ManyToOne(targetEntity="Project", inversedBy = "classifications")
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private $project;
 
@@ -60,27 +60,27 @@ class ProjectClassification
     }
 
     /**
-     * Set categories
+     * Set classification
      *
-     * @param string $categories
+     * @param string $classification
      *
      * @return ProjectClassification
      */
-    public function setCategories($categories)
+    public function setClassification($classification)
     {
-        $this->categories = $categories;
+        $this->classification = $classification;
 
         return $this;
     }
 
     /**
-     * Get categories
+     * Get classification
      *
      * @return string
      */
-    public function getCategories()
+    public function getClassification()
     {
-        return $this->categories;
+        return $this->classification;
     }
 
     /**
@@ -117,10 +117,10 @@ class ProjectClassification
     public function setProject(\Librecores\ProjectRepoBundle\Entity\Project $project = null)
     {
         if ($this->project !== null)
-            $this->project->removeProject($this);
+            $this->project->removeClassification($this);
 
         if ($project !== null) {
-            $project->addProject($this);
+            $project->addClassification($this);
         }
 
         $this->project = $project;
