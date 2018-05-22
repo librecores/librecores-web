@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * A
  *
- * @ORM\Table(name="project_classification")
+ * @ORM\Table(name="ProjectClassification")
  * @ORM\Entity
  */
 class ProjectClassification
@@ -20,16 +20,6 @@ class ProjectClassification
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-
-    /**
-     * User owning this project
-     *
-     * @var User
-     *
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="projectClassification")
-     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
-     */
-    private $parentUser;
 
     /**
      * @var string
@@ -55,7 +45,10 @@ class ProjectClassification
      */
     private $createdAt;
 
-
+    public function __construct()
+    {
+        $this->createdAt = new \DateTime;
+    }
     /**
      * Get id
      *
@@ -64,37 +57,6 @@ class ProjectClassification
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set parentUser
-     *
-     * @param User $parentUser
-     *
-     * @return ProjectClassification
-     */
-    public function setParentUser(User $parentUser = null)
-    {
-      if ($this->parentUser !== null)
-          $this->parentUser->removeProjectClassification($this);
-
-      if ($parentUser !== null) {
-          $parentUser->addProjectClassification($this);
-      }
-
-      $this->parentUser = $parentUser;
-
-        return $this;
-    }
-
-    /**
-     * Get parentUser
-     *
-     * @return User
-     */
-    public function getParentUser()
-    {
-        return $this->parentUser;
     }
 
     /**
@@ -154,6 +116,13 @@ class ProjectClassification
      */
     public function setProject(\Librecores\ProjectRepoBundle\Entity\Project $project = null)
     {
+        if ($this->project !== null)
+            $this->project->removeProject($this);
+
+        if ($project !== null) {
+            $project->addProject($this);
+        }
+
         $this->project = $project;
 
         return $this;

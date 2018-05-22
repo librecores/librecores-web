@@ -94,13 +94,6 @@ class User extends BaseUser
      **/
     protected $organizationMemberships;
 
-    /**
-     * @var ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="ProjectClassification", mappedBy="parentUser")
-     */
-    protected $projectClassification;
-
     // profile data
     /**
      * Full (real) name of the user
@@ -137,7 +130,6 @@ class User extends BaseUser
         $this->projects                = new ArrayCollection();
         $this->organizationsCreated    = new ArrayCollection();
         $this->organizationMemberships = new ArrayCollection();
-        $this->projectClassification    = new ArrayCollection();
     }
 
     /**
@@ -513,39 +505,5 @@ class User extends BaseUser
     public function removeOrganizationsCreated(\Librecores\ProjectRepoBundle\Entity\Organization $organizationsCreated)
     {
         $this->organizationsCreated->removeElement($organizationsCreated);
-    }
-    
-    /**
-     * Add projectClassification
-     *
-     * @param \Librecores\ProjectRepoBundle\Entity\ProjectClassification $projectClassification
-     *
-     * @return User
-     */
-    public function addProjectClassification(\Librecores\ProjectRepoBundle\Entity\ProjectClassification $projectClassification)
-    {
-        $this->projectClassification[] = $projectClassification;
-
-        return $this;
-    }
-
-    /**
-     * Remove projectClassification
-     *
-     * @param \Librecores\ProjectRepoBundle\Entity\ProjectClassification $projectClassification
-     */
-    public function removeProjectClassification(\Librecores\ProjectRepoBundle\Entity\ProjectClassification $projectClassification)
-    {
-        $this->projectClassification->removeElement($projectClassification);
-    }
-
-    /**
-     * Get projectClassification
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getProjectClassification()
-    {
-        return $this->projectClassification;
     }
 }

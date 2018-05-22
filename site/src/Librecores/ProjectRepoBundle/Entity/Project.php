@@ -1,6 +1,7 @@
 <?php
 namespace Librecores\ProjectRepoBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -307,6 +308,7 @@ class Project
         // record the date/time of the project creation
         $this->setDateAdded(new \DateTime());
         $this->setDateLastModified(new \DateTime());
+        $this->projects = new ArrayCollection();
     }
 
     /**

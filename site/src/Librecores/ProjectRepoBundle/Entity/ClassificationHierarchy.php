@@ -2,6 +2,7 @@
 
 namespace Librecores\ProjectRepoBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -10,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  *It contains classification categories that can be use to classify the IP Cores
  * for better categorization
  *
- * @ORM\Table(name="classification_hierarchy")
+ * @ORM\Table(name="ClassificationHierarchy")
  * @ORM\Entity
  */
 class ClassificationHierarchy
@@ -25,11 +26,23 @@ class ClassificationHierarchy
     private $id;
 
     /**
-     * @var int
+     * One ClassificationHierarchy has Many ClassificationHierarchy.
      *
-     * @ORM\Column(name="parent_id", type="integer")
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="ClassificationHierarchy", mappedBy="parent")
      */
-    private $parentId;
+    private $children;
+
+    /**
+     * Many ClassificationHierarchy have One ClassificationHierarchy.
+     *
+     * @var ClassificationHierarchy
+     *
+     * @ORM\ManyToOne(targetEntity="ClassificationHierarchy", inversedBy="children")
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", nullable=true)
+     */
+    private $parent;
 
     /**
      * @var string
@@ -56,6 +69,7 @@ class ClassificationHierarchy
     {
         $this->createdAt = new \DateTime;
         $this->updatedAt = new \DateTime;
+        $this->children = new ArrayCollection();
     }
 
     /**
@@ -69,27 +83,34 @@ class ClassificationHierarchy
     }
 
     /**
-     * Set parentId
+     * Set parent
      *
-     * @param integer $parentId
+     * @param ClassificationHierarchy $parent
      *
      * @return ClassificationHierarchy
      */
-    public function setParentId($parentId)
+    public function setParent(\Librecores\ProjectRepoBundle\Entity\ClassificationHierarchy $parent = null)
     {
-        $this->parentId = $parentId;
+        if ($this->parent !== null)
+            $this->parent->removeChild($this);
+
+        if ($parent !== null) {
+            $parent->addChild($this);
+        }
+
+        $this->parent = $parent;
 
         return $this;
     }
 
     /**
-     * Get parentId
+     * Get parent
      *
-     * @return int
+     * @return ClassificationHierarchy
      */
-    public function getParentId()
+    public function getParent()
     {
-        return $this->parentId;
+        return $this->parent;
     }
 
     /**
@@ -162,5 +183,39 @@ class ClassificationHierarchy
     public function getUpdatedAt()
     {
         return $this->updatedAt;
+    }
+
+    /**
+     * Add child
+     *
+     * @param \Librecores\ProjectRepoBundle\Entity\ClassificationHierarchy $child
+     *
+     * @return ClassificationHierarchy
+     */
+    public function addChild(\Librecores\ProjectRepoBundle\Entity\ClassificationHierarchy $child)
+    {
+        $this->children[] = $child;
+
+        return $this;
+    }
+
+    /**
+     * Remove child
+     *
+     * @param \Librecores\ProjectRepoBundle\Entity\ClassificationHierarchy $child
+     */
+    public function removeChild(\Librecores\ProjectRepoBundle\Entity\ClassificationHierarchy $child)
+    {
+        $this->children->removeElement($child);
+    }
+
+    /**
+     * Get children
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getChildren()
+    {
+        return $this->children;
     }
 }
