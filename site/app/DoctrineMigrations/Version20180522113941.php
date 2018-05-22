@@ -25,14 +25,7 @@ class Version20180522113941 extends AbstractMigration
         {
             $date = new \DateTime;
             $dateTime = $date->format('Y-m-d H:i:s');
-            if($categories[0] != 0)
-            {
-                $this->addSql('INSERT INTO ClassificationHierarchy(parent_id,name,created_at,updated_at) VALUES ('.$categories[0].',"'.$categories[1].'","'.$dateTime.'","'.$dateTime.'")');
-            }
-            else
-            {
-                $this->addSql('INSERT INTO ClassificationHierarchy(parent_id,name,created_at,updated_at) VALUES (null,"'.$categories[1].'","'.$dateTime.'","'.$dateTime.'")');
-            }
+            $this->addSql('INSERT INTO ClassificationHierarchy(parent_id,name,created_at,updated_at) VALUES ('.$categories[0].',"'.$categories[1].'","'.$dateTime.'","'.$dateTime.'")');
         }
 
     }
@@ -47,9 +40,19 @@ class Version20180522113941 extends AbstractMigration
 
         $this->addSql('TRUNCATE ClassificationHierarchy');
     }
-
+    /**
+    +     * Data for ClassificationHierarchy object
+    +     *
+    +     * Each row of the array contains two values. First parameter
+    +     * for the parent category id. It is null if the category
+    +     * does not have a parent category and the second one is
+    +     * for the category name.
+    +     *
+    +     * @var array classifiers
+    +     *
+    +     */
     const classifier = [
-        [0, "License"],
+        ['null', "License"],
         [1, "Free and Open"],
         [2, "Permissive"],
         [3, "BSD"],
@@ -72,7 +75,7 @@ class Version20180522113941 extends AbstractMigration
         [17, "GNU Public License v3 or later (GPLv3+)"],
         [1, "Other/Proprietary License"],
         [1, "Public Domain/CC0"],
-        [0, "Tool"],
+        ['null', "Tool"],
         [24, "Simulation"],
         [25, "Verilator"],
         [25, "Icarus Verilog"],
@@ -89,7 +92,7 @@ class Version20180522113941 extends AbstractMigration
         [34, "Xilinx ISE"],
         [34, "Altera Quartus"],
         [34, "Yosys"],
-        [0, "Target"],
+        ['null', "Target"],
         [41, "Simulation"],
         [41, "FPGA"],
         [43, "Xilinx"],
@@ -103,10 +106,10 @@ class Version20180522113941 extends AbstractMigration
         [43, "Microsemi"],
         [43, "other"],
         [41, "ASIC"],
-        [0, "Proven on"],
+        ['null', "Proven on"],
         [55, "FPGA"],
         [55, "ASIC"],
-        [0, "Programming Language"],
+        ['null', "Programming Language"],
         [58, "Verilog"],
         [59, "Verilog 95"],
         [59, "Verilog 2001"],
@@ -128,7 +131,7 @@ class Version20180522113941 extends AbstractMigration
         [58, "Java"],
         [58, "TCL"],
         [58, "other"],
-        [0, "Topic"],
+        ['null', "Topic"],
         [80, "Hardware"],
         [81, "CPU"],
         [82, "OpenRISC"],
@@ -151,10 +154,10 @@ class Version20180522113941 extends AbstractMigration
         [80, "Software"],
         [100, "Application"],
         [100, "Library"],
-        [0, "Support"],
+        ['null', "Support"],
         [103, "Commercially supported"],
         [103, "Community supported"],
-        [0, "LibreCores"],
+        ['null', "LibreCores"],
         [106, "Featured"]
     ];
 }
