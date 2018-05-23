@@ -34,13 +34,14 @@
   <div class="col-sm-2">
     <ul class="list-group">
       <li class="list-group-item"><a href="{{ path('librecores_project_repo_project_view', {'parentName':
-    project.getParentName(), 'projectName': project.getName()}) }}">
-        <i class="fa fa-bookmark fa-fw"></i>
-        Project
-      </a></li>
-      <li class="list-group-item active"><a href="#">
-        <i class="fa fa-cogs fa-fw"></i>Settings
-      </a></li>
+          project.getParentName(), 'projectName': project.getName()}) }}">
+          <i class="fa fa-bookmark fa-fw"></i>
+          Project
+        </a></li>
+      <li class="list-group-item active"><a href="{{ path('librecores_project_repo_project_settings', {'parentName':
+          project.getParentName(), 'projectName': project.getName()}) }}">
+          <i class="fa fa-cogs fa-fw"></i>Settings
+        </a></li>
     </ul>
   </div>
   <div class="col-sm-10">
@@ -100,6 +101,15 @@
         </div>
         <div class="panel-body">
           {{ form_row(form.sourceRepo, {'label': false}) }}
+        </div>
+      </div>
+
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Project Classification</h3>
+        </div>
+        <div class="panel-body">
+          {{ form_row(form.classifications) }}
         </div>
       </div>
 

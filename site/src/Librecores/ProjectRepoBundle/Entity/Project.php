@@ -1006,16 +1006,6 @@ class Project
     }
 
     /**
-     * Get Classification
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getClassification()
-    {
-        return $this->classifications;
-    }
-
-    /**
      * Get classifications
      *
      * @return \Doctrine\Common\Collections\Collection
@@ -1023,5 +1013,19 @@ class Project
     public function getClassifications()
     {
         return $this->classifications;
+    }
+
+    /**
+     * set Classification
+     *
+     * @param \Librecores\ProjectRepoBundle\Entity\ProjectClassification $classifications
+     *
+     * @return Project
+     */
+    public function setClassifications(\Librecores\ProjectRepoBundle\Entity\ProjectClassification $classifications)
+    {
+        $this->addClassification($classifications);
+
+        return $this;
     }
 }
