@@ -21,7 +21,8 @@ class Version20180522113941 extends AbstractMigration
         foreach (self::classifier as $categories) {
             $date = new \DateTime;
             $dateTime = $date->format('Y-m-d H:i:s');
-            $this->addSql('INSERT INTO ClassificationHierarchy(parent_id,name,created_at,updated_at) VALUES ('.$categories[0].',"'.$categories[1].'","'.$dateTime.'","'.$dateTime.'")');
+            $classificationHierarchy = ['parent_id' => $categories[0], 'name' => $categories[1], 'created_at' => $dateTime, 'updated_at' => $dateTime];
+            $this->addSql('INSERT INTO ClassificationHierarchy(parent_id,name,created_at,updated_at) VALUES (:parent_id,:name,:created_at,:updated_at)', $classificationHierarchy);
         }
 
     }
@@ -48,7 +49,7 @@ class Version20180522113941 extends AbstractMigration
      *
      */
     const classifier = [
-        ['null', "License"],
+        [NULL, "License"],
         [1, "Free and Open"],
         [2, "Permissive"],
         [3, "BSD"],
@@ -64,14 +65,14 @@ class Version20180522113941 extends AbstractMigration
         [9, "GNU Lesser General Public License v3 (LGPLv3)"],
         [9, "GNU Lesser General Public License v3 or Other"],
         [9, "Other"],
-        [2, "copyleft"],
+        [2, "Copyleft"],
         [17, "GNU Public License v2 (GPLv2)"],
         [17, "GNU Public License v2 or later (GPLv2+)"],
         [17, "GNU Public License v3 (GPLv3)"],
         [17, "GNU Public License v3 or later (GPLv3+)"],
         [1, "Other/Proprietary License"],
         [1, "Public Domain/CC0"],
-        ['null', "Tool"],
+        [NULL, "Tool"],
         [24, "Simulation"],
         [25, "Verilator"],
         [25, "Icarus Verilog"],
@@ -88,7 +89,7 @@ class Version20180522113941 extends AbstractMigration
         [34, "Xilinx ISE"],
         [34, "Altera Quartus"],
         [34, "Yosys"],
-        ['null', "Target"],
+        [NULL, "Target"],
         [41, "Simulation"],
         [41, "FPGA"],
         [43, "Xilinx"],
@@ -102,10 +103,10 @@ class Version20180522113941 extends AbstractMigration
         [43, "Microsemi"],
         [43, "Other"],
         [41, "ASIC"],
-        ['null', "Proven on"],
+        [NULL, "Proven on"],
         [55, "FPGA"],
         [55, "ASIC"],
-        ['null', "Programming Language"],
+        [NULL, "Programming Language"],
         [58, "Verilog"],
         [59, "Verilog 95"],
         [59, "Verilog 2001"],
@@ -127,7 +128,7 @@ class Version20180522113941 extends AbstractMigration
         [58, "Java"],
         [58, "TCL"],
         [58, "Other"],
-        ['null', "Topic"],
+        [NULL, "Topic"],
         [80, "Hardware"],
         [81, "CPU"],
         [82, "OpenRISC"],
@@ -150,10 +151,10 @@ class Version20180522113941 extends AbstractMigration
         [80, "Software"],
         [100, "Application"],
         [100, "Library"],
-        ['null', "Support"],
+        [NULL, "Support"],
         [103, "Commercially supported"],
         [103, "Community supported"],
-        ['null', "LibreCores"],
+        [NULL, "LibreCores"],
         [106, "Featured"]
     ];
 }
