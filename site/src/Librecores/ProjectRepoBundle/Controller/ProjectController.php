@@ -6,6 +6,7 @@ use Librecores\ProjectRepoBundle\Entity\GitSourceRepo;
 use Librecores\ProjectRepoBundle\Entity\LanguageStat;
 use Librecores\ProjectRepoBundle\Entity\OrganizationMember;
 use Librecores\ProjectRepoBundle\Entity\Project;
+use Librecores\ProjectRepoBundle\Entity\ProjectClassification;
 use Librecores\ProjectRepoBundle\Form\Type\ProjectType;
 use Librecores\ProjectRepoBundle\RepoCrawler\GithubRepoCrawler;
 use Librecores\ProjectRepoBundle\Util\Dates;
@@ -240,16 +241,37 @@ class ProjectController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+
+            $classification = '';
+
+            for($i = 1; $i < 5; $i++) {
+                if($request->request->get('category-'.$i.'') != 'NULL') {
+                    if($i = 1) {
+                        $classification =  $request->request->get('category-1');
+                    }
+                    else {
+                        $classification =  $classification.'::'.$request->request->get('category-'.$i.'');
+                    }
+                }
+            }
+
+            if($classification != '') {
+                $projectClassification = new ProjectClassification();
+                $projectClassification->setProject($p);
+                $projectClassification->setClassification($classification);
+                $em->persist($projectClassification);
+            }
+
             $em->persist($p);
             $em->flush();
         }
 
-        $data = $this->getDoctrine()
+        $classification = $this->getDoctrine()
                 ->getRepository('LibrecoresProjectRepoBundle:Project')
                 ->getClassificationHierarchy();
 
         return $this->render('LibrecoresProjectRepoBundle:Project:settings.html.twig',
-            array('project' => $p, 'form' => $form->createView(),'classification' => $data));
+            array('project' => $p, 'form' => $form->createView(),'classification' => $classification));
     }
 
     /**

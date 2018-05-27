@@ -218,6 +218,7 @@ $(document).ready(function(){
     if(value != "NULL") {
       $('#category-'+count+'').attr('disabled', 'disabled');
       count++;
+      var increase = false;
       var id = 0;
       for(var i = 0; i < classificationDetails.length; i++) {
         if(classificationDetails[i][3] == value) {
@@ -229,7 +230,12 @@ $(document).ready(function(){
         if(classificationDetails[i][2] == id) {
           $('#category-'+count+'').append('<option value="'+classificationDetails[i][3]+'">'+classificationDetails[i][3]+'</option>');
           $('#category-'+count+'').show();
+          increase = true;
         }
+      }
+      if(increase == false) {
+        count--;
+        $('#category-'+count+'').removeAttr('disabled');
       }
     }
   })

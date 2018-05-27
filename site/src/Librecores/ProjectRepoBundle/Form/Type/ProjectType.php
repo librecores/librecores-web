@@ -2,7 +2,6 @@
 namespace Librecores\ProjectRepoBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -30,9 +29,6 @@ class ProjectType extends AbstractType
             ->add('projectUrl', UrlType::class, array('label' => 'Project URL', 'required' => false))
             ->add('issueTracker', UrlType::class, array('label' => 'Issue/Bug Tracker URL', 'required' => false))
             ->add('sourceRepo', SourceRepoType::class)
-            ->add('classifications', CollectionType::class, array(
-                    'entry_type' => ProjectClassificationType::class,
-                ))
             ->add('licenseName', TextType::class, array('label' => 'License Name (such as GPL or MIT)', 'required' => false))
             ->add('licenseTextAutoUpdate', ChoiceType::class, array(
                 'choices' => array(
