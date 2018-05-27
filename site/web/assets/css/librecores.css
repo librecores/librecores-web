@@ -519,3 +519,28 @@ h1 a:hover, h1 a:active {
 .bootstrap-select.btn-group .dropdown-menu {
   z-index: 1050; /* to over-ride navbar z-index*/
 }
+
+.classification-category {
+  height: 40px;
+  margin-right: 10px;
+}
+
+.classification-hierarchy {
+  position: relative;
+}
+
+.close-category,
+.add-category {
+  position: absolute;
+  top: -5px;
+  padding: 5px;
+}
+
+.close-category {
+  right: 15px;
+}
+
+ .add-category {
+   right: 40px;
+ }
+

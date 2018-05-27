@@ -244,8 +244,12 @@ class ProjectController extends Controller
             $em->flush();
         }
 
+        $data = $this->getDoctrine()
+                ->getRepository('LibrecoresProjectRepoBundle:Project')
+                ->getClassificationHierarchy();
+
         return $this->render('LibrecoresProjectRepoBundle:Project:settings.html.twig',
-            array('project' => $p, 'form' => $form->createView()));
+            array('project' => $p, 'form' => $form->createView(),'classification' => $data));
     }
 
     /**

@@ -108,8 +108,34 @@
         <div class="panel-heading">
           <h3 class="panel-title">Project Classification</h3>
         </div>
-        <div class="panel-body">
-          {{ form_row(form.classifications) }}
+        <div class="panel-body classification-hierarchy row">
+
+          <div class="classification-system col-sm-3">
+            <select name="category-1" id="category-1" class="classification-category">
+              <option value="NULL" data-parentId="NULL">select a category</option>
+            </select>
+          </div>
+
+          <div class="classification-system col-sm-3">
+            <select name="category-2" id="category-2" class="classification-category">
+              <option value="NULL" data-parentId="NULL">select a category</option>
+            </select>
+          </div>
+
+          <div class="classification-system col-sm-3">
+            <select name="category-3" id="category-3" class="classification-category">
+              <option value="NULL" data-parentId="NULL">select a category</option>
+            </select>
+          </div>
+
+          <div class="classification-system col-sm-3">
+            <select name="category-4" id="category-4" class="classification-category">
+              <option value="NULL" data-parentId="NULL">select a category</option>
+            </select>
+          </div>
+
+          <a href="" class="close-category"><i class="fa fa-close"></i></a>
+          <a href="" class="add-category"><i class="fa fa-plus"></i></a>
         </div>
       </div>
 
@@ -171,5 +197,53 @@ $(document).ready(function(){
     var el = $('#licenseText_div');
     au ? el.hide() : el.show();
   });
+
+  //insert classification
+  //hiding select element
+  for(var j = 2; j < 5 ;j++) {
+    $('#category-'+j+'').hide();
+  }
+
+  var classificationDetails = {{ classification|json_encode|raw }}
+  var count = 1;
+  for(var i = 0; i < classificationDetails.length; i++) {
+    if(classificationDetails[i][2] == null) {
+      $('#category-'+count+'').append('<option value="'+classificationDetails[i][3]+'" data-id='+classificationDetails[i][1]+'>'+classificationDetails[i][3]+'</option>');
+    }
+  }
+
+  $('.add-category').on('click',function(){
+    event.preventDefault();
+    var value = $('#category-'+count+'').val();
+    if(value != "NULL") {
+      $('#category-'+count+'').attr('disabled', 'disabled');
+      count++;
+      var id = 0;
+      for(var i = 0; i < classificationDetails.length; i++) {
+        if(classificationDetails[i][3] == value) {
+          id = classificationDetails[i][1];
+          break;
+        }
+      }
+      for(var i = 0; i < classificationDetails.length; i++) {
+        if(classificationDetails[i][2] == id) {
+          $('#category-'+count+'').append('<option value="'+classificationDetails[i][3]+'">'+classificationDetails[i][3]+'</option>');
+          $('#category-'+count+'').show();
+        }
+      }
+    }
+  })
+
+  $('.close-category').on('click',function(){
+    event.preventDefault();
+    if(count != 1) {
+      $('#category-'+count+'').empty();
+      $('#category-'+count+'').append('<option value="NULL" data-parentId="NULL">select a category</option>');
+      $('#category-'+count+'').hide();
+      count--;
+      $('#category-'+count+'').removeAttr('disabled');
+    }
+  })
+
 });
 {% endblock %}
