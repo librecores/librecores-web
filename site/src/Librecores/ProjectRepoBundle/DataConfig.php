@@ -1,46 +1,13 @@
 <?php
 
-namespace Application\Migrations;
-
-use Doctrine\DBAL\Migrations\AbstractMigration;
-use Doctrine\DBAL\Schema\Schema;
-use Librecores\ProjectRepoBundle\DataConfig;
-
+namespace Librecores\ProjectRepoBundle;
 /**
- * Auto-generated Migration: Please modify to your needs!
+ * This class holds the default data 
+ *
  */
-class Version20180522113941 extends AbstractMigration
+
+class DataConfig
 {
-    /**
-     * @param Schema $schema
-     */
-    public function up(Schema $schema)
-    {
-        // this up() migration is auto-generated, please modify it to your needs
-        $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
-        $this->addSql('CREATE TABLE ClassificationHierarchy (id int(11) NOT NULL, parent_id int(11) DEFAULT NULL,name varchar(255) COLLATE utf8mb4_unicode_520_ci NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci');
-        $this->addSql('ALTER TABLE ClassificationHierarchy ADD PRIMARY KEY (id), ADD KEY IDX_D13880A5727ACA70 (parent_id)');
-        $this->addSql('ALTER TABLE ClassificationHierarchy MODIFY id int(11) NOT NULL AUTO_INCREMENT');
-        $this->addSql('ALTER TABLE ClassificationHierarchy  ADD CONSTRAINT FK_D13880A5727ACA70 FOREIGN KEY (parent_id) REFERENCES ClassificationHierarchy (id)');
-        foreach (DataConfig::classifier as $categories) {
-            $classificationHierarchy = ['parent_id' => $categories[0], 'name' => $categories[1]];
-            $this->addSql('INSERT INTO ClassificationHierarchy(parent_id,name) VALUES (:parent_id,:name)', $classificationHierarchy);
-        }
-
-    }
-
-    /**
-     * @param Schema $schema
-     */
-    public function down(Schema $schema)
-    {
-        // this down() migration is auto-generated, please modify it to your needs
-        $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
-
-        $this->addSql('TRUNCATE ClassificationHierarchy');
-        $this->addSql('ALTER TABLE ClassificationHierarchy DROP FOREIGN KEY FK_D13880A5727ACA70');
-        $this->addSql('DROP TABLE ClassificationHierarchy');
-    }
     /**
      * Data for ClassificationHierarchy object
      *
