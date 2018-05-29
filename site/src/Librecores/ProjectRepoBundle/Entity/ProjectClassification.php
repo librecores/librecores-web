@@ -5,7 +5,10 @@ namespace Librecores\ProjectRepoBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * A
+ * A ProjectClassification contains the classifications for the projects
+ * A group up related categories can be used to classify the projects
+ *
+ * @author Sandip Kumar Bhuyan <sandipbhuyan@gmail.com>
  *
  * @ORM\Table(name="ProjectClassification")
  * @ORM\Entity
@@ -22,6 +25,10 @@ class ProjectClassification
     private $id;
 
     /**
+     * It contains the classification string which has been classified by
+     * facted classification. Classifications are categorization of a project
+     * and two consecutive categories will be separated by '::'
+     *
      * @var string
      *
      * @ORM\Column(name="categories", type="text")
@@ -29,7 +36,8 @@ class ProjectClassification
     private $classification;
 
     /**
-     *
+     * It contains the project id and related to Project Entity in
+     * One Project can have Many ProjectClassification
      *
      * @var Project
      *
@@ -39,6 +47,8 @@ class ProjectClassification
     private $project;
 
     /**
+     * It conatins the creation date of the classification
+     *
      * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime")
@@ -60,7 +70,7 @@ class ProjectClassification
     }
 
     /**
-     * Set classification
+     * Set classification string for the Project
      *
      * @param string $classification
      *
@@ -108,7 +118,7 @@ class ProjectClassification
     }
 
     /**
-     * Set project
+     * Set the Project for the given ProjectClassification object
      *
      * @param \Librecores\ProjectRepoBundle\Entity\Project $project
      *

@@ -986,7 +986,7 @@ class Project
      *
      * @return Project
      */
-    public function addClassification(\Librecores\ProjectRepoBundle\Entity\ProjectClassification $classifications)
+    public function addClassification(ProjectClassification $classifications)
     {
         $this->classifications[] = $classifications;
 
@@ -998,7 +998,7 @@ class Project
      *
      * @param \Librecores\ProjectRepoBundle\Entity\ProjectClassification $classifications
      */
-    public function removeClassification(\Librecores\ProjectRepoBundle\Entity\ProjectClassification $classifications)
+    public function removeClassification(ProjectClassification $classifications)
     {
         $this->classifications->removeElement($classifications);
     }

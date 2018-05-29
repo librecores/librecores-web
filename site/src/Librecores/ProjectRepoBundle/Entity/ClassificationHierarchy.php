@@ -11,6 +11,8 @@ use Doctrine\ORM\Mapping as ORM;
  * It contains classification categories that can be use to classify the IP Cores
  * for better categorization
  *
+ * @author Sandip Kumar Bhuyan <sandipbhuyan@gmail.com>
+ *
  * @ORM\Table(name="ClassificationHierarchy")
  * @ORM\Entity
  */
@@ -45,30 +47,16 @@ class ClassificationHierarchy
     private $parent;
 
     /**
+     * It holds the category name of the project classification hierarchy
+     *
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
 
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="created_at", type="datetime")
-     */
-    private $createdAt;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="updated_at", type="datetime")
-     */
-    private $updatedAt;
-
     public function __construct()
     {
-        $this->createdAt = new \DateTime;
-        $this->updatedAt = new \DateTime;
         $this->children = new ArrayCollection();
     }
 
@@ -138,61 +126,13 @@ class ClassificationHierarchy
     }
 
     /**
-     * Set createdAt
-     *
-     * @param \DateTime $createdAt
-     *
-     * @return ClassificationHierarchy
-     */
-    public function setCreatedAt($createdAt)
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    /**
-     * Get createdAt
-     *
-     * @return \DateTime
-     */
-    public function getCreatedAt()
-    {
-        return $this->createdAt;
-    }
-
-    /**
-     * Set updatedAt
-     *
-     * @param \DateTime $updatedAt
-     *
-     * @return ClassificationHierarchy
-     */
-    public function setUpdatedAt($updatedAt)
-    {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
-    }
-
-    /**
-     * Get updatedAt
-     *
-     * @return \DateTime
-     */
-    public function getUpdatedAt()
-    {
-        return $this->updatedAt;
-    }
-
-    /**
      * Add child
      *
      * @param \Librecores\ProjectRepoBundle\Entity\ClassificationHierarchy $child
      *
      * @return ClassificationHierarchy
      */
-    public function addChild(\Librecores\ProjectRepoBundle\Entity\ClassificationHierarchy $child)
+    public function addChild(ClassificationHierarchy $child)
     {
         $this->children[] = $child;
 
@@ -204,7 +144,7 @@ class ClassificationHierarchy
      *
      * @param \Librecores\ProjectRepoBundle\Entity\ClassificationHierarchy $child
      */
-    public function removeChild(\Librecores\ProjectRepoBundle\Entity\ClassificationHierarchy $child)
+    public function removeChild(ClassificationHierarchy $child)
     {
         $this->children->removeElement($child);
     }

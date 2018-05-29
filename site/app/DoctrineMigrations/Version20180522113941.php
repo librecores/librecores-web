@@ -17,12 +17,13 @@ class Version20180522113941 extends AbstractMigration
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
-
+        $this->addSql('CREATE TABLE ClassificationHierarchy (id int(11) NOT NULL, parent_id int(11) DEFAULT NULL,name varchar(255) COLLATE utf8mb4_unicode_520_ci NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci');
+        $this->addSql('ALTER TABLE ClassificationHierarchy ADD PRIMARY KEY (id), ADD KEY IDX_D13880A5727ACA70 (parent_id)');
+        $this->addSql('ALTER TABLE ClassificationHierarchy MODIFY id int(11) NOT NULL AUTO_INCREMENT');
+        $this->addSql('ALTER TABLE ClassificationHierarchy  ADD CONSTRAINT FK_D13880A5727ACA70 FOREIGN KEY (parent_id) REFERENCES ClassificationHierarchy (id)');
         foreach (self::classifier as $categories) {
-            $date = new \DateTime;
-            $dateTime = $date->format('Y-m-d H:i:s');
-            $classificationHierarchy = ['parent_id' => $categories[0], 'name' => $categories[1], 'created_at' => $dateTime, 'updated_at' => $dateTime];
-            $this->addSql('INSERT INTO ClassificationHierarchy(parent_id,name,created_at,updated_at) VALUES (:parent_id,:name,:created_at,:updated_at)', $classificationHierarchy);
+            $classificationHierarchy = ['parent_id' => $categories[0], 'name' => $categories[1]];
+            $this->addSql('INSERT INTO ClassificationHierarchy(parent_id,name) VALUES (:parent_id,:name)', $classificationHierarchy);
         }
 
     }
@@ -36,6 +37,8 @@ class Version20180522113941 extends AbstractMigration
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
         $this->addSql('TRUNCATE ClassificationHierarchy');
+        $this->addSql('ALTER TABLE ClassificationHierarchy DROP FOREIGN KEY FK_D13880A5727ACA70');
+        $this->addSql('DROP TABLE ClassificationHierarchy');
     }
     /**
      * Data for ClassificationHierarchy object
