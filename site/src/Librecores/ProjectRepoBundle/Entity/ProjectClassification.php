@@ -25,9 +25,11 @@ class ProjectClassification
     private $id;
 
     /**
-     * It contains the classification string which has been classified by
-     * facted classification. Classifications are categorization of a project
-     * and two consecutive categories will be separated by '::'
+     * Classifiers for Project Classification
+     *
+     * This attribute holds the classifier for the classification of the projects
+     * The classification is a combination of categories. Parent and child categories
+     * are separated by '::'
      *
      * @var string
      *
@@ -36,8 +38,7 @@ class ProjectClassification
     private $classification;
 
     /**
-     * It contains the project id and related to Project Entity in
-     * One Project can have Many ProjectClassification
+     *
      *
      * @var Project
      *
@@ -47,7 +48,7 @@ class ProjectClassification
     private $project;
 
     /**
-     * It conatins the creation date of the classification
+     * ProjectClassification creation date/time
      *
      * @var \DateTime
      *

@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * A classification hierarchy for the projects
  *
- * It contains classification categories that can be use to classify the IP Cores
+ * This class contains classification categories that can be use to classify a project
  * for better categorization
  *
  * @author Sandip Kumar Bhuyan <sandipbhuyan@gmail.com>
@@ -32,7 +32,8 @@ class ClassificationHierarchy
      *
      * @var ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="ClassificationHierarchy", mappedBy="parent")
+     * @ORM\OneToMany(targetEntity="ClassificationHierarchy", mappedBy="parent", cascade={"persist", "remove"},
+     *                orphanRemoval=true)
      */
     private $children;
 
@@ -42,12 +43,12 @@ class ClassificationHierarchy
      * @var ClassificationHierarchy
      *
      * @ORM\ManyToOne(targetEntity="ClassificationHierarchy", inversedBy="children")
-     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", nullable=true)
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
      */
     private $parent;
 
     /**
-     * It holds the category name of the project classification hierarchy
+     * Category name of the Classification Hierarchy
      *
      * @var string
      *
@@ -71,13 +72,13 @@ class ClassificationHierarchy
     }
 
     /**
-     * Set parent
+     * Set parent category
      *
      * @param ClassificationHierarchy $parent
      *
      * @return ClassificationHierarchy
      */
-    public function setParent(\Librecores\ProjectRepoBundle\Entity\ClassificationHierarchy $parent = null)
+    public function setParent(ClassificationHierarchy $parent = null)
     {
         if ($this->parent !== null)
             $this->parent->removeChild($this);
@@ -92,7 +93,7 @@ class ClassificationHierarchy
     }
 
     /**
-     * Get parent
+     * Get parent category
      *
      * @return ClassificationHierarchy
      */
@@ -102,7 +103,7 @@ class ClassificationHierarchy
     }
 
     /**
-     * Set name
+     * Set Category name
      *
      * @param string $name
      *
@@ -116,7 +117,7 @@ class ClassificationHierarchy
     }
 
     /**
-     * Get name
+     * Get Category name
      *
      * @return string
      */

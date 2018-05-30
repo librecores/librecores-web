@@ -74,6 +74,8 @@ class Project
 
     // Associations
     /**
+     * Classifications assigned to this project
+     *
      * @var ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="ProjectClassification", mappedBy="project",cascade={"persist", "remove"},
