@@ -522,7 +522,7 @@ h1 a:hover, h1 a:active {
 
 .classification-category {
   height: 40px;
-  margin-right: 10px;
+  margin:0 10px 5px;
 }
 
 .classification-hierarchy {
@@ -543,4 +543,3 @@ h1 a:hover, h1 a:active {
  .add-category {
    right: 40px;
  }
-

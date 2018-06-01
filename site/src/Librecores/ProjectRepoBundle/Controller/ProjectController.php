@@ -242,17 +242,10 @@ class ProjectController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
 
+            //creating object for ProjectClassification
             $classification = '';
-
-            for($i = 1; $i < 5; $i++) {
-                if($request->request->get('category-'.$i.'') != 'NULL') {
-                    if($i = 1) {
-                        $classification =  $request->request->get('category-1');
-                    }
-                    else {
-                        $classification =  $classification.'::'.$request->request->get('category-'.$i.'');
-                    }
-                }
+            if($request->request->get('classification') != 'NULL') {
+                $classification = $request->request->get('classification');
             }
 
             if($classification != '') {
