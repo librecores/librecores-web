@@ -181,7 +181,7 @@ $(document).ready(function(){
 
   //insert classification
   // classification hierarchy data
-  var classificationDetails = {{ classification|json_encode|raw }}
+  var classificationDetails = {{ classificationHierarchy|json_encode|raw }}
   var count = 1;
   for(var i = 0; i < classificationDetails.length; i++) {
     if(classificationDetails[i][2] == null) {
