@@ -543,3 +543,36 @@ h1 a:hover, h1 a:active {
  .add-category {
    right: 40px;
  }
+
+.classifications {
+  margin-top: 10px;
+  margin-bottom: 15px;
+  padding: 0 10px;
+  display: table;
+}
+
+.categories {
+  font-weight: 500;
+  font-size: 14px;
+  border-radius: 2px;
+  background-color: #3fb0ac;
+  color: #fff;
+  display: inline-block;
+  margin: 0 5px 5px 0;
+}
+
+.categories span {
+  display: table-cell;
+  padding: 6px;
+  vertical-align: middle;
+}
+
+.classifications a {
+  text-align: center;
+  display: table-cell;
+  color: #fff;
+  background: transparent;
+  border: 0;
+  border-left: 1px solid hsla(0,0%,100%,.2);
+  padding: 6px;
+}

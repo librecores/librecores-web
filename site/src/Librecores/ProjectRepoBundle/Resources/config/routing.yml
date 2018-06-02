@@ -84,6 +84,10 @@ librecores_project_repo_project_update:
     defaults:
         _controller: 'LibrecoresProjectRepoBundle:Project:update'
 
+librecores_project_repo_classification_delete:
+    path: /{parentName}/{projectName}/{classificationId}/delete
+    defaults: { _controller: LibrecoresProjectRepoBundle:Project:deleteClassification }
+
 
 # Organization routes
 

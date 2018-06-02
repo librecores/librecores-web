@@ -263,8 +263,15 @@ class ProjectController extends Controller
                 ->getRepository('LibrecoresProjectRepoBundle:Project')
                 ->getClassificationHierarchy();
 
+        $classifications = $this->getDoctrine()
+            ->getRepository(ProjectClassification::class)
+            ->findBy(['project' => $p->getId()]);
+
         return $this->render('LibrecoresProjectRepoBundle:Project:settings.html.twig',
-            array('project' => $p, 'form' => $form->createView(),'classificationHierarchy' => $classificationHierarchy));
+            array('project' => $p, 'form' => $form->createView(),
+                'classificationHierarchy' => $classificationHierarchy,
+                'classifications' => $classifications
+                ));
     }
 
     /**
@@ -548,4 +555,32 @@ class ProjectController extends Controller
 
         return $graph;
     }
+
+    /**
+     * Delete ProjectClassification object
+     *
+     * Delete a project classification for a project
+     *
+     * @param Request $resource
+     * @param string $parentName URL component: name of the parent
+     *                           (user or organization)
+     * @param string $projectName URL component: name of the project
+     * @param integer $classificationId URL component: id of a project classification
+     * @return Response
+     */
+    public function deleteClassificationAction(Request $request, $parentName, $projectName, $classificationId)
+    {
+      $em = $this->getDoctrine()->getManager();
+      $projectClassification = $em->getRepository(ProjectClassification::class)->find($classificationId);
+      $em->remove($projectClassification);
+      $em->flush();
+
+      return $this->redirectToRoute(
+          'librecores_project_repo_project_settings',
+          array(
+              'parentName' => $parentName,
+              'projectName' => $projectName,
+          ));
+    }
+
 }
