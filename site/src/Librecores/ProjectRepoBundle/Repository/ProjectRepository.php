@@ -32,6 +32,14 @@ class ProjectRepository extends EntityRepository
         return $p;
     }
 
+    public function getClassificationHierarchy(){
+        $classifications = $this->getEntityManager()
+            ->createQuery(
+                'SELECT (c.id),  (c.parent), (c.name) FROM LibrecoresProjectRepoBundle:ClassificationHierarchy c')
+            ->getResult();
+        return $classifications;
+    }
+
     /**
      * Find a project using a fragment/substring of its fully qualified name
      *
