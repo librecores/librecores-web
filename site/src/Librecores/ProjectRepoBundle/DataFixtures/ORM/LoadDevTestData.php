@@ -217,16 +217,16 @@ class LoadDevTestData extends AbstractFixture
         $manager->persist($verilog);
 
         //ClassificationHierarchy Programming Language::Verilog::Verilog 95
-        $verilog_95 = new ClassificationHierarchy();
-        $verilog_95->setName('Verilog 95');
-        $verilog_95->setParent($verilog);
-        $manager->persist($verilog_95);
+        $verilog95 = new ClassificationHierarchy();
+        $verilog95->setName('Verilog 95');
+        $verilog95->setParent($verilog);
+        $manager->persist($verilog95);
 
         //ClassificationHierarchy Programming Language::Verilog::Verilog 2001
-        $verilog_01 = new ClassificationHierarchy();
-        $verilog_01->setName('Verilog 2001');
-        $verilog_01->setParent($verilog);
-        $manager->persist($verilog_01);
+        $verilog01 = new ClassificationHierarchy();
+        $verilog01->setName('Verilog 2001');
+        $verilog01->setParent($verilog);
+        $manager->persist($verilog01);
 
         //ClassificationHierarchy Programming Language::C
         $c = new ClassificationHierarchy();
