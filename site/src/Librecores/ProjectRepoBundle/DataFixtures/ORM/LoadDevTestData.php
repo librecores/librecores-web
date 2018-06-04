@@ -4,6 +4,7 @@ namespace Librecores\ProjectRepoBundle\DataFixtures\ORM;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
+use Librecores\ProjectRepoBundle\Entity\ClassificationHierarchy;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
@@ -94,6 +95,156 @@ class LoadDevTestData extends AbstractFixture
         $projectOptimsoc->setLicenseName('MIT');
         $projectOptimsoc->setSourceRepo($sourcerepoOptimsoc);
         $manager->persist($projectOptimsoc);
+
+        /**
+         *Populating classificatioinHierarchy object for development environment
+         *
+         * These are the test data for classification hierarchy. For the complete
+         * classification hierarchy run migration version 20180530072940 again
+         */
+        //ClassificationHierarchy License
+        $license = new ClassificationHierarchy();
+        $license->setName('License');
+        $license->setParent(NULL);
+        $manager->persist($license);
+
+        //ClassificationHierarchy License::Free and Open
+        $freeAndOpen = new ClassificationHierarchy();
+        $freeAndOpen->setName('Free and Open');
+        $freeAndOpen->setParent($license);
+        $manager->persist($freeAndOpen);
+
+        //ClassificationHierarchy License::Other/Proprietary
+        $Other = new ClassificationHierarchy();
+        $Other->setName('Other/Proprietary License');
+        $Other->setParent($license);
+        $manager->persist($Other);
+
+        //ClassificationHierarchy License::Free and Open::Premissive
+        $permissive = new ClassificationHierarchy();
+        $permissive->setName('Permissive');
+        $permissive->setParent($freeAndOpen);
+        $manager->persist($permissive);
+
+        //ClassificationHierarchy License::Free and Open::Weak Copyleft
+        $weakCopyleft = new ClassificationHierarchy();
+        $weakCopyleft->setName('Weak Copyleft');
+        $weakCopyleft->setParent($freeAndOpen);
+        $manager->persist($weakCopyleft);
+
+        //ClassificationHierarchy License::Premisive::BSD
+        $BSD = new ClassificationHierarchy();
+        $BSD->setName('BSD');
+        $BSD->setParent($permissive);
+        $manager->persist($BSD);
+
+        //ClassificationHierarchy License::Premisive::MIT
+        $MIT = new ClassificationHierarchy();
+        $MIT->setName('MIT');
+        $MIT->setParent($permissive);
+        $manager->persist($MIT);
+
+        //ClassificationHierarchy Tool
+        $tool = new ClassificationHierarchy();
+        $tool->setName('Tool');
+        $tool->setParent(NULL);
+        $manager->persist($tool);
+
+        //ClassificationHierarchy Support
+        $support = new ClassificationHierarchy();
+        $support->setName('Support');
+        $support->setParent(NULL);
+        $manager->persist($support);
+
+        //ClassificationHierarchy Support::Commercially Supported
+        $commercially = new ClassificationHierarchy();
+        $commercially->setName('Commercially supported');
+        $commercially->setParent($support);
+        $manager->persist($commercially);
+
+        //ClassificationHierarchy Support::Community Supported
+        $community = new ClassificationHierarchy();
+        $community->setName('Community supported');
+        $community->setParent($support);
+        $manager->persist($community);
+
+        //ClassificationHierarchy Topic
+        $topic = new ClassificationHierarchy();
+        $topic->setName('Topic');
+        $topic->setParent(NULL);
+        $manager->persist($topic);
+
+        //ClassificationHierarchy Topic::Hardware
+        $hardware = new ClassificationHierarchy();
+        $hardware->setName('Hardware');
+        $hardware->setParent($topic);
+        $manager->persist($hardware);
+
+        //ClassificationHierarchy Topic::Software
+        $software = new ClassificationHierarchy();
+        $software->setName('Software');
+        $software->setParent($topic);
+        $manager->persist($software);
+
+        //ClassificationHierarchy Target
+        $target = new ClassificationHierarchy();
+        $target->setName('Target');
+        $target->setParent(NULL);
+        $manager->persist($target);
+
+        //ClassificationHierarchy Proven On
+        $proven = new ClassificationHierarchy();
+        $proven->setName('Proven On');
+        $proven->setParent(NULL);
+        $manager->persist($proven);
+
+        //ClassificationHierarchy LibreCores
+        $librecores = new ClassificationHierarchy();
+        $librecores->setName('LibreCores');
+        $librecores->setParent(NULL);
+        $manager->persist($librecores);
+
+        //ClassificationHierarchy Programming Language
+        $programing = new ClassificationHierarchy();
+        $programing->setName('Programming Language');
+        $programing->setParent(NULL);
+        $manager->persist($programing);
+
+        //ClassificationHierarchy Programming Language::Verilog
+        $verilog = new ClassificationHierarchy();
+        $verilog->setName('Verilog');
+        $verilog->setParent($programing);
+        $manager->persist($verilog);
+
+        //ClassificationHierarchy Programming Language::Verilog::Verilog 95
+        $verilog_95 = new ClassificationHierarchy();
+        $verilog_95->setName('Verilog 95');
+        $verilog_95->setParent($verilog);
+        $manager->persist($verilog_95);
+
+        //ClassificationHierarchy Programming Language::Verilog::Verilog 2001
+        $verilog_01 = new ClassificationHierarchy();
+        $verilog_01->setName('Verilog 2001');
+        $verilog_01->setParent($verilog);
+        $manager->persist($verilog_01);
+
+        //ClassificationHierarchy Programming Language::C
+        $c = new ClassificationHierarchy();
+        $c->setName('C');
+        $c->setParent($programing);
+        $manager->persist($c);
+
+        //ClassificationHierarchy Programming Language::C++
+        $cPlus = new ClassificationHierarchy();
+        $cPlus->setName('C++');
+        $cPlus->setParent($programing);
+        $manager->persist($cPlus);
+
+        //ClassificationHierarchy Programming Language::JAVA
+        $java = new ClassificationHierarchy();
+        $java->setName('JAVA');
+        $java->setParent($programing);
+        $manager->persist($java);
 
         $manager->flush();
     }

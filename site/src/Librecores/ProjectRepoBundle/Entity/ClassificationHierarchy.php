@@ -28,7 +28,7 @@ class ClassificationHierarchy
     private $id;
 
     /**
-     * One ClassificationHierarchy has Many ClassificationHierarchy.
+     * One ClassificationHierarchy has Many parent classification.
      *
      * @var ArrayCollection
      *
@@ -38,7 +38,7 @@ class ClassificationHierarchy
     private $children;
 
     /**
-     * Many ClassificationHierarchy have One ClassificationHierarchy.
+     * Many ClassificationHierarchy have One Parent Classification.
      *
      * @var ClassificationHierarchy
      *
