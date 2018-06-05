@@ -521,7 +521,7 @@ h1 a:hover, h1 a:active {
 }
 
 #delete-panel-button {
-  margin-left: 15px;
+    margin-left: 8px;
 }
 
 #delete-project-button {
