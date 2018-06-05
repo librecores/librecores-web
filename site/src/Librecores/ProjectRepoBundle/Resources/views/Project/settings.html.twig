@@ -124,7 +124,9 @@
                         <span>
                           {{ classification.getClassification() }}
                         </span>
-                        <a href="#">
+                        <a href="{{ path('librecores_project_repo_classification_update',{'parentName':
+                          classification.project.getParentName(), 'projectName' : classification.project.getName(),
+                          'classificationId' : classification.getId()}) }}">
                           <i class="fa fa-edit" aria-hidden="true"></i>
                         </a>
                         <a class="delete-classification" href="{{ path('librecores_project_repo_classification_delete',{'parentName':

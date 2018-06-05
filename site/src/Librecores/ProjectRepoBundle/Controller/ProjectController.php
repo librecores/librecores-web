@@ -7,6 +7,7 @@ use Librecores\ProjectRepoBundle\Entity\LanguageStat;
 use Librecores\ProjectRepoBundle\Entity\OrganizationMember;
 use Librecores\ProjectRepoBundle\Entity\Project;
 use Librecores\ProjectRepoBundle\Entity\ProjectClassification;
+use Librecores\ProjectRepoBundle\Form\Type\ProjectClassificationType;
 use Librecores\ProjectRepoBundle\Form\Type\ProjectType;
 use Librecores\ProjectRepoBundle\RepoCrawler\GithubRepoCrawler;
 use Librecores\ProjectRepoBundle\Util\Dates;
@@ -581,6 +582,45 @@ class ProjectController extends Controller
               'parentName' => $parentName,
               'projectName' => $projectName,
           ));
+    }
+
+    /**
+     * Update ProjectClassification object
+     *
+     * Update a project classification for a project
+     *
+     * @param Request $request
+     * @param integer $classificationId URL component: id of a project classification
+     * @return Response
+     */
+    public function updateClassificationAction(Request $request,$parentName, $projectName, $classificationId) {
+        $em = $this->getDoctrine()->getManager();
+        $projectClassification = $em->getRepository(ProjectClassification::class)->find($classificationId);
+        // check Authentication
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $form = $this->createForm(ProjectClassificationType::class, $projectClassification);
+        $p = $this->getProject($parentName,$projectName);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->persist($projectClassification);
+            $em->flush();
+            return $this->redirectToRoute(
+                'librecores_project_repo_project_settings',
+                array(
+                    'parentName' => $parentName,
+                    'projectName' => $projectName,
+                ));
+        }
+
+        $classificationHierarchy = $this->getDoctrine()
+            ->getRepository('LibrecoresProjectRepoBundle:Project')
+            ->getClassificationHierarchy();
+
+        return $this->render('LibrecoresProjectRepoBundle:Project:update_classification.html.twig',
+            array('project' => $p, 'form' => $form->createView(),
+                'classificationHierarchy' => $classificationHierarchy,
+            ));
     }
 
 }

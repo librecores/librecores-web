@@ -1,0 +1,222 @@
+{% extends 'layout.html.twig' %}
+
+{# include trumbowyg CSS/JS #}
+{% block stylesheets %}
+  {% stylesheets filter="scssphp,cssrewrite"
+      "assets/scss/trumbowyg.scss"
+  %}
+    <link rel="stylesheet" href="{{ asset_url }}" />
+  {% endstylesheets %}
+  {{ parent() }}
+{% endblock %}
+
+{% block javascripts %}
+  {{ parent() }}
+  {% javascripts filter="?jsqueeze"
+    "assets/js/trumbowyg.min.js"
+  %}
+    <script src="{{ asset_url }}"></script>
+  {% endjavascripts %}
+{% endblock %}
+
+
+{% block title %}
+{{ project.getFullName() }} @ LibreCores: Update Classification
+{% endblock %}
+
+{% block pagepath %}Home &raquo; Projects &raquo; {{ project.getFullName() }} &raquo; Update Classification{% endblock %}
+
+{% block content %}
+<h1 class="projectname"><a href="{{ path('librecores_project_repo_project_view', {'parentName':
+  project.getParentName(), 'projectName': project.getName()}) }}">{{ project.getFullName() }}</a>: Update</h1>
+
+<div class="row">
+  <div class="col-sm-2">
+    <ul class="list-group">
+      <li class="list-group-item"><a href="{{ path('librecores_project_repo_project_view', {'parentName':
+          project.getParentName(), 'projectName': project.getName()}) }}">
+          <i class="fa fa-bookmark fa-fw"></i>
+          Project
+        </a></li>
+      <li class="list-group-item active"><a href="{{ path('librecores_project_repo_project_settings', {'parentName':
+          project.getParentName(), 'projectName': project.getName()}) }}">
+          <i class="fa fa-cogs fa-fw"></i>Settings
+        </a></li>
+    </ul>
+  </div>
+  <div class="col-sm-10">
+
+    {{ form_start(form) }}
+      {{ form_errors(form) }}
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Project Classification</h3>
+        </div>
+        <div class="panel-body classification-hierarchy row">
+          <div class="classification-system">
+            <select id="category-1" class="classification-category">
+              <option value="NULL" data-parentId="NULL">select a category</option>
+            </select>
+          </div>
+          <a href="" class="close-category" data-toggle="tooltip" data-placement="bottom" title="Remove the last child category"><i class="fa fa-close"></i></a>
+          <a href="" class="add-category" data-toggle="tooltip" data-placement="bottom" title="Add child category" ><i class="fa fa-plus"></i></a>
+        </div>
+      </div>
+
+    {{ form_end(form) }}
+  </div>
+</div>
+
+{% endblock %}
+
+{% block pagejs %}
+
+$(document).ready(function(){
+  $.trumbowyg.svgPath = '/img/trumbowyg-icons.svg';
+
+  var trumbowyg_config = {
+    btns: [
+      ['formatting'],
+      'btnGrp-semantic',
+      ['link'],
+      ['insertImage'],
+      'btnGrp-lists',
+      ['horizontalRule'],
+      ['removeformat'],
+      ['viewHTML'],
+      ['fullscreen']
+    ]
+  };
+
+  //insert classification
+  // classification hierarchy data
+  var classificationDetails = {{ classificationHierarchy|json_encode|raw }}
+  var count = 1;
+  var classifications = $('#project_classification_classification').val().split('::');
+  for(var i = 0; i < classificationDetails.length; i++) {
+    if(classificationDetails[i][2] == null) {
+      if(classifications[0] == classificationDetails[i][3] ) {
+        $('#category-'+count+'').append('<option value="'+classificationDetails[i][3]+'" selected="selected">'+classificationDetails[i][3]+'</option>');
+      }
+      else {
+        $('#category-'+count+'').append('<option value="'+classificationDetails[i][3]+'" >'+classificationDetails[i][3]+'</option>');
+      }
+    }
+  }
+  for(var j = 1; j < classifications.length; j++) {
+    var value = $('#category-'+count+'').val();
+    if(value != "NULL") {
+      var increase = false;
+      var id = 0;
+      for(var i = 0; i < classificationDetails.length; i++) {
+        if(classificationDetails[i][3] == value) {
+          id = classificationDetails[i][1];
+          break;
+        }
+      }
+      //debugger;
+      for(var i = 0; i < classificationDetails.length; i++) {
+        if(classificationDetails[i][2] == id) {
+          if(increase == false){
+            var category = $('#category-'+count+'').clone().appendTo('.classification-system');
+            count++;
+            category.attr('id','category-'+count+'').empty().append('<option value="NULL">select a category</option>');
+            if(classifications[j] == classificationDetails[i][3] ) {
+              $('#category-'+count+'').append('<option value="'+classificationDetails[i][3]+'" selected="selected">'+classificationDetails[i][3]+'</option>');
+            }
+            else {
+              $('#category-'+count+'').append('<option value="'+classificationDetails[i][3]+'" >'+classificationDetails[i][3]+'</option>');
+            }
+            increase = true;
+          }
+          else {
+            if(classifications[j] == classificationDetails[i][3] ) {
+              $('#category-'+count+'').append('<option value="'+classificationDetails[i][3]+'" selected="selected">'+classificationDetails[i][3]+'</option>');
+            }
+            else {
+              $('#category-'+count+'').append('<option value="'+classificationDetails[i][3]+'" >'+classificationDetails[i][3]+'</option>');
+            }
+          }
+        }
+      }
+      //include this current select element to the remove paramenter
+      removeChildCategory();
+	}
+}
+  //adding tooltip to the button
+  $('[data-toggle="tooltip"]').tooltip();
+
+  // add a new category to the project
+  removeChildCategory();
+  // remove next all child category if a parent category change
+	function removeChildCategory(){
+				$('select').on('change',function(){
+				  var id = $(this).attr('id');
+				  var getCount = id.split('-');
+				  count = parseInt(getCount[1]);
+				  $(this).nextAll().remove();
+			})
+		}
+  $('.add-category').on('click',function(event){
+		    event.preventDefault();
+		    var value = $('#category-'+count+'').val();
+		    if(value != "NULL") {
+		      var increase = false;
+		      var id = 0;
+          for(var i = 0; i < classificationDetails.length; i++) {
+            if(classificationDetails[i][3] == value) {
+              id = classificationDetails[i][1];
+              break;
+            }
+          }
+          for(var i = 0; i < classificationDetails.length; i++) {
+            if(classificationDetails[i][2] == id) {
+              if(increase == false){
+                var category = $('#category-'+count+'').clone().appendTo('.classification-system');
+      		      count++;
+      		      category.attr('id','category-'+count+'').empty().append('<option value="NULL">select a category</option>');
+                $('#category-'+count+'').append('<option value="'+classificationDetails[i][3]+'">'+classificationDetails[i][3]+'</option>');
+                increase = true;
+              }
+              else {
+                $('#category-'+count+'').append('<option value="'+classificationDetails[i][3]+'">'+classificationDetails[i][3]+'</option>');
+              }
+            }
+          }
+          //include this current select element to the remove paramenter
+          removeChildCategory();
+		 }
+	})
+
+  //remove a category to the project
+  $('.close-category').on('click',function(event){
+    event.preventDefault();
+    if(count != 1) {
+      $('#category-'+count+'').remove();
+      count--;
+    }
+  })
+
+  //send the classification of the project to controller
+  $('form').on('submit',function() {
+			var $self = $(this);
+			var classification = '';
+			for(var j = 1; j <= count ;j++) {
+				if($('#category-'+j+'').val() != 'NULL') {
+					if(j == 1) {
+						classification = $('#category-'+j+'').val();
+					}
+					else {
+						classification = classification + '::' + $('#category-'+j+'').val();
+					}
+				}
+				else {
+					break;
+				}
+			 }
+
+      $('#project_classification_classification').val(classification);
+               $self.submit();
+		})
+});
+{% endblock %}
