@@ -1,6 +1,7 @@
 <?php
 namespace Librecores\ProjectRepoBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -70,6 +71,18 @@ class Project
      * @ORM\JoinColumn(nullable=true)
      */
     private $parentOrganization;
+
+    // Associations
+    /**
+     * Classifications assigned to this project
+     *
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="ProjectClassification", mappedBy="project",cascade={"persist", "remove"},
+     *                orphanRemoval=true)
+     * @ORM\JoinColumn(name="projectId", referencedColumnName="id")
+     */
+    protected $classifications;
 
     /**
      * Short name of the project
@@ -298,6 +311,7 @@ class Project
         // record the date/time of the project creation
         $this->setDateAdded(new \DateTime());
         $this->setDateLastModified(new \DateTime());
+        $this->classifications = new ArrayCollection();
     }
 
     /**
@@ -963,6 +977,54 @@ class Project
     public function setReleases(array $releases)
     {
         $this->releases = $releases;
+
+        return $this;
+    }
+
+    /**
+     * Add Classification
+     *
+     * @param \Librecores\ProjectRepoBundle\Entity\ProjectClassification $classifications
+     *
+     * @return Project
+     */
+    public function addClassification(ProjectClassification $classifications)
+    {
+        $this->classifications[] = $classifications;
+
+        return $this;
+    }
+
+    /**
+     * Remove Classification
+     *
+     * @param \Librecores\ProjectRepoBundle\Entity\ProjectClassification $classifications
+     */
+    public function removeClassification(ProjectClassification $classifications)
+    {
+        $this->classifications->removeElement($classifications);
+    }
+
+    /**
+     * Get classifications
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getClassifications()
+    {
+        return $this->classifications;
+    }
+
+    /**
+     * set Classification
+     *
+     * @param \Librecores\ProjectRepoBundle\Entity\ProjectClassification $classifications
+     *
+     * @return Project
+     */
+    public function setClassifications(\Librecores\ProjectRepoBundle\Entity\ProjectClassification $classifications)
+    {
+        $this->addClassification($classifications);
 
         return $this;
     }

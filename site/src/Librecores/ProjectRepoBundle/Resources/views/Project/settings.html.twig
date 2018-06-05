@@ -34,13 +34,14 @@
   <div class="col-sm-2">
     <ul class="list-group">
       <li class="list-group-item"><a href="{{ path('librecores_project_repo_project_view', {'parentName':
-    project.getParentName(), 'projectName': project.getName()}) }}">
-        <i class="fa fa-bookmark fa-fw"></i>
-        Project
-      </a></li>
-      <li class="list-group-item active"><a href="#">
-        <i class="fa fa-cogs fa-fw"></i>Settings
-      </a></li>
+          project.getParentName(), 'projectName': project.getName()}) }}">
+          <i class="fa fa-bookmark fa-fw"></i>
+          Project
+        </a></li>
+      <li class="list-group-item active"><a href="{{ path('librecores_project_repo_project_settings', {'parentName':
+          project.getParentName(), 'projectName': project.getName()}) }}">
+          <i class="fa fa-cogs fa-fw"></i>Settings
+        </a></li>
     </ul>
   </div>
   <div class="col-sm-10">
@@ -105,6 +106,42 @@
 
       <div class="panel panel-default">
         <div class="panel-heading">
+          <h3 class="panel-title">Project Classification</h3>
+        </div>
+        <div class="panel-body classification-hierarchy row">
+          <div class="classification-system">
+            <select id="category-1" class="classification-category">
+              <option value="NULL" data-parentId="NULL">select a category</option>
+            </select>
+          </div>
+          <a href="" class="close-category" data-toggle="tooltip" data-placement="bottom" title="Remove the last child category"><i class="fa fa-close"></i></a>
+          <a href="" class="add-category" data-toggle="tooltip" data-placement="bottom" title="Add child category" ><i class="fa fa-plus"></i></a>
+        </div>
+        <div class="classifications">
+            {% if classifications %}
+                    {% for classification in classifications %}
+                      <div class="categories">
+                        <span>
+                          {{ classification.getClassification() }}
+                        </span>
+                        <a href="{{ path('librecores_project_repo_classification_update',{'parentName':
+                          classification.project.getParentName(), 'projectName' : classification.project.getName(),
+                          'classificationId' : classification.getId()}) }}">
+                          <i class="fa fa-edit" aria-hidden="true"></i>
+                        </a>
+                        <a class="delete-classification" href="{{ path('librecores_project_repo_classification_delete',{'parentName':
+                          classification.project.getParentName(), 'projectName' : classification.project.getName(),
+                          'classificationId' : classification.getId()}) }}">
+                          <i class="fa fa-trash" aria-hidden="true"></i>
+                        </a>
+                      </div>
+                    {% endfor %}
+            {% endif %}
+        </div>
+      </div>
+
+      <div class="panel panel-default">
+        <div class="panel-heading">
           <h3 class="panel-title">License</h3>
         </div>
         <div class="panel-body">
@@ -126,6 +163,18 @@
     {{ form_end(form) }}
   </div>
 </div>
+
+  <div class="confirmation-popup" role="alert">
+    <div class="confirmation-popup-container">
+      <p>Are you sure you want to delete this classification?</p>
+      <ul class="confirmation-buttons">
+        <li><a class="confirm-delete">Yes</a></li>
+        <li><a class="close-conf">No</a></li>
+      </ul>
+      <a href="#0" class="confirmation-popup-close img-replace"></a>
+    </div> <!-- confirmation-popup-container -->
+  </div> <!-- confirmation-popup -->
+
 {% endblock %}
 
 {% block pagejs %}
@@ -161,5 +210,125 @@ $(document).ready(function(){
     var el = $('#licenseText_div');
     au ? el.hide() : el.show();
   });
+
+  //insert classification
+  // classification hierarchy data
+  var classificationDetails = {{ classificationHierarchy|json_encode|raw }}
+  var count = 1;
+  for(var i = 0; i < classificationDetails.length; i++) {
+    if(classificationDetails[i][2] == null) {
+      $('#category-'+count+'').append('<option value="'+classificationDetails[i][3]+'" data-id='+classificationDetails[i][1]+'>'+classificationDetails[i][3]+'</option>');
+    }
+  }
+  //adding tooltip to the button
+  $('[data-toggle="tooltip"]').tooltip();
+
+  // add a new category to the project
+  removeChildCategory();
+  // remove next all child category if a parent category change
+	function removeChildCategory(){
+				$('select').on('change',function(){
+				  var id = $(this).attr('id');
+				  var getCount = id.split('-');
+				  count = parseInt(getCount[1]);
+				  $(this).nextAll().remove();
+			})
+		}
+  $('.add-category').on('click',function(event){
+		    event.preventDefault();
+		    var value = $('#category-'+count+'').val();
+		    if(value != "NULL") {
+		      var increase = false;
+		      var id = 0;
+          for(var i = 0; i < classificationDetails.length; i++) {
+            if(classificationDetails[i][3] == value) {
+              id = classificationDetails[i][1];
+              break;
+            }
+          }
+          for(var i = 0; i < classificationDetails.length; i++) {
+            if(classificationDetails[i][2] == id) {
+              if(increase == false){
+                var category = $('#category-'+count+'').clone().appendTo('.classification-system');
+      		      count++;
+      		      category.attr('id','category-'+count+'').empty().append('<option value="NULL">select a category</option>');
+                $('#category-'+count+'').append('<option value="'+classificationDetails[i][3]+'">'+classificationDetails[i][3]+'</option>');
+                increase = true;
+              }
+              else {
+                $('#category-'+count+'').append('<option value="'+classificationDetails[i][3]+'">'+classificationDetails[i][3]+'</option>');
+              }
+            }
+          }
+          //include this current select element to the remove paramenter
+          removeChildCategory();
+		 }
+	})
+
+  //remove a category to the project
+  $('.close-category').on('click',function(event){
+    event.preventDefault();
+    if(count != 1) {
+      $('#category-'+count+'').remove();
+      count--;
+    }
+  })
+
+  //send the classification of the project to controller
+  $('form').on('submit',function() {
+			var $self = $(this);
+			var classification = '';
+			for(var j = 1; j <= count ;j++) {
+				if($('#category-'+j+'').val() != 'NULL') {
+					if(j == 1) {
+						classification = $('#category-'+j+'').val();
+					}
+					else {
+						classification = classification + '::' + $('#category-'+j+'').val();
+					}
+				}
+				else {
+					break;
+				}
+			 }
+			  	if(classification == '') {
+			  		var input = $("<input>")
+               .attr("type", "hidden")
+               .attr("name", "classification").val("NULL");
+			  	}
+			  	else	{
+			  		var input = $("<input>")
+               .attr("type", "hidden")
+               .attr("name", "classification").val(classification);
+			  	}
+               $self.append($(input));
+               $self.submit();
+		})
+
+    var deleteUrl = '';
+    $('.delete-classification').on('click', function(event){
+  		event.preventDefault();
+  		$('.confirmation-popup').addClass('is-visible');
+      deleteUrl = $(this).attr('href');
+  	});
+
+  	//close popup
+  	$('.confirmation-popup').on('click', function(event){
+  		if( $(event.target).is('.confirmation-popup-close') || $(event.target).is('.confirmation-popup') || $(event.target).is('.close-conf')) {
+  			event.preventDefault();
+  			$(this).removeClass('is-visible');
+  		}
+
+      if($(event.target).is('.confirm-delete')) {
+        window.location = deleteUrl;
+      }
+  	});
+  	//close popup when clicking the esc keyboard button
+  	$(document).keyup(function(event){
+      	if(event.which=='27'){
+      		$('.confirmation-popup').removeClass('is-visible');
+  	    }
+      });
+
 });
 {% endblock %}
