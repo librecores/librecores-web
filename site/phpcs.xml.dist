@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<ruleset name="LibreCores">
+  <description>The coding standard for LibreCores</description>
+
+  <file>src</file>
+  <file>tests</file>
+
+  <arg name="basepath" value="."/>
+  <arg name="colors" />
+
+  <!-- We mostly follow the Symfony coding standards -->
+  <rule ref="Symfony">
+    <!-- Excluded until we add license headers to all files. -->
+    <exclude name="Symfony.Commenting.License.Warning"/>
+
+    <!-- "Yoda-style" makes control statements harder to read -->
+    <exclude name="Symfony.ControlStructure.YodaConditions.Invalid"/>
+
+    <!--
+    Having all method arguments in a single line conflicts with the desire to
+    reduce the line length to 80 characters.
+    -->
+    <exclude name="Symfony.Functions.Arguments.Invalid"/>
+
+    <!-- exclude until we have fixed RepoCrawler and SourceRepo -->
+    <exclude name="Symfony.NamingConventions.ValidClassName.InvalidAbstractName"/>
+  </rule>
+
+  <!--
+  Degrade some phpdoc errors to warnings. In cases where the function name is
+  self-describing a phpdoc comment only adds visual overhead. This is something
+  for the developer to decide.
+  -->
+  <rule ref="Symfony.Commenting.FunctionComment.Missing">
+    <type>warning</type>
+  </rule>
+  <rule ref="Symfony.Commenting.ClassComment.Missing">
+    <type>warning</type>
+  </rule>
+  <rule ref="Symfony.Commenting.FunctionComment.MissingParamTag">
+    <type>warning</type>
+  </rule>
+  <rule ref="Symfony.Commenting.FunctionComment.MissingReturn">
+    <type>warning</type>
+  </rule>
+  <rule ref="Symfony.Commenting.FunctionComment.MissingReturn">
+    <type>warning</type>
+  </rule>
+
+  <!--
+  This setting is currently ignored as long as we exclude
+  Squiz.Strings.ConcatenationSpacing.PaddingFound. Including it would require
+  putting all dots (".") used for continuing multi-line strings in front of
+  the continued (second) line instead of in front of the continuing (first)
+  line.
+  -->
+  <rule ref="Squiz.Strings.ConcatenationSpacing">
+    <properties>
+      <property name="ignoreNewlines" value="true"/>
+    </properties>
+  </rule>
+
+  <!--
+  Even these days code is viewed and edited in diff viewers and terminals which
+  work best with lines not exceeding 80 characters.
+  -->
+  <rule ref="Generic.Files.LineLength">
+    <properties>
+      <property name="lineLimit" value="80"/>
+      <property name="absoluteLineLimit" value="120"/>
+    </properties>
+  </rule>
+</ruleset>
