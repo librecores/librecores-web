@@ -14,4 +14,5 @@ Documentation Contents
 
    devenv/index.rst
    contributing.rst
+   codingstyle.rst
    designdocs/index.rst
