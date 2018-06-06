@@ -27,6 +27,7 @@ class AppKernel extends Kernel
             new Exercise\HTMLPurifierBundle\ExerciseHTMLPurifierBundle(),
             new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle(),
             new Sentry\SentryBundle\SentryBundle(),
+            new Http\HttplugBundle\HttplugBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
