@@ -61,7 +61,8 @@ class ProjectVoter extends Voter
      * Can a given user edit the project?
      *
      * @param Project $project
-     * @param User $user
+     * @param User    $user
+     *
      * @return boolean
      */
     private function canEdit(Project $project, User $user)

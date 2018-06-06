@@ -16,15 +16,17 @@ class ProcessCreator
 {
 
     /**
-     * @param string $cmd
+     * Create a new process
+     *
+     * @param string   $cmd
      * @param string[] $args
-     * @param string|null $cwd
+     *
      * @return Process
      */
     public function createProcess(string $cmd, array $args): Process
     {
-
-        $commandLine = ProcessUtils::escapeArgument($cmd).' '
+        $commandLine = ProcessUtils::escapeArgument($cmd)
+            .' '
             .implode(' ', array_map([ProcessUtils::class, 'escapeArgument'], $args));
         $process = new Process($commandLine);
 

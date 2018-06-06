@@ -44,17 +44,18 @@ class RepoCrawlerFactory
      * Constructor: create a new instance
      *
      * @param MarkupToHtmlConverter $markupConverter
-     * @param LoggerInterface $logger
-     * @param ObjectManager $manager
-     * @param ProcessCreator $processCreator
-     * @param GithubApiService $ghApi
+     * @param LoggerInterface       $logger
+     * @param ObjectManager         $manager
+     * @param ProcessCreator        $processCreator
+     * @param GithubApiService      $ghApi
      */
-    public function __construct(MarkupToHtmlConverter $markupConverter,
-                                LoggerInterface $logger,
-                                ObjectManager $manager,
-                                ProcessCreator $processCreator,
-                                GithubApiService $ghApi)
-    {
+    public function __construct(
+        MarkupToHtmlConverter $markupConverter,
+        LoggerInterface $logger,
+        ObjectManager $manager,
+        ProcessCreator $processCreator,
+        GithubApiService $ghApi
+    ) {
         $this->markupConverter = $markupConverter;
         $this->logger = $logger;
         $this->manager = $manager;
@@ -66,6 +67,7 @@ class RepoCrawlerFactory
      * Get a RepoCrawler subclass for the source repository
      *
      * @param SourceRepo $repo
+     *
      * @throws \InvalidArgumentException if the source repository type is not
      *                                   supported by an available crawler
      * @return RepoCrawler
@@ -83,18 +85,22 @@ class RepoCrawlerFactory
                     $this->logger,
                     $this->ghApi
                 );
-            } else {
-                return new GitRepoCrawler(
-                    $repo,
-                    $this->markupConverter,
-                    $this->processCreator,
-                    $this->manager,
-                    $this->logger
-                );
             }
+
+            return new GitRepoCrawler(
+                $repo,
+                $this->markupConverter,
+                $this->processCreator,
+                $this->manager,
+                $this->logger
+            );
         }
 
-        throw new \InvalidArgumentException("No crawler for source repository " .
-            "of type " . get_class($repo) . " found.");
+        throw new \InvalidArgumentException(
+            sprintf(
+                "No crawler for source repository of type %s found.",
+                get_class($repo)
+            )
+        );
     }
 }

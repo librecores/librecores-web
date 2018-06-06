@@ -64,6 +64,7 @@ class Contributor
      * @var string
      *
      * @Assert\Email()
+     *
      * @ORM\Column(type="string")
      */
     private $email;
@@ -128,6 +129,7 @@ class Contributor
      * Set name
      *
      * @param string $name
+     *
      * @return Contributor
      */
     public function setName($name)
@@ -151,6 +153,7 @@ class Contributor
      * Set email
      *
      * @param string $email
+     *
      * @return Contributor
      */
     public function setEmail($email)

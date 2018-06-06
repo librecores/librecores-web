@@ -45,8 +45,10 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
  *
  * @author Philipp Wagner <mail@philipp-wagner.com>
  */
-class LibreCoresUserProvider implements UserProviderInterface,
-    AccountConnectorInterface, OAuthAwareUserProviderInterface
+class LibreCoresUserProvider implements
+    UserProviderInterface,
+    AccountConnectorInterface,
+    OAuthAwareUserProviderInterface
 {
     /**
      * @var UserManagerInterface
@@ -73,9 +75,11 @@ class LibreCoresUserProvider implements UserProviderInterface,
      *
      * @param UserManagerInterface $userManager the user manager
      */
-    public function __construct(UserManagerInterface $userManager,
-        ValidatorInterface $validator, Session $session)
-    {
+    public function __construct(
+        UserManagerInterface $userManager,
+        ValidatorInterface $validator,
+        Session $session
+    ) {
         $this->userManager = $userManager;
         $this->validator = $validator;
         $this->session = $session;
@@ -111,7 +115,8 @@ class LibreCoresUserProvider implements UserProviderInterface,
         $serviceName = $response->getResourceOwner()->getName();
         $user = $this->userManager->findUserByOAuth(
             $serviceName,
-            $oAuthUserId);
+            $oAuthUserId
+        );
 
         if ($user === null) {
             $user = $this->registerNewUser($response);
@@ -119,9 +124,11 @@ class LibreCoresUserProvider implements UserProviderInterface,
 
         // user already exists
         // update OAuth token in user object
-        $this->accessor->setValue($user,
+        $this->accessor->setValue(
+            $user,
             $this->getAccessTokenProperty($serviceName),
-            $response->getAccessToken());
+            $response->getAccessToken()
+        );
 
         return $user;
     }
@@ -141,18 +148,23 @@ class LibreCoresUserProvider implements UserProviderInterface,
         // to this OAuth account.
         $previousUser = $this->userManager->findUserByOAuth(
             $serviceName,
-            $oAuthUserId);
+            $oAuthUserId
+        );
         if ($previousUser !== null) {
             $this->disconnect($previousUser, $serviceName);
         }
 
         // Connect the OAuth account to the LibreCores user
-        $this->accessor->setValue($user,
+        $this->accessor->setValue(
+            $user,
             $this->getAccessTokenProperty($serviceName),
-            $response->getAccessToken());
-        $this->accessor->setValue($user,
+            $response->getAccessToken()
+        );
+        $this->accessor->setValue(
+            $user,
             $this->getUserIdProperty($serviceName),
-            $response->getUsername());
+            $response->getUsername()
+        );
         $this->userManager->updateUser($user);
     }
 
@@ -160,16 +172,20 @@ class LibreCoresUserProvider implements UserProviderInterface,
      * Disconnect an OAuth service from a user account
      *
      * @param UserInterface $user
-     * @param string $serviceName
+     * @param string        $serviceName
      */
     public function disconnect(UserInterface $user, $serviceName)
     {
-        $this->accessor->setValue($user,
+        $this->accessor->setValue(
+            $user,
             $this->getAccessTokenProperty($serviceName),
-            null);
-        $this->accessor->setValue($user,
+            null
+        );
+        $this->accessor->setValue(
+            $user,
             $this->getUserIdProperty($serviceName),
-            null);
+            null
+        );
 
         $this->userManager->updateUser($user);
     }
@@ -187,6 +203,41 @@ class LibreCoresUserProvider implements UserProviderInterface,
         }
 
         return $user;
+    }
+
+    /**
+     * Get the user id property for a given response
+     *
+     * @param string $serviceName
+     *
+     * @return string
+     */
+    public function getUserIdProperty(string $serviceName)
+    {
+        return strtolower($serviceName).'OAuthUserId';
+    }
+
+    /**
+     * Get the access token property for a given response
+     *
+     * @param string $serviceName
+     *
+     * @return string
+     */
+    public function getAccessTokenProperty(string $serviceName)
+    {
+        return strtolower($serviceName).'OAuthAccessToken';
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see \Symfony\Component\Security\Core\User\UserProviderInterface::supportsClass()
+     */
+    public function supportsClass($class)
+    {
+        $userClass = $this->userManager->getClass();
+
+        return $userClass === $class || is_subclass_of($class, $userClass);
     }
 
     /**
@@ -209,7 +260,9 @@ class LibreCoresUserProvider implements UserProviderInterface,
      * failed.
      *
      * @param UserResponseInterface $response
+     *
      * @throws OAuthUserLinkingException
+     *
      * @return User
      *
      * @see OAuthRegistrationListener
@@ -226,12 +279,16 @@ class LibreCoresUserProvider implements UserProviderInterface,
         // create a random default password
         $user->setPlainPassword(base64_encode(random_bytes(50)));
         $user->setEnabled(true);
-        $this->accessor->setValue($user,
+        $this->accessor->setValue(
+            $user,
             $this->getAccessTokenProperty($serviceName),
-            $response->getAccessToken());
-        $this->accessor->setValue($user,
+            $response->getAccessToken()
+        );
+        $this->accessor->setValue(
+            $user,
             $this->getUserIdProperty($serviceName),
-            $response->getUsername());
+            $response->getUsername()
+        );
 
         // validate newly created user entity
         $errors = $this->validator->validate($user, null, 'Registration');
@@ -250,18 +307,20 @@ class LibreCoresUserProvider implements UserProviderInterface,
             $errorMsgs .= '</ul>';
             // the flash message is shown on top of the registration form
             // to which we forward, informing the user about what went wrong
-            $this->session->getFlashBag()->add('warning',
+            $this->session->getFlashBag()->add(
+                'warning',
                 '<p>We were unable to create a new account for you '.
                 'automatically. '.
                 'Please register on LibreCores first, you can then log in '.
                 'through '.ucfirst($serviceName).' as you just tried to.</p>'.
-                '<p>We encountered the following problems: </p>'.$errorMsgs);
+                '<p>We encountered the following problems: </p>'.$errorMsgs
+            );
 
             // Throwing this exception effectively forwards the user to the
             // registration form, which has event handlers attached which read
             // the oAuthData created below.
             // See OAuthRegistrationListener if you make changes to this code!
-            $e = new OAuthUserLinkingException((string)$errors);
+            $e = new OAuthUserLinkingException((string) $errors);
             $oAuthData = [];
             $oAuthData['oAuthServiceName'] = $serviceName;
             $oAuthData['oAuthUserId'] = $response->getUsername();
@@ -275,38 +334,7 @@ class LibreCoresUserProvider implements UserProviderInterface,
 
         // if User is valid, save and return
         $this->userManager->updateUser($user);
+
         return $user;
-    }
-
-    /**
-     * Get the user id property for a given response
-     *
-     * @param string $serviceName
-     * @return string
-     */
-    public function getUserIdProperty(string $serviceName)
-    {
-        return strtolower($serviceName).'OAuthUserId';
-    }
-
-    /**
-     * Get the access token property for a given response
-     *
-     * @param string $serviceName
-     * @return string
-     */
-    public function getAccessTokenProperty(string $serviceName)
-    {
-        return strtolower($serviceName).'OAuthAccessToken';
-    }
-
-    /**
-     * {@inheritDoc}
-     * @see \Symfony\Component\Security\Core\User\UserProviderInterface::supportsClass()
-     */
-    public function supportsClass($class)
-    {
-        $userClass = $this->userManager->getClass();
-        return $userClass === $class || is_subclass_of($class, $userClass);
     }
 }

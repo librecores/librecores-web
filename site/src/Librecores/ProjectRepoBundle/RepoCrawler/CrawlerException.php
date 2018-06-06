@@ -2,7 +2,6 @@
 
 namespace Librecores\ProjectRepoBundle\RepoCrawler;
 
-
 use Librecores\ProjectRepoBundle\Entity\SourceRepo;
 use Throwable;
 
@@ -12,20 +11,25 @@ class CrawlerException extends \Exception
 
     /**
      * CrawlerException constructor.
-     * @param SourceRepo $repository repository on which the crawl error occured
-     * @param string $message the error message
-     * @param int $code error code, if available
-     * @param Throwable|null $previous the error/exception that
-     *                                 resulted this exception
+     * @param SourceRepo     $repository repository on which the crawl error occured
+     * @param string         $message    the error message
+     * @param int            $code       error code, if available
+     * @param Throwable|null $previous   the error/exception that
+     *                                   resulted this exception
      */
-    public function __construct(SourceRepo $repository, $message = "",
-                                $code = 0, Throwable $previous = null)
-    {
+    public function __construct(
+        SourceRepo $repository,
+        $message = "",
+        $code = 0,
+        Throwable $previous = null
+    ) {
         $this->repository = $repository;
-        parent::__construct('Error during crawling repository '
-                            .$repository->getUrl()
-                            .' '.$message, $code, $previous);
-
+        parent::__construct(
+            'Error during crawling repository '.$repository->getUrl()
+            .' '.$message,
+            $code,
+            $previous
+        );
     }
 
     /**
@@ -36,5 +40,4 @@ class CrawlerException extends \Exception
     {
         return $this->repository;
     }
-
 }

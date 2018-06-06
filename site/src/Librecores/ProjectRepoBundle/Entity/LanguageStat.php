@@ -42,6 +42,7 @@ class LanguageStat
     /**
      * Set language
      * @param string $language
+     *
      * @return LanguageStat
      */
     public function setLanguage(string $language)
@@ -63,6 +64,7 @@ class LanguageStat
     /**
      * Set fileCount
      * @param int $fileCount
+     *
      * @return LanguageStat
      */
     public function setFileCount(int $fileCount)
@@ -82,6 +84,7 @@ class LanguageStat
 
     /**
      * @param int $linesOfCode
+     *
      * @return LanguageStat
      */
     public function setLinesOfCode(int $linesOfCode)
@@ -101,6 +104,7 @@ class LanguageStat
 
     /**
      * @param int $commentLineCount
+     *
      * @return LanguageStat
      */
     public function setCommentLineCount(int $commentLineCount)
@@ -120,6 +124,7 @@ class LanguageStat
 
     /**
      * @param int $blankLineCount
+     *
      * @return LanguageStat
      */
     public function setBlankLineCount(int $blankLineCount)

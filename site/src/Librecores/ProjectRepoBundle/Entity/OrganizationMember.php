@@ -22,7 +22,7 @@ class OrganizationMember
     const PERMISSION_ADMIN   = 'ADMIN';
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -32,6 +32,7 @@ class OrganizationMember
 
     /**
      * @var Organization
+     *
      * @ORM\ManyToOne(targetEntity="Organization", inversedBy="members")
      * @ORM\JoinColumn(name="organizationId", referencedColumnName="id", nullable=FALSE)
      */
@@ -49,6 +50,7 @@ class OrganizationMember
      * @var string
      *
      * @Assert\Choice(choices = {"REQUEST", "DENY", "SUPPORT", "MEMBER", "ADMIN"})
+     *
      * @ORM\Column(type="string")
      */
     protected $permission = self::PERMISSION_REQUEST;
@@ -58,6 +60,7 @@ class OrganizationMember
      * When was this mapping created?
      *
      * @var \DateTime
+     *
      * @ORM\Column(type="datetime")
      */
     protected $createdAt;
@@ -66,6 +69,7 @@ class OrganizationMember
      * When was this mapping last updated?
      *
      * @var \DateTime
+     *
      * @ORM\Column(type="datetime")
      */
     protected $updatedAt;
@@ -73,7 +77,6 @@ class OrganizationMember
 
     public function __construct()
     {
- 
     }
 
     /**
@@ -83,8 +86,8 @@ class OrganizationMember
      */
     public function prePersist()
     {
-        $this->createdAt = new \DateTime;
-        $this->updatedAt = new \DateTime;
+        $this->createdAt = new \DateTime();
+        $this->updatedAt = new \DateTime();
     }
 
     /**
@@ -94,7 +97,7 @@ class OrganizationMember
      */
     public function preUpdate()
     {
-        $this->updatedAt = new \DateTime;
+        $this->updatedAt = new \DateTime();
     }
 
     /**
@@ -111,6 +114,7 @@ class OrganizationMember
      * Set user
      *
      * @param User $user
+     *
      * @return OrganizationMember
      */
     public function setUser(User $user = null)
@@ -142,6 +146,7 @@ class OrganizationMember
     * Set organization
     *
     * @param Organization $organization
+    *
     * @return OrganizationMember
     */
     public function setOrganization(Organization $organization = null)
@@ -173,15 +178,19 @@ class OrganizationMember
      * Set permission
      *
      * @param string $permission One of the self::PERMISSION_* constants
+     *
      * @throws \InvalidArgumentException
      */
     public function setPermission($permission)
     {
-        if (!in_array($permission, [self::PERMISSION_REQUEST,
-                                    self::PERMISSION_DENY,
-                                    self::PERMISSION_SUPPORT,
-                                    self::PERMISSION_MEMBER,
-                                    self::PERMISSION_ADMIN], false)) {
+        $permissions = [
+            self::PERMISSION_REQUEST,
+            self::PERMISSION_DENY,
+            self::PERMISSION_SUPPORT,
+            self::PERMISSION_MEMBER,
+            self::PERMISSION_ADMIN,
+        ];
+        if (!in_array($permission, $permissions, false)) {
             throw new \InvalidArgumentException('Invalid Permission');
         }
 
@@ -206,6 +215,7 @@ class OrganizationMember
      * Set createdAt
      *
      * @param \DateTime $createdAt
+     *
      * @return OrganizationMember
      */
     public function setCreatedAt($createdAt)
@@ -229,6 +239,7 @@ class OrganizationMember
      * Set updatedAt
      *
      * @param \DateTime $updatedAt
+     *
      * @return OrganizationMember
      */
     public function setUpdatedAt($updatedAt)

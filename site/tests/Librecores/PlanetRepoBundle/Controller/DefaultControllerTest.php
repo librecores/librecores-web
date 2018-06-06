@@ -2,7 +2,6 @@
 
 namespace Tests\Librecores\ProjectRepoBundle\Controller;
 
-
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityRepository;
 use FOS\UserBundle\Doctrine\UserManager;
@@ -33,9 +32,9 @@ class DefaultControllerTest extends WebTestCase
         $this->assertEquals($client->getResponse()->getStatusCode(), 200);
 
         // ensure header contains user's name
-        $this->assertEquals($crawler->filter('.librecores-user-page-header > h1')->eq(0)->text(),'test');
+        $this->assertEquals($crawler->filter('.librecores-user-page-header > h1')->eq(0)->text(), 'test');
 
         $crawler = $client->request('GET', '/openrisc');
-        $this->assertEquals($crawler->filter('html body div#maincontent.container h1')->text(),'openrisc : OpenRISC');
+        $this->assertEquals($crawler->filter('html body div#maincontent.container h1')->text(), 'openrisc : OpenRISC');
     }
 }

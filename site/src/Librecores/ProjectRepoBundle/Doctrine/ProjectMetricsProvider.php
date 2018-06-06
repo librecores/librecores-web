@@ -35,14 +35,13 @@ class ProjectMetricsProvider
 
     /**
      * DefaultMetadataManager constructor.
-     * @param CommitRepository $commitRepository
+     * @param CommitRepository      $commitRepository
      * @param ContributorRepository $contributorRepository
      */
     public function __construct(
         CommitRepository $commitRepository,
         ContributorRepository $contributorRepository
-    )
-    {
+    ) {
         $this->commitRepository      = $commitRepository;
         $this->contributorRepository = $contributorRepository;
     }
@@ -53,6 +52,7 @@ class ProjectMetricsProvider
      * Invalidates all caches and reloads the data from the database.
      *
      * @param Project $project
+     *
      * @return bool
      */
     public function refreshMetadata(Project $project): bool
@@ -64,6 +64,7 @@ class ProjectMetricsProvider
     /**
      * Fetch the commits in a given project
      * @param Project $project
+     *
      * @return array
      */
     public function getCommits(Project $project): array
@@ -77,6 +78,7 @@ class ProjectMetricsProvider
      * Fetch the number of commits in a given project
      *
      * @param Project $project
+     *
      * @return int
      */
     public function getCommitCount(Project $project): int
@@ -90,6 +92,7 @@ class ProjectMetricsProvider
      * Get the latest commit recorded in meta-data storage
      *
      * @param Project $project
+     *
      * @return Commit
      */
     public function getLatestCommit(Project $project): ?Commit
@@ -103,9 +106,10 @@ class ProjectMetricsProvider
      * Get first commit recorded in meta-data storage
      *
      * @param Project $project
+     *
      * @return Commit
      */
-    function getFirstCommit(Project $project): ?Commit
+    public function getFirstCommit(Project $project): ?Commit
     {
         return $this->commitRepository->getFirstCommit(
             $project->getSourceRepo()
@@ -116,6 +120,7 @@ class ProjectMetricsProvider
      * Get the contributors to a project
      *
      * @param Project $project
+     *
      * @return array
      */
     public function getContributors(Project $project): array
@@ -129,6 +134,7 @@ class ProjectMetricsProvider
      * Get the total number of contributors to a project
      *
      * @param Project $project
+     *
      * @return int
      */
     public function getContributorsCount(Project $project): int
@@ -144,7 +150,8 @@ class ProjectMetricsProvider
      * Contributors are chosen as per number of commits, lines added and deleted
      *
      * @param Project $project
-     * @param int $count
+     * @param int     $count
+     *
      * @return array
      */
     public function getTopContributors(Project $project, int $count = 5): array
@@ -159,6 +166,7 @@ class ProjectMetricsProvider
      * Get the number of commits by a project contributor
      *
      * @param Contributor $contributor
+     *
      * @return int
      */
     public function getCommitCountForContributor(Contributor $contributor): int
@@ -171,12 +179,13 @@ class ProjectMetricsProvider
     /**
      * Get a histogram of commits over a range of dates
      *
-     * @param Project $project
-     * @param int $bucket one of the constants 'INTERVAL_DAY', 'INTERVAL_WEEK'
-     *                    'INTERVAL_MONTH', 'INTERVAL_YEAR', which specifies
-     *                     the histogram bucket size
-     * @param \DateTimeImmutable $start start date of commits
-     * @param \DateTimeImmutable $end end date of commits
+     * @param Project            $project
+     * @param int                $bucket  one of the constants 'INTERVAL_DAY', 'INTERVAL_WEEK'
+     *                                    'INTERVAL_MONTH', 'INTERVAL_YEAR', which specifies
+     *                                    the histogram bucket size
+     * @param \DateTimeImmutable $start   start date of commits
+     * @param \DateTimeImmutable $end     end date of commits
+     *
      * @return array associative array of a time span index and commits in that
      *               time span
      */
@@ -185,25 +194,28 @@ class ProjectMetricsProvider
         int $bucket,
         \DateTimeImmutable $start = null,
         \DateTimeImmutable $end = null
-    ): array
-    {
+    ): array {
         // TODO: This function needs some form of caching
         // aggregation queries in mysql are very expensive, this function
         // will never use an index and always perform a full table scan
         return $this->commitRepository->getCommitHistogram(
-            $project->getSourceRepo(), $bucket, $start, $end
+            $project->getSourceRepo(),
+            $bucket,
+            $start,
+            $end
         );
     }
 
     /**
      * Get a histogram of contributors over a range of dates
      *
-     * @param Project $project
-     * @param int $bucket one of the constants 'INTERVAL_DAY', 'INTERVAL_WEEK'
-     *                    'INTERVAL_MONTH', 'INTERVAL_YEAR', which specifies
-     *                     the histogram bucket size
-     * @param \DateTimeImmutable $start start date of commits
-     * @param \DateTimeImmutable $end end date of commits
+     * @param Project            $project
+     * @param int                $bucket  one of the constants 'INTERVAL_DAY', 'INTERVAL_WEEK'
+     *                                    'INTERVAL_MONTH', 'INTERVAL_YEAR', which specifies
+     *                                    the histogram bucket size
+     * @param \DateTimeImmutable $start   start date of commits
+     * @param \DateTimeImmutable $end     end date of commits
+     *
      * @return array associative array of a time span index and commits in that
      *               time span
      */
@@ -212,20 +224,22 @@ class ProjectMetricsProvider
         int $bucket,
         \DateTimeImmutable $start = null,
         \DateTimeImmutable $end = null
-    ): array
-    {
+    ): array {
         // TODO: This function needs some form of caching
         // aggregation queries in mysql are very expensive, this function
         // will never use an index and always perform a full table scan
         return $this->commitRepository->getCommitContributorHistogram(
-            $project->getSourceRepo(), $bucket, $start, $end
+            $project->getSourceRepo(),
+            $bucket,
+            $start,
+            $end
         );
     }
 
     /**
      * Get the major languages used in a project
      *
-     * @param $project
+     * @param Project $project
      *
      * @return array[string]
      */
@@ -274,6 +288,7 @@ class ProjectMetricsProvider
      * http://www.librecores.org/static/docs/code-quality
      *
      * @param Project $project
+     *
      * @return float
      */
     public function getCodeQualityScore(Project $project): float
@@ -300,9 +315,9 @@ class ProjectMetricsProvider
 
             if ($difference->days < 30) {
                 $score += 2;
-            } else if ($difference->y < 1) {
+            } elseif ($difference->y < 1) {
                 $score += 1;
-            } else if ($difference->y < 3) {
+            } elseif ($difference->y < 3) {
                 $score += 0.25;
             } else {
                 $score -= -0.25;
@@ -326,9 +341,9 @@ class ProjectMetricsProvider
         $contributors = $this->getContributorsCount($project);
         if ($contributors > 20) {
             $score += 3;
-        } else if ($contributors > 8) {
+        } elseif ($contributors > 8) {
             $score += 1;
-        } else if ($contributors > 3) {
+        } elseif ($contributors > 3) {
             $score += 0.5;
         } else {
             $score -= 1;
@@ -348,9 +363,9 @@ class ProjectMetricsProvider
 
         if ($stars > 10000) {
             $score += 2.5;
-        } else if ($stars > 1000) {
+        } elseif ($stars > 1000) {
             $score += 1;
-        } else if ($stars > 100) {
+        } elseif ($stars > 100) {
             $score += 0.5;
         }
 
@@ -441,6 +456,7 @@ class ProjectMetricsProvider
      * returned as the value for start.
      *
      * @param Project $project
+     *
      * @return array average rate of change of number of commits
      *          in three phases - start, mid, end. Value of the
      *          phases that have not been calculated is 0
@@ -448,11 +464,12 @@ class ProjectMetricsProvider
     public function getPhaseWiseAverageRateOfChangeOfCommits(Project $project)
     {
         $yearlyCommitCount =
-            array_values($this->commitRepository->getCommitHistogram($project->getSourceRepo(),
-                                                                     Dates::INTERVAL_YEAR));
+            array_values($this->commitRepository->getCommitHistogram(
+                $project->getSourceRepo(),
+                Dates::INTERVAL_YEAR
+            ));
 
         if (empty($yearlyCommitCount)) {
-
             return [
                 'start' => -1,
                 'mid' => -1,
@@ -464,17 +481,23 @@ class ProjectMetricsProvider
 
         // It makes sense to divide a 6 year old project not a young project
         if ($yearsWithCommits >= 6) {
-            list($start, $mid, $end) = array_chunk($yearlyCommitCount,
-                                                   ceil(count($yearlyCommitCount) / 3));
+            list($start, $mid, $end) = array_chunk(
+                $yearlyCommitCount,
+                ceil(count($yearlyCommitCount) / 3)
+            );
 
             return [
                 'start' => StatsUtil::averageRateOfChange($start),
                 'mid' => StatsUtil::averageRateOfChange($mid),
                 'end' => StatsUtil::averageRateOfChange($end),
             ];
-        } else if ($yearsWithCommits > 2) {
-            list($start, $mid) = array_chunk($yearlyCommitCount,
-                                             ceil(count($yearlyCommitCount) / 2));
+        }
+
+        if ($yearsWithCommits > 2) {
+            list($start, $mid) = array_chunk(
+                $yearlyCommitCount,
+                ceil(count($yearlyCommitCount) / 2)
+            );
 
             return [
                 'start' => StatsUtil::averageRateOfChange($start),
@@ -501,22 +524,20 @@ class ProjectMetricsProvider
      * for start.
      *
      * @param Project $project
+     *
      * @return array averages in three phases - start,
      *          mid, end. Value of the phases that have not been
      *          calculated is 0
-     * @param Project $project
-     * @return array average number of commits in three phases -
-     *          start, mid, end. Value of the phases that have
-     *          not been calculated is 0
      */
     public function getPhaseWiseAverageCommitCount(Project $project)
     {
         $yearlyCommitCount =
-            array_values($this->commitRepository->getCommitHistogram($project->getSourceRepo(),
-                                                                     Dates::INTERVAL_YEAR));
+            array_values($this->commitRepository->getCommitHistogram(
+                $project->getSourceRepo(),
+                Dates::INTERVAL_YEAR
+            ));
 
         if (empty($yearlyCommitCount)) {
-
             return [
                 'start' => 0,
                 'mid' => 0,
@@ -528,17 +549,23 @@ class ProjectMetricsProvider
 
         // It makes sense to divide a 6 year old project not a young project
         if ($yearsWithCommits >= 6) {
-            list($start, $mid, $end) = array_chunk($yearlyCommitCount,
-                                                   ceil(count($yearlyCommitCount) / 3));
+            list($start, $mid, $end) = array_chunk(
+                $yearlyCommitCount,
+                ceil(count($yearlyCommitCount) / 3)
+            );
 
             return [
                 'start' => StatsUtil::average($start),
                 'mid' => StatsUtil::average($mid),
                 'end' => StatsUtil::average($end),
             ];
-        } else if ($yearsWithCommits > 2) {
-            list($start, $mid) = array_chunk($yearlyCommitCount,
-                                             ceil(count($yearlyCommitCount) / 2));
+        }
+
+        if ($yearsWithCommits > 2) {
+            list($start, $mid) = array_chunk(
+                $yearlyCommitCount,
+                ceil(count($yearlyCommitCount) / 2)
+            );
 
             return [
                 'start' => StatsUtil::average($start),
@@ -559,12 +586,15 @@ class ProjectMetricsProvider
      * through out the project lifetime.
      *
      * @param Project $project
+     *
      * @return float average rate of change of yearly contributors
      */
     public function getAverageRateOfChangeOfYearlyContributors(Project $project)
     {
-        $contributorsPerYear = array_values($this->getContributorHistogram($project,
-                                                                           Dates::INTERVAL_YEAR));
+        $contributorsPerYear = array_values($this->getContributorHistogram(
+            $project,
+            Dates::INTERVAL_YEAR
+        ));
 
         return StatsUtil::averageRateOfChange($contributorsPerYear);
     }
@@ -573,6 +603,7 @@ class ProjectMetricsProvider
      * Get the average rate of change of commits per year.
      *
      * @param Project $project
+     *
      * @return float average rate of change of commits
      */
     public function getAverageRateOfChangeOfCommits(Project $project)
@@ -580,7 +611,5 @@ class ProjectMetricsProvider
         $commits = array_values($this->getCommitHistogram($project, Dates::INTERVAL_YEAR));
 
         return StatsUtil::averageRateOfChange($commits);
-
     }
-
 }

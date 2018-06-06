@@ -63,13 +63,14 @@ class GithubApiService
      * All requests are cached in the given cache pool.
      *
      * @param TokenStorageInterface $tokenStorage token storage service
-     * @param AdapterInterface $cachePool the cache pool to use for all requests
-     * @param RouterInterface $router
+     * @param AdapterInterface      $cachePool    the cache pool to use for all requests
+     * @param RouterInterface       $router
      */
-    public function __construct(TokenStorageInterface $tokenStorage,
-                                AdapterInterface $cachePool,
-                                RouterInterface $router)
-    {
+    public function __construct(
+        TokenStorageInterface $tokenStorage,
+        AdapterInterface $cachePool,
+        RouterInterface $router
+    ) {
         $token = $tokenStorage->getToken();
         if (null !== $token) {
             $this->user = $token->getUser();
@@ -113,6 +114,7 @@ class GithubApiService
         if ($this->clientIsAuthenticated) {
             return $this->client;
         }
+
         return null;
     }
 
@@ -127,18 +129,22 @@ class GithubApiService
      * account), NULL is returned.
      *
      * @param User $user
+     *
      * @return Github\Client|NULL an authenticated GitHub client, or NULL
      */
     public function getAuthenticatedClientForUser(User $user)
     {
-        $client= new Github\Client();
+        $client = new Github\Client();
         $client->addCache($this->cachePool);
 
         // try to authenticate as user with its access token
         if (null !== $user && $user->isConnectedToOAuthService('github')) {
             $oauthAccessToken = $user->getGithubOAuthAccessToken();
-            $client->authenticate($oauthAccessToken, null,
-                                  Github\Client::AUTH_URL_TOKEN);
+            $client->authenticate(
+                $oauthAccessToken,
+                null,
+                Github\Client::AUTH_URL_TOKEN
+            );
 
             return $client;
         }
@@ -146,36 +152,19 @@ class GithubApiService
         return null;
     }
 
-    /**
-     * Initialize the client
-     *
-     * @return boolean
-     */
-    protected function initClient()
-    {
-        $this->client = $this->getAuthenticatedClientForUser($this->user);
-
-        if (null !== $this->client) {
-            $this->clientIsAuthenticated = true;
-        } else {
-            $this->client = new Github\Client();
-            $this->client->addCache($this->cachePool);
-            $this->clientIsAuthenticated = false;
-        }
-        return true;
-    }
-
 
     /**
      * Populate a Project with data obtained from the GitHub API
      *
      * @param Project $project
-     * @param string $owner
-     * @param string $repo
+     * @param string  $owner
+     * @param string  $repo
      */
-    public function populateProject(Project $project, string $owner,
-                                    string $repo)
-    {
+    public function populateProject(
+        Project $project,
+        string $owner,
+        string $repo
+    ) {
         $repo = $this->getClient()->repo()->show($owner, $repo);
 
         if ($repo['has_issues']) {
@@ -200,8 +189,8 @@ class GithubApiService
      * Install a webhook on a GitHub repository for a given project
      *
      * @param Project $project
-     * @param string $owner
-     * @param string $repo
+     * @param string  $owner
+     * @param string  $repo
      */
     public function installHook(Project $project, string $owner, string $repo)
     {
@@ -209,7 +198,7 @@ class GithubApiService
             'librecores_project_repo_project_update',
             [
                 'parentName' => $project->getParentName(),
-                'projectName' => $project->getName()
+                'projectName' => $project->getName(),
             ],
             RouterInterface::ABSOLUTE_URL
         );
@@ -225,5 +214,25 @@ class GithubApiService
 
         $this->getAuthenticatedClient()->repo()
             ->hooks()->create($owner, $repo, $params);
+    }
+
+    /**
+     * Initialize the client
+     *
+     * @return boolean
+     */
+    protected function initClient()
+    {
+        $this->client = $this->getAuthenticatedClientForUser($this->user);
+
+        if (null !== $this->client) {
+            $this->clientIsAuthenticated = true;
+        } else {
+            $this->client = new Github\Client();
+            $this->client->addCache($this->cachePool);
+            $this->clientIsAuthenticated = false;
+        }
+
+        return true;
     }
 }

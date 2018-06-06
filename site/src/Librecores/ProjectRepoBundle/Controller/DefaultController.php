@@ -24,33 +24,10 @@ class DefaultController extends Controller
     }
 
     /**
-     * Get an user or organization entity with the given name
-     *
-     * @param string $userOrOrgName
-     * @return User|Organization|null user or organization entity, or null if
-     *   no entity with the given name exists.
-     */
-    private function getUserOrOrg($userOrOrganization) {
-        // try user first
-        $user = $this->getDoctrine()
-                     ->getRepository('LibrecoresProjectRepoBundle:User')
-                     ->findOneByUsername($userOrOrganization);
-
-        if ($user !== null) {
-            return $user;
-        }
-
-        // then organization
-        $org = $this->getDoctrine()
-                    ->getRepository('LibrecoresProjectRepoBundle:Organization')
-                    ->findOneByName($userOrOrganization);
-        return $org;
-    }
-
-    /**
      * Display a user or an organization
      *
      * @param string $userOrOrganization
+     *
      * @return Response
      */
     public function userOrgViewAction($userOrOrganization)
@@ -58,12 +35,16 @@ class DefaultController extends Controller
         $uoo = $this->getUserOrOrg($userOrOrganization);
 
         if ($uoo instanceof User) {
-            return $this->forward('LibrecoresProjectRepoBundle:User:view',
-                array('user' => $uoo));
+            return $this->forward(
+                'LibrecoresProjectRepoBundle:User:view',
+                array('user' => $uoo)
+            );
         }
         if ($uoo instanceof Organization) {
-            return $this->forward('LibrecoresProjectRepoBundle:Organization:view',
-                array('organization' => $uoo));
+            return $this->forward(
+                'LibrecoresProjectRepoBundle:Organization:view',
+                array('organization' => $uoo)
+            );
         }
 
         // and 404 if it's neither
@@ -74,7 +55,8 @@ class DefaultController extends Controller
      * Display the organization settings page
      *
      * @param Request $request
-     * @param string $organizationName name of the organization
+     * @param string  $userOrOrganization name of the organization
+     *
      * @return Response
      */
     public function userOrgSettingsAction(Request $request, $userOrOrganization)
@@ -82,16 +64,21 @@ class DefaultController extends Controller
         $uoo = $this->getUserOrOrg($userOrOrganization);
 
         if ($uoo instanceof User) {
-            if ($uoo->getId() != $this->getUser()->getId()) {
+            if ($uoo->getId() !== $this->getUser()->getId()) {
                 throw $this->createAccessDeniedException();
             }
-            return $this->forward('LibrecoresProjectRepoBundle:User:profileSettings',
-                array('user' => $userOrOrganization));
+
+            return $this->forward(
+                'LibrecoresProjectRepoBundle:User:profileSettings',
+                array('user' => $userOrOrganization)
+            );
         }
 
         if ($uoo instanceof Organization) {
-            return $this->forward('LibrecoresProjectRepoBundle:Organization:settings',
-                array('organization' => $uoo));
+            return $this->forward(
+                'LibrecoresProjectRepoBundle:Organization:settings',
+                array('organization' => $uoo)
+            );
         }
 
         // and 404 if it's neither
@@ -102,6 +89,7 @@ class DefaultController extends Controller
      * Search for a project
      *
      * @param Request $req
+     *
      * @return Response
      */
     public function searchAction(Request $req)
@@ -112,10 +100,10 @@ class DefaultController extends Controller
             'label' => 'Users',
         ));
         $searchQueryForm->add('search_projects', SubmitType::class, array(
-            'label' => 'Projects'
+            'label' => 'Projects',
         ));
         $searchQueryForm->add('search_orgs', SubmitType::class, array(
-            'label' => 'Organizations'
+            'label' => 'Organizations',
         ));
         $searchQueryForm->handleRequest($req);
 
@@ -143,20 +131,24 @@ class DefaultController extends Controller
             $redirect = true;
         }
         if ($redirect) {
-            return $this->redirectToRoute($req->get('_route'),
-                [ 'q' => $searchQuery->getQ(), 'type' => $searchQuery->getType()]);
+            return $this->redirectToRoute(
+                $req->get('_route'),
+                [ 'q' => $searchQuery->getQ(), 'type' => $searchQuery->getType()]
+            );
         }
 
         // No query string given: no search necessary
         if (empty($searchQuery->getQ())) {
-            return $this->render('LibrecoresProjectRepoBundle:Default:project_search.html.twig',
+            return $this->render(
+                'LibrecoresProjectRepoBundle:Default:project_search.html.twig',
                 [
                     'search_query_form' => $searchQueryForm->createView(),
                     'search_query' => $searchQuery,
                     'projects' => [],
                     'users' => [],
                     'orgs' => [],
-                ]);
+                ]
+            );
         }
 
         // Get the results
@@ -165,33 +157,35 @@ class DefaultController extends Controller
         $orgs = array();
 
         // Search for projects
-        if ($searchQuery->getType() == SearchQuery::TYPE_PROJECTS) {
+        if ($searchQuery->getType() === SearchQuery::TYPE_PROJECTS) {
             $projects = $this->getDoctrine()
                 ->getRepository('LibrecoresProjectRepoBundle:Project')
                 ->findByFqnameFragment($searchQuery->getQ());
         }
 
         // Search for users
-        if ($searchQuery->getType() == SearchQuery::TYPE_USERS) {
+        if ($searchQuery->getType() === SearchQuery::TYPE_USERS) {
             $userManager = $this->get('fos_user.user_manager');
             $users = $userManager->findUsersBySearchString($searchQuery->getQ());
         }
 
         // Search for organizations
-        if ($searchQuery->getType() == SearchQuery::TYPE_ORGS) {
+        if ($searchQuery->getType() === SearchQuery::TYPE_ORGS) {
             $orgs = $this->getDoctrine()
                 ->getRepository('LibrecoresProjectRepoBundle:Organization')
                 ->findByFragment($searchQuery->getQ());
         }
 
-        return $this->render('LibrecoresProjectRepoBundle:Default:project_search.html.twig',
+        return $this->render(
+            'LibrecoresProjectRepoBundle:Default:project_search.html.twig',
             [
                 'search_query_form' => $searchQueryForm->createView(),
                 'search_query' => $searchQuery,
                 'projects' => $projects,
                 'users' => $users,
                 'orgs' => $orgs,
-            ]);
+            ]
+        );
     }
 
 
@@ -203,5 +197,32 @@ class DefaultController extends Controller
         $url = str_replace($pathInfo, rtrim($pathInfo, ' /'), $requestUri);
 
         return $this->redirect($url, 301);
+    }
+
+    /**
+     * Get an user or organization entity with the given name
+     *
+     * @param string $userOrOrganization
+     *
+     * @return User|Organization|null user or organization entity, or null if
+     *   no entity with the given name exists.
+     */
+    private function getUserOrOrg($userOrOrganization)
+    {
+        // try user first
+        $user = $this->getDoctrine()
+        ->getRepository('LibrecoresProjectRepoBundle:User')
+        ->findOneByUsername($userOrOrganization);
+
+        if ($user !== null) {
+            return $user;
+        }
+
+        // then organization
+        $org = $this->getDoctrine()
+        ->getRepository('LibrecoresProjectRepoBundle:Organization')
+        ->findOneByName($userOrOrganization);
+
+        return $org;
     }
 }

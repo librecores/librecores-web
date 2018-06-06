@@ -16,20 +16,29 @@ class ProjectType extends AbstractType
         $builder
             ->add('displayName', TextType::class, array('label' => 'Display name', 'required' => false))
             ->add('tagline', TextType::class, array('label' => 'Tagline', 'required' => false))
-            ->add('descriptionTextAutoUpdate', ChoiceType::class, array(
-                'choices' => array(
-                    'Extract the project description out of the README file in the source code.' => true,
-                    'Enter the project description here.' => false
-                ),
-                'choices_as_values' => true,
-                'label' => 'Project Description',
-                'expanded' => true,
-                'multiple' => false))
+            ->add(
+                'descriptionTextAutoUpdate',
+                ChoiceType::class,
+                [
+                    'choices' => array(
+                        'Extract the project description out of the README file in the source code.' => true,
+                        'Enter the project description here.' => false,
+                    ),
+                    'choices_as_values' => true,
+                    'label' => 'Project Description',
+                    'expanded' => true,
+                    'multiple' => false,
+                ]
+            )
             ->add('descriptionText', PurifiedTextareaType::class, array('label' => false, 'required' => false))
             ->add('projectUrl', UrlType::class, array('label' => 'Project URL', 'required' => false))
             ->add('issueTracker', UrlType::class, array('label' => 'Issue/Bug Tracker URL', 'required' => false))
             ->add('sourceRepo', SourceRepoType::class)
-            ->add('licenseName', TextType::class, array('label' => 'License Name (such as GPL or MIT)', 'required' => false))
+            ->add(
+                'licenseName',
+                TextType::class,
+                array('label' => 'License Name (such as GPL or MIT)', 'required' => false)
+            )
             ->add('licenseTextAutoUpdate', ChoiceType::class, array(
                 'choices' => array(
                     'Extract the full license text out of the LICENSE file in the source code.' => true,
@@ -38,7 +47,7 @@ class ProjectType extends AbstractType
                 'choices_as_values' => true,
                 'label' => 'Full License Text',
                 'expanded' => true,
-                'multiple' => false))
+            'multiple' => false, ))
             ->add('licenseText', PurifiedTextareaType::class, array('label' => false, 'required' => false))
             ->add('save', SubmitType::class, array('label' => 'Update Project', 'attr' => ['class' => 'btn-primary']))
         ;

@@ -5,7 +5,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
-
 /**
  * A project
  *
@@ -18,6 +17,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * })
  * @ORM\Entity(repositoryClass="Librecores\ProjectRepoBundle\Repository\ProjectRepository")
  * @ORM\HasLifecycleCallbacks
+ *
  * @UniqueEntity(
  *     fields={"parentUser", "parentOrganization", "name"},
  *     errorPath="name",
@@ -33,7 +33,7 @@ class Project
     /**
      * Internal project ID
      *
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -47,6 +47,7 @@ class Project
      * @var string
      *
      * @Assert\Choice(choices = {"ASSIGNED", "UNASSIGNED"})
+     *
      * @ORM\Column(type="string", options={"default" : Project::STATUS_ASSIGNED})
      */
     private $status = self::STATUS_ASSIGNED;
@@ -83,6 +84,7 @@ class Project
      *
      * @Assert\Regex("/^[a-z][a-z0-9-]+$/")
      * @Assert\Length(min = 4, max = 30)
+     *
      * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
@@ -97,6 +99,7 @@ class Project
      *
      * @Assert\NotBlank
      * @Assert\Length(min = 5, max = 100)
+     *
      * @ORM\Column(name="displayName", type="string", length=100)
      */
     private $displayName;
@@ -110,6 +113,7 @@ class Project
      * @var string
      *
      * @Assert\Length(max = 140)
+     *
      * @ORM\Column(name="tagline", type="string", length=140, nullable=true)
      */
     private $tagline;
@@ -121,6 +125,7 @@ class Project
      *
      * @Assert\Length(max = 255)
      * @Assert\Url
+     *
      * @ORM\Column(name="projectUrl", type="string", length=255, nullable=true)
      */
     private $projectUrl;
@@ -132,6 +137,7 @@ class Project
      *
      * @Assert\Length(max = 255)
      * @Assert\Url
+     *
      * @ORM\Column(name="issueTracker", type="string", length=255, nullable=true)
      */
     private $issueTracker;
@@ -153,6 +159,7 @@ class Project
      * @var string
      *
      * @Assert\Length(max = 100)
+     *
      * @ORM\Column(type="string", nullable=true, length=100)
      */
     private $licenseName;
@@ -163,6 +170,7 @@ class Project
      * @var string
      *
      * @Assert\Length(max = 64000)
+     *
      * @ORM\Column(type="text", nullable=true, length=64000)
      */
     private $licenseText;
@@ -170,7 +178,7 @@ class Project
     /**
      * Update the license text automatically from the source code repository.
      *
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(type="boolean", options={"default" : true})
      */
@@ -182,6 +190,7 @@ class Project
      * @var string
      *
      * @Assert\Length(max = 64000)
+     *
      * @ORM\Column(type="text", nullable=true, length=64000)
      */
     private $descriptionText;
@@ -189,7 +198,7 @@ class Project
     /**
      * Update the description text automatically from the source code repository
      *
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(type="boolean", options={"default" : true})
      */
@@ -198,7 +207,7 @@ class Project
     /**
      * The project's data is currently being processed
      *
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(type="boolean", options={"default" : false})
      */
@@ -328,9 +337,9 @@ class Project
     {
         if ($this->parentUser !== null) {
             return $this->parentUser->getUsername();
-        } else {
-            return $this->parentOrganization->getName();
         }
+
+        return $this->parentOrganization->getName();
     }
 
     /**
@@ -347,6 +356,7 @@ class Project
      * Set the project status
      *
      * @param string $status one of the self::STATUS_* constants
+     *
      * @throws \InvalidArgumentException
      */
     public function setStatus($status)
@@ -379,12 +389,14 @@ class Project
      * Set parentUser
      *
      * @param User $parentUser
+     *
      * @return Project
      */
     public function setParentUser(User $parentUser = null)
     {
-        if ($this->parentUser !== null)
+        if ($this->parentUser !== null) {
             $this->parentUser->removeProject($this);
+        }
 
         if ($parentUser !== null) {
             $parentUser->addProject($this);
@@ -410,6 +422,7 @@ class Project
      * Set parentOrganization
      *
      * @param Organization $parentOrganization
+     *
      * @return Project
      */
     public function setParentOrganization(Organization $parentOrganization = null)
@@ -442,6 +455,7 @@ class Project
      * Set name
      *
      * @param string $name
+     *
      * @return Project
      */
     public function setName($name)
@@ -465,6 +479,7 @@ class Project
      * Set projectUrl
      *
      * @param string $projectUrl
+     *
      * @return Project
      */
     public function setProjectUrl($projectUrl)
@@ -488,6 +503,7 @@ class Project
      * Set issueTracker
      *
      * @param string $issueTracker
+     *
      * @return Project
      */
     public function setIssueTracker($issueTracker)
@@ -551,6 +567,7 @@ class Project
      * Set licenseName
      *
      * @param string $licenseName
+     *
      * @return Project
      */
     public function setLicenseName($licenseName)
@@ -574,6 +591,7 @@ class Project
      * Set licenseText
      *
      * @param string $licenseText
+     *
      * @return Project
      */
     public function setLicenseText($licenseText)
@@ -597,11 +615,12 @@ class Project
      * Set licenseTextAutoUpdate
      *
      * @param boolean $licenseTextAutoUpdate
+     *
      * @return Project
      */
     public function setLicenseTextAutoUpdate($licenseTextAutoUpdate)
     {
-        $this->licenseTextAutoUpdate = (bool)$licenseTextAutoUpdate;
+        $this->licenseTextAutoUpdate = (bool) $licenseTextAutoUpdate;
 
         return $this;
     }
@@ -620,6 +639,7 @@ class Project
      * Set descriptionText
      *
      * @param string $descriptionText
+     *
      * @return Project
      */
     public function setDescriptionText($descriptionText)
@@ -643,11 +663,12 @@ class Project
      * Set descriptionTextAutoUpdate
      *
      * @param boolean $descriptionTextAutoUpdate
+     *
      * @return Project
      */
     public function setDescriptionTextAutoUpdate($descriptionTextAutoUpdate)
     {
-        $this->descriptionTextAutoUpdate = (bool)$descriptionTextAutoUpdate;
+        $this->descriptionTextAutoUpdate = (bool) $descriptionTextAutoUpdate;
 
         return $this;
     }
@@ -666,6 +687,7 @@ class Project
      * Set inProcessing
      *
      * @param boolean $inProcessing
+     *
      * @return Project
      */
     public function setInProcessing($inProcessing)
@@ -689,6 +711,7 @@ class Project
      * Set tagline
      *
      * @param string $tagline
+     *
      * @return Project
      */
     public function setTagline($tagline)
@@ -712,6 +735,7 @@ class Project
      * Set dateAdded
      *
      * @param \DateTime $dateAdded
+     *
      * @return Project
      */
     public function setDateAdded($dateAdded)
@@ -735,6 +759,7 @@ class Project
      * Set dateLastModified
      *
      * @param \DateTime $dateLastModified
+     *
      * @return Project
      */
     public function setDateLastModified($dateLastModified)
@@ -758,6 +783,7 @@ class Project
      * Set dateLastActivityOccurred
      *
      * @param \DateTime $date
+     *
      * @return Project
      */
     public function setDateLastActivityOccurred($date)
@@ -781,6 +807,7 @@ class Project
      * Set sourceRepo
      *
      * @param \Librecores\ProjectRepoBundle\Entity\SourceRepo $sourceRepo
+     *
      * @return Project
      */
     public function setSourceRepo(\Librecores\ProjectRepoBundle\Entity\SourceRepo $sourceRepo = null)
@@ -958,6 +985,7 @@ class Project
      * Set releases
      *
      * @param ProjectRelease[] $releases
+     *
      * @return Project
      */
     public function setReleases(array $releases)

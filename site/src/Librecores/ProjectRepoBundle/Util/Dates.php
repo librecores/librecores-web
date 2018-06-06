@@ -66,5 +66,4 @@ class Dates
      * @var int
      */
     const INTERVAL_CUSTOM = 99999;
-
 }

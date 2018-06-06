@@ -47,13 +47,14 @@ class GithubRepoCrawler extends GitRepoCrawler
     private $githubRepoName;
     private $githubData;
 
-    public function __construct(SourceRepo $repo,
-                                MarkupToHtmlConverter $markupConverter,
-                                ProcessCreator $processCreator,
-                                ObjectManager $manager,
-                                LoggerInterface $logger,
-                                GithubApiService $ghApi)
-    {
+    public function __construct(
+        SourceRepo $repo,
+        MarkupToHtmlConverter $markupConverter,
+        ProcessCreator $processCreator,
+        ObjectManager $manager,
+        LoggerInterface $logger,
+        GithubApiService $ghApi
+    ) {
         parent::__construct($repo, $markupConverter, $processCreator, $manager, $logger);
         $this->githubApi = $ghApi;
         preg_match(static::GH_REGEX, $this->repo->getUrl(), $matches);
@@ -63,7 +64,8 @@ class GithubRepoCrawler extends GitRepoCrawler
 
     /**
      * Check whether the given URL is a valid Github repository URL
-     * @param $repoUrl
+     * @param string $repoUrl
+     *
      * @return bool
      */
     public static function isGithubRepoUrl($repoUrl)
@@ -96,6 +98,7 @@ class GithubRepoCrawler extends GitRepoCrawler
      * current SourceRepo
      *
      * @return Client
+     *
      * @throws \Exception if GitHub credentials are not found
      */
     protected function getGithubClient()
@@ -122,6 +125,7 @@ class GithubRepoCrawler extends GitRepoCrawler
      * Call GitHub API and fetch repository data
      *
      * @return array
+     *
      * @throws \Exception
      */
     protected function getGithubData()
@@ -137,7 +141,7 @@ query getRepoData (
   $owner: String!
   $repository: String!
  ) {
-  repository(owner: $owner, name: $repository) { 
+  repository(owner: $owner, name: $repository) {
     forks {
       totalCount
     }
@@ -174,7 +178,6 @@ QUERY;
         $this->githubData = $res['data']['repository'];
 
         return $this->githubData;
-
     }
 
     /**
@@ -203,7 +206,7 @@ QUERY;
             $this->logger->info('Fetched GitHub metrics successfully');
         } catch (\Exception $ex) {
             $this->logger->error('Unable to fetch data from Github: '
-                . $ex->getMessage());
+            .$ex->getMessage());
         }
     }
 }

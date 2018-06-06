@@ -18,6 +18,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table("Organization")
  * @ORM\Entity(repositoryClass="Librecores\ProjectRepoBundle\Repository\OrganizationRepository")
  * @ORM\HasLifecycleCallbacks
+ *
  * @UniqueEntity(
  *     fields={"name"},
  *     errorPath="name",
@@ -29,7 +30,7 @@ class Organization
     const SPECIAL_UNASSIGNED_ID = 1;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -43,6 +44,7 @@ class Organization
      * @var string
      *
      * @LcAssert\UserOrgName(payload = {"type" = "org"})
+     *
      * @ORM\Column(name="name", type="string", length=255, unique=true)
      */
     private $name;
@@ -53,6 +55,7 @@ class Organization
      * @var string
      *
      * @Assert\Length(max = 255)
+     *
      * @ORM\Column(name="displayName", type="string", length=255)
      */
     private $displayName;
@@ -98,6 +101,7 @@ class Organization
      * When was this organization created?
      *
      * @var \DateTime
+     *
      * @ORM\Column(type="datetime", nullable=false)
      */
     private $createdAt;
@@ -106,6 +110,7 @@ class Organization
      * When was this organization last updated?
      *
      * @var \DateTime
+     *
      * @ORM\Column(type="datetime", nullable=false)
      */
     private $updatedAt;
@@ -126,8 +131,8 @@ class Organization
      */
     public function prePersist()
     {
-        $this->createdAt = new \DateTime;
-        $this->updatedAt = new \DateTime;
+        $this->createdAt = new \DateTime();
+        $this->updatedAt = new \DateTime();
     }
 
     /**
@@ -137,7 +142,7 @@ class Organization
      */
     public function preUpdate()
     {
-        $this->updatedAt = new \DateTime;
+        $this->updatedAt = new \DateTime();
     }
 
     /**
@@ -154,6 +159,7 @@ class Organization
      * Set name
      *
      * @param string $name
+     *
      * @return Organization
      */
     public function setName($name)
@@ -177,6 +183,7 @@ class Organization
      * Set displayName
      *
      * @param string $displayName
+     *
      * @return Organization
      */
     public function setDisplayName($displayName)
@@ -200,6 +207,7 @@ class Organization
      * Set description
      *
      * @param string $description
+     *
      * @return Organization
      */
     public function setDescription($description)
@@ -223,6 +231,7 @@ class Organization
      * Add project
      *
      * @param Project $project
+     *
      * @return Organization
      */
     public function addProject(Project $project)
@@ -260,6 +269,7 @@ class Organization
      * Add member
      *
      * @param OrganizationMember $member
+     *
      * @return Organization
      */
     public function addMember(OrganizationMember $member)
@@ -312,6 +322,7 @@ class Organization
      * Set creator
      *
      * @param User $creator
+     *
      * @return Organization
      */
     public function setCreator(User $creator)
@@ -343,6 +354,7 @@ class Organization
      * Set createdAt
      *
      * @param \DateTime $createdAt
+     *
      * @return Organization
      */
     public function setCreatedAt($createdAt)
@@ -366,6 +378,7 @@ class Organization
      * Set updatedAt
      *
      * @param \DateTime $updatedAt
+     *
      * @return Organization
      */
     public function setUpdatedAt($updatedAt)

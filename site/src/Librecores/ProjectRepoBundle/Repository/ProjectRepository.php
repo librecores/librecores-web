@@ -15,6 +15,7 @@ class ProjectRepository extends EntityRepository
      *
      * @param string $parentName
      * @param string $projectName
+     *
      * @return NULL|Project
      */
     public function findProjectWithParent($parentName, $projectName)
@@ -25,10 +26,12 @@ class ProjectRepository extends EntityRepository
                 'LEFT JOIN p.parentOrganization org '.
                 'LEFT JOIN p.parentUser user '.
                 'WHERE p.name = :projectName '.
-                '  AND (org.name = :parentName OR user.username = :parentName)')
+                '  AND (org.name = :parentName OR user.username = :parentName)'
+            )
             ->setParameter('parentName', $parentName)
             ->setParameter('projectName', $projectName)
             ->getOneOrNullResult();
+
         return $p;
     }
 
@@ -51,11 +54,13 @@ class ProjectRepository extends EntityRepository
                 'FROM LibrecoresProjectRepoBundle:Project p '.
                 'LEFT JOIN p.parentOrganization org '.
                 'LEFT JOIN p.parentUser user '.
-                'WHERE CONCAT(COALESCE(org.name, user.username), \'/\', p.name) LIKE :fqnameFragment')
+                'WHERE CONCAT(COALESCE(org.name, user.username), \'/\', p.name) LIKE :fqnameFragment'
+            )
             ->setParameter('fqnameFragment', $fqnameFragment);
         if ($limit != 0) {
             $p->setFirstResults(0)->setMaxResults($limit);
         }
+
         return $p->getResult();
     }
 }

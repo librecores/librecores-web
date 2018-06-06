@@ -15,8 +15,9 @@ class FileUtil
      * the first basename and all possible extensions, and continues then with
      * the next basename.
      *
-     * @param string $basedir
+     * @param string   $basedir
      * @param string[] $basenames
+     *
      * @return string|boolean the name of the file including the base directory
      *                        if a match was found, or false if no match was
      *                        found
@@ -38,23 +39,24 @@ class FileUtil
     /**
      * Recursive delete of a directory (rm -r)
      *
-     * @param $dir string directory to delete recursively
+     * @param string $dir string directory to delete recursively
+     *
      * @return
      */
     public static function recursiveRmdir($dir)
     {
         if (is_dir($dir)) {
-          $objects = scandir($dir);
-          foreach ($objects as $object) {
-              if ($object != "." && $object != "..") {
-                  if (is_dir($dir."/".$object)) {
-                      self::recursiveRmdir($dir."/".$object);
-                  } else {
-                      unlink($dir."/".$object);
-                  }
-              }
-          }
-          rmdir($dir);
+            $objects = scandir($dir);
+            foreach ($objects as $object) {
+                if ($object != "." && $object != "..") {
+                    if (is_dir($dir."/".$object)) {
+                        self::recursiveRmdir($dir."/".$object);
+                    } else {
+                        unlink($dir."/".$object);
+                    }
+                }
+            }
+            rmdir($dir);
         }
     }
 
@@ -64,7 +66,9 @@ class FileUtil
      * The directory must be manually deleted if not used any more.
      *
      * @return string path to the temporary directory
+     *
      * @throws \RuntimeException
+     *
      * @see recursiveRmdir()
      */
     public static function createTemporaryDirectory($prefix)
@@ -73,9 +77,14 @@ class FileUtil
         $process = new Process($cmd);
         $process->run();
         if (!$process->isSuccessful()) {
-            throw new \RuntimeException('Unable to create temporary '.
-                'directory: '.$process->getErrorOutput());
+            throw new \RuntimeException(
+                sprintf(
+                    'Unable to create temporary directory: %s',
+                    $process->getErrorOutput()
+                )
+            );
         }
+
         return trim($process->getOutput());
     }
 }

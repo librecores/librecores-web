@@ -17,7 +17,7 @@ use FOS\UserBundle\Model\User as BaseUser;
 class User extends BaseUser
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -139,8 +139,8 @@ class User extends BaseUser
      */
     public function prePersist()
     {
-        $this->createdAt = new \DateTime;
-        $this->updatedAt = new \DateTime;
+        $this->createdAt = new \DateTime();
+        $this->updatedAt = new \DateTime();
     }
 
     /**
@@ -150,7 +150,7 @@ class User extends BaseUser
      */
     public function preUpdate()
     {
-        $this->updatedAt = new \DateTime;
+        $this->updatedAt = new \DateTime();
     }
 
     /**
@@ -167,6 +167,7 @@ class User extends BaseUser
         if ($this->googleOAuthUserId) {
             $result[] = 'github';
         }
+
         return $result;
     }
 
@@ -174,6 +175,7 @@ class User extends BaseUser
      * Is the user account connected to an OAuth service with a given name?
      *
      * @param string $serviceName
+     *
      * @return boolean
      */
     public function isConnectedToOAuthService($serviceName)
@@ -184,6 +186,7 @@ class User extends BaseUser
         if ($serviceName == 'google') {
             return $this->googleOAuthUserId !== null;
         }
+
         return false;
     }
 
@@ -201,6 +204,7 @@ class User extends BaseUser
      * Add project
      *
      * @param Project $project
+     *
      * @return User
      */
     public function addProject(Project $project)
@@ -238,6 +242,7 @@ class User extends BaseUser
      * Add organization created
      *
      * @param Organization $organization
+     *
      * @return User
      */
     public function addOrganizationCreated(Organization $organization)
@@ -275,6 +280,7 @@ class User extends BaseUser
      * Add organization membership
      *
      * @param OrganizationMember $organizationMember
+     *
      * @return User
      */
     public function addOrganizationMembership(OrganizationMember $organizationMember)
@@ -327,6 +333,7 @@ class User extends BaseUser
      * Set createdAt
      *
      * @param \DateTime $createdAt
+     *
      * @return User
      */
     public function setCreatedAt($createdAt)
@@ -350,6 +357,7 @@ class User extends BaseUser
      * Set updatedAt
      *
      * @param \DateTime $updatedAt
+     *
      * @return User
      */
     public function setUpdatedAt($updatedAt)
@@ -373,6 +381,7 @@ class User extends BaseUser
      * Set name
      *
      * @param string $name
+     *
      * @return User
      */
     public function setName($name)
@@ -396,6 +405,7 @@ class User extends BaseUser
      * Set githubOAuthUserId
      *
      * @param string $githubOAuthUserId
+     *
      * @return User
      */
     public function setGithubOAuthUserId($githubOAuthUserId)
@@ -419,6 +429,7 @@ class User extends BaseUser
      * Set githubOAuthAccessToken
      *
      * @param string $githubOAuthAccessToken
+     *
      * @return User
      */
     public function setGithubOAuthAccessToken($githubOAuthAccessToken)
@@ -442,6 +453,7 @@ class User extends BaseUser
      * Set googleOAuthUserId
      *
      * @param string $googleOAuthUserId
+     *
      * @return User
      */
     public function setGoogleOAuthUserId($googleOAuthUserId)
@@ -465,6 +477,7 @@ class User extends BaseUser
      * Set googleOAuthAccessToken
      *
      * @param string $googleOAuthAccessToken
+     *
      * @return User
      */
     public function setGoogleOAuthAccessToken($googleOAuthAccessToken)
@@ -488,6 +501,7 @@ class User extends BaseUser
      * Add organizationsCreated
      *
      * @param \Librecores\ProjectRepoBundle\Entity\Organization $organizationsCreated
+     *
      * @return User
      */
     public function addOrganizationsCreated(\Librecores\ProjectRepoBundle\Entity\Organization $organizationsCreated)

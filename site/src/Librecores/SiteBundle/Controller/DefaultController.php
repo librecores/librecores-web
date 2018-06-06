@@ -13,6 +13,7 @@ class DefaultController extends Controller
      * Render the home page
      *
      * @param Request $request
+     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function homeAction(Request $request)
@@ -20,16 +21,52 @@ class DefaultController extends Controller
         $templateArgs = array();
 
         // search query form
-        $searchQueryForm = $this->createForm(SearchQueryType::class,
+        $searchQueryForm = $this->createForm(
+            SearchQueryType::class,
             new SearchQuery(),
-            ['action' => $this->generateUrl('librecores_project_repo_project_search')]);
+            ['action' => $this->generateUrl('librecores_project_repo_project_search')]
+        );
         $templateArgs['search_query_form'] = $searchQueryForm->createView();
 
         // blog posts on planet
         $templateArgs['blogposts'] = $this->getBlogPosts();
 
-        return $this->render('LibrecoresSiteBundle:Default:home.html.twig',
+        return $this->render(
+            'LibrecoresSiteBundle:Default:home.html.twig',
             $templateArgs
+        );
+    }
+
+    /**
+     * XXX: add caching for static pages
+     * see http://symfony.com/doc/current/bundles/SensioFrameworkExtraBundle/annotations/cache.html
+     */
+    public function pageAction($page)
+    {
+        $siteContentRoot = $this->get('kernel')->getRootDir().'/../sitecontent';
+
+        // $page can contain anything, sanitize it by stripping all unknown
+        // characters out
+        $page = preg_replace('|[^a-zA-Z0-9_/-]|i', '', $page);
+
+        // strip trailing slash
+        if (substr($page, -1) == '/') {
+            $page = substr($page, 0, -1);
+        }
+
+        // resolve directories and index pages
+        if (is_dir($siteContentRoot.'/'.$page)) {
+            $page .= '/index';
+        }
+
+        if (!file_exists("$siteContentRoot/$page.md")) {
+            throw $this->createNotFoundException('Page not found.');
+        }
+
+        // show the page
+        return $this->render(
+            'LibrecoresSiteBundle:Default:contentwrapper.html.twig',
+            array('page' => "@site_content/$page.md")
         );
     }
 
@@ -58,9 +95,10 @@ class DefaultController extends Controller
                 'date' => $item->get_date('U'),
                 'title' => $item->get_title(),
                 'teaser' => $this->sanitizeContent($item->get_description(), 140),
-                'url' => $item->get_link()
+                'url' => $item->get_link(),
             );
         }
+
         return $blogPosts;
     }
 
@@ -69,8 +107,9 @@ class DefaultController extends Controller
      *
      * Strip HTML, convert HTML entities, etc.
      *
-     * @param string $htmlContent input data
-     * @param int $maxLength maximum length of the output string; -1 for unlimited
+     * @param string $text      input data
+     * @param int    $maxLength maximum length of the output string; -1 for unlimited
+     *
      * @return string sanitized content
      */
     private function sanitizeContent($text, $maxLength = -1)
@@ -87,36 +126,5 @@ class DefaultController extends Controller
         }
 
         return $text;
-    }
-
-    // XXX: add caching for static pages
-    // see http://symfony.com/doc/current/bundles/SensioFrameworkExtraBundle/annotations/cache.html
-    public function pageAction($page)
-    {
-        $siteContentRoot = $this->get('kernel')->getRootDir().'/../sitecontent';
-
-        // $page can contain anything, sanitize it by stripping all unknown
-        // characters out
-        $page = preg_replace('|[^a-zA-Z0-9_/-]|i', '', $page);
-
-        // strip trailing slash
-        if (substr($page, -1) == '/') {
-            $page = substr($page, 0, -1);
-        }
-
-        // resolve directories and index pages
-        if (is_dir($siteContentRoot.'/'.$page)) {
-            $page .= '/index';
-        }
-
-        if (!file_exists("$siteContentRoot/$page.md")) {
-            throw $this->createNotFoundException('Page not found.');
-        }
-
-        // show the page
-        return $this->render(
-            'LibrecoresSiteBundle:Default:contentwrapper.html.twig',
-            array('page' => "@site_content/$page.md")
-        );
     }
 }

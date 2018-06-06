@@ -29,7 +29,8 @@ class GroupHydrator extends AbstractHydrator
     /**
      * Recursively group a 2D array to form a nested associative array
      *
-     * @param $rows
+     * @param array $rows
+     *
      * @return mixed
      */
     private function group(array $rows)

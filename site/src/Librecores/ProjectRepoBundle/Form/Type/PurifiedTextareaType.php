@@ -44,4 +44,3 @@ class PurifiedTextareaType extends AbstractType
         return 'purified_textarea';
     }
 }
-

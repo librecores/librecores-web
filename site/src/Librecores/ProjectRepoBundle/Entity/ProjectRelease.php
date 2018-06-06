@@ -48,6 +48,7 @@ class ProjectRelease
      * Set release name
      *
      * @param string $name
+     *
      * @return ProjectRelease
      */
     public function setName(string $name)
@@ -71,6 +72,7 @@ class ProjectRelease
      * Set when this release was published
      *
      * @param \DateTime $publishedAt
+     *
      * @return ProjectRelease
      */
     public function setPublishedAt(\DateTime $publishedAt)
@@ -94,6 +96,7 @@ class ProjectRelease
      * Set if this release is a pre-release
      *
      * @param bool $isPrerelease
+     *
      * @return ProjectRelease
      */
     public function setIsPrerelease(bool $isPrerelease)
@@ -117,6 +120,7 @@ class ProjectRelease
      * Set the commit id this release is based on
      *
      * @param string $commitID
+     *
      * @return ProjectRelease
      */
     public function setCommitID(string $commitID)
@@ -125,6 +129,4 @@ class ProjectRelease
 
         return $this;
     }
-
-
 }

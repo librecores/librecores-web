@@ -54,6 +54,7 @@ class SearchQuery
         if (empty($this->type)) {
             return self::TYPE_PROJECTS;
         }
+
         return $this->type;
     }
 }

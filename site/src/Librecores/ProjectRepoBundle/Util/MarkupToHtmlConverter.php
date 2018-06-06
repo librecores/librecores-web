@@ -32,9 +32,10 @@ class MarkupToHtmlConverter
     private $logger;
     private $htmlPurifier;
 
-    public function __construct(LoggerInterface $logger,
-                                \HTMLPurifier $htmlPurifier)
-    {
+    public function __construct(
+        LoggerInterface $logger,
+        \HTMLPurifier $htmlPurifier
+    ) {
         $this->logger = $logger;
         $this->htmlPurifier = $htmlPurifier;
     }
@@ -43,19 +44,22 @@ class MarkupToHtmlConverter
      * Convert content in a markup language to sanitized HTML
      *
      * @param string $markupInput
+     *
      * @return boolean|string
      */
     public function convert($markupInput)
     {
         $unsafeHtml = $this->markupToUnsafeHtml($markupInput);
         $sanitizedHtml = $this->sanitizeHtml($unsafeHtml);
+
         return $sanitizedHtml;
     }
 
     /**
      * Convert a file with markup to sanitized HTML
      *
-     * @param string$markupInputFile
+     * @param string $markupInputFile
+     *
      * @return boolean|string
      */
     public function convertFile($markupInputFile)
@@ -66,6 +70,7 @@ class MarkupToHtmlConverter
         $sanitizedHtml = $this->sanitizeHtml($unsafeHtml);
 
         $this->logger->debug("Conversion done.");
+
         return $sanitizedHtml;
     }
 
@@ -73,8 +78,11 @@ class MarkupToHtmlConverter
      * Convert a string of markup text to HTML
      *
      * @param string $markupInput
+     *
      * @return string HTML
+     *
      * @throws \RuntimeException processing failed (see message for details)
+     *
      * @see markupFileToHtml()
      */
     protected function markupToUnsafeHtml($markupInput)
@@ -82,7 +90,12 @@ class MarkupToHtmlConverter
         // write $markupInput into temporary file
         $tmpFilename = tempnam(sys_get_temp_dir(), 'lc-markup-conv-');
         if ($tmpFilename === false) {
-            throw new \RuntimeException('Unable to create temporary file in '.sys_get_temp_dir());
+            throw new \RuntimeException(
+                sprintf(
+                    'Unable to create temporary file in %s.',
+                    sys_get_temp_dir()
+                )
+            );
         }
         try {
             $rv = file_put_contents($tmpFilename, $markupInput);
@@ -102,7 +115,9 @@ class MarkupToHtmlConverter
      * Convert a file to HTML
      *
      * @param string $markupInputFile
+     *
      * @return string string of HTML data, UTF-8 encoded
+     *
      * @throws \RuntimeException processing failed (see message for details)
      */
     protected function markupFileToUnsafeHtml($markupInputFile)
@@ -110,20 +125,27 @@ class MarkupToHtmlConverter
         $fileExtension = pathinfo($markupInputFile, PATHINFO_EXTENSION);
         if (in_array($fileExtension, [ '.txt', ''])) {
             return $this->markupFileToUnsafeHtmlPlaintext($markupInputFile);
-        } else {
-            return $this->markupFileToUnsafeHtmlWithGhMarkup($markupInputFile);
         }
+
+        return $this->markupFileToUnsafeHtmlWithGhMarkup($markupInputFile);
+    }
+
+    protected function sanitizeHtml($htmlInput)
+    {
+        return $this->htmlPurifier->purify($htmlInput);
     }
 
     /**
      * Convert plaintext content to HTML
      *
      * @param string $markupInputFile
+     *
      * @return string string of HTML data, UTF-8 encoded
      */
     private function markupFileToUnsafeHtmlPlaintext($markupInputFile)
     {
         $text = file_get_contents($markupInputFile);
+
         return '<pre>'.htmlspecialchars($text, ENT_QUOTES, 'UTF-8').'</pre>';
     }
 
@@ -131,7 +153,9 @@ class MarkupToHtmlConverter
      * Convert a file containing markup content to HTML using github-markup
      *
      * @param string $markupInputFile
+     *
      * @return string string of HTML data, UTF-8 encoded
+     *
      * @throws ProcessFailedException processing failed (see message for details)
      */
     private function markupFileToUnsafeHtmlWithGhMarkup($markupInputFile)
@@ -151,10 +175,5 @@ class MarkupToHtmlConverter
         }
 
         return $output;
-    }
-
-    protected function sanitizeHtml($htmlInput)
-    {
-        return $this->htmlPurifier->purify($htmlInput);
     }
 }

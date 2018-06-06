@@ -20,14 +20,14 @@ class UserOrgNameValidator extends ConstraintValidator
     /**
      * Minimum length of the user or org name
      *
-     * @var integer
+     * @var int
      */
     const LENGTH_MIN = 4;
 
     /**
      * Maximum length of the user or org name
      *
-     * @var integer
+     * @var int
      */
     const LENGTH_MAX = 39;
     /**
@@ -39,7 +39,7 @@ class UserOrgNameValidator extends ConstraintValidator
      * @var string[]
      */
     const RESERVED_NAMES = [ 'org', 'orgs', 'planet', 'project', 'projects',
-                             'search', 'static', 'unassigned', 'user', 'admin', 'administrator' ];
+                             'search', 'static', 'unassigned', 'user', 'admin', 'administrator', ];
 
     /**
      * Routes that are excluded from checking for a match in userOrgReserved()
@@ -114,7 +114,7 @@ class UserOrgNameValidator extends ConstraintValidator
                 ->buildViolation($constraint->messageUniqueName)
                 ->setParameter('%string%', $value)
                 ->addViolation();
-        } else if ($this->userOrOrgReserved($value)) {
+        } elseif ($this->userOrOrgReserved($value)) {
             $this->context
                 ->buildViolation($constraint->messageReservedName)
                 ->setParameter('%string%', $value)
@@ -127,6 +127,7 @@ class UserOrgNameValidator extends ConstraintValidator
      *
      * @param string $name user or org name
      * @param string $type "user" or "org"
+     *
      * @return bool
      */
     private function userOrOrgNameExists($name, $type)
@@ -136,35 +137,37 @@ class UserOrgNameValidator extends ConstraintValidator
 
         // Check the org name against existing usernames
         if ($type === "org") {
-
-            $q = 'SELECT COUNT(u.id) FROM LibrecoresProjectRepoBundle:User u ' .
+            $q = 'SELECT COUNT(u.id) FROM LibrecoresProjectRepoBundle:User u '.
                 'WHERE u.usernameCanonical = :name';
-            $cnt_user = $em->createQuery($q)
+            $cntUser = $em->createQuery($q)
                 ->setParameter('name', $name)
                 ->getSingleScalarResult();
-            if ($cnt_user != 0) {
+            if ($cntUser != 0) {
                 return true;
             }
         }
 
         // Check the username against existing org names
         if ($type === "user") {
-            $q = 'SELECT COUNT(o.id) ' .
-                'FROM LibrecoresProjectRepoBundle:Organization o ' .
+            $q = 'SELECT COUNT(o.id) '.
+                'FROM LibrecoresProjectRepoBundle:Organization o '.
                 'WHERE LOWER(o.name) = :name';
-            $cnt_org = $em->createQuery($q)
+            $cntOrg = $em->createQuery($q)
                 ->setParameter('name', $name)
                 ->getSingleScalarResult();
-            if ($cnt_org != 0) {
+            if ($cntOrg != 0) {
                 return true;
             }
         }
+
+        return false;
     }
 
     /**
      * Find out if a given top-level URL value is reserved
      *
-     * @param $value
+     * @param string $value
+     *
      * @return bool
      */
     private function userOrOrgReserved($value)
@@ -178,7 +181,7 @@ class UserOrgNameValidator extends ConstraintValidator
          * a route pattern in the RESERVED_NAMES array.
          */
 
-        $route = $this->router->match('/' . $value)['_route'];
+        $route = $this->router->match('/'.$value)['_route'];
 
         return ($route !== null && !in_array($route, self::EXCLUDE_ROUTE_CHECK));
     }

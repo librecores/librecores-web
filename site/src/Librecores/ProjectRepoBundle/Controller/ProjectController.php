@@ -28,7 +28,9 @@ class ProjectController extends Controller
      * Render the "New Project" page
      *
      * @param Request $request
+     *
      * @return Response
+     *
      * @throws \Exception
      */
     public function newAction(Request $request)
@@ -44,12 +46,12 @@ class ProjectController extends Controller
 
         // construct choices for the owner
         $username = $this->getUser()->getUsername();
-        $parentChoices = array($username => 'u_' . $username);
+        $parentChoices = array($username => 'u_'.$username);
         foreach ($this->getUser()->getOrganizationMemberships() as $organizationMembership) {
             if ($organizationMembership->getPermission() === OrganizationMember::PERMISSION_MEMBER or
                 $organizationMembership->getPermission() === OrganizationMember::PERMISSION_ADMIN) {
                 $parentChoices[$organizationMembership->getOrganization()->getName()] =
-                    'o_' . $organizationMembership->getOrganization()->getName();
+                    'o_'.$organizationMembership->getOrganization()->getName();
             }
         }
 
@@ -58,7 +60,7 @@ class ProjectController extends Controller
             ->add('parentName', ChoiceType::class, [
                 'mapped' => false,
                 'choices' => $parentChoices,
-                'multiple' => false
+                'multiple' => false,
             ])
             ->add('name')
             ->add('displayName')
@@ -67,14 +69,14 @@ class ProjectController extends Controller
                 'label' => 'Git URL',
                 'required' => false,
                 'constraints' => [
-                    new NotBlank(['groups'=>["git_url"]]),
-                    new Url(['groups'=>["git_url"]]),
+                    new NotBlank(['groups' => ["git_url"]]),
+                    new Url(['groups' => ["git_url"]]),
                 ],
             ])
             ->add('saveGitSourceRepoUrl', SubmitType::class, [
                 'label' => 'Create Project from Git repository',
                 'attr' => [
-                    'class' => 'btn-primary'
+                    'class' => 'btn-primary',
                 ],
                 'validation_groups' => ['Default', 'git_url'],
             ]);
@@ -120,7 +122,8 @@ class ProjectController extends Controller
                 array(
                     'parentName' => $p->getParentName(),
                     'projectName' => $p->getName(),
-                ));
+                )
+            );
         }
 
         // determine which tab to show to select the source from
@@ -141,16 +144,18 @@ class ProjectController extends Controller
                 'isGithubConnected' => $isGithubConnected,
                 'noGithubRepos' => $noGithubRepos,
                 'activeSourcePanel' => $activeSourcePanel,
-            ));
+            )
+        );
     }
 
     /**
      * Display the project
      *
      * @param Request $request
-     * @param string $parentName URL component: name of the parent
-     *                           (user or organization)
-     * @param string $projectName URL component: name of the project
+     * @param string  $parentName  URL component: name of the parent
+     *                             (user or organization)
+     * @param string  $projectName URL component: name of the project
+     *
      * @return Response
      */
     public function viewAction(Request $request, $parentName, $projectName)
@@ -162,8 +167,10 @@ class ProjectController extends Controller
             $waitTemplate = 'LibrecoresProjectRepoBundle:Project:view_wait_processing.html.twig';
             $response = new Response(
                 $this->renderView($waitTemplate, array('project' => $p)),
-                Response::HTTP_OK);
+                Response::HTTP_OK
+            );
             $response->headers->set('refresh', '5;url='.$request->getUri());
+
             return $response;
         }
 
@@ -178,7 +185,7 @@ class ProjectController extends Controller
             'qualityScore' => [
                 'fullStars' => (int) ($twoTimesQualityScore / 2),
                 'halfStars' => $twoTimesQualityScore % 2,
-                'value' => $qualityScore
+                'value' => $qualityScore,
             ],
             'latestCommit' => $projectMetricsProvider->getLatestCommit($p),
             'firstCommit' => $projectMetricsProvider->getFirstCommit($p),
@@ -203,9 +210,11 @@ class ProjectController extends Controller
             ),
             'languageGraph' => $this->makeGraph(
                 $projectMetricsProvider->getMostUsedLanguages($p),
-                false),
+                false
+            ),
             'contributorsGraph' => $this->makeGraph(
-                $projectMetricsProvider->getContributorHistogram($p, Dates::INTERVAL_YEAR)),
+                $projectMetricsProvider->getContributorHistogram($p, Dates::INTERVAL_YEAR)
+            ),
             'isHostedOnGithub' => GithubRepoCrawler::isGithubRepoUrl($p->getSourceRepo()->getUrl()),
         ];
 
@@ -215,16 +224,18 @@ class ProjectController extends Controller
             [
                 'project' => $p,
                 'metadata' => $metadata,
-            ]);
+            ]
+        );
     }
 
     /**
      * Display the project settings page
      *
      * @param Request $request
-     * @param string $parentName URL component: name of the parent
-     *                           (user or organization)
-     * @param string $projectName URL component: name of the project
+     * @param string  $parentName  URL component: name of the parent
+     *                             (user or organization)
+     * @param string  $projectName URL component: name of the project
+     *
      * @return Response
      */
     public function settingsAction(Request $request, $parentName, $projectName)
@@ -244,24 +255,29 @@ class ProjectController extends Controller
             $em->flush();
         }
 
-        return $this->render('LibrecoresProjectRepoBundle:Project:settings.html.twig',
-            array('project' => $p, 'form' => $form->createView()));
+        return $this->render(
+            'LibrecoresProjectRepoBundle:Project:settings.html.twig',
+            array('project' => $p, 'form' => $form->createView())
+        );
     }
 
     /**
      * Render the project settings -> team page
      *
-     * @param string $parentName URL component: name of the parent
-     *                           (user or organization)
+     * @param string $parentName  URL component: name of the parent
+     *                            (user or organization)
      * @param string $projectName URL component: name of the project
+     *
      * @return Response
      */
     public function settingsTeamAction($parentName, $projectName)
     {
         $p = $this->getProject($parentName, $projectName);
 
-        return $this->render('LibrecoresProjectRepoBundle:Project:settings_team.html.twig',
-            array('project' => $p));
+        return $this->render(
+            'LibrecoresProjectRepoBundle:Project:settings_team.html.twig',
+            array('project' => $p)
+        );
     }
 
     /**
@@ -270,6 +286,7 @@ class ProjectController extends Controller
      * @todo paginate result
      *
      * @param Request $req
+     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function listAction(Request $req)
@@ -278,10 +295,10 @@ class ProjectController extends Controller
             ->getRepository('LibrecoresProjectRepoBundle:Project')
             ->findAll();
 
-        return $this->render('LibrecoresProjectRepoBundle:Project:list.html.twig',
-            [
-                'projects' => $projects,
-            ]);
+        return $this->render(
+            'LibrecoresProjectRepoBundle:Project:list.html.twig',
+            ['projects' => $projects]
+        );
     }
 
     /**
@@ -294,6 +311,7 @@ class ProjectController extends Controller
      * done asynchronously through RabbitMQ.
      *
      * @param Request $req
+     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function updateAction(Request $req, $parentName, $projectName)
@@ -312,8 +330,11 @@ class ProjectController extends Controller
         $p = $this->getProject($parentName, $projectName);
         $this->getQueueDispatcherService()->updateProjectInfo($p);
 
-        return new Response('project update queued', 200,
-            [ 'Content-Type' => 'text/plain' ]);
+        return new Response(
+            'project update queued',
+            200,
+            [ 'Content-Type' => 'text/plain' ]
+        );
     }
 
     /**
@@ -337,7 +358,9 @@ class ProjectController extends Controller
      *
      * @param string $parentName
      * @param string $projectName
+     *
      * @return Project
+     *
      * @throws NotFoundHttpException
      */
     private function getProject($parentName, $projectName)
@@ -349,6 +372,7 @@ class ProjectController extends Controller
         if (!$p) {
             throw $this->createNotFoundException('No project found with that name.');
         }
+
         return $p;
     }
 
@@ -380,6 +404,7 @@ class ProjectController extends Controller
         }
 
         $response = $githubClient->getHttpClient()->get($path);
+
         return \Github\HttpClient\Message\ResponseMediator::getContent($response);
     }
 
@@ -387,6 +412,7 @@ class ProjectController extends Controller
      * Get the type of source (repository) from the form
      *
      * @param FormInterface $form
+     *
      * @return NULL|string 'git_url' or 'github'
      */
     private function getSourceTypeFromForm(FormInterface $form)
@@ -399,6 +425,7 @@ class ProjectController extends Controller
         } else {
             new \Exception('No submit button with associated source type clicked?');
         }
+
         return $sourceType;
     }
 
@@ -410,7 +437,7 @@ class ProjectController extends Controller
      * this mapping. In addition, this method sets all project properties which
      * are not part of the form, but filled with default values.
      *
-     * @param Project $p
+     * @param Project       $p
      * @param FormInterface $form
      */
     private function populateProjectFromForm(Project $p, FormInterface $form)
@@ -454,8 +481,9 @@ class ProjectController extends Controller
      * represented in one dropdown field. This method takes the submitted string
      * apart and constructs the right parent object out of it.
      *
+     * @param Project       $p
      * @param FormInterface $form
-     * @param Project $p
+     *
      * @throws \Exception
      */
     private function projectSetParentFromForm(Project $p, FormInterface $form)
@@ -472,26 +500,29 @@ class ProjectController extends Controller
             $user = $this->container->get('fos_user.user_manager')
                 ->findUserByUsername($formParentName);
 
-            if (null === $user)
+            if (null === $user) {
                 throw new \Exception("form manipulated");
+            }
 
-                $p->setParentUser($user);
-
-        } else if ($formParentType === 'o') {
+            $p->setParentUser($user);
+        } elseif ($formParentType === 'o') {
             $organization = $this->getDoctrine()
                 ->getRepository('LibrecoresProjectRepoBundle:Organization')
                 ->findOneByName($formParentName);
 
-            if (null === $organization)
+            if (null === $organization) {
                 throw new \Exception("form manipulated");
+            }
 
-                $p->setParentOrganization($organization);
+            $p->setParentOrganization($organization);
         }
     }
 
     /**
      * Discards any labels and retains the value of a histogram
-     * @param $histogram
+     *
+     * @param array $histogram
+     *
      * @return array
      */
     private function makeActivityGraph($histogram)
@@ -502,6 +533,7 @@ class ProjectController extends Controller
                 $values[] = $j[0];
             }
         }
+
         return $values;
     }
 
@@ -512,8 +544,8 @@ class ProjectController extends Controller
      * Uses array keys as labels and values as series.
      *
      * @param LanguageStat[] $languages
-     * @param bool $multiDim does the graph expect multidimensional
-     *              series. Defaults to true
+     * @param bool           $multiDim  does the graph expect multidimensional
+     *                                  series. Defaults to true
      *
      * @return array data object for graph
      */
@@ -521,7 +553,7 @@ class ProjectController extends Controller
     {
         $graph = [
             'labels' => array_keys($languages),
-            'series' => [array_values($languages)]
+            'series' => [array_values($languages)],
         ];
         if (!$multiDim) {
             $graph['series'] = $graph['series'][0];

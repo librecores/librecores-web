@@ -19,6 +19,7 @@ class UserManager extends BaseUserManager
      *
      * @param string $username
      * @param string $email
+     *
      * @return mixed
      */
     public function findUserByUsernameOrEmail2($username, $email)
@@ -37,12 +38,14 @@ class UserManager extends BaseUserManager
      * Find user by OAuth user ID
      *
      * @param string $oAuthService name of the OAuth service
-     * @param string $oAuthUserId user ID on the OAuth service
+     * @param string $oAuthUserId  user ID on the OAuth service
+     *
      * @return mixed
      */
     public function findUserByOAuth($oAuthService, $oAuthUserId)
     {
         $columnName = $oAuthService.'OAuthUserId';
+
         return $this->getRepository()->createQueryBuilder('u')
             ->where("u.$columnName = :oAuthUserId")
             ->setParameter('oAuthUserId', $oAuthUserId)
@@ -62,6 +65,7 @@ class UserManager extends BaseUserManager
      *       faster results.
      *
      * @param string $searchString
+     *
      * @return mixed
      */
     public function findUsersBySearchString($searchString)

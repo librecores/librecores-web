@@ -104,6 +104,7 @@ class SourceStats
 
     /**
      * @param bool $available
+     *
      * @return SourceStats
      */
     public function setAvailable(bool $available)
@@ -115,6 +116,7 @@ class SourceStats
 
     /**
      * @param int $totalFiles
+     *
      * @return SourceStats
      */
     public function setTotalFiles(int $totalFiles)
@@ -134,6 +136,7 @@ class SourceStats
 
     /**
      * @param int $totalLinesOfCode
+     *
      * @return SourceStats
      */
     public function setTotalLinesOfCode(int $totalLinesOfCode)
@@ -153,6 +156,7 @@ class SourceStats
 
     /**
      * @param int $totalLinesOfComments
+     *
      * @return SourceStats
      */
     public function setTotalLinesOfComments(int $totalLinesOfComments)
@@ -172,6 +176,7 @@ class SourceStats
 
     /**
      * @param int $totalBlankLines
+     *
      * @return SourceStats
      */
     public function setTotalBlankLines(int $totalBlankLines)
@@ -190,7 +195,8 @@ class SourceStats
     }
 
     /**
-     * @param $language
+     * @param LanguageStat $language
+     *
      * @return SourceStats
      */
     public function addLanguageStat(LanguageStat $language)
@@ -201,7 +207,8 @@ class SourceStats
     }
 
     /**
-     * @param $language
+     * @param LanguageStat $language
+     *
      * @return bool
      */
     public function removeLanguageStat(LanguageStat $language)
@@ -210,9 +217,9 @@ class SourceStats
             unset($this->languageStats[$key]);
 
             return true;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**
@@ -310,6 +317,7 @@ class SourceStats
      * Get estimated effort in man-months
      *
      * @param int $type Development type of the repository
+     *
      * @return float effort in man-months
      */
     public function getCocomoEffort(int $type = self::DEVELOPMENT_TYPE_EMBEDDED): float
@@ -341,6 +349,7 @@ class SourceStats
      * Get estimated duration in man-months
      *
      * @param int $type Development type of the repository
+     *
      * @return float effort in man-months
      */
     public function getCocomoDuration(int $type = self::DEVELOPMENT_TYPE_EMBEDDED): float
@@ -367,6 +376,7 @@ class SourceStats
     /**
      * Get estimated number of developers
      * @param int $type Development type of the repository
+     *
      * @return int estimated number of developers
      */
     public function getCocomoTeamSize(int $type = self::DEVELOPMENT_TYPE_EMBEDDED): int

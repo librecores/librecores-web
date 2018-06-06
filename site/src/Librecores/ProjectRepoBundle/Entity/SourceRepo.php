@@ -28,7 +28,7 @@ abstract class SourceRepo
     /**
      * Unique ID to identify this entity in the database
      *
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -48,6 +48,7 @@ abstract class SourceRepo
      *
      * @Assert\NotBlank()
      * @Assert\Length(max = 255)
+     *
      * @ORM\Column(type="string", length=255)
      */
     protected $url;
@@ -69,6 +70,7 @@ abstract class SourceRepo
      *
      * @Assert\Url()
      * @Assert\Length(max = 255)
+     *
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     protected $webViewUrl = null;
@@ -136,6 +138,7 @@ abstract class SourceRepo
      * Set url
      *
      * @param string $url
+     *
      * @return SourceRepo
      */
     public function setUrl($url)
@@ -159,12 +162,14 @@ abstract class SourceRepo
      * Set project
      *
      * @param Project $project
+     *
      * @return SourceRepo
      */
     public function setProject(Project $project)
     {
         $this->project = $project;
         $project->setSourceRepo($this);
+
         return $this;
     }
 

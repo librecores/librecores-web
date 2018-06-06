@@ -87,7 +87,7 @@ class InsufficientOAuthDataProvidedException extends AuthenticationException
     {
         return array(
             '{{ username }}' => $this->username,
-            '{{ email }}' => $this->email
+            '{{ email }}' => $this->email,
         );
     }
 }

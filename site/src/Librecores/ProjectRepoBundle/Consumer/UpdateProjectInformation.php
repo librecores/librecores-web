@@ -26,9 +26,11 @@ class UpdateProjectInformation implements ConsumerInterface
     private $orm;
     private $repoCrawlerFactory;
 
-    public function __construct(RepoCrawlerFactory $repoCrawlerFactory,
-        LoggerInterface $logger, Registry $doctrine)
-    {
+    public function __construct(
+        RepoCrawlerFactory $repoCrawlerFactory,
+        LoggerInterface $logger,
+        Registry $doctrine
+    ) {
         $this->repoCrawlerFactory = $repoCrawlerFactory;
         $this->logger = $logger;
         $this->orm = $doctrine;
@@ -46,25 +48,31 @@ class UpdateProjectInformation implements ConsumerInterface
         // unhandled exception within a consumer, as this essentially kills our
         // RabbitMQ consumer daemon and ends all processing tasks.
         try {
-            $projectId = (int)unserialize($msg->body);
+            $projectId = (int) unserialize($msg->body);
 
             $project = $this->orm
                 ->getRepository('LibrecoresProjectRepoBundle:Project')
                 ->find($projectId);
             if (!$project) {
-                $this->logger->error("Unable to update project with ID ".
-                    "$projectId: project does not exist.");
+                $this->logger->error(
+                    "Unable to update project with ID $projectId: project does "
+                    ."not exist."
+                );
 
                 $this->markInProcessing($project, false);
+
                 return true; // don't requeue
             }
 
             // check if this project is associated with a source repository
             if ($project->getSourceRepo() === null) {
-                $this->logger->error("Unable to update project with ID ".
-                    "$projectId: no valid source repository associated.");
+                $this->logger->error(
+                    "Unable to update project with ID "
+                    ."$projectId: no valid source repository associated."
+                );
 
                 $this->markInProcessing($project, false);
+
                 return true; // don't requeue
             }
             $sourceRepo = $project->getSourceRepo();
@@ -80,25 +88,28 @@ class UpdateProjectInformation implements ConsumerInterface
 
             // persist all changes made to to DB
             $this->orm->getManager()->flush();
-
         } catch (DBALException $e) {
             // We assume we got a database exception. Most likely the connection to
             // the DB server died for some reason (probably due to a timeout).
             // Log it and end this script. It will be re-spawned by systemd and
             // a fresh DB connection will be created. The processing request stays
             // in the queue and will be processed once this service returns.
-            $this->logger->info("Processing of repository resulted in an ".
-                get_class($e).' with message '.$e->getMessage());
-            $this->logger->info("Exiting this script and waiting for it to be ".
-                "re-spawned by systemd.");
+            $this->logger->info(
+                "Processing of repository resulted in an ".get_class($e)
+                .' with message '.$e->getMessage()
+            );
+            $this->logger->info(
+                "Exiting this script and waiting for it to be re-spawned by "
+                ."systemd."
+            );
             exit(0);
-
         } catch (\Exception $e) {
             // We got an unexpected Exception. We assume this is a one-off event
             // and just log it, but otherwise keep the consumer running for the
             // next requests.
-            $this->logger->error("Processing of repository resulted in an ".
-                get_class($e));
+            $this->logger->error(
+                "Processing of repository resulted in an ".get_class($e)
+            );
             $this->logger->error('Message: '.$e->getMessage());
             $this->logger->error('Trace: '.$e->getTraceAsString());
 
@@ -125,7 +136,7 @@ class UpdateProjectInformation implements ConsumerInterface
      * presented a "Please wait" page instead.
      *
      * @param Project $project
-     * @param bool $isInProcessing
+     * @param bool    $isInProcessing
      */
     private function markInProcessing(Project $project, $isInProcessing = true)
     {

@@ -17,7 +17,8 @@ class DefaultController extends Controller
         $templateArgs['blogposts'] = $this->blogposts;
         $templateArgs['feedLastUpdate'] = $this->feedLastUpdate;
 
-        return $this->render('LibrecoresPlanetBundle:Default:index.html.twig',
+        return $this->render(
+            'LibrecoresPlanetBundle:Default:index.html.twig',
             $templateArgs
         );
     }
@@ -35,19 +36,35 @@ class DefaultController extends Controller
         $feed->enable_order_by_date(false);
         $feed->init();
 
-        $updatedString = $feed->get_feed_tags(SIMPLEPIE_NAMESPACE_ATOM_10, 'updated')[0]['data'];
-        $this->feedLastUpdate = \DateTime::createFromFormat(\DateTime::ATOM, $updatedString, new \DateTimeZone('UTC'));
+        $feedTags = $feed->get_feed_tags(SIMPLEPIE_NAMESPACE_ATOM_10, 'updated');
+        $updatedString = $feedTags[0]['data'];
+        $this->feedLastUpdate = \DateTime::createFromFormat(
+            \DateTime::ATOM,
+            $updatedString,
+            new \DateTimeZone('UTC')
+        );
 
         $this->blogposts = array();
         foreach ($feed->get_items(0) as $item) {
+            $authorName = $this->decodeHtmlEntities(
+                $item->get_author()->get_name()
+            );
+            $blogDate = \DateTime::createFromFormat(
+                'U',
+                $item->get_gmdate('U'),
+                new \DateTimeZone('UTC')
+            );
+            $sourceTitle = $this->decodeHtmlEntities(
+                $item->get_source()->get_title()
+            );
             $this->blogposts[] = array(
-                'author' => $this->decodeHtmlEntities($item->get_author()->get_name()),
-                'date' => \DateTime::createFromFormat('U', $item->get_gmdate('U'), new \DateTimeZone('UTC')),
+                'author' => $authorName,
+                'date' => $blogDate,
                 'title' => $this->decodeHtmlEntities($item->get_title()),
                 'teaser' => $this->extractTeaser($item->get_content()),
                 'teaser_img_url' => $this->extractTeaserImage($item->get_content()),
                 'url' => $item->get_link(),
-                'source_title' => $this->decodeHtmlEntities($item->get_source()->get_title()),
+                'source_title' => $sourceTitle,
                 'source_link' => $item->get_source()->get_link(),
             );
         }
@@ -60,6 +77,7 @@ class DefaultController extends Controller
      * from setting the necessary parameters only once.
      *
      * @param string $string
+     *
      * @return string string in UTF-8 format with all XML entities removed
      */
     private function decodeHtmlEntities($string)
@@ -74,6 +92,7 @@ class DefaultController extends Controller
      * it finds, and the HTML parsing is not very evolved, either.
      *
      * @param string $content input data (HTML)
+     *
      * @return string|null the image URL, or NULL if no image was found
      */
     private function extractTeaserImage($content)
@@ -81,8 +100,9 @@ class DefaultController extends Controller
         $matches = array();
         $rv = preg_match('/<img[^>]+src=(["\'])([^">]+)\1/i', $content, $matches);
         if (!$rv) {
-          return null;
+            return null;
         }
+
         return $matches[2];
     }
 
@@ -91,6 +111,10 @@ class DefaultController extends Controller
      *
      * XXX: We should be much smarter here. End at a full sentence/paragraph
      *   (if possible), selectively allow HTML, etc.
+     *
+     * @param string $content input data (HTML)
+     *
+     * @return string a up to 500 characters long teaser for the content
      */
     private function extractTeaser($content)
     {
@@ -109,7 +133,7 @@ class DefaultController extends Controller
             // cut at whitespace
             $cutpos = mb_strrpos($content, ' ');
             if ($cutpos !== false) {
-              $content = mb_substr($content, 0, $cutpos + 1);
+                $content = mb_substr($content, 0, $cutpos + 1);
             }
             $content .= ' ...';
         }

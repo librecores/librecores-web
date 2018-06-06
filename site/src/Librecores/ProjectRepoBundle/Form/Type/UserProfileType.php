@@ -15,7 +15,7 @@ class UserProfileType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name', TextType::class,   array('label' => 'Full name', 'required' => false))
+            ->add('name', TextType::class, array('label' => 'Full name', 'required' => false))
             ->add('save', SubmitType::class, array('label' => 'Update profile settings'))
         ;
     }
@@ -24,7 +24,7 @@ class UserProfileType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => 'Librecores\ProjectRepoBundle\Entity\User',
-            'label'      => 'User Profile Settings'
+            'label'      => 'User Profile Settings',
         ]);
     }
 }

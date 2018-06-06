@@ -39,9 +39,11 @@ class OAuthRegistrationListener implements EventSubscriberInterface
      */
     protected $accessor;
 
-    public function __construct(UserManagerInterface $userManager,
-        LibreCoresUserProvider $userProvider, Session $session)
-    {
+    public function __construct(
+        UserManagerInterface $userManager,
+        LibreCoresUserProvider $userProvider,
+        Session $session
+    ) {
         $this->userManager = $userManager;
         $this->userProvider = $userProvider;
         $this->session = $session;
@@ -57,6 +59,70 @@ class OAuthRegistrationListener implements EventSubscriberInterface
             FOSUserEvents::REGISTRATION_INITIALIZE => 'onRegistrationInitialize',
             FOSUserEvents::REGISTRATION_SUCCESS => 'onRegistrationSuccess',
         );
+    }
+
+    /**
+     * Event handler: the registration form was initialized
+     *
+     * @param GetResponseUserEvent $event
+     *
+     * @return void
+     */
+    public function onRegistrationInitialize(GetResponseUserEvent $event)
+    {
+        $oAuthData = $this->getFailedOAuthData();
+        if (!$oAuthData) {
+            return;
+        }
+
+        $user = $event->getUser();
+
+        $user->setUsername($oAuthData['username']);
+        $user->setEmail($oAuthData['email']);
+    }
+
+    /**
+     * Event handler: the registration form was successfully submitted
+     *
+     * This event is triggered after the user has completed the registration
+     * form. In this handler we connect the user to the OAuth service he/she
+     * tried to use during the auto-registration. After this step, logging in
+     * through the OAuth provider is possible.
+     *
+     * @param FormEvent $event
+     *
+     * @return NULL
+     */
+    public function onRegistrationSuccess(FormEvent $event)
+    {
+        $oAuthData = $this->getFailedOAuthData();
+        if (!$oAuthData) {
+            return null;
+        }
+
+        /** @var $user \Librecores\ProjectRepoBundle\Entity\User */
+        $user = $event->getForm()->getData();
+
+        // Connect the OAuth account to the LibreCores user
+        $this->accessor->setValue(
+            $user,
+            $this->userProvider->getAccessTokenProperty($oAuthData['oAuthServiceName']),
+            $oAuthData['oAuthAccessToken']
+        );
+        $this->accessor->setValue(
+            $user,
+            $this->userProvider->getUserIdProperty($oAuthData['oAuthServiceName']),
+            $oAuthData['oAuthUserId']
+        );
+
+        // set the real name of the user if it was provided by the OAuth service
+        if (empty($user->getName()) && $oAuthData['name']) {
+            $user->setName($oAuthData['name']);
+        }
+
+        $this->userManager->updateUser($user);
+
+        $this->clearFailedOAuthSession();
     }
 
     /**
@@ -87,6 +153,7 @@ class OAuthRegistrationListener implements EventSubscriberInterface
             $data = $error->getOAuthData();
             $this->session->set(self::FAILED_OAUTH_DATA, $data);
             $this->session->remove(Security::AUTHENTICATION_ERROR);
+
             return $data;
         }
     }
@@ -97,63 +164,5 @@ class OAuthRegistrationListener implements EventSubscriberInterface
     private function clearFailedOAuthSession()
     {
         $this->session->remove(self::FAILED_OAUTH_DATA);
-    }
-
-    /**
-     * Event handler: the registration form was initialized
-     *
-     * @param GetResponseUserEvent $event
-     * @return void
-     */
-    public function onRegistrationInitialize(GetResponseUserEvent $event)
-    {
-        $oAuthData = $this->getFailedOAuthData();
-        if (!$oAuthData) {
-            return;
-        }
-
-        $user = $event->getUser();
-
-        $user->setUsername($oAuthData['username']);
-        $user->setEmail($oAuthData['email']);
-    }
-
-    /**
-     * Event handler: the registration form was successfully submitted
-     *
-     * This event is triggered after the user has completed the registration
-     * form. In this handler we connect the user to the OAuth service he/she
-     * tried to use during the auto-registration. After this step, logging in
-     * through the OAuth provider is possible.
-     *
-     * @param FormEvent $event
-     * @return NULL
-     */
-    public function onRegistrationSuccess(FormEvent $event)
-    {
-        $oAuthData = $this->getFailedOAuthData();
-        if (!$oAuthData) {
-            return null;
-        }
-
-        /** @var $user \Librecores\ProjectRepoBundle\Entity\User */
-        $user = $event->getForm()->getData();
-
-        // Connect the OAuth account to the LibreCores user
-        $this->accessor->setValue($user,
-            $this->userProvider->getAccessTokenProperty($oAuthData['oAuthServiceName']),
-            $oAuthData['oAuthAccessToken']);
-        $this->accessor->setValue($user,
-            $this->userProvider->getUserIdProperty($oAuthData['oAuthServiceName']),
-            $oAuthData['oAuthUserId']);
-
-        // set the real name of the user if it was provided by the OAuth service
-        if (empty($user->getName()) && $oAuthData['name']) {
-            $user->setName($oAuthData['name']);
-        }
-
-        $this->userManager->updateUser($user);
-
-        $this->clearFailedOAuthSession();
     }
 }

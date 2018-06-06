@@ -8,7 +8,6 @@ use Librecores\ProjectRepoBundle\Util\MarkupToHtmlConverter;
 use Librecores\ProjectRepoBundle\Util\ProcessCreator;
 use Psr\Log\LoggerInterface;
 
-
 /**
  * Repository crawler base class
  *
@@ -43,11 +42,11 @@ abstract class RepoCrawler
 
     /**
      * RepoCrawler constructor.
-     * @param SourceRepo $repo
+     * @param SourceRepo            $repo
      * @param MarkupToHtmlConverter $markupConverter
-     * @param ProcessCreator $processCreator
-     * @param ObjectManager $manager
-     * @param LoggerInterface $logger
+     * @param ProcessCreator        $processCreator
+     * @param ObjectManager         $manager
+     * @param LoggerInterface       $logger
      */
     public function __construct(
         SourceRepo $repo,
@@ -55,8 +54,7 @@ abstract class RepoCrawler
         ProcessCreator $processCreator,
         ObjectManager $manager,
         LoggerInterface $logger
-    )
-    {
+    ) {
         $this->repo            = $repo;
         $this->markupConverter = $markupConverter;
         $this->logger          = $logger;
@@ -91,6 +89,4 @@ abstract class RepoCrawler
     {
         // the default implementation is empty
     }
-
-
 }

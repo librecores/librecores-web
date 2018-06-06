@@ -16,8 +16,7 @@ use Librecores\ProjectRepoBundle\Entity\GitSourceRepo;
 /**
  * Create a basic test environment
  */
-class LoadDevTestData extends AbstractFixture
-    implements FixtureInterface, ContainerAwareInterface
+class LoadDevTestData extends AbstractFixture implements FixtureInterface, ContainerAwareInterface
 {
     use ContainerAwareTrait;
 
@@ -103,6 +102,7 @@ class LoadDevTestData extends AbstractFixture
      *
      * @param string $username
      * @param string $password
+     *
      * @return \Librecores\ProjectRepoBundle\Entity\User
      */
     private function createUser($username, $password)

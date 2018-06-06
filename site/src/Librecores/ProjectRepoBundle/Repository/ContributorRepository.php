@@ -20,9 +20,10 @@ class ContributorRepository extends EntityRepository
      *
      * Creates and returns a new entity, if a name is supplied and the email does not exist.
      *
-     * @param SourceRepo $repo repository to search against
-     * @param string $email email of the contributor to search for
-     * @param null|string $name name of the contributor
+     * @param SourceRepo  $repo  repository to search against
+     * @param string      $email email of the contributor to search for
+     * @param null|string $name  name of the contributor
+     *
      * @return Contributor|null
      */
     public function getContributorForRepository(SourceRepo $repo, string $email, ?string $name = null): ?Contributor
@@ -51,6 +52,7 @@ class ContributorRepository extends EntityRepository
      * Gets all contributors for the given repository
      *
      * @param SourceRepo $repo repository to query for
+     *
      * @return array
      */
     public function getContributorsForRepository(SourceRepo $repo)
@@ -64,6 +66,7 @@ class ContributorRepository extends EntityRepository
      * Gets the number of contributors of the given repository
      *
      * @param SourceRepo $repo repository to query for
+     *
      * @return mixed
      */
     public function getContributorCountForRepository(SourceRepo $repo): int
@@ -78,8 +81,9 @@ class ContributorRepository extends EntityRepository
 
     /**
      * Gets top n contributors from repositories by commit count, lines added and lines removed
-     * @param SourceRepo $repo repository to query for
-     * @param int $count number of top contributors to return
+     * @param SourceRepo $repo  repository to query for
+     * @param int        $count number of top contributors to return
+     *
      * @return array
      */
     public function getTopContributorsForRepository(SourceRepo $repo, int $count)

@@ -16,6 +16,7 @@ class OrganizationRepository extends EntityRepository
      * Find all the organizations that a user is a member of.
      *
      * @param User $user
+     *
      * @return Organization[]
      */
     public function findAllByMemberOrderedByName(User $user)
@@ -36,6 +37,7 @@ class OrganizationRepository extends EntityRepository
      * Find an organization by its name.
      *
      * @param string $organizationName
+     *
      * @return NULL|Organization
      */
     public function findOneByName($organizationName)
@@ -54,6 +56,7 @@ class OrganizationRepository extends EntityRepository
      * Find an organization by a part of its name
      *
      * @param string $fragment
+     *
      * @return NULL|Organization
      */
     public function findByFragment($fragment)

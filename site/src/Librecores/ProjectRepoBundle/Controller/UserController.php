@@ -11,24 +11,30 @@ use Librecores\ProjectRepoBundle\Form\Type\UserProfileType;
 use FOS\UserBundle\Form\Type\ChangePasswordFormType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
-class UserController extends Controller {
+class UserController extends Controller
+{
 
     /**
      * View a user's public profile
      *
-     * @param User $user
+     * @param Request $request
+     * @param User    $user
+     *
      * @return Response
      */
     public function viewAction(Request $request, User $user)
     {
-        return $this->render('LibrecoresProjectRepoBundle:User:view.html.twig',
-            array('user' => $user));
+        return $this->render(
+            'LibrecoresProjectRepoBundle:User:view.html.twig',
+            array('user' => $user)
+        );
     }
 
     /**
      * User profile settings
      *
-     * @param Request
+     * @param Request $request
+     *
      * @return Response
      */
     public function profileSettingsAction(Request $request)
@@ -46,14 +52,17 @@ class UserController extends Controller {
             $em->flush();
         }
 
-        return $this->render('LibrecoresProjectRepoBundle:User:settings_profile.html.twig',
-            array('user' => $user, 'form' => $form->createView()));
+        return $this->render(
+            'LibrecoresProjectRepoBundle:User:settings_profile.html.twig',
+            array('user' => $user, 'form' => $form->createView())
+        );
     }
 
     /**
      * User connected services settings (such as GitHub or BitBucket)
      *
-     * @param Request
+     * @param Request $request
+     *
      * @return Response
      */
     public function connectionsSettingsAction(Request $request)
@@ -61,8 +70,11 @@ class UserController extends Controller {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         $user = $this->getUser();
-        return $this->render('LibrecoresProjectRepoBundle:User:settings_connections.html.twig',
-            array('user' => $user));
+
+        return $this->render(
+            'LibrecoresProjectRepoBundle:User:settings_connections.html.twig',
+            array('user' => $user)
+        );
     }
 
     /**
@@ -75,13 +87,17 @@ class UserController extends Controller {
      * app/Resources/HWIOAuthBundle/views/Connect/connect_success.html.twig
      *
      * @param Request $request
-     * @param string $serviceName
+     * @param string  $serviceName
+     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function connectionSuccessAction(Request $request, $serviceName)
     {
-        $this->addFlash('success', "You successfully connected your LibreCores ".
-            "account to ".ucfirst($serviceName).".");
+        $this->addFlash(
+            'success',
+            "You successfully connected your LibreCores account to "
+            .ucfirst($serviceName)."."
+        );
 
         return $this->connectionsSettingsAction($request);
     }
@@ -90,7 +106,8 @@ class UserController extends Controller {
      * Disconnect the user account from an OAuth service
      *
      * @param Request $request
-     * @param string $serviceName
+     * @param string  $serviceName
+     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function disconnectFromOAuthServiceAction(Request $request, $serviceName)
@@ -99,8 +116,11 @@ class UserController extends Controller {
 
         $this->get('hwi_oauth.account.connector')->disconnect($this->getUser(), $serviceName);
 
-        $this->addFlash('success', "You successfully disconnected your ".
-            "LibreCores account from ".ucfirst($serviceName).".");
+        $this->addFlash(
+            'success',
+            "You successfully disconnected your LibreCores account from "
+            .ucfirst($serviceName)."."
+        );
 
         return $this->connectionsSettingsAction($request);
     }
@@ -108,7 +128,8 @@ class UserController extends Controller {
     /**
      * Change user password
      *
-     * @param Request
+     * @param Request $request
+     *
      * @return Response
      */
     public function passwordSettingsAction(Request $request)
@@ -127,7 +148,9 @@ class UserController extends Controller {
             $em->flush();
         }
 
-        return $this->render('LibrecoresProjectRepoBundle:User:settings_password.html.twig',
-            array('user' => $user, 'form' => $form->createView()));
+        return $this->render(
+            'LibrecoresProjectRepoBundle:User:settings_password.html.twig',
+            array('user' => $user, 'form' => $form->createView())
+        );
     }
 }
