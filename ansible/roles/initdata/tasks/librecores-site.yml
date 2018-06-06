@@ -7,6 +7,7 @@
   command: php bin/console doctrine:fixtures:load -n
   args:
     chdir: /var/www/lc/site
+  when: not is_docker_environment
 
 - name: Update all projects from their source repository
   become: true
@@ -14,10 +15,13 @@
   command: php bin/console librecores:update-repos
   args:
     chdir: /var/www/lc/site
-
+  when: not is_docker_environment
+  
 - name: Run planet generator for the first time
   become: true
   become_user: "{{ web_user }}"
   shell: /var/www/lc/planet/generate.sh
   args:
     chdir: /var/www/lc/planet
+  when: not is_docker_environment
+  

@@ -26,24 +26,30 @@
 - name: Add admin user
   shell: rabbitmqctl add_user admin {{ rabbitmq_admin_password }}
   ignore_errors: true
+  when: not is_docker_environment
 
 - name: Set admin user tags
   shell: rabbitmqctl set_user_tags admin administrator
   ignore_errors: true
+  when: not is_docker_environment
 
 - name: Set admin user permissions
   shell: rabbitmqctl set_permissions -p / admin ".*" ".*" ".*"
   ignore_errors: true
+  when: not is_docker_environment
 
 - name: Delete guest user
   shell: rabbitmqctl delete_user guest
   notify: restart rabbitmq
   ignore_errors: true
+  when: not is_docker_environment
 
 - name: Add librecores user
   shell: rabbitmqctl add_user librecores {{ site_rabbitmq_password }}
   ignore_errors: true
+  when: not is_docker_environment
 
 - name: Set admin user permissions
   shell: rabbitmqctl set_permissions -p / librecores ".*" ".*" ".*"
   ignore_errors: true
+  when: not is_docker_environment
