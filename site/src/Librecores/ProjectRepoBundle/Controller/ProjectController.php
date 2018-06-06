@@ -2,10 +2,12 @@
 
 namespace Librecores\ProjectRepoBundle\Controller;
 
+use Librecores\ProjectRepoBundle\Entity\ClassificationHierarchy;
 use Librecores\ProjectRepoBundle\Entity\GitSourceRepo;
 use Librecores\ProjectRepoBundle\Entity\LanguageStat;
 use Librecores\ProjectRepoBundle\Entity\OrganizationMember;
 use Librecores\ProjectRepoBundle\Entity\Project;
+use Librecores\ProjectRepoBundle\Entity\ProjectClassification;
 use Librecores\ProjectRepoBundle\Form\Type\ProjectType;
 use Librecores\ProjectRepoBundle\RepoCrawler\GithubRepoCrawler;
 use Librecores\ProjectRepoBundle\Util\Dates;
@@ -18,6 +20,7 @@ use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Url;
@@ -218,12 +221,18 @@ class ProjectController extends Controller
             'isHostedOnGithub' => GithubRepoCrawler::isGithubRepoUrl($p->getSourceRepo()->getUrl()),
         ];
 
+        // Retrieve the project classifications for a project
+        $classifications = $this->getDoctrine()->getManager()
+            ->getRepository(ProjectClassification::class)
+            ->findByProject($p);
+
         // the actual project page
         return $this->render(
             'LibrecoresProjectRepoBundle:Project:view.html.twig',
             [
                 'project' => $p,
                 'metadata' => $metadata,
+                'classifications' => $classifications,
             ]
         );
     }
@@ -248,16 +257,66 @@ class ProjectController extends Controller
         // create and show form
         $form = $this->createForm(ProjectType::class, $p);
         $form->handleRequest($request);
-
+        $errorClassifications = [];
         if ($form->isSubmitted() && $form->isValid()) {
+            $projClassification = $request->request->get('classification');
+            $deleteClassification = $request->request->get('deleteClassification');
             $em = $this->getDoctrine()->getManager();
+            // Insert classifications
+            if (isset($projClassification)) {
+                foreach ($projClassification as $classification) {
+                    if ($this->classificationValidation($classification)) {
+                        $projectClassification = new ProjectClassification();
+                        $projectClassification->setProject($p);
+                        $projectClassification->setClassification($classification);
+                        $projectClassification->setCreatedBy($this->getUser());
+                        $em->persist($projectClassification);
+                    } else {
+                        $errorClassifications[] = $classification;
+                    }
+                }
+            }
+            // Delete classifications
+            if (isset($deleteClassification)) {
+                foreach ($deleteClassification as $delete) {
+                    $projectClassification = $em->getRepository(ProjectClassification::class)->find($delete);
+                    $em->remove($projectClassification);
+                }
+            }
             $em->persist($p);
             $em->flush();
         }
 
+        // Retrieve the project classifications for a project
+        $classifications = $this->getDoctrine()->getManager()
+            ->getRepository(ProjectClassification::class)
+            ->findByProject($p);
+
+        // Retrieve classification hierarchy
+        $classificationCategories = $this->getDoctrine()->getManager()
+            ->getRepository(ClassificationHierarchy::class)
+            ->findAll();
+
+        $classificationHierarchy = [];
+        foreach ($classificationCategories as $category) {
+            $temp = [
+                "id" => $category->getId(),
+                "parentId" => $category->getParent() == null ?
+                    $category->getParent(): $category->getParent()->getId(),
+                "name" => $category->getName(),
+            ];
+            $classificationHierarchy[] = $temp;
+        }
+
         return $this->render(
             'LibrecoresProjectRepoBundle:Project:settings.html.twig',
-            array('project' => $p, 'form' => $form->createView())
+            [
+                'project' => $p,
+                'form' => $form->createView(),
+                'classificationHierarchy' => $classificationHierarchy,
+                'classifications' => $classifications,
+                'errorClassification' => $errorClassifications,
+            ]
         );
     }
 
@@ -560,5 +619,38 @@ class ProjectController extends Controller
         }
 
         return $graph;
+    }
+
+    /**
+     * Validate a Project Classification
+     *
+     * @param string $classification holds a clssification for a project
+     *
+     * @return bool
+     */
+    private function classificationValidation($classification)
+    {
+        $em = $this->getDoctrine()->getManager()
+            ->getRepository(ClassificationHierarchy::class);
+
+        $classificationHierarchy = $em->findByParent(null);
+        $classifications = [];
+        foreach ($classificationHierarchy as $classHyc) {
+            $classifications[$classHyc->getName()] = $classHyc;
+        }
+        $categories = explode('::', $classification);
+        $i = 0;
+        $count = count($categories);
+        foreach ($categories as $category) {
+            if (!array_key_exists($category, $classifications)) {
+                return false;
+            }
+            $classificationHierarchy = $em->findByParent($classifications[$category]);
+            $classifications = [];
+            foreach ($classificationHierarchy as $classHyc) {
+                $classifications[$classHyc->getName()] = $classHyc;
+            }
+        }
+        return true;
     }
 }

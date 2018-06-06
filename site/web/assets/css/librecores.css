@@ -519,3 +519,86 @@ h1 a:hover, h1 a:active {
 .bootstrap-select.btn-group .dropdown-menu {
   z-index: 1050; /* to over-ride navbar z-index*/
 }
+
+.classification-category {
+  height: 40px;
+  margin:0 10px 5px 0px;
+}
+
+.classification-hierarchy {
+  position: relative;
+}
+
+.close-category,
+.add-category {
+  position: absolute;
+  top: -5px;
+  padding: 5px;
+}
+
+.close-category {
+  right: 15px;
+}
+
+ .add-category {
+   right: 40px;
+ }
+
+ .insert-classification {
+   float: right;
+ }
+
+ .classifications {
+  margin-top: 10px;
+  margin-bottom: 15px;
+  display: table;
+}
+
+.categories {
+  font-weight: 500;
+  font-size: 14px;
+  border-radius: 2px;
+  background-color: #3fb0ac;
+  color: #fff;
+  display: inline-block;
+  margin: 0 5px 5px 0;
+}
+
+.categories span {
+  display: table-cell;
+  padding: 6px;
+  vertical-align: middle;
+}
+
+.classifications a {
+  text-align: center;
+  display: table-cell;
+  color: #fff;
+  background: transparent;
+  border: 0;
+  border-left: 1px solid hsla(0,0%,100%,.2);
+  padding: 6px;
+}
+
+.classification-container {
+  display: inline-flex;
+  flex-wrap: wrap;
+  font-size: 12px;
+  align-items: baseline;
+  margin-top: 4px;
+}
+
+a.classifiation-tag {
+  display: inline-block;
+  padding: 0.3em 0.9em;
+  margin: 0 0.5em 0.5em 0;
+  white-space: nowrap;
+  background-color: #f1f8ff;
+  text-decoration: none;
+  border-radius: 3px;
+}
+
+a.classifiation-tag:hover {
+  text-decoration: none;
+  background-color: #def;
+}
