@@ -48,7 +48,7 @@ class ProjectController extends Controller
         $username = $this->getUser()->getUsername();
         $parentChoices = array($username => 'u_'.$username);
         foreach ($this->getUser()->getOrganizationMemberships() as $organizationMembership) {
-            if ($organizationMembership->getPermission() === OrganizationMember::PERMISSION_MEMBER or
+            if ($organizationMembership->getPermission() === OrganizationMember::PERMISSION_MEMBER ||
                 $organizationMembership->getPermission() === OrganizationMember::PERMISSION_ADMIN) {
                 $parentChoices[$organizationMembership->getOrganization()->getName()] =
                     'o_'.$organizationMembership->getOrganization()->getName();

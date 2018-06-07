@@ -94,6 +94,6 @@ class ProjectVoter extends Voter
             }
         }
 
-        return $orgResult or $userResult;
+        return $orgResult || $userResult;
     }
 }
