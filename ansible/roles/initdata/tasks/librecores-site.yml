@@ -8,6 +8,14 @@
   args:
     chdir: /var/www/lc/site
 
+- name: Insert classifications from YAML configuration file
+  become: true
+  become_user: "{{ web_user }}"
+  command: php bin/console librecores:insert-classifications
+  environment: "{{ symfony_config }}"
+  args:
+    chdir: /var/www/lc/site
+
 - name: Update all projects from their source repository
   become: true
   become_user: "{{ web_user }}"
