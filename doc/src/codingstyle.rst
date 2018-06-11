@@ -17,6 +17,7 @@ The following exceptions/changes and extensions are made:
 * Try to keep lines at 80 characters length.
 * Yoda-style comparisons (e.g. ``if (0 === $someVar)``) are discouraged.
 * Use the ``||`` and ``&&`` operators for logical AND and OR (instead of ``and`` and ``or``).
+* Start inline comments with a single space, e.g. ``// comment``).
 
 The PHP code can be checked using the `phpcs <https://github.com/squizlabs/PHP_CodeSniffer>`_ tool.
 The required configuration is part of the source repository (``site/phpcs.xml.dist``) and will be picked up by phpcs automatically.

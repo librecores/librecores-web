@@ -70,4 +70,7 @@
       <property name="absoluteLineLimit" value="120"/>
     </properties>
   </rule>
+
+  <!-- Require a space after an inline comment (e.g. "// text") -->
+  <rule ref="Squiz.Commenting.InlineComment.NoSpaceBefore"/>
 </ruleset>

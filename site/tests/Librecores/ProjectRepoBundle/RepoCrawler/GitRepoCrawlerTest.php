@@ -308,8 +308,8 @@ class GitRepoCrawlerTest extends TestCase
             new \DateTime('Tue Aug 23 04:11:11 2016 +0530')
         );
 
-        //notavalidrelease|f17341b4|Sun Aug 28 11:39:38 2016 +0530
-        //11invalidtag|f17341b4|Sun Aug 28 11:39:38 2016 +0530
+        // notavalidrelease|f17341b4|Sun Aug 28 11:39:38 2016 +0530
+        // 11invalidtag|f17341b4|Sun Aug 28 11:39:38 2016 +0530
     }
 
     private function getTestDataFileContents($testDataFilename)

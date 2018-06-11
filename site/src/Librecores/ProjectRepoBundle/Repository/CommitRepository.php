@@ -288,7 +288,7 @@ class CommitRepository extends EntityRepository
             ->addSelect('MONTH(c.dateCommitted) month')
             ->addSelect('DAY(c.dateCommitted) day')
             ->addSelect('COUNT(1) as commits');
-            //->where('c.sourceRepo = :repo');
+            // ->where('c.sourceRepo = :repo');
 
         if (null !== $start) {
             $query->andWhere('c.dateCommitted >= :start');

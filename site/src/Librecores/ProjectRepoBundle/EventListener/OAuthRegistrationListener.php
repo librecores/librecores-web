@@ -138,7 +138,7 @@ class OAuthRegistrationListener implements EventSubscriberInterface
      */
     private function getFailedOAuthData()
     {
-        //$this->session->remove(self::FAILED_OAUTH_DATA);
+        // $this->session->remove(self::FAILED_OAUTH_DATA);
         if ($this->session->has(self::FAILED_OAUTH_DATA)) {
             return $this->session->get(self::FAILED_OAUTH_DATA);
         }

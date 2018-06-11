@@ -122,7 +122,7 @@ class GitRepoCrawler extends RepoCrawler
         } else {
             // there has been a history rewrite
             // we drop everything and persist all commits to the DB
-            //XXX: Find a way to find the common ancestor and do partial rewrites
+            // XXX: Find a way to find the common ancestor and do partial rewrites
             $commitRepository->removeAllCommits($this->repo);
             $this->repo->getCommits()->clear();
             $commitCount = $this->updateCommits();
