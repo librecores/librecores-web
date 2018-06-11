@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * A ProjectClassification contains the classifications for the projects
- * A group up related categories can be used to classify the projects
+ * A group of related categories can be used to classify the projects
  *
  * @author Sandip Kumar Bhuyan <sandipbhuyan@gmail.com>
  *
@@ -38,7 +38,7 @@ class ProjectClassification
     private $classification;
 
     /**
-     *
+     * Project entity object for a classification
      *
      * @var Project
      *

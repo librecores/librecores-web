@@ -28,7 +28,7 @@ class ClassificationHierarchy
     private $id;
 
     /**
-     * One ClassificationHierarchy has Many parent classification.
+     * One ClassificationHierarchy has Many subclassifications.
      *
      * @var ArrayCollection
      *
@@ -38,7 +38,7 @@ class ClassificationHierarchy
     private $children;
 
     /**
-     * Many ClassificationHierarchy have One Parent Classification.
+     * Many subclassifications have One Parent Classification.
      *
      * @var ClassificationHierarchy
      *
@@ -127,7 +127,7 @@ class ClassificationHierarchy
     }
 
     /**
-     * Add child
+     * Add child category
      *
      * @param \Librecores\ProjectRepoBundle\Entity\ClassificationHierarchy $child
      *
@@ -141,7 +141,7 @@ class ClassificationHierarchy
     }
 
     /**
-     * Remove child
+     * Remove child category
      *
      * @param \Librecores\ProjectRepoBundle\Entity\ClassificationHierarchy $child
      */
@@ -151,7 +151,7 @@ class ClassificationHierarchy
     }
 
     /**
-     * Get children
+     * Get children category
      *
      * @return \Doctrine\Common\Collections\Collection
      */
