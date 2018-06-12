@@ -21,8 +21,14 @@ class ProjectClassificationType extends AbstractType
     {
         $builder
             ->add('classification', HiddenType::class, array('required' => false))
-            ->add('save', SubmitType::class, array('label' => 'Update Project', 'attr' => ['class' => 'btn-primary']))
-        ;
+            ->add(
+                'save',
+                SubmitType::class,
+                array(
+                    'label' => 'Update Classification',
+                    'attr' => ['class' => 'btn-primary'],
+                )
+            );
     }
     public function configureOptions(OptionsResolver $resolver)
     {
