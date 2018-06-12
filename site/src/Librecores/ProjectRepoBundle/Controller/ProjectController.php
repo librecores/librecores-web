@@ -8,6 +8,7 @@ use Librecores\ProjectRepoBundle\Entity\LanguageStat;
 use Librecores\ProjectRepoBundle\Entity\OrganizationMember;
 use Librecores\ProjectRepoBundle\Entity\Project;
 use Librecores\ProjectRepoBundle\Entity\ProjectClassification;
+use Librecores\ProjectRepoBundle\Form\Type\ProjectClassificationType;
 use Librecores\ProjectRepoBundle\Form\Type\ProjectType;
 use Librecores\ProjectRepoBundle\RepoCrawler\GithubRepoCrawler;
 use Librecores\ProjectRepoBundle\Util\Dates;
@@ -443,6 +444,67 @@ class ProjectController extends Controller
         $response = new Response("success", Response::HTTP_OK);
 
         return $response;
+    }
+
+    /**
+     * Update a Project Classification
+     *
+     * @param Request $request
+     *
+     * @param string  $parentName       URL component: name of the parent
+     * @param string  $projectName      URL component: name of the project
+     *
+     * @param int     $classificationId URL component: id of a project classification
+     *
+     * @return Response
+     */
+    public function updateClassificationAction(Request $request, $parentName, $projectName, $classificationId)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $projectClassification = $em->getRepository(ProjectClassification::class)->find($classificationId);
+        // check Authentication
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $form = $this->createForm(ProjectClassificationType::class, $projectClassification);
+        $p = $this->getProject($parentName, $projectName);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->persist($projectClassification);
+            $em->flush();
+
+            return $this->redirectToRoute(
+                'librecores_project_repo_project_settings',
+                array(
+                    'parentName' => $parentName,
+                    'projectName' => $projectName,
+                )
+            );
+        }
+
+        // retrive classification hierarchy and send it to settings page
+        $classificationCategories = $this->getDoctrine()->getManager()
+            ->getRepository(ClassificationHierarchy::class)
+            ->findAll();
+
+        $classificationHierarchy = array();
+        $id = 0;
+        foreach ($classificationCategories as $category) {
+            $temp = array(
+                1 => $category->getId(),
+                2 => $category->getParent() == null ?
+                    $category->getParent(): $category->getParent()->getId(),
+                3 => $category->getName(),
+            );
+            $classificationHierarchy[$id++] = $temp;
+        }
+
+        return $this->render(
+            'LibrecoresProjectRepoBundle:Project:update_classification.html.twig',
+            array(
+                'project' => $p,
+                'form' => $form->createView(),
+                'classificationHierarchy' => $classificationHierarchy,
+            )
+        );
     }
 
     /**
