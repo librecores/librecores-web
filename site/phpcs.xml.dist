@@ -9,7 +9,7 @@
   <arg name="colors" />
 
   <!-- We mostly follow the Symfony coding standards -->
-  <rule ref="Symfony">
+  <rule ref="vendor/escapestudios/symfony2-coding-standard/Symfony">
     <!-- Excluded until we add license headers to all files. -->
     <exclude name="Symfony.Commenting.License.Warning"/>
 
