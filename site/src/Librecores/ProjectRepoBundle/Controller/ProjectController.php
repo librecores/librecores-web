@@ -258,7 +258,7 @@ class ProjectController extends Controller
             $em->flush();
         }
 
-        //retrive classification hierarchy and send it to settings page
+        // retrive classification hierarchy and send it to settings page
         $classificationCategories = $this->getDoctrine()->getManager()
             ->getRepository(ClassificationHierarchy::class)
             ->findAll();
@@ -268,15 +268,20 @@ class ProjectController extends Controller
         foreach ($classificationCategories as $category) {
             $temp = array(
                 1 => $category->getId(),
-                2 => $category->getParent() == null ? $category->getParent(): $category->getParent()->getId(),
-                3 => $category->getName()
+                2 => $category->getParent() == null ?
+                    $category->getParent(): $category->getParent()->getId(),
+                3 => $category->getName(),
             );
             $classificationHierarchy[$id++] = $temp;
         }
 
         return $this->render(
             'LibrecoresProjectRepoBundle:Project:settings.html.twig',
-            array('project' => $p, 'form' => $form->createView(), 'classificationHierarchy' => $classificationHierarchy )
+            array(
+                'project' => $p,
+                'form' => $form->createView(),
+                'classificationHierarchy' => $classificationHierarchy,
+            )
         );
     }
 
@@ -354,6 +359,83 @@ class ProjectController extends Controller
             200,
             [ 'Content-Type' => 'text/plain' ]
         );
+    }
+
+    /**
+     * Set The Classifications for a project
+     *
+     * This method helps to specify classification for a project
+     *
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function insertClassificationAction(Request $request)
+    {
+        $p = $this->getProject($request->get('parentName'), $request->get('projectName'));
+        $em = $this->getDoctrine()->getManager();
+        $projectClassification = new ProjectClassification();
+        $projectClassification->setProject($p);
+        $projectClassification->setClassification($request->get('classification'));
+        $projectClassification->setCreatedBy($p->getParentUser());
+        $em->persist($projectClassification);
+        $em->flush();
+
+        $response = new Response("success", Response::HTTP_OK);
+
+        return $response;
+    }
+
+    /**
+     * Get The Classifications for a project
+     *
+     * This method retrives the classifications that are specified
+     * for a given project.
+     *
+     * @param string $parentName  URL component: name of the parent
+     *                            (user or organization)
+     * @param string $projectName URL component: name of the project
+     *
+     * @return JsonResponse
+     */
+    public function getClassificationAction($parentName, $projectName)
+    {
+        $p = $this->getProject($parentName, $projectName);
+
+        $classifications = $this->getDoctrine()->getManager()
+            ->getRepository(ProjectClassification::class)
+            ->findBy(['project' => $p->getId()]);
+        $response = array();
+        $id = 0;
+        foreach ($classifications as $classification) {
+            $temp = array(
+                'id' => $classification->getId(),
+                'classification' => $classification->getClassification(),
+                'project' => $p->getId(),
+            );
+            $response[$id++] = $temp;
+        }
+
+        return new JsonResponse($response);
+    }
+
+    /**
+     * Delete a ProjectClassification object
+     *
+     * @param int $classificationId URL component: id of a project classification
+     *
+     * @return Response
+     */
+    public function deleteClassificationAction($classificationId)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $projectClassification = $em->getRepository(ProjectClassification::class)->find($classificationId);
+        $em->remove($projectClassification);
+        $em->flush();
+
+        $response = new Response("success", Response::HTTP_OK);
+
+        return $response;
     }
 
     /**
@@ -579,59 +661,5 @@ class ProjectController extends Controller
         }
 
         return $graph;
-    }
-
-    /**
-     * Set The Classifications for a project
-     *
-     * This method helps to specify classification for a project
-     *
-     * @param Request $request
-     *
-     * @return Response
-     */
-    public function insertClassificationAction(Request $request) {
-        $p = $this->getProject($request->get('parentName'), $request->get('projectName'));
-        $em = $this->getDoctrine()->getManager();
-        $projectClassification = new ProjectClassification();
-        $projectClassification->setProject($p);
-        $projectClassification->setClassification($request->get('classification'));
-        $projectClassification->setCreatedBy($p->getParentUser());
-        $em->persist($projectClassification);
-        $em->flush();
-
-        $response = new Response("success",Response::HTTP_OK);
-        return $response;
-    }
-
-    /**
-     * Get The Classifications for a project
-     *
-     * This method retrives the classifications that are specified
-     * for a given project.
-     *
-     * @param string  $parentName  URL component: name of the parent
-     *                             (user or organization)
-     * @param string  $projectName URL component: name of the project
-     * @return JsonResponse
-     */
-    public function getClassificationAction($projectName, $parentName) {
-        $p = $this->getProject($parentName, $projectName);
-
-        $classifications = $this->getDoctrine()->getManager()
-            ->getRepository(ProjectClassification::class)
-            ->findBy(['project' => $p->getId()]);
-        $response = array();
-        $id = 0;
-        foreach ($classifications as $classification) {
-            $temp = array(
-                'id' => $classification->getId(),
-                'classification' => $classification->getClassification(),
-                'project' => $p->getId()
-            );
-            $response[$id++] = $temp;
-        }
-
-        return new JsonResponse($response);
     }
 }
