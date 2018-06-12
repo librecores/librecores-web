@@ -1,0 +1,97 @@
+{% extends "@FOSUser/layout.html.twig" %}
+
+{% trans_default_domain 'FOSUserBundle' %}
+
+{% block fos_user_content %}
+  <div class="container marketing">
+    <div class="intro">
+      <h1>Welcome {{ user.username }}</h1>
+      <p>your account is now activated. You can now take a ride of librecores</p>
+      <p>LibreCores is your gateway to free and open source digital designs and other components that you can use and re-use in your digital designs.
+        Towards this goal, LibreCores provides you</p>
+      <ul>
+        <li>a comprehensive and easy directory of digital design components ("IP Cores"),</li>
+        <li>means to assess the quality of those components, and</li>
+        <li>documentation to learn more about the use and contribution to free and open source digital designs.</li>
+      </ul>
+      <h4>Basic Features</h4>
+      <p>Some of the most important features we are working on and that will be added in the near future are:</p>
+    </div>
+    <hr class="featurette-divider">
+    <div class="row featurette">
+      <div class="col-md-7">
+        <h2 class="featurette-heading">Connect <span class="text-muted">and Engage</span></h2>
+        <p class="lead">You're not alone.
+          Meet other developers, engage and tackle your challenges together.
+          Join the mailing list, hop on to IRC, or read blogs.
+          <a class="librecores-home-showcase-btn"
+             href="{{ path('librecores_site_page', {'page': 'community-hub'}) }}">
+            » Community Hub
+          </a>
+        </p>
+
+      </div>
+      <div class="col-md-5">
+        <a href="{{ path('librecores_site_page', {'page': 'community-hub'}) }}">
+          <img class="featurette-image img-responsive center-block" src="{{ asset('img/chat.svg') }}" alt="engage">
+        </a>
+      </div>
+    </div>
+    <hr class="featurette-divider">
+    <div class="row featurette">
+      <div class="col-md-7 col-md-push-5">
+        <h2 class="featurette-heading">Code <span class="text-muted">and Share</span></h2>
+        <p class="lead">Express your ideas in code.
+          Create new digital hardware designs and improve existing ones.
+          Open them up for the world to see.
+          <a class="librecores-home-showcase-btn"
+             href="{{ path('librecores_project_repo_project_new') }}">
+            » Add a project
+          </a>
+        </p>
+      </div>
+      <div class="col-md-5 col-md-pull-7">
+        <a href="{{ path('librecores_project_repo_project_new') }}">
+          <img class="featurette-image img-responsive center-block" src="{{ asset('img/coding.svg') }}" alt="code">
+        </a>
+
+      </div>
+    </div>
+    <hr class="featurette-divider">
+    <div class="row featurette">
+      <div class="col-md-7">
+        <h2 class="featurette-heading">Learn <span class="text-muted">and Implement</span></h2>
+        <p class="lead">Get started with VHDL, Verilog and other languages. Find out what tools you can use. Learn which licenses are best for your project.
+          <a class="librecores-home-showcase-btn"
+             href="{{ path('librecores_site_page', {'page': 'docs'}) }}">
+            » Read the docs
+          </a>
+        </p>
+      </div>
+      <div class="col-md-5">
+        <a href="{{ path('librecores_site_page', {'page': 'docs'}) }}">
+          <img class="featurette-image img-responsive center-block" src="{{ asset('img/open-book.svg') }}" alt="share">
+        </a>
+      </div>
+    </div>
+    <hr class="featurette-divider">
+    <div class="row featurette">
+      <div class="col-md-7 col-md-push-5">
+        <h2 class="featurette-heading">Reuse <span class="text-muted">and Improve</span></h2>
+        <p class="lead">Express your ideas in code.
+          Create new digital hardware designs and improve existing ones.
+          Open them up for the world to see.
+          <a class="librecores-home-showcase-btn"
+             href="{{ path('librecores_project_repo_project_list') }}">
+            » Browse projects
+          </a>
+        </p>
+      </div>
+      <div class="col-md-5 col-md-pull-7">
+        <a href="{{ path('librecores_project_repo_project_list') }}">
+          <img class="featurette-image img-responsive center-block" src="{{ asset('img/reuse.svg') }}" alt="code">
+        </a>
+      </div>
+    </div>
+  </div><!-- /.container -->
+{% endblock fos_user_content %}

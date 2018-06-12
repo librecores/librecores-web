@@ -59,3 +59,16 @@ SaltStack
     License: MIT
     Files:
         site/app/Resources/FOSUserBundle/Registration/email.html.twig
+
+
+NounProject
+    URL: https://thenounproject.com
+    Files:
+      site/web/img/chat.svg
+        author: Marta Ambrosetti
+      site/web/img/coding.svg
+        author: Curve
+      site/web/img/open-book.svg
+        author: Gregor Cresnar
+      site/web/img/reuse.svg
+
