@@ -1,9 +1,9 @@
 
-  var insertClassification = function(classificationDetails) {
+  var insertClassification = function(classificationDetails, parentName, projectName) {
     var count = 1;
     for(var i = 0; i < classificationDetails.length; i++) {
       if(classificationDetails[i][2] == null) {
-        $('#category-'+count+'').append('<option value="'+classificationDetails[i][3]+'" data-id='+classificationDetails[i][1]+'>'+classificationDetails[i][3]+'</option>');
+        $('#category-'+count+'').append('<option value="'+classificationDetails[i][3]+'">'+classificationDetails[i][3]+'</option>');
       }
     }
     //adding tooltip to the button
@@ -20,6 +20,7 @@
         $(this).nextAll().remove();
       })
     }
+    //add a new child category
     $('.add-category').on('click',function(event){
       event.preventDefault();
       var value = $('#category-'+count+'').val();
@@ -59,12 +60,11 @@
         count--;
       }
     })
-
-    //send the classification of the project to controller
-    $('form').on('submit',function() {
-      var $self = $(this);
+    //send ajax request for inserting classification for a project
+    $('.insert-classification').on('click',function(event){
+      event.preventDefault();
       var classification = '';
-      for(var j = 1; j <= count ;j++) {
+      for(var j = 1; j <= count;j++) {
         if($('#category-'+j+'').val() != 'NULL') {
           if(j == 1) {
             classification = $('#category-'+j+'').val();
@@ -77,17 +77,63 @@
           break;
         }
       }
-      if(classification == '') {
-        var input = $("<input>")
-          .attr("type", "hidden")
-          .attr("name", "classification").val("NULL");
+
+      if( classification != '') {
+        $.ajax({
+          url: "/project/insert/classifications",
+          type: "GET",
+          data: { "classification" : classification, "parentName" : parentName, "projectName" : projectName },
+          async: true,
+          success: function(data, status) {
+            count = 1;
+            $('#category-'+count+'').empty();
+            $('#category-'+count+'').append('<option value="NULL" selected="selected">select a category</option>')
+            for(var i = 0; i < classificationDetails.length; i++) {
+              if(classificationDetails[i][2] == null) {
+                $('#category-'+count+'').append('<option value="'+classificationDetails[i][3]+'">'+classificationDetails[i][3]+'</option>');
+              }
+            }
+            $('#category-'+count+'').nextAll().remove();
+            getClassification();
+
+          },
+          error : function(xhr, textStatus, errorThrown) {
+          }
+        })
       }
-      else	{
-        var input = $("<input>")
-          .attr("type", "hidden")
-          .attr("name", "classification").val(classification);
-      }
-      $self.append($(input));
-      $self.submit();
+
     })
+
+    //displaying classification details for a project
+    $('.classifications').hide();
+    getClassification();
+    function getClassification() {
+      $.ajax({
+        url: "/"+parentName+"/"+projectName+"/classification",
+        type: "GET",
+        async: true,
+        success: function(data,status) {
+          if(data.length >= 1) {
+            $('.classifications').show();
+            $('.classifications').empty();
+            $('.classifications').append('<h4>Classifications</h4>');
+            for(var i = 0; i < data.length; i++) {
+              $('.classifications').append('<div class="categories">\
+                        <span>'+data[i]['classification']+'</span>\
+                    <a class="update-classification" href="#">\
+                      <i class="fa fa-edit" aria-hidden="true"></i>\
+                    </a>\
+                    <a class="delete-classification" href="#">\
+                      <i class="fa fa-trash" aria-hidden="true"></i>\
+                    </a>\
+                  </div>')
+            }
+          }
+          else {
+            $('.classifications').hide();
+          }
+        }
+      })
+    }
+
   }

@@ -2,10 +2,12 @@
 
 namespace Librecores\ProjectRepoBundle\Controller;
 
+use Librecores\ProjectRepoBundle\Entity\ClassificationHierarchy;
 use Librecores\ProjectRepoBundle\Entity\GitSourceRepo;
 use Librecores\ProjectRepoBundle\Entity\LanguageStat;
 use Librecores\ProjectRepoBundle\Entity\OrganizationMember;
 use Librecores\ProjectRepoBundle\Entity\Project;
+use Librecores\ProjectRepoBundle\Entity\ProjectClassification;
 use Librecores\ProjectRepoBundle\Form\Type\ProjectType;
 use Librecores\ProjectRepoBundle\RepoCrawler\GithubRepoCrawler;
 use Librecores\ProjectRepoBundle\Util\Dates;
@@ -16,6 +18,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -255,9 +258,25 @@ class ProjectController extends Controller
             $em->flush();
         }
 
+        //retrive classification hierarchy and send it to settings page
+        $classificationCategories = $this->getDoctrine()->getManager()
+            ->getRepository(ClassificationHierarchy::class)
+            ->findAll();
+
+        $classificationHierarchy = array();
+        $id = 0;
+        foreach ($classificationCategories as $category) {
+            $temp = array(
+                1 => $category->getId(),
+                2 => $category->getParent() == null ? $category->getParent(): $category->getParent()->getId(),
+                3 => $category->getName()
+            );
+            $classificationHierarchy[$id++] = $temp;
+        }
+
         return $this->render(
             'LibrecoresProjectRepoBundle:Project:settings.html.twig',
-            array('project' => $p, 'form' => $form->createView())
+            array('project' => $p, 'form' => $form->createView(), 'classificationHierarchy' => $classificationHierarchy )
         );
     }
 
@@ -560,5 +579,59 @@ class ProjectController extends Controller
         }
 
         return $graph;
+    }
+
+    /**
+     * Set The Classifications for a project
+     *
+     * This method helps to specify classification for a project
+     *
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function insertClassificationAction(Request $request) {
+        $p = $this->getProject($request->get('parentName'), $request->get('projectName'));
+        $em = $this->getDoctrine()->getManager();
+        $projectClassification = new ProjectClassification();
+        $projectClassification->setProject($p);
+        $projectClassification->setClassification($request->get('classification'));
+        $projectClassification->setCreatedBy($p->getParentUser());
+        $em->persist($projectClassification);
+        $em->flush();
+
+        $response = new Response("success",Response::HTTP_OK);
+        return $response;
+    }
+
+    /**
+     * Get The Classifications for a project
+     *
+     * This method retrives the classifications that are specified
+     * for a given project.
+     *
+     * @param string  $parentName  URL component: name of the parent
+     *                             (user or organization)
+     * @param string  $projectName URL component: name of the project
+     * @return JsonResponse
+     */
+    public function getClassificationAction($projectName, $parentName) {
+        $p = $this->getProject($parentName, $projectName);
+
+        $classifications = $this->getDoctrine()->getManager()
+            ->getRepository(ProjectClassification::class)
+            ->findBy(['project' => $p->getId()]);
+        $response = array();
+        $id = 0;
+        foreach ($classifications as $classification) {
+            $temp = array(
+                'id' => $classification->getId(),
+                'classification' => $classification->getClassification(),
+                'project' => $p->getId()
+            );
+            $response[$id++] = $temp;
+        }
+
+        return new JsonResponse($response);
     }
 }

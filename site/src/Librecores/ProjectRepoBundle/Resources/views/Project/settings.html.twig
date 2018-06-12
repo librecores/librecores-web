@@ -108,15 +108,21 @@
         <div class="panel-heading">
           <h3 class="panel-title">Project Classification</h3>
         </div>
-        <div class="panel-body classification-hierarchy row">
-          <div class="classification-system">
-            <select id="category-1" class="classification-category">
-              <option value="NULL" data-parentId="NULL">select a category</option>
-            </select>
+        <div class="panel-body">
+          <div class="classification-hierarchy">
+            <label class="control-label">Specify Classifications for your project</label>
+            <div class="classification-system">
+              <select id="category-1" class="classification-category">
+                <option value="NULL" data-parentId="NULL">select a category</option>
+              </select>
+            </div>
+            <a href="" class="insert-classification btn btn-primary"><i class="fa fa-plus"></i> Add Classification</a>
+            <div class="classifications">
+              <h4>Classifications</h4>
+            </div>
+            <a href="" class="close-category" data-toggle="tooltip" data-placement="bottom" title="Remove the last child category"><i class="fa fa-close"></i></a>
+            <a href="" class="add-category" data-toggle="tooltip" data-placement="bottom" title="Add child category" ><i class="fa fa-plus"></i></a>
           </div>
-
-          <a href="" class="close-category" data-toggle="tooltip" data-placement="bottom" title="Remove the last child category"><i class="fa fa-close"></i></a>
-          <a href="" class="add-category" data-toggle="tooltip" data-placement="bottom" title="Add child category" ><i class="fa fa-plus"></i></a>
         </div>
       </div>
 
@@ -182,6 +188,6 @@ $(document).ready(function(){
   //insert classification
   // classification hierarchy data
   var classificationDetails = {{ classificationHierarchy|json_encode|raw }}
-  insertClassification(classificationDetails);
+  insertClassification(classificationDetails, "{{ project.getParentName() }}", "{{ project.getName() }}");
 });
 {% endblock %}
