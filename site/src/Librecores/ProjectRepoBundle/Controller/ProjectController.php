@@ -372,6 +372,8 @@ class ProjectController extends Controller
      */
     public function insertClassificationAction(Request $request)
     {
+        // check Authentication
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $p = $this->getProject($request->get('parentName'), $request->get('projectName'));
         $em = $this->getDoctrine()->getManager();
         $projectClassification = new ProjectClassification();
@@ -402,6 +404,9 @@ class ProjectController extends Controller
     {
         $p = $this->getProject($parentName, $projectName);
 
+        // check Authentication
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         $classifications = $this->getDoctrine()->getManager()
             ->getRepository(ProjectClassification::class)
             ->findBy(['project' => $p->getId()]);
@@ -428,6 +433,8 @@ class ProjectController extends Controller
      */
     public function deleteClassificationAction($classificationId)
     {
+        // check Authentication
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $em = $this->getDoctrine()->getManager();
         $projectClassification = $em->getRepository(ProjectClassification::class)->find($classificationId);
         $em->remove($projectClassification);

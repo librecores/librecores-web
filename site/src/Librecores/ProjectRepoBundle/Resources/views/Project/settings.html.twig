@@ -149,6 +149,17 @@
     {{ form_end(form) }}
   </div>
 </div>
+<!-- delete confirmation modal -->
+<div class="confirmation-popup" role="alert">
+    <div class="confirmation-popup-container">
+      <p>Are you sure you want to delete this classification?</p>
+      <ul class="confirmation-buttons">
+        <li><a class="confirm-delete">Yes</a></li>
+        <li><a class="close-conf">No</a></li>
+      </ul>
+      <a href="#0" class="confirmation-popup-close img-replace"></a>
+    </div>
+  </div>
 {% endblock %}
 
 {% block pagejs %}

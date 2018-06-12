@@ -123,11 +123,12 @@
                     <a class="update-classification" href="#">\
                       <i class="fa fa-edit" aria-hidden="true"></i>\
                     </a>\
-                    <a class="delete-classification" href="#">\
+                    <a class="delete-classification" href="/project/classification/delete/'+data[i]['id']+'">\
                       <i class="fa fa-trash" aria-hidden="true"></i>\
                     </a>\
                   </div>')
             }
+            deleteClassification();
           }
           else {
             $('.classifications').hide();
@@ -136,4 +137,38 @@
       })
     }
 
+    function deleteClassification() {
+      var deleteUrl = '';
+      $('.delete-classification').on('click', function(event){
+    		event.preventDefault();
+    		$('.confirmation-popup').addClass('is-visible');
+        deleteUrl = $(this).attr('href');
+    	});
+
+    	//close popup
+    	$('.confirmation-popup').on('click', function(event){
+    		if( $(event.target).is('.confirmation-popup-close') || $(event.target).is('.confirmation-popup') || $(event.target).is('.close-conf')) {
+    			event.preventDefault();
+    			$(this).removeClass('is-visible');
+    		}
+
+        if($(event.target).is('.confirm-delete')) {
+          $(this).removeClass('is-visible');
+          $.ajax({
+            url: deleteUrl,
+            type: "GET",
+            async: true,
+            success: function(data,status) {
+              getClassification();
+            }
+          })
+        }
+    	});
+    	//close popup when clicking the esc keyboard button
+    	$(document).keyup(function(event){
+        	if(event.which=='27'){
+        		$('.confirmation-popup').removeClass('is-visible');
+    	    }
+        });
+    }
   }
