@@ -8,7 +8,6 @@ use Librecores\ProjectRepoBundle\Entity\LanguageStat;
 use Librecores\ProjectRepoBundle\Entity\OrganizationMember;
 use Librecores\ProjectRepoBundle\Entity\Project;
 use Librecores\ProjectRepoBundle\Entity\ProjectClassification;
-use Librecores\ProjectRepoBundle\Form\Type\ProjectClassificationType;
 use Librecores\ProjectRepoBundle\Form\Type\ProjectType;
 use Librecores\ProjectRepoBundle\RepoCrawler\GithubRepoCrawler;
 use Librecores\ProjectRepoBundle\Util\Dates;
@@ -19,7 +18,6 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -254,12 +252,36 @@ class ProjectController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $projClassification = $request->request->get('classification');
+            $deleteClassification = $request->request->get('deleteClassification');
             $em = $this->getDoctrine()->getManager();
+            // Insert classifications
+            if (isset($projClassification)) {
+                foreach ($projClassification as $classification) {
+                    $projectClassification = new ProjectClassification();
+                    $projectClassification->setProject($p);
+                    $projectClassification->setClassification($classification);
+                    $projectClassification->setCreatedBy($p->getParentUser());
+                    $em->persist($projectClassification);
+                }
+            }
+            // Delete classifications
+            if (isset($deleteClassification)) {
+                foreach ($deleteClassification as $delete) {
+                    $projectClassification = $em->getRepository(ProjectClassification::class)->find($delete);
+                    $em->remove($projectClassification);
+                }
+            }
             $em->persist($p);
             $em->flush();
         }
 
-        // retrive classification hierarchy and send it to settings page
+        // Retrive the project classifications for a project
+        $classifications = $this->getDoctrine()->getManager()
+            ->getRepository(ProjectClassification::class)
+            ->findBy(['project' => $p->getId()]);
+
+        // Retrive classification hierarchy
         $classificationCategories = $this->getDoctrine()->getManager()
             ->getRepository(ClassificationHierarchy::class)
             ->findAll();
@@ -282,6 +304,7 @@ class ProjectController extends Controller
                 'project' => $p,
                 'form' => $form->createView(),
                 'classificationHierarchy' => $classificationHierarchy,
+                'classifications' => $classifications,
             )
         );
     }
@@ -360,90 +383,6 @@ class ProjectController extends Controller
             200,
             [ 'Content-Type' => 'text/plain' ]
         );
-    }
-
-    /**
-     * Set The Classifications for a project
-     *
-     * This method helps to specify classification for a project
-     *
-     * @param Request $request
-     *
-     * @return Response
-     */
-    public function insertClassificationAction(Request $request)
-    {
-        // check Authentication
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $p = $this->getProject($request->get('parentName'), $request->get('projectName'));
-        $em = $this->getDoctrine()->getManager();
-        $projectClassification = new ProjectClassification();
-        $projectClassification->setProject($p);
-        $projectClassification->setClassification($request->get('classification'));
-        $projectClassification->setCreatedBy($p->getParentUser());
-        $em->persist($projectClassification);
-        $em->flush();
-
-        $response = new Response("success", Response::HTTP_OK);
-
-        return $response;
-    }
-
-    /**
-     * Get The Classifications for a project
-     *
-     * This method retrives the classifications that are specified
-     * for a given project.
-     *
-     * @param string $parentName  URL component: name of the parent
-     *                            (user or organization)
-     * @param string $projectName URL component: name of the project
-     *
-     * @return JsonResponse
-     */
-    public function getClassificationAction($parentName, $projectName)
-    {
-        $p = $this->getProject($parentName, $projectName);
-
-        // check Authentication
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-
-        $classifications = $this->getDoctrine()->getManager()
-            ->getRepository(ProjectClassification::class)
-            ->findBy(['project' => $p->getId()]);
-        $response = array();
-        $id = 0;
-        foreach ($classifications as $classification) {
-            $temp = array(
-                'id' => $classification->getId(),
-                'classification' => $classification->getClassification(),
-                'project' => $p->getId(),
-            );
-            $response[$id++] = $temp;
-        }
-
-        return new JsonResponse($response);
-    }
-
-    /**
-     * Delete a ProjectClassification object
-     *
-     * @param int $classificationId URL component: id of a project classification
-     *
-     * @return Response
-     */
-    public function deleteClassificationAction($classificationId)
-    {
-        // check Authentication
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $em = $this->getDoctrine()->getManager();
-        $projectClassification = $em->getRepository(ProjectClassification::class)->find($classificationId);
-        $em->remove($projectClassification);
-        $em->flush();
-
-        $response = new Response("success", Response::HTTP_OK);
-
-        return $response;
     }
 
     /**

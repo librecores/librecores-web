@@ -84,22 +84,6 @@ librecores_project_repo_project_update:
     defaults:
         _controller: 'LibrecoresProjectRepoBundle:Project:update'
 
-librecores_project_repo_project_insert_classification:
-    path: /project/insert/classifications
-    defaults: { _controller: LibrecoresProjectRepoBundle:Project:insertClassification }
-
-librecores_project_repo_project_get_classification:
-    path: /{parentName}/{projectName}/classification
-    defaults: { _controller: LibrecoresProjectRepoBundle:Project:getClassification }
-
-librecores_project_repo_classification_delete:
-    path: /project/classification/delete/{classificationId}
-    defaults: { _controller: LibrecoresProjectRepoBundle:Project:deleteClassification }
-
-librecores_project_repo_classification_update:
-    path: /{parentName}/{projectName}/{classificationId}/update
-    defaults: { _controller: LibrecoresProjectRepoBundle:Project:updateClassification }
-
 # Organization routes
 
 librecores_project_repo_organization_view:

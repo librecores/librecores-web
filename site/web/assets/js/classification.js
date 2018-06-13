@@ -1,171 +1,140 @@
-
-  var insertClassification = function(classificationDetails, parentName, projectName) {
-    var count = 1;
-    for(var i = 0; i < classificationDetails.length; i++) {
-      if(classificationDetails[i][2] == null) {
-        $('#category-'+count+'').append('<option value="'+classificationDetails[i][3]+'">'+classificationDetails[i][3]+'</option>');
-      }
+var insertClassification = function (classificationDetails) {
+  var count = 1;
+  for (var i = 0; i < classificationDetails.length; i++) {
+    if (classificationDetails[i][2] == null) {
+      $('#category-' + count + '').append('<option value="' + classificationDetails[i][3] + '">' + classificationDetails[i][3] + '</option>');
     }
-    //adding tooltip to the button
-    $('[data-toggle="tooltip"]').tooltip();
+  }
+  // adding tooltip to the button
+  $('[data-toggle="tooltip"]').tooltip();
 
-    // add a new category to the project
-    removeChildCategory();
-    // remove next all child category if a parent category change
-    function removeChildCategory(){
-      $('select').on('change',function(){
-        var id = $(this).attr('id');
-        var getCount = id.split('-');
-        count = parseInt(getCount[1]);
-        $(this).nextAll().remove();
-      })
-    }
-    //add a new child category
-    $('.add-category').on('click',function(event){
-      event.preventDefault();
-      var value = $('#category-'+count+'').val();
-      if(value != "NULL") {
+  // add a new category to the project
+  updateCategory();
+
+  // remove next all child category if a parent category change
+  function updateCategory() {
+    $('select').on('change', function () {
+      var id = $(this).attr('id');
+      var getCount = id.split('-');
+      count = parseInt(getCount[1]);
+      $(this).nextAll().remove();
+      var value = $('#category-' + count + '').val();
+      if (value != "NULL") {
         var increase = false;
         var id = 0;
-        for(var i = 0; i < classificationDetails.length; i++) {
-          if(classificationDetails[i][3] == value) {
+        for (var i = 0; i < classificationDetails.length; i++) {
+          if (classificationDetails[i][3] == value) {
             id = classificationDetails[i][1];
             break;
           }
         }
-        for(var i = 0; i < classificationDetails.length; i++) {
-          if(classificationDetails[i][2] == id) {
-            if(increase == false){
-              var category = $('#category-'+count+'').clone().appendTo('.classification-system');
+        for (var i = 0; i < classificationDetails.length; i++) {
+          if (classificationDetails[i][2] == id) {
+            if (increase == false) {
+              var category = $('#category-' + count + '').clone().appendTo('.classification-system');
               count++;
-              category.attr('id','category-'+count+'').empty().append('<option value="NULL">select a category</option>');
-              $('#category-'+count+'').append('<option value="'+classificationDetails[i][3]+'">'+classificationDetails[i][3]+'</option>');
+              category.attr('id', 'category-' + count + '').empty().append('<option value="NULL">select a category</option>');
+              $('#category-' + count + '').append('<option value="' + classificationDetails[i][3] + '">' + classificationDetails[i][3] + '</option>');
               increase = true;
             }
             else {
-              $('#category-'+count+'').append('<option value="'+classificationDetails[i][3]+'">'+classificationDetails[i][3]+'</option>');
+              $('#category-' + count + '').append('<option value="' + classificationDetails[i][3] + '">' + classificationDetails[i][3] + '</option>');
             }
           }
         }
         //include this current select element to the remove paramenter
-        removeChildCategory();
+        updateCategory();
       }
     })
+  }
 
-    //remove a category to the project
-    $('.close-category').on('click',function(event){
-      event.preventDefault();
-      if(count != 1) {
-        $('#category-'+count+'').remove();
-        count--;
-      }
-    })
-    //send ajax request for inserting classification for a project
-    $('.insert-classification').on('click',function(event){
-      event.preventDefault();
-      var classification = '';
-      for(var j = 1; j <= count;j++) {
-        if($('#category-'+j+'').val() != 'NULL') {
-          if(j == 1) {
-            classification = $('#category-'+j+'').val();
-          }
-          else {
-            classification = classification + '::' + $('#category-'+j+'').val();
-          }
+  //remove a category to the project
+  $('.close-category').on('click', function (event) {
+    event.preventDefault();
+    if (count != 1) {
+      $('#category-' + count + '').remove();
+      count--;
+    }
+  })
+
+
+  //send ajax request for inserting classification for a project
+  $('.insert-classification').on('click', function (event) {
+    event.preventDefault();
+    var classification = '';
+    for (var j = 1; j <= count; j++) {
+      if ($('#category-' + j + '').val() != 'NULL') {
+        if (j == 1) {
+          classification = $('#category-' + j + '').val();
         }
         else {
-          break;
+          classification = classification + '::' + $('#category-' + j + '').val();
         }
       }
+      else {
+        break;
+      }
+    }
 
-      if( classification != '') {
-        $.ajax({
-          url: "/project/insert/classifications",
-          type: "GET",
-          data: { "classification" : classification, "parentName" : parentName, "projectName" : projectName },
-          async: true,
-          success: function(data, status) {
-            count = 1;
-            $('#category-'+count+'').empty();
-            $('#category-'+count+'').append('<option value="NULL" selected="selected">select a category</option>')
-            for(var i = 0; i < classificationDetails.length; i++) {
-              if(classificationDetails[i][2] == null) {
-                $('#category-'+count+'').append('<option value="'+classificationDetails[i][3]+'">'+classificationDetails[i][3]+'</option>');
-              }
-            }
-            $('#category-'+count+'').nextAll().remove();
-            getClassification();
+    if (classification != '') {
+      if ($('.update-classification').children().length <= 0) {
+        $('.update-classification').append('<p><span style="color: red">*</span> Click update project to add these classifications</p>')
+      }
+      $('.update-classification').append('<div class="categories update">\
+                        <input type="hidden" name="classification[]" value="' + classification + '" />\
+                        <span>' + classification + '</span>\
+                    <a class="remove-classification" href="#">\
+                      <i class="fa fa-close" aria-hidden="true"></i>\
+                    </a>\
+                  </div>')
+      count = 1;
+      $('#category-' + count + '').empty();
+      $('#category-' + count + '').append('<option value="NULL" selected="selected">select a category</option>')
+      for (var i = 0; i < classificationDetails.length; i++) {
+        if (classificationDetails[i][2] == null) {
+          $('#category-' + count + '').append('<option value="' + classificationDetails[i][3] + '">' + classificationDetails[i][3] + '</option>');
+        }
+      }
+      $('#category-' + count + '').nextAll().remove();
+      removeClassification()
+    }
+  })
 
-          },
-          error : function(xhr, textStatus, errorThrown) {
-          }
-        })
+  function removeClassification() {
+    $('.remove-classification').on('click', function (event) {
+      event.preventDefault();
+      if ($('.remove-classification').parent().hasClass('delete')) {
+        $('.classification-'+$(this).siblings('input').val()+'').show();
+        $(this).parent().remove();
+        if ($('.delete-classifications').children().length <= 1) {
+          $('.delete-classifications').empty();
+        }
+      }
+      else if ($('.remove-classification').parent().hasClass('update')) {
+        $(this).parent().remove();
+        if ($('.update-classification').children().length <= 1) {
+          $('.update-classification').empty();
+        }
       }
 
     })
+  }
 
-    //displaying classification details for a project
-    $('.classifications').hide();
-    getClassification();
-    function getClassification() {
-      $.ajax({
-        url: "/"+parentName+"/"+projectName+"/classification",
-        type: "GET",
-        async: true,
-        success: function(data,status) {
-          if(data.length >= 1) {
-            $('.classifications').show();
-            $('.classifications').empty();
-            $('.classifications').append('<h4>Classifications</h4>');
-            for(var i = 0; i < data.length; i++) {
-              $('.classifications').append('<div class="categories">\
-                        <span>'+data[i]['classification']+'</span>\
-                    <a class="delete-classification" href="/project/classification/delete/'+data[i]['id']+'">\
-                      <i class="fa fa-trash" aria-hidden="true"></i>\
+  $('.delete-classification').on('click', function (event) {
+    event.preventDefault();
+    var clasificationId = $(this).attr('href');
+    var classificationName = $(this).siblings('span').html();
+    $(this).parent().hide();
+    if ($('.delete-classifications').children().length <= 0) {
+      $('.delete-classifications').append('<p><span style="color: red">*</span> Click update project to delete these classifications</p>')
+    }
+    $('.delete-classifications').append('<div class="categories delete">\
+                        <input type="hidden" name="deleteClassification[]" value="' + clasificationId + '" />\
+                        <span>' + classificationName + '</span>\
+                    <a class="remove-classification" href="#">\
+                      <i class="fa fa-close" aria-hidden="true"></i>\
                     </a>\
                   </div>')
-            }
-            deleteClassification();
-          }
-          else {
-            $('.classifications').hide();
-          }
-        }
-      })
-    }
-
-    function deleteClassification() {
-      var deleteUrl = '';
-      $('.delete-classification').on('click', function(event){
-    		event.preventDefault();
-    		$('.confirmation-popup').addClass('is-visible');
-        deleteUrl = $(this).attr('href');
-    	});
-
-    	//close popup
-    	$('.confirmation-popup').on('click', function(event){
-    		if( $(event.target).is('.confirmation-popup-close') || $(event.target).is('.confirmation-popup') || $(event.target).is('.close-conf')) {
-    			event.preventDefault();
-    			$(this).removeClass('is-visible');
-    		}
-
-        if($(event.target).is('.confirm-delete')) {
-          $(this).removeClass('is-visible');
-          $.ajax({
-            url: deleteUrl,
-            type: "GET",
-            async: true,
-            success: function(data,status) {
-              getClassification();
-            }
-          })
-        }
-    	});
-    	//close popup when clicking the esc keyboard button
-    	$(document).keyup(function(event){
-        	if(event.which=='27'){
-        		$('.confirmation-popup').removeClass('is-visible');
-    	    }
-        });
-    }
-  }
+    removeClassification()
+  })
+}
