@@ -220,12 +220,18 @@ class ProjectController extends Controller
             'isHostedOnGithub' => GithubRepoCrawler::isGithubRepoUrl($p->getSourceRepo()->getUrl()),
         ];
 
+        // Retrive the project classifications for a project
+        $classifications = $this->getDoctrine()->getManager()
+            ->getRepository(ProjectClassification::class)
+            ->findBy(['project' => $p->getId()]);
+
         // the actual project page
         return $this->render(
             'LibrecoresProjectRepoBundle:Project:view.html.twig',
             [
                 'project' => $p,
                 'metadata' => $metadata,
+                'classifications' => $classifications,
             ]
         );
     }

@@ -579,3 +579,26 @@ h1 a:hover, h1 a:active {
   border-left: 1px solid hsla(0,0%,100%,.2);
   padding: 6px;
 }
+
+.classification-container {
+  display: inline-flex;
+  flex-wrap: wrap;
+  font-size: 12px;
+  align-items: baseline;
+  margin-top: 4px;
+}
+
+a.classifiation-tag {
+  display: inline-block;
+  padding: 0.3em 0.9em;
+  margin: 0 0.5em 0.5em 0;
+  white-space: nowrap;
+  background-color: #f1f8ff;
+  text-decoration: none;
+  border-radius: 3px;
+}
+
+a.classifiation-tag:hover {
+  text-decoration: none;
+  background-color: #def;
+}

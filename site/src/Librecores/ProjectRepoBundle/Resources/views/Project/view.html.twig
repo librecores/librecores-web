@@ -57,6 +57,13 @@
       </div>
     </div>
   </div>
+  <div class="classification-container">
+    {% if classifications %}
+      {% for classification in classifications %}
+        <a href="" class="classifiation-tag">{{ classification.getClassification() }}</a>
+      {% endfor %}
+    {% endif %}
+  </div>
 </div>
 
 <div class="row">
