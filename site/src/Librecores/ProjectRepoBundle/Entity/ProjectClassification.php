@@ -3,6 +3,8 @@
 namespace Librecores\ProjectRepoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Normalizer\NormalizableInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 /**
  * A ProjectClassification represents a single classification for a Project
@@ -14,7 +16,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="ProjectClassification")
  * @ORM\Entity
  */
-class ProjectClassification
+class ProjectClassification implements NormalizableInterface
 {
     /**
      * @var int
@@ -71,6 +73,21 @@ class ProjectClassification
     {
         $this->createdAt = new \DateTime();
     }
+
+    /**
+     * @param NormalizerInterface $serializer
+     * @param null $format
+     * @param array $context
+     * 
+     * @return array
+     */
+    public function normalize(NormalizerInterface $serializer, $format = null, array $context = array()): array
+    {
+        return [
+            'classifications' => $this->getClassification(),
+        ];
+    }
+
     /**
      * Get id
      *

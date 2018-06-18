@@ -16,3 +16,5 @@ services:
         # thinks it can be translated -- but we don't have any translations available, therefore the autowire is set to
         # false
 
+framework:
+  serializer: { enabled: true }

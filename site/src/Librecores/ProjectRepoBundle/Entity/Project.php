@@ -5,6 +5,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Serializer\Normalizer\NormalizableInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 /**
  * A project
@@ -26,7 +28,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  *     ignoreNull=false
  * )
  */
-class Project
+class Project implements NormalizableInterface
 {
     const STATUS_ASSIGNED   = 'ASSIGNED';
     const STATUS_UNASSIGNED = 'UNASSIGNED';
@@ -323,6 +325,21 @@ class Project
         $this->classifications = new ArrayCollection();
     }
 
+    /**
+     * @param NormalizerInterface $serializer
+     * @param null $format
+     * @param array $context
+     *
+     * @return array
+     */
+    public function normalize(NormalizerInterface $serializer, $format = null, array $context = array()): array
+    {
+        return [
+            'name' => $this->getName(),
+            'displayName' => $this->getDisplayName(),
+            'tagName' => $this->getTagline(),
+        ];
+    }
     /**
      * Update $dateLastModified
      *

@@ -44,7 +44,8 @@
 		"easycorp/easyadmin-bundle" : "^1.16",
 		"beberlei/DoctrineExtensions" : "^1.0",
 		"sentry/sentry-symfony" : "^0.8",
-		"php-http/httplug-bundle" : "^1.10"
+		"php-http/httplug-bundle" : "^1.10",
+		"algolia/search-bundle": "^3.1"
 	},
 	"scripts" : {
 		"post-install-cmd" : [

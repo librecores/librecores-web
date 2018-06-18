@@ -199,3 +199,11 @@ sentry:
     dsn: "%sentry_dsn%"
     options:
         environment: "%sentry_env%"
+
+algolia_search:
+  indices:
+    - name: projects
+      class: Librecores\ProjectRepoBundle\Entity\Project
+
+    - name: classifications
+      class: Librecores\ProjectRepoBundle\Entity\ProjectClassification
