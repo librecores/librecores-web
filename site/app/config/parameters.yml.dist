@@ -51,4 +51,4 @@ parameters:
     # Algolia Configuration
     env(ALGOLIA_APP_ID):  ~
     env(ALGOLIA_API_KEY): ~
-    
+
