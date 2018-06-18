@@ -330,13 +330,40 @@ class Project
      *
      * @return array
      */
-    public function getClassificationArray() {
+    public function getClassificationArray()
+    {
         $classifications = $this->getClassification();
         $classificationArray = [];
-        foreach($classifications as $classification) {
+        foreach ($classifications as $classification) {
             $classificationArray[] = $classification->getClassification();
         }
+
         return $classificationArray;
+    }
+
+    /**
+     * Get the classification hierarchy
+     *
+     * This functions returns the classification hierarchy levels
+     *
+     * @return array
+     */
+    public function getCategoryLists()
+    {
+        $classifications = $this->getClassificationArray();
+        $categoryLevels = [];
+        foreach ($classifications as $classification) {
+            $categories = explode('::', $classification);
+            $catIncrement = '';
+            for ($i = 0; $i < count($categories); $i++) {
+                if (isset($categories[$i])){
+                    $catIncrement = $i == 0 ? $categories[$i]: $catIncrement.'::'.$categories[$i] ;
+                    $categoryLevels['lvl'.$i][] = $catIncrement;
+                }
+            }
+        }
+
+        return $categoryLevels;
     }
 
     /**

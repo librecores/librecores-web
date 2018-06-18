@@ -49,6 +49,8 @@ parameters:
     sentry_env:       'dev'
 
     # Algolia Configuration
-    env(ALGOLIA_APP_ID):  ~
-    env(ALGOLIA_API_KEY): ~
-    
+    env(ALGOLIA_APP_ID):    ~
+    env(ALGOLIA_API_KEY):   ~
+    ALGOLIA_SEARCH_KEY:     ~
+    algolia_search_prefix:  ~
+

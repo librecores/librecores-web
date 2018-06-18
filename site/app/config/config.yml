@@ -49,6 +49,10 @@ twig:
     form_themes:
         - 'bootstrap_3_layout.html.twig'
         - 'LibrecoresProjectRepoBundle:Form:fields.html.twig'
+    globals:
+        algolia_app_id: "%env(ALGOLIA_APP_ID)%"
+        algolia_search_key: "%ALGOLIA_SEARCH_KEY%"
+        algolia_search_prefix: "%algolia_search_prefix%"
 
 # Assetic Configuration
 assetic:
@@ -56,6 +60,7 @@ assetic:
     use_controller: false
     bundles:
         - LibrecoresProjectRepoBundle
+        - LibrecoresSiteBundle
     filters:
         scssphp:
             formatter: 'Leafo\ScssPhp\Formatter\Compressed'
@@ -203,7 +208,7 @@ sentry:
 
 # algolia search indices configuration
 algolia_search:
-  prefix: ''
+  prefix: "%algolia_search_prefix%"
   indices:
     - name: projects
       class: Librecores\ProjectRepoBundle\Entity\Project

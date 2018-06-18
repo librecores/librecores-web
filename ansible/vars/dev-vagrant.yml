@@ -26,3 +26,6 @@ site_sentry_env: dev
 # Requires a working mailer setup. Add SMTP credentials in
 # secrets/dev-vagrant.secrets.yml before enabling this setting.
 site_user_email_confirmation_enabled: false
+
+# Algolia
+site_algolia_search_prefix: 'dev_'

@@ -111,22 +111,51 @@ Check the coding style of PHP code
   vm$> ./vendor/bin/phpcs --runtime-set ignore_warnings_on_exit true -s \
     && echo You can commit: No errors found!
 
-Algolia indices configuration
------------------------------
-To configure Algolia in the development environment you need to specify the Application ID (site_algolia_app_id) and
-the Admin API Key (site_algolia_api_key) in the ansible/secrets/dev-vagrant.secrets.yml file.
-you have to clear and import the search indices settings for pushing data to algolia.
+Use Algolia
+-----------
+LibreCores makes use of `Algolia <https://www.algolia.com/>`_ to provide the search functionality.
+Some settings of Algolia can be managed through its web UI, but most data and configuration is pushed from the LibreCores server.
+In a development environment using Algolia is optional (if it is not used, no search functionality is available).
+If Algolia should be used, first register an account at their web page (the basic account is free and sufficient for development).
+
+Then the configuration needs to be inserted into the LibreCores web app (all data is available from the Algolia web UI).
+Specify the application id (``site_algolia_app_id``), the admin API key (``site_algolia_api_key``) and the search API key (``site_algolia_search_api_key``) in the corresponding configuration file in ``ansible/secrets`` (use ``dev-vagrant.secrets.yml`` for the development settings in Vagrant).
+
+Then push the configuration to Algolia using the ``search:settings:push`` command (see below).
+
+Afterwards push the data to the search indices using ``search:clear`` followed by ``search:import``.
 
 Clear indices
--------------
+~~~~~~~~~~~~~
+
+The data stored with Algolia can be removed using the following commands.
+
 .. code-block:: bash
 
   vm$> cd /var/www/lc/site
   vm$> ./bin/console search:clear
 
-Import all indices
-------------------
+Push data to Algolia (indexing)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+To send data to Algolia to index it the data needs to be "imported".
+This can be done using the following commands.
+
 .. code-block:: bash
 
   vm$> cd /var/www/lc/site
   vm$> ./bin/console search:import
+
+Backup settings
+~~~~~~~~~~~~~~~
+.. code-block:: bash
+
+  vm$> cd /var/www/lc/site
+  vm$> ./bin/console search:settings:backup
+
+Push settings to Algolia
+~~~~~~~~~~~~~~~~~~~~~~~~
+.. code-block:: bash
+
+  vm$> cd /var/www/lc/site
+  vm$> ./bin/console search:settings:push

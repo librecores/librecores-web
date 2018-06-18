@@ -60,7 +60,7 @@
   <div class="classification-container">
     {% if classifications %}
       {% for classification in classifications %}
-        <a href="" class="classifiation-tag">{{ classification.getClassification() }}</a>
+        <a href="{{ path('librecores_project_repo_project_search') }}?query={{ classification.getClassification() }}&type=projects" class="classifiation-tag">{{ classification.getClassification() }}</a>
       {% endfor %}
     {% endif %}
   </div>

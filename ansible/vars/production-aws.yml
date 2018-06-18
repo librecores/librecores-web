@@ -22,3 +22,6 @@ symfony_config:
 site_sentry_env: production
 
 site_user_email_confirmation_enabled: true
+
+# Algolia
+site_algolia_search_prefix: 'production_'

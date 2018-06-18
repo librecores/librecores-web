@@ -10,8 +10,6 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
  * This class normalizes the Projects for getting indexed in algolia
  *
  * @author Sandip Kumar Bhuyan <sandipbhuyan@gmail.com>
- *
- * @package Librecores\ProjectRepoBundle\Serializer\Normalizer
  */
 class ProjectNormalizer implements NormalizerInterface
 {
@@ -30,6 +28,7 @@ class ProjectNormalizer implements NormalizerInterface
             'dateLastActivityOccurred' => $object->getDateLastActivityOccurred(),
             'mostUsedLanguage' => $object->getSourceRepo()->getSourceStats()->getMostUsedLanguage(),
             'parentUserName' => $object->getParentName(),
+            'hierarchicalCategories' => $object->getCategoryLists(),
             'classifications' => $object->getClassificationArray(),
         ];
     }
