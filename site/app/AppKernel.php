@@ -28,6 +28,7 @@ class AppKernel extends Kernel
             new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle(),
             new Sentry\SentryBundle\SentryBundle(),
             new Http\HttplugBundle\HttplugBundle(),
+            new Algolia\SearchBundle\AlgoliaSearchBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

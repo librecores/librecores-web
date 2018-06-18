@@ -71,6 +71,7 @@ class ProjectClassification
     {
         $this->createdAt = new \DateTime();
     }
+
     /**
      * Get id
      *
