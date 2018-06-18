@@ -519,3 +519,30 @@ h1 a:hover, h1 a:active {
 .bootstrap-select.btn-group .dropdown-menu {
   z-index: 1050; /* to over-ride navbar z-index*/
 }
+
+#delete-panel-button {
+    margin-left: 8px;
+}
+
+#delete-project-button {
+  color: #cb2431;
+  font-weight: bold;
+  width: 100%;
+}
+
+#delete-project-text {
+  width: 100%;
+}
+
+#delete-panel-button {
+  color: #cb2431;
+}
+
+#modal-close-button {
+  margin-top: -28px
+}
+
+#modal-note {
+  color: #735c0f;
+  background-color: #fffbdd;
+}

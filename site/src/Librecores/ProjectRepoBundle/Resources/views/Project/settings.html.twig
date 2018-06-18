@@ -16,6 +16,23 @@
     "assets/js/trumbowyg.min.js"
   %}
     <script src="{{ asset_url }}"></script>
+    <script>
+      $(document).ready(function(){
+      $("#delete-project-text").keyup(function(){
+        var projectName = $("#project_displayName").val();
+        if ($(this).val() != projectName) {
+          $('#delete-project-button').attr('disabled', 'disabled');
+        } else {
+          $('#delete-project-button').removeAttr('disabled');
+        }
+      });
+      var deletebutton = document.getElementById("delete-project-button");
+      deletebutton.addEventListener("click", function(){
+        window.location.href='{{ path('librecores_project_repo_project_delete',
+        {'parentName':project.getParentName(), 'projectName': project.getName()}) }}'
+      });
+      });
+    </script>
   {% endjavascripts %}
 {% endblock %}
 
@@ -124,7 +141,45 @@
         </div>
       </div>
     {{ form_end(form) }}
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">Delete</h3>
+    </div>
+    <div class="panel-button" id="delete-panel-button">
+      <br>
+      <a href="#" id="btn-danger" class="btn btn-default" data-toggle="modal" data-target="#delete-modal"><strong>Delete this project</strong></a>
+      </br>
+      </br>
+    </div>
+    <div id="delete-modal" align="left" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="delete-modal" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="myModalLabel"><strong>Are you absolutely sure?</strong></h4>
+            <button type="button" id="modal-close-button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">x</span>
+            </button>
+          </div>
+          <div class="modal-header" id="modal-note">
+            You will lose the project listing, if you don't read this!
+          </div>
+          <div class="modal-body">
+            <form id="modal-form" class="delete-panel-body">
+              <p align="left">This action <strong>cannot</strong> be undone.
+                This will permanently delete the <strong>{{project.getParentName()}}/{{project.getName()}}</strong>
+                project, license details, project metrics, data sheet and remove all references.<br /><br>
+                Please type in the project display name to confirm: <br />
+              </p>
+              <input type="text" id="delete-project-text" name="project_name" /><br>
+              <input type="button" id="delete-project-button" disabled="disabled" class="btn btn-default" value="I understand the consequences, delete this project"/>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
+{{ form_end(form) }}
 </div>
 {% endblock %}
 
