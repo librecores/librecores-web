@@ -1,17 +1,17 @@
 var insertClassification = function (classificationDetails) {
   var count = 1;
   for (var i = 0; i < classificationDetails.length; i++) {
-    if (classificationDetails[i][2] == null) {
-      $('#category-' + count + '').append('<option value="' + classificationDetails[i][3] + '">' + classificationDetails[i][3] + '</option>');
+    if (classificationDetails[i]["parentId"] === null) {
+      $('#category-' + count + '').append($("<option>").val(classificationDetails[i]["name"]).html(classificationDetails[i]["name"]));
     }
   }
-  // adding tooltip to the button
+  // Adding tooltip to the button
   $('[data-toggle="tooltip"]').tooltip();
 
-  // add a new category to the project
+  // Add a new category to the project
   updateCategory();
 
-  // remove next all child category if a parent category change
+  // Update the selected category
   function updateCategory() {
     $('select').on('change', function () {
       var id = $(this).attr('id');
@@ -19,36 +19,36 @@ var insertClassification = function (classificationDetails) {
       count = parseInt(getCount[1]);
       $(this).nextAll().remove();
       var value = $('#category-' + count + '').val();
-      if (value != "NULL") {
+      if (value !== "NULL") {
         var increase = false;
         var id = 0;
         for (var i = 0; i < classificationDetails.length; i++) {
-          if (classificationDetails[i][3] == value) {
-            id = classificationDetails[i][1];
+          if (classificationDetails[i]["name"] === value) {
+            id = classificationDetails[i]["id"];
             break;
           }
         }
         for (var i = 0; i < classificationDetails.length; i++) {
-          if (classificationDetails[i][2] == id) {
-            if (increase == false) {
+          if (classificationDetails[i]["parentId"] === id) {
+            if (increase === false) {
               var category = $('#category-' + count + '').clone().appendTo('.classification-system');
               count++;
               category.attr('id', 'category-' + count + '').empty().append('<option value="NULL">select a category</option>');
-              $('#category-' + count + '').append('<option value="' + classificationDetails[i][3] + '">' + classificationDetails[i][3] + '</option>');
+              $('#category-' + count + '').append($("<option>").val(classificationDetails[i]["name"]).html(classificationDetails[i]["name"]));
               increase = true;
             }
             else {
-              $('#category-' + count + '').append('<option value="' + classificationDetails[i][3] + '">' + classificationDetails[i][3] + '</option>');
+              $('#category-' + count + '').append($("<option>").val(classificationDetails[i]["name"]).html(classificationDetails[i]["name"]));
             }
           }
         }
-        //include this current select element to the remove paramenter
+        // Include this current select element to the remove parameter
         updateCategory();
       }
     })
   }
 
-  //remove a category to the project
+  // Remove a classification from
   $('.close-category').on('click', function (event) {
     event.preventDefault();
     if (count != 1) {
@@ -58,12 +58,12 @@ var insertClassification = function (classificationDetails) {
   })
 
 
-  //send ajax request for inserting classification for a project
+  // Send ajax request for inserting classification for a project
   $('.insert-classification').on('click', function (event) {
     event.preventDefault();
     var classification = '';
     for (var j = 1; j <= count; j++) {
-      if ($('#category-' + j + '').val() != 'NULL') {
+      if ($('#category-' + j + '').val() !== 'NULL') {
         if (j == 1) {
           classification = $('#category-' + j + '').val();
         }
@@ -76,23 +76,23 @@ var insertClassification = function (classificationDetails) {
       }
     }
 
-    if (classification != '') {
-      if ($('.update-classification').children().length <= 0) {
+    if (classification !== '') {
+      if ($('.update-classification').children().length  === 0) {
         $('.update-classification').append('<p><span style="color: red">*</span> Click update project to add these classifications</p>')
       }
-      $('.update-classification').append('<div class="categories update">\
-                        <input type="hidden" name="classification[]" value="' + classification + '" />\
-                        <span>' + classification + '</span>\
-                    <a class="remove-classification" href="#">\
-                      <i class="fa fa-close" aria-hidden="true"></i>\
-                    </a>\
-                  </div>')
+      $('.update-classification').append('<div class="categories update">'+
+                        '<input type="hidden" name="classification[]" value="' + classification + '" />'+
+                        '<span>' + classification + '</span>'+
+                    '<a class="remove-classification" href="#">'+
+                      '<i class="fa fa-close" aria-hidden="true"></i>'+
+                    '</a>'+
+                  '</div>')
       count = 1;
       $('#category-' + count + '').empty();
       $('#category-' + count + '').append('<option value="NULL" selected="selected">select a category</option>')
       for (var i = 0; i < classificationDetails.length; i++) {
-        if (classificationDetails[i][2] == null) {
-          $('#category-' + count + '').append('<option value="' + classificationDetails[i][3] + '">' + classificationDetails[i][3] + '</option>');
+        if (classificationDetails[i]["parentId"] === null) {
+          $('#category-' + count + '').append($("<option>").val(classificationDetails[i]["name"]).html(classificationDetails[i]["name"]));
         }
       }
       $('#category-' + count + '').nextAll().remove();
@@ -109,8 +109,7 @@ var insertClassification = function (classificationDetails) {
         if ($('.delete-classifications').children().length <= 1) {
           $('.delete-classifications').empty();
         }
-      }
-      else if ($('.remove-classification').parent().hasClass('update')) {
+      } else if ($('.remove-classification').parent().hasClass('update')) {
         $(this).parent().remove();
         if ($('.update-classification').children().length <= 1) {
           $('.update-classification').empty();
@@ -125,16 +124,16 @@ var insertClassification = function (classificationDetails) {
     var clasificationId = $(this).attr('href');
     var classificationName = $(this).siblings('span').html();
     $(this).parent().hide();
-    if ($('.delete-classifications').children().length <= 0) {
+    if ($('.delete-classifications').children().length === 0) {
       $('.delete-classifications').append('<p><span style="color: red">*</span> Click update project to delete these classifications</p>')
     }
-    $('.delete-classifications').append('<div class="categories delete">\
-                        <input type="hidden" name="deleteClassification[]" value="' + clasificationId + '" />\
-                        <span>' + classificationName + '</span>\
-                    <a class="remove-classification" href="#">\
-                      <i class="fa fa-close" aria-hidden="true"></i>\
-                    </a>\
-                  </div>')
+    $('.delete-classifications').append('<div class="categories delete">'+
+                        '<input type="hidden" name="deleteClassification[]" value="' + clasificationId + '" />'+
+                        '<span>' + classificationName + '</span>'+
+                    '<a class="remove-classification" href="#">'+
+                      '<i class="fa fa-close" aria-hidden="true"></i>'+
+                    '</a>'+
+                  '</div>')
     removeClassification()
   })
 }

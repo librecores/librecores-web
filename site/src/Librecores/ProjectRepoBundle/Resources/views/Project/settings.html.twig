@@ -14,7 +14,7 @@
   {{ parent() }}
   {% javascripts filter="?jsqueeze"
     "assets/js/trumbowyg.min.js"
-  "assets/js/classification.js"
+    "assets/js/classification.js"
   %}
     <script src="{{ asset_url }}"></script>
   {% endjavascripts %}
@@ -109,6 +109,11 @@
           <h3 class="panel-title">Project Classification</h3>
         </div>
         <div class="panel-body">
+          {% if errorClassification %}
+            <div class="alert alert-danger">
+              Invalid classifications - {% for error in errorClassification %} {{ error }} {% endfor %}
+            </div>
+          {% endif %}
           <div class="classification-hierarchy">
             <label class="control-label">Specify Classifications for your project</label>
             <div class="classification-system">
@@ -202,7 +207,7 @@ $(document).ready(function(){
     au ? el.hide() : el.show();
   });
 
-  //insert classification
+  // insert classification
   // classification hierarchy data
   var classificationDetails = {{ classificationHierarchy|json_encode|raw }}
   insertClassification(classificationDetails);
