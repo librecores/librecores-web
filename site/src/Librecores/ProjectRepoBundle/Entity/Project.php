@@ -326,18 +326,27 @@ class Project implements NormalizableInterface
     }
 
     /**
-     * @param NormalizerInterface $serializer
-     * @param null $format
-     * @param array $context
+     * Normalizes the object into an array of scalars|arrays.
      *
-     * @return array
+     * @param NormalizerInterface $serializer The serializer is given so that you
+     *                                        can use it to serialize objects contained within this object
+     * @param string|null         $format     The format is optionally given to be able to serialize differently
+     *                                        based on different output formats
+     * @param array               $context    Options for serializing this object
+     *
+     * @return array|string|int|float|bool
      */
-    public function normalize(NormalizerInterface $serializer, $format = null, array $context = array()): array
+    public function normalize(NormalizerInterface $serializer, $format = null, array $context = array())
     {
         return [
             'name' => $this->getName(),
             'displayName' => $this->getDisplayName(),
             'tagName' => $this->getTagline(),
+            'dataAdded' => $this->getDateAdded(),
+            'dateLastActivityOccurred' => $this->getDateLastActivityOccurred(),
+            'mostUsedLanguage' => $this->getSourceRepo()->getSourceStats()->getMostUsedLanguage(),
+            'parentUserName' => $this->getParentName(),
+            'classifications' => $this->getClassifications()->getValues(),
         ];
     }
     /**
