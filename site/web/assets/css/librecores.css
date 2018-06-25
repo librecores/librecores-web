@@ -167,9 +167,7 @@ h1 a:hover, h1 a:active {
   padding-top: 50px;
 }
 .librecores-home-banner {
-  background-color: #173e43;
-  opacity: 0.75;
-  filter: alpha(opacity=75); /* For IE8 and earlier */
+  background-color: rgba(23, 62, 67, .75);
   text-align:center;
 }
 
@@ -181,13 +179,13 @@ h1 a:hover, h1 a:active {
 .librecores-home-banner-wordmark {
   font-size: 40px;
   line-height: normal;
-  color: #3fb0ac;
+  color: rgba(63, 176, 172, .75);
 }
 
 .librecores-home-banner-claim {
   font-size: 24px;
   line-height: normal;
-  color: #c0c4b0;
+  color: rgba(192, 196, 176, .75);
   margin-bottom: 8px;
 }
 
@@ -601,4 +599,78 @@ a.classifiation-tag {
 a.classifiation-tag:hover {
   text-decoration: none;
   background-color: #def;
+}
+
+.aa-input-container {
+  display: inline-block;
+  position: relative;
+}
+
+#search-form-input {
+  padding: 12px 28px 12px 12px;
+  border: 1px solid #e4e4e4;
+  box-sizing: border-box;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+#search-form-input::-webkit-search-decoration, #search-form-input::-webkit-search-cancel-button,
+#search-form-input::-webkit-search-results-button, #search-form-input::-webkit-search-results-decoration {
+  display: none;
+}
+
+.aa-dropdown-menu {
+  background-color: #fff;
+  border: 1px solid rgba(228, 228, 228, 0.6);
+  width: 100%;
+  margin-top: 10px;
+  box-sizing: border-box;
+  max-height: 300px;
+  overflow-y: scroll;
+}
+
+.aa-suggestion {
+  padding: 6px 12px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+}
+
+.aa-suggestions-category {
+  border-bottom: 1px solid rgba(228, 228, 228, 0.6);
+  border-top: 1px solid rgba(228, 228, 228, 0.6);
+  padding: 6px 12px;
+  text-align: left;
+  color: #a9a9a9;
+}
+
+.aa-dropdown-menu > div {
+  width: 100%;
+  vertical-align: top;
+}
+.aa-demo-3 .aa-suggestion > span:first-child em, .aa-demo-3 .aa-suggestion > span:last-child em {
+  font-weight: 700;
+  font-style: normal;
+  background-color: rgba(58, 150, 207, 0.1);
+  padding: 2px 0 2px 2px;
+}
+
+.aa-empty {
+  padding: 6px 12px;
+}
+
+.aa-suggestion > span:first-child em, .aa-demo-3 .aa-suggestion > span:last-child em {
+  font-weight: 700;
+  font-style: normal;
+  background-color: rgba(58, 150, 207, 0.1);
+  padding: 2px 0 2px 2px;
+}
+
+.position-inherit {
+  position: inherit;
+}
+
+.aa-suggestion > span:last-child {
+  color: #a9a9a9;
 }
