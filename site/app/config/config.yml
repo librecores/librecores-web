@@ -200,10 +200,18 @@ sentry:
     options:
         environment: "%sentry_env%"
 
+# algolia search indices configuration
 algolia_search:
+  prefix: ''
   indices:
     - name: projects
       class: Librecores\ProjectRepoBundle\Entity\Project
 
     - name: classifications
       class: Librecores\ProjectRepoBundle\Entity\ProjectClassification
+
+    - name: organization
+      class: Librecores\ProjectRepoBundle\Entity\Organization
+
+    - name: user
+      class: Librecores\ProjectRepoBundle\Entity\User

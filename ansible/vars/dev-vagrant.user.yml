@@ -6,6 +6,7 @@
 
 
 # Require confirmation of the email address of newly registered users.
+# Require site_algolia_app_id and site_algolia_api_key of algolia application.
 # Requires a working mailer setup. Add SMTP credentials in
 # secrets/dev-vagrant.secrets.yml before enabling this setting.
-#site_user_email_confirmation_enabled: true
+# site_user_email_confirmation_enabled: true

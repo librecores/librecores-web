@@ -7,6 +7,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Librecores\ProjectRepoBundle\Validator\Constraints as LcAssert;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Normalizer\NormalizableInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 /**
  * An organization
@@ -25,7 +27,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     message="The organization already exists, please try a different name."
  * )
  */
-class Organization
+class Organization implements NormalizableInterface
 {
     const SPECIAL_UNASSIGNED_ID = 1;
 
@@ -124,6 +126,24 @@ class Organization
         $this->members  = new ArrayCollection();
     }
 
+    /**
+     * Normalizes the object into an array of scalars|arrays.
+     *
+     * @param NormalizerInterface $serializer The serializer is given so that you
+     *                                        can use it to serialize objects contained within this object
+     * @param string|null         $format     The format is optionally given to be able to serialize differently
+     *                                        based on different output formats
+     * @param array               $context    Options for serializing this object
+     *
+     * @return array|string|int|float|bool
+     */
+    public function normalize(NormalizerInterface $serializer, $format = null, array $context = array())
+    {
+        return [
+            'name' => $this->getName(),
+            'displayName' => $this->getDisplayName(),
+        ];
+    }
     /**
      * Hook on the first storing of this object
      *
