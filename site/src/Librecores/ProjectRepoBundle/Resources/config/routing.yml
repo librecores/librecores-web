@@ -84,7 +84,6 @@ librecores_project_repo_project_update:
     defaults:
         _controller: 'LibrecoresProjectRepoBundle:Project:update'
 
-
 # Organization routes
 
 librecores_project_repo_organization_view:
