@@ -642,18 +642,15 @@ class ProjectController extends Controller
         $i = 0;
         $count = count($categories);
         foreach ($categories as $category) {
-            if (array_key_exists($category, $classifications)) {
-                $classificationHierarchy = $em->findByParent($classifications[$category]);
-                $classifications = [];
-                foreach ($classificationHierarchy as $classHyc) {
-                    $classifications[$classHyc->getName()] = $classHyc;
-                }
-                if (++$i == $count) {
-                    return true;
-                }
-            } else {
+            if (!array_key_exists($category, $classifications)) {
                 return false;
             }
+            $classificationHierarchy = $em->findByParent($classifications[$category]);
+            $classifications = [];
+            foreach ($classificationHierarchy as $classHyc) {
+                $classifications[$classHyc->getName()] = $classHyc;
+            }
         }
+        return true;
     }
 }
