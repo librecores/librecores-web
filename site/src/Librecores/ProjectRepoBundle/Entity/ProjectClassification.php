@@ -3,8 +3,6 @@
 namespace Librecores\ProjectRepoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Normalizer\NormalizableInterface;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 /**
  * A ProjectClassification represents a single classification for a Project
@@ -16,7 +14,7 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
  * @ORM\Table(name="ProjectClassification")
  * @ORM\Entity
  */
-class ProjectClassification implements NormalizableInterface
+class ProjectClassification
 {
     /**
      * @var int
@@ -72,31 +70,6 @@ class ProjectClassification implements NormalizableInterface
     public function __construct()
     {
         $this->createdAt = new \DateTime();
-    }
-
-    /**
-     * Normalizes the object into an array of scalars|arrays.
-     *
-     * @param NormalizerInterface $serializer The serializer is given so that you
-     *                                        can use it to serialize objects contained within this object
-     * @param string|null         $format     The format is optionally given to be able to serialize differently
-     *                                        based on different output formats
-     * @param array               $context    Options for serializing this object
-     *
-     * @return array|string|int|float|bool
-     */
-    public function normalize(NormalizerInterface $serializer, $format = null, array $context = array())
-    {
-        return [
-            'classifications' => $this->getClassification(),
-            'projectName' => $this->getProject()->getName(),
-            'projectDisplayName' => $this->getProject()->getDisplayName(),
-            'projectTagName' => $this->getProject()->getTagline(),
-            'projectDataAdded' => $this->getProject()->getDateAdded(),
-            'projectDateLastActivityOccurred' => $this->getProject()->getDateLastActivityOccurred(),
-            'projectmostUsedLanguage' => $this->getProject()->getSourceRepo()->getSourceStats()->getMostUsedLanguage(),
-            'projectParentUserName' => $this->getProject()->getParentName(),
-        ];
     }
 
     /**

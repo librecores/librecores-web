@@ -112,14 +112,15 @@ Check the coding style of PHP code
     && echo You can commit: No errors found!
 
 Algolia indices configuration
----------------------------
-For configuring algolia in development environment first specify the Apllication ID and Admin API Key in ``parameter.yml``
-Clear the indices and import the settings from algolia
+-----------------------------
+To configure Algolia in the development environment you need to specify the Application ID (site_algolia_app_id)
+and the Admin API Key (site_algolia_api_key) in the ansible/secrets/dev-vagrant.secrets.yml file.
+Clear and import the search settings from algolia
 
 Clear indices
 -------------
 .. code-block:: bash
-qqq
+
   vm$> cd /var/www/lc/site
   vm$> ./bin/console search:clear
 

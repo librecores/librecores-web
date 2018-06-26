@@ -207,9 +207,6 @@ algolia_search:
     - name: projects
       class: Librecores\ProjectRepoBundle\Entity\Project
 
-    - name: classifications
-      class: Librecores\ProjectRepoBundle\Entity\ProjectClassification
-
     - name: organization
       class: Librecores\ProjectRepoBundle\Entity\Organization
 

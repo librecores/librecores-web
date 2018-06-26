@@ -342,13 +342,30 @@ class Project implements NormalizableInterface
             'name' => $this->getName(),
             'displayName' => $this->getDisplayName(),
             'tagName' => $this->getTagline(),
-            'dataAdded' => $this->getDateAdded(),
+            'dateAdded' => $this->getDateAdded(),
             'dateLastActivityOccurred' => $this->getDateLastActivityOccurred(),
             'mostUsedLanguage' => $this->getSourceRepo()->getSourceStats()->getMostUsedLanguage(),
             'parentUserName' => $this->getParentName(),
-            'classifications' => $this->getClassifications()->getValues(),
+            'classifications' => $this->getClassificationArray(),
         ];
     }
+
+    /**
+     * Get child Classifications array
+     *
+     * This function returns all child Classifications of a project
+     *
+     * @return array
+     */
+    public function getClassificationArray() {
+        $classifications = $this->getClassification();
+        $classificationArray = [];
+        foreach($classifications as $classification) {
+            $classificationArray[] = $classification->getClassification();
+        }
+        return $classificationArray;
+    }
+
     /**
      * Update $dateLastModified
      *

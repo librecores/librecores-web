@@ -48,5 +48,6 @@ parameters:
     # Options: dev, staging, production
     sentry_env:       'dev'
 
+    # Algolia Configuration
     env(ALGOLIA_APP_ID):  ~
     env(ALGOLIA_API_KEY): ~
