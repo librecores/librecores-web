@@ -674,3 +674,27 @@ a.classifiation-tag:hover {
 .aa-suggestion > span:last-child {
   color: #a9a9a9;
 }
+
+#searchType {
+  height: 40px;
+  margin:0 10px 5px 0px;
+}
+
+a.classifiation-tag {
+  display: inline-block;
+  padding: 0.3em 0.9em;
+  margin: 0 0.5em 0.5em 0;
+  white-space: nowrap;
+  background-color: #f1f8ff;
+  text-decoration: none;
+  border-radius: 3px;
+}
+
+a.classifiation-tag:hover {
+  text-decoration: none;
+  background-color: #def;
+}
+
+.search-type {
+  text-align: left;
+}

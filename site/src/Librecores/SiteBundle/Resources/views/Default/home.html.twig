@@ -13,6 +13,7 @@
       <form name="search-form" method="get" action="{{ path('librecores_project_repo_project_search') }}">
         <div class="input-group">
           <input type="text" class="form-control" id="search-form-input" name="q" placeholder="What IP is missing in your project?">
+          <input type="hidden" id="type" name="type" value="projects">
           <span class="input-group-btn">
             <button class="btn btn-danger" type="submit">
             <span class="glyphicon glyphicon-search" aria-hidden="true"></span>

@@ -7,19 +7,7 @@ function algoliaAutocomplete() {
 
   autocomplete('#search-form-input', {debug:true}, [
     {
-      source: autocomplete.sources.hits(classifications, { hitsPerPage: 3 }),
-      displayKey: 'classifications',
-      templates: {
-        header: '<div class="aa-suggestions-category">Classifications</div>',
-        suggestion: function(suggestion) {
-          return '<span>' +
-            suggestion._highlightResult.classifications.value + '</span>  <span>'
-            + suggestion._highlightResult.projectName.value + '</span>';
-        }
-      }
-    },
-    {
-      source: autocomplete.sources.hits(projects, { hitsPerPage: 3 }),
+      source: autocomplete.sources.hits(projects, { hitsPerPage: 5 }),
       displayKey: 'name',
       templates: {
         header: '<div class="aa-suggestions-category">Projects</div>',
@@ -31,7 +19,7 @@ function algoliaAutocomplete() {
       }
     },
     {
-      source: autocomplete.sources.hits(organization, { hitsPerPage: 3 }),
+      source: autocomplete.sources.hits(organization, { hitsPerPage: 5 }),
       displayKey: 'name',
       templates: {
         header: '<div class="aa-suggestions-category">Organizations</div>',
@@ -44,7 +32,7 @@ function algoliaAutocomplete() {
       }
     },
     {
-      source: autocomplete.sources.hits(user, { hitsPerPage: 3 }),
+      source: autocomplete.sources.hits(user, { hitsPerPage: 5 }),
       displayKey: 'name',
       templates: {
         header: '<div class="aa-suggestions-category">Users</div>',
@@ -56,18 +44,25 @@ function algoliaAutocomplete() {
       }
     }
   ]).on('autocomplete:selected', function(event, suggestion, dataset) {
-    console.log()
     if(dataset === 1) {
-      $('#search-form-input').val(suggestion['classifications'])
+      $('#search-form-input').val(suggestion['name'])
+      $('#type').val('projects');
     }
     if(dataset === 2) {
       $('#search-form-input').val(suggestion['name'])
+      $('#type').val('orgs');
     }
     if(dataset === 3) {
-      $('#search-form-input').val(suggestion['name'])
-    }
-    if(dataset === 4) {
       $('#search-form-input').val(suggestion['username'])
+      $('#type').val('user');
     }
   });
+}
+
+function searchFunctions() {
+  $('.search-type').on('click',function(event){
+    event.preventDefault();
+    $('#type').val($(this).attr('id'));
+    $('form').submit();
+  })
 }
