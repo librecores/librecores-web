@@ -97,40 +97,16 @@ class DefaultController extends Controller
     public function searchAction(Request $req)
     {
         $searchType = $req->get('type');
-        $indexManager = $this->get('search.index_manager');
-        $searchResult = array();
-        // No query string given: no search necessary
-        if (empty($req->get('q'))) {
-            return $this->render(
-                'LibrecoresProjectRepoBundle:Default:project_search.html.twig',
-                [
-                    'searchType' => $searchType,
-                    'searchResult' => $searchResult,
-                ]
-            );
-        }
+        $searchQuery = $req->get('query');
 
-        if($searchType === 'classification') {
-            $searchResult = $indexManager->rawSearch($req->get('q'), ProjectClassification::class);
-        }
-
-        if($searchType === 'projects') {
-            $searchResult = $indexManager->rawSearch($req->get('q'), Project::class);
-        }
-
-        if($searchType === 'orgs') {
-            $searchResult = $indexManager->rawSearch($req->get('q'), Organization::class);
-        }
-
-        if($searchType === 'user') {
-            $searchResult = $indexManager->rawSearch($req->get('q'), User::class);
-        }
+        // If searchType is null
+        $searchType = ($searchType === null ? 'projects' : $searchType);
 
         return $this->render(
             'LibrecoresProjectRepoBundle:Default:project_search.html.twig',
             [
                 'searchType' => $searchType,
-                'searchResult' => $searchResult,
+                'searchQuery' => $searchQuery,
             ]
         );
     }

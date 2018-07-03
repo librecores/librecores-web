@@ -1,5 +1,5 @@
 function algoliaAutocomplete() {
-  var client = algoliasearch("JWXAXWPD3Z", "d7e6874d3bae89103fc6133ae81e4aeb")
+  var client = algoliasearch('ENTER_APPLICATION_ID', 'ENTER_APPLICATION_KEY')
   var projects = client.initIndex('projects');
   var classifications = client.initIndex('classifications');
   var organization = client.initIndex('organization');
@@ -24,7 +24,6 @@ function algoliaAutocomplete() {
       templates: {
         header: '<div class="aa-suggestions-category">Organizations</div>',
         suggestion: function(suggestion) {
-          console.log(suggestion)
           return '<span>' +
             suggestion._highlightResult.name.value + '</span>  <span>'
             + suggestion._highlightResult.displayName.value + '</span>';
@@ -50,7 +49,7 @@ function algoliaAutocomplete() {
     }
     if(dataset === 2) {
       $('#search-form-input').val(suggestion['name'])
-      $('#type').val('orgs');
+      $('#type').val('organization');
     }
     if(dataset === 3) {
       $('#search-form-input').val(suggestion['username'])
@@ -63,6 +62,110 @@ function searchFunctions() {
   $('.search-type').on('click',function(event){
     event.preventDefault();
     $('#type').val($(this).attr('id'));
+    $('#q').val($('.ais-search-box--input').val());
     $('form').submit();
   })
+
+  $('.search-query').on('click',function(event){
+    event.preventDefault();
+    $('#q').val($('.ais-search-box--input').val());
+    $('form').submit();
+  })
+}
+// Algolia instantsearch configuration
+function algoliaInstantSearch(options, searchType) {
+  var search = instantsearch({
+    appId: options.appId,
+    apiKey: options.apiKey,
+    indexName: options.indexName,
+    routing: true,
+    searchParameters: {
+      hitsPerPage: 10,
+    }
+  });
+
+  // Search Box Configuration
+  search.addWidget(
+    instantsearch.widgets.searchBox({
+      container: '#search-input',
+      placeholder: 'Search ...',
+    })
+  );
+
+  // Search Result Configuration
+  search.addWidget(
+    instantsearch.widgets.hits({
+      container: '#hits',
+      templates: {
+        item: getTemplate(searchType),
+        empty: '<h2>Nothing found :-( Maybe try another search keyword?</h2>',
+      },
+      transformData: {
+        item : function item(item) {
+          if(searchType === 'projects') {
+            item.activityDetails = getTimeDiff(item);
+            item.creationDetails = getFormattedDate(item.dateAdded.date);
+          }
+          if(searchType === 'user') {
+            item.createdAt.date = getFormattedDate(item.createdAt.date)
+          }
+          return item;
+        },
+      },
+    })
+  );
+
+  // Pagination
+  search.addWidget(
+    instantsearch.widgets.pagination({
+      container: '#pagination',
+      scrollTo: '#search-input',
+    })
+  );
+
+  search.addWidget(
+    instantsearch.widgets.stats({
+      container: '#stats',
+      transform: {
+
+      },
+    })
+  );
+
+  search.start();
+}
+
+// Get Templates for Result display feature
+function getTemplate(templateName) {
+  return $('#'+templateName+'-template').html();
+}
+
+function getTimeDiff(item) {
+  var time = item.dateLastActivityOccurred.date;
+  var date = new Date(time);
+  var today = new Date();
+  var years = today.getFullYear() - date.getFullYear();
+  var months = today.getMonth() - date.getMonth();
+  var days = today.getUTCDate() - date.getUTCDate();
+
+  if(years > 0) {
+    return years === 1 ? years + ' year before' : years + ' years before';
+  }
+
+  if(months > 0) {
+    return months === 1 ? months + ' month before' : months + ' months before';
+  }
+
+  if(days > 0) {
+    return days === 1 ? days + ' day before' : days + ' day before';
+  }
+
+  return 0 + ' day before'
+}
+
+function getFormattedDate(item){
+  var timeToFormat = item;
+  var date =  new Date(timeToFormat);
+  var formattedDate = date.getFullYear() + '-' + (date.getMonth()+1) + '-' + date.getDate();
+  return formattedDate;
 }

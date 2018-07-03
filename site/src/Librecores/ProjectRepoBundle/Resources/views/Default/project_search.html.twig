@@ -6,6 +6,15 @@ LibreCores Search
 
 {% block pagepath %}Home &raquo; LibreCores Search{% endblock %}
 
+{% block stylesheets %}
+  {{ parent() }}
+  {% stylesheets filter="cssrewrite"
+  "assets/css/instantsearch.min.css"
+  %}
+  <link rel="stylesheet" href="{{ asset_url }}" />
+  {% endstylesheets %}
+{% endblock %}
+
 {% block content %}
 <form name="search-form" method="get" action="{{ path('librecores_project_repo_project_search') }}">
   <div class="librecores-search">
@@ -15,128 +24,94 @@ LibreCores Search
       </div>
       <div class="col-sm-9">
         <div class="input-group" style="width:100%">
-          <input type="search" id="q" name="q" placeholder="Search for ..." class="form-control" value="{% if searchResult %}{{ searchResult.query }}{% endif %}">
-          <input type="hidden" id="type" name="type" value="{{ searchType }}">
+          <input type="search" id="search-input" placeholder="Search for ..." class="form-control" value="t">
           <span class="input-group-btn">
-            <button class="btn btn-default" type="submit">
+            <button class="btn btn-default search-query" type="submit">
               <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
               Search
             </button>
           </span>
         </div>
       </div>
+      <input type="hidden" id="q" name="query" value="{% if searchQuery %}{{ searchQuery }}{% endif %}">
+      <input type="hidden" id="type" name="type" value="{{ searchType }}">
     </div>
 
     <div class="row">
       <div class="col-sm-3">
         {# sidebar for search refinements #}
         <ul class="list-group">
-          <a id="projects" href="#" class=" search-type list-group-item {% if searchType == "projects" %}active{% endif %} btn"><i class="fa fa-code"></i> Projects</a>
-          <a id="orgs" href="#" class=" search-type list-group-item {% if searchType == "orgs" %}active{% endif %} btn"><i class="fa fa-users"></i> Organization</a>
-          <a id="user" href="#" class=" search-type list-group-item {% if searchType == "user" %}active{% endif %} btn"><i class="fa fa-user"></i> Users</a>
+          <a id="projects" href="#" class=" search-type list-group-item {{ searchType == 'projects' ? 'active' : '' }} btn">
+            <i class="fa fa-code"></i> Projects</a>
+          <a id="organization" href="#" class=" search-type list-group-item {{ searchType == 'organization' ? 'active' : '' }} btn">
+            <i class="fa fa-users"></i> Organization</a>
+          <a id="user" href="#" class=" search-type list-group-item {{ searchType == 'user' ? 'active' : '' }} btn">
+            <i class="fa fa-user"></i> Users</a>
         </ul>
       </div>
       <div class="col-sm-9">
-        {# main content: search results #}
-        {% if searchType == 'projects' and searchResult %}
-          {% for project in searchResult.hits %}
-            <h2><a href="{{ path('librecores_project_repo_project_view', {'parentName':
-      project.parentUserName, 'projectName': project.name}) }}">{{ project.parentUserName }}/{{ project.name }}</a></h2>
-            <div>{{ project.tagName }}</div>
-            <div class="classification-container">
-              {% if project.classifications %}
-                {% for classificationDetails in project.classifications %}
-                  <a href="" class="classifiation-tag">{{ classificationDetails }}</a>
-                {% endfor %}
-              {% endif %}
-            </div>
-            <div><i>
-              added on {{ project.dateAdded.date |date('Y-m-d') }}
-            </i></div>
-            <div class="librecores-project-list-metadata">
-              {% if project.mostUsedLanguage %}
-              <span class="metric metric-lang">
-                <i class="fa fa-code"></i>
-                <span class="sr-only">Major language: </span>
-                {{ project.mostUsedLanguage }}
-              </span>
-              {%  endif %}
-              {% if project.dateLastActivityOccurred %}
-              <span class="updated">
-              <i class="fa fa-history"></i> Updated {{ project.dateLastActivityOccurred.date | time_diff }}
-              </span>
-              {% endif %}
-            </div>
-            <hr/>
-          {% else %}
-            {% if searchResult is empty %}
-              <div>Search for projects on LibreCores by entering a keyword above.</div>
-              <br/>
-              <strong>Don't know what you're looking for? <a href="{{ path('librecores_project_repo_project_list') }}">Browse the list of all projects.</a></strong>
-            {% else %}
-              <h2>Nothing found :-( Maybe try another search keyword?</h2>
-              <br/>
-              <strong>Don't know what you're looking for? <a href="{{ path('librecores_project_repo_project_list') }}">Browse the list of all projects.</a></strong>
-            {% endif %}
-          {% endfor %}
-
-        {% elseif searchType == 'user' and searchResult %}
-          {% for user in searchResult.hits %}
-            <h2><a href="{{ path('librecores_project_repo_user_org_view', {'userOrOrganization':
-      user.username}) }}">{{ user.username }}</a></h2>
-            <div>{{ user.name }}</div>
-            <div><i>
-              joined on {{ user.createdAt.date |date('Y-m-d') }}
-            </i></div>
-            <hr/>
-          {% else %}
-            {% if searchResult is empty %}
-              <div>Search for users on LibreCores by entering a keyword above.</div>
-            {% else %}
-              <h2>Nothing found :-( Maybe try another search keyword?</h2>
-            {% endif %}
-          {% endfor %}
-
-        {% elseif searchType == 'orgs' and searchResult %}
-          {% for org in searchResult.hits %}
-            <h2><a href="{{ path('librecores_project_repo_user_org_view', {'userOrOrganization':
-      org.name}) }}">{{ org.displayName }}</a></h2>
-            <div>{{ org.name }}</div>
-            <hr/>
-          {% else %}
-            {% if searchResult is empty %}
-              <div>Search for organizations on LibreCores by entering a keyword above.</div>
-            {% else %}
-              <h2>Nothing found :-( Maybe try another search keyword?</h2>
-            {% endif %}
-          {% endfor %}
-        {% elseif searchType == 'user' and searchResult %}
-          {% for user in searchResult.hits %}
-            <h2><a href="{{ path('librecores_project_repo_user_org_view', {'userOrOrganization':
-                user.username}) }}">{{ user.username }}</a></h2>
-            <div>{{ user.name }}</div>
-            <div><i>
-                joined on {{ user.createdAt.date |date('Y-m-d') }}
-              </i></div>
-            <hr/>
-          {% else %}
-            {% if searchResult is empty %}
-              <div>Search for users on LibreCores by entering a keyword above.</div>
-            {% else %}
-              <h2>Nothing found :-( Maybe try another search keyword?</h2>
-            {% endif %}
-          {% endfor %}
-        {% endif %}
-        
+        <div id="stats"></div>
+        <div id="hits"></div>
+        <div id="pagination"></div>
       </div>
     </div>
   </div>
 </form>
+  {# Templates for instant search #}
+
+  {# User Template #}
+  <script type="text/html" id="user-template">
+    {% verbatim %}
+          <h2><a href="/{{ username }}">{{{ _highlightResult.username.value }}}</a></h2>
+            <div>{{{ _highlightResult.name.value }}}</div>
+            <div><i>
+                joined on {{{ createdAt.date }}}
+              </i></div>
+            <hr/>
+    {% endverbatim %}
+  </script>
+
+  {# Organization Template #}
+  <script type="text/html" id="organization-template">
+    {% verbatim %}
+          <h2><a href="/{{ name }}">{{{ _highlightResult.displayName.value }}}</a></h2>
+            <div>{{{ _highlightResult.name.value }}}</div>
+            <hr/>
+    {% endverbatim %}
+  </script>
+
+  {# Project Template #}
+  <script type="text/html" id="projects-template">
+    {% verbatim %}
+        <h2><a href="/{{ parentUserName }}/{{ name }}">{{{ _highlightResult.parentUserName.value }}}/{{{ _highlightResult.name.value }}}</a></h2>
+            <div>{{{ _highlightResult.tagName.value }}}</div>
+            <div class="classification-container">
+            {{#_highlightResult.classifications}}
+               <a href="#" class="classifiation-tag">{{{ value }}}</a>
+            {{/_highlightResult.classifications}}
+            </div>
+            <div><i>
+              added on {{{ creationDetails }}}
+            </i></div>
+            <div class="librecores-project-list-metadata">
+              <span class="metric metric-lang">
+                <i class="fa fa-code"></i>
+                <span class="sr-only">Major language: </span>
+                {{{ _highlightResult.mostUsedLanguage.value }}}
+              </span>
+              <span class="updated">
+              <i class="fa fa-history"></i> Updated {{{ activityDetails }}}
+              </span>
+            </div>
+            <hr/>
+    {% endverbatim %}
+  </script>
 {% endblock %}
 
 {% block javascripts %}
   {{ parent() }}
   {% javascripts
+  'assets/js/instantsearch.js'
   'assets/js/search.js'
   filter="?jsqueeze" %}
   <script src="{{ asset_url }}"></script>
@@ -145,7 +120,18 @@ LibreCores Search
 
 {% block pagejs %}
 {# do not use autofocus attribute to work around FF bug 712130 (FOUC) #}
+
 $(function() {
   searchFunctions();
+  options =  {
+  appId: 'ENTER_APPLICATION_ID',
+  apiKey: 'ENTER_APPLICATION_KEY',
+  indexName: '{{ searchType }}',
+  searchParameters: {
+    hitsPerPage: 10,
+    },
+  }
+  // Algolia instantsearch configuration
+  algoliaInstantSearch(options, '{{searchType}}');
 });
 {% endblock %}

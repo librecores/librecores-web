@@ -330,12 +330,14 @@ class Project
      *
      * @return array
      */
-    public function getClassificationArray() {
+    public function getClassificationArray()
+    {
         $classifications = $this->getClassification();
         $classificationArray = [];
-        foreach($classifications as $classification) {
+        foreach ($classifications as $classification) {
             $classificationArray[] = $classification->getClassification();
         }
+
         return $classificationArray;
     }
 
