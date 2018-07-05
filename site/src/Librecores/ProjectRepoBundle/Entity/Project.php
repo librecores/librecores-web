@@ -5,8 +5,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Serializer\Normalizer\NormalizableInterface;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 /**
  * A project
@@ -28,7 +26,7 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
  *     ignoreNull=false
  * )
  */
-class Project implements NormalizableInterface
+class Project
 {
     const STATUS_ASSIGNED   = 'ASSIGNED';
     const STATUS_UNASSIGNED = 'UNASSIGNED';
@@ -323,31 +321,6 @@ class Project implements NormalizableInterface
         $this->setDateAdded(new \DateTime());
         $this->setDateLastModified(new \DateTime());
         $this->classifications = new ArrayCollection();
-    }
-
-    /**
-     * Normalizes the object into an array of scalars|arrays.
-     *
-     * @param NormalizerInterface $serializer The serializer is given so that you
-     *                                        can use it to serialize objects contained within this object
-     * @param string|null         $format     The format is optionally given to be able to serialize differently
-     *                                        based on different output formats
-     * @param array               $context    Options for serializing this object
-     *
-     * @return array|string|int|float|bool
-     */
-    public function normalize(NormalizerInterface $serializer, $format = null, array $context = array())
-    {
-        return [
-            'name' => $this->getName(),
-            'displayName' => $this->getDisplayName(),
-            'tagName' => $this->getTagline(),
-            'dateAdded' => $this->getDateAdded(),
-            'dateLastActivityOccurred' => $this->getDateLastActivityOccurred(),
-            'mostUsedLanguage' => $this->getSourceRepo()->getSourceStats()->getMostUsedLanguage(),
-            'parentUserName' => $this->getParentName(),
-            'classifications' => $this->getClassificationArray(),
-        ];
     }
 
     /**

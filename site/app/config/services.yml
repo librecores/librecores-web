@@ -16,5 +16,20 @@ services:
         # thinks it can be translated -- but we don't have any translations available, therefore the autowire is set to
         # false
 
+    user_normalizer:
+        class: Librecores\ProjectRepoBundle\Serializer\Normalizer\UserNormalizer
+        tag: serializer.normalizer
+        public: false
+
+    project_normalizer:
+        class: Librecores\ProjectRepoBundle\Serializer\Normalizer\ProjectNormalizer
+        tag: serializer.normalizer
+        public: false
+
+    organization_normalizer:
+        class: Librecores\ProjectRepoBundle\Serializer\Normalizer\OrganizationNormalizer
+        tag: serializer.normalizer
+        public: false
+
 framework:
   serializer: { enabled: true }
