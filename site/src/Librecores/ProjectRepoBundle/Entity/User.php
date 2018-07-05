@@ -4,8 +4,6 @@ namespace Librecores\ProjectRepoBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use FOS\UserBundle\Model\User as BaseUser;
-use Symfony\Component\Serializer\Normalizer\NormalizableInterface;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 /**
  * A user
@@ -16,7 +14,7 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
  * @ORM\Entity
  * @ORM\HasLifecycleCallbacks
  */
-class User extends BaseUser implements NormalizableInterface
+class User extends BaseUser
 {
     /**
      * @var int
@@ -132,26 +130,6 @@ class User extends BaseUser implements NormalizableInterface
         $this->projects                = new ArrayCollection();
         $this->organizationsCreated    = new ArrayCollection();
         $this->organizationMemberships = new ArrayCollection();
-    }
-
-    /**
-     * Normalizes the object into an array of scalars|arrays.
-     *
-     * @param NormalizerInterface $serializer The serializer is given so that you
-     *                                        can use it to serialize objects contained within this object
-     * @param string|null         $format     The format is optionally given to be able to serialize differently
-     *                                        based on different output formats
-     * @param array               $context    Options for serializing this object
-     *
-     * @return array|string|int|float|bool
-     */
-    public function normalize(NormalizerInterface $serializer, $format = null, array $context = array())
-    {
-        return [
-            'name' => $this->getName(),
-            'username' => $this->getUsername(),
-            'createdAt' => $this->getCreatedAt(),
-        ];
     }
 
     /**
