@@ -238,7 +238,11 @@
 {% block pagejs %}
 {# do not use autofocus attribute to work around FF bug 712130 (FOUC) #}
 $(function() {
+  algoliaConfig = {
+    applicationId: '{{ algolia_app_id }}',
+    searchKey: '{{ algolia_search_key }}'
+  }
   $("#search-form-input").focus();
-  algoliaAutocomplete();
+  algoliaAutocomplete(algoliaConfig);
 });
 {% endblock %}

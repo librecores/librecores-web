@@ -1,7 +1,7 @@
 {% extends 'layout.html.twig' %}
 
 {% block title %}
-LibreCores Search
+  LibreCores Search
 {% endblock %}
 
 {% block pagepath %}Home &raquo; LibreCores Search{% endblock %}
@@ -9,54 +9,55 @@ LibreCores Search
 {% block stylesheets %}
   {{ parent() }}
   {% stylesheets filter="cssrewrite"
-  "assets/css/instantsearch.min.css"
-  %}
-  <link rel="stylesheet" href="{{ asset_url }}" />
+  "assets/css/instantsearch.min.css" %}
+  <link rel="stylesheet" href="{{ asset_url }}"/>
   {% endstylesheets %}
 {% endblock %}
 
 {% block content %}
-<form name="search-form" method="get" action="{{ path('librecores_project_repo_project_search') }}">
-  <div class="librecores-search">
-    <div class="row">
-      <div class="col-sm-3">
-        <h1>Search</h1>
-      </div>
-      <div class="col-sm-9">
-        <div class="input-group" style="width:100%">
-          <input type="search" id="search-input" placeholder="Search for ..." class="form-control" value="t">
-          <span class="input-group-btn">
+  <form name="search-form" method="get" action="{{ path('librecores_project_repo_project_search') }}">
+    <div class="librecores-search">
+      <div class="row">
+        <div class="col-sm-3">
+          <h1>Search</h1>
+        </div>
+        <div class="col-sm-9">
+          <div class="input-group" style="width:100%">
+            <input type="search" id="search-input" placeholder="Search for ..." class="form-control">
+            <span class="input-group-btn">
             <button class="btn btn-default search-query" type="submit">
               <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
               Search
             </button>
           </span>
+          </div>
+        </div>
+        <input type="hidden" id="q" name="query" value="{% if searchQuery %}{{ searchQuery }}{% endif %}">
+        <input type="hidden" id="type" name="type" value="{{ searchType }}">
+      </div>
+
+      <div class="row">
+        <div class="col-sm-3">
+          {# sidebar for search refinements #}
+          <ul class="list-group">
+            <a id="projects" href="#"
+               class=" search-type list-group-item {{ searchType == 'projects' ? 'active' : '' }} btn">
+              <i class="fa fa-code"></i> Projects</a>
+            <a id="organization" href="#"
+               class=" search-type list-group-item {{ searchType == 'organization' ? 'active' : '' }} btn">
+              <i class="fa fa-users"></i> Organization</a>
+            <a id="user" href="#" class=" search-type list-group-item {{ searchType == 'user' ? 'active' : '' }} btn">
+              <i class="fa fa-user"></i> Users</a>
+          </ul>
+        </div>
+        <div class="col-sm-9">
+          <div id="stats"></div>
+          <div id="hits"></div>
+          <div id="pagination"></div>
         </div>
       </div>
-      <input type="hidden" id="q" name="query" value="{% if searchQuery %}{{ searchQuery }}{% endif %}">
-      <input type="hidden" id="type" name="type" value="{{ searchType }}">
     </div>
-
-    <div class="row">
-      <div class="col-sm-3">
-        {# sidebar for search refinements #}
-        <ul class="list-group">
-          <a id="projects" href="#" class=" search-type list-group-item {{ searchType == 'projects' ? 'active' : '' }} btn">
-            <i class="fa fa-code"></i> Projects</a>
-          <a id="organization" href="#" class=" search-type list-group-item {{ searchType == 'organization' ? 'active' : '' }} btn">
-            <i class="fa fa-users"></i> Organization</a>
-          <a id="user" href="#" class=" search-type list-group-item {{ searchType == 'user' ? 'active' : '' }} btn">
-            <i class="fa fa-user"></i> Users</a>
-        </ul>
-      </div>
-      <div class="col-sm-9">
-        <div id="stats"></div>
-        <div id="hits"></div>
-        <div id="pagination"></div>
-      </div>
-    </div>
-  </div>
-</form>
+  </form>
   {# Templates for instant search #}
 
   {# User Template #}
@@ -87,7 +88,7 @@ LibreCores Search
             <div>{{{ _highlightResult.tagName.value }}}</div>
             <div class="classification-container">
             {{#_highlightResult.classifications}}
-               <a href="#" class="classifiation-tag">{{{ value }}}</a>
+               <a href="/search?query={{ value }}&type=projects" class="classifiation-tag">{{{ value }}}</a>
             {{/_highlightResult.classifications}}
             </div>
             <div><i>
@@ -119,19 +120,19 @@ LibreCores Search
 {% endblock %}
 
 {% block pagejs %}
-{# do not use autofocus attribute to work around FF bug 712130 (FOUC) #}
+  {# do not use autofocus attribute to work around FF bug 712130 (FOUC) #}
 
-$(function() {
+  $(function() {
   searchFunctions();
   options =  {
-  appId: 'ENTER_APPLICATION_ID',
-  apiKey: 'ENTER_APPLICATION_KEY',
-  indexName: '{{ searchType }}',
-  searchParameters: {
-    hitsPerPage: 10,
+    appId: '{{ algolia_app_id }}',
+    apiKey: '{{ algolia_search_key }}',
+    indexName: '{{ searchType }}',
+    searchParameters: {
+      hitsPerPage: 10,
     },
   }
   // Algolia instantsearch configuration
-  algoliaInstantSearch(options, '{{searchType}}');
-});
+  algoliaInstantSearch(options, '{{ searchType }}');
+  });
 {% endblock %}

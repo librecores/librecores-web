@@ -1,11 +1,11 @@
-function algoliaAutocomplete() {
-  var client = algoliasearch('ENTER_APPLICATION_ID', 'ENTER_APPLICATION_KEY')
+function algoliaAutocomplete(algoliaConfig) {
+  var client = algoliasearch(algoliaConfig.applicationId, algoliaConfig.searchKey)
   var projects = client.initIndex('projects');
   var classifications = client.initIndex('classifications');
   var organization = client.initIndex('organization');
   var user = client.initIndex('user');
 
-  autocomplete('#search-form-input', {debug:true}, [
+  autocomplete('#search-form-input', {} ,[
     {
       source: autocomplete.sources.hits(projects, { hitsPerPage: 5 }),
       displayKey: 'name',
@@ -36,8 +36,10 @@ function algoliaAutocomplete() {
       templates: {
         header: '<div class="aa-suggestions-category">Users</div>',
         suggestion: function(suggestion) {
+          var name = suggestion._highlightResult.name == null ?
+            suggestion._highlightResult.username.value : suggestion._highlightResult.name.value;
           return '<span>' +
-            suggestion._highlightResult.name.value + '</span>  <span>'
+             name + '</span>  <span>'
             + suggestion._highlightResult.username.value + '</span>';
         }
       }
@@ -141,6 +143,9 @@ function getTemplate(templateName) {
 }
 
 function getTimeDiff(item) {
+  if(item.dateLastActivityOccurred === null) {
+    return 0 + ' days before';
+  }
   var time = item.dateLastActivityOccurred.date;
   var date = new Date(time);
   var today = new Date();

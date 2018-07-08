@@ -745,7 +745,7 @@ a.classifiation-tag:hover {
   background: none;
 }
 
-#search-input input {
+.ais-search-box .ais-search-box--input {
   height: 35px;
   padding: 6px 25px;
   font-size: 15px;
@@ -755,15 +755,16 @@ a.classifiation-tag:hover {
   background-image: none;
   border: 1px solid #ccc;
   border-radius: 4px;
+
 }
-#search-input input, #search-input input:focus {
+.ais-search-box--input input:focus {
   transition: border-color .3s ease-in;
   outline: 0;
 }
-#search-input input:focus {
+.ais-search-box--input input:focus {
   border-color: #3fb0ac;
 }
-#search-input input::-webkit-input-placeholder, #search-input input:-moz-placeholder, #search-input input:-moz-placeholder, #search-input input:-ms-input-placeholder {
+.ais-search-box--input input::-webkit-input-placeholder, #search-input input:-moz-placeholder, #search-input input:-moz-placeholder, #search-input input:-ms-input-placeholder {
   font-weight: 100;
   color: #999;
 }
@@ -781,7 +782,9 @@ a.classifiation-tag:hover {
   font-style: normal;
   background-color: rgba(58, 150, 207, 0.1);
 }
+.ais-search-box {
 
+}
 #stats .ais-stats--time {
   font-size: 0.8em;
   color: #999;
