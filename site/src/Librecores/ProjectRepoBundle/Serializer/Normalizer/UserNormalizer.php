@@ -4,14 +4,21 @@ namespace Librecores\ProjectRepoBundle\Serializer\Normalizer;
 use Librecores\ProjectRepoBundle\Entity\User;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
+/**
+ * Class UserNormalizer
+ *
+ * This class normalize the users for getting indexed in algolia.
+ *
+ * @author Sandip Kumar Bhuyan <sandipbhuyan@gmail.com>
+ *
+ * @package Librecores\ProjectRepoBundle\Serializer\Normalizer
+ */
 class UserNormalizer implements NormalizerInterface
 {
     /**
      * Normalize a user into a set of arrays/scalars.
      *
-     * {@inheritdoc}. This class normalize the users for getting indexed in algolia.
-     *
-     * @author Sandip Kumar Bhuyan <sandipbhuyan@gmail.com>
+     * {@inheritdoc}
      */
     public function normalize($object, $format = null, array $context = array())
     {

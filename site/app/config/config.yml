@@ -37,6 +37,7 @@ framework:
             # GithubApiService
             app.cache.githubapi:
                 adapter: cache.app
+    serializer: { enabled: true }
 
 # Twig Configuration
 twig:

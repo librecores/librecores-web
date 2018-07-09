@@ -4,14 +4,21 @@ namespace Librecores\ProjectRepoBundle\Serializer\Normalizer;
 use Librecores\ProjectRepoBundle\Entity\Organization;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
+/**
+ * Class OrganizationNormalizer
+ *
+ * This class normalizes the Organizations for getting indexed in algolia
+ *
+ * @author Sandip Kumar Bhuyan <sandipbhuyan@gmail.com>
+ *
+ * @package Librecores\ProjectRepoBundle\Serializer\Normalizer
+ */
 class OrganizationNormalizer implements NormalizerInterface
 {
     /**
      * Normalize a Organization into a set of arrays/scalars.
      *
-     * {@inheritdoc}. This class normalizes the Organizations for getting indexed in algolia
-     *
-     * @author Sandip Kumar Bhuyan <sandipbhuyan@gmail.com>
+     * {@inheritdoc}.
      */
     public function normalize($object, $format = null, array $context = array())
     {
