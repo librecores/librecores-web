@@ -324,6 +324,22 @@ class Project
     }
 
     /**
+     * Get child Classifications array
+     *
+     * This function returns all child Classifications of a project
+     *
+     * @return array
+     */
+    public function getClassificationArray() {
+        $classifications = $this->getClassification();
+        $classificationArray = [];
+        foreach($classifications as $classification) {
+            $classificationArray[] = $classification->getClassification();
+        }
+        return $classificationArray;
+    }
+
+    /**
      * Update $dateLastModified
      *
      * This is called automatically by Doctrine.
