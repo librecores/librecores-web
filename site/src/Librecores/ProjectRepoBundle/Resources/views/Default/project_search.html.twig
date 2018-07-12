@@ -63,53 +63,54 @@
   {# User Template #}
   <script type="text/html" id="user-template">
     {% verbatim %}
-          <h2><a href="/{{ username }}">{{{ _highlightResult.username.value }}}</a></h2>
-            <div>{{{ _highlightResult.name.value }}}</div>
-            <div><i>
-                joined on {{{ createdAt.date }}}
-              </i></div>
-            <hr/>
+      <h2><a href="/{{ username }}">{{{ _highlightResult.username.value }}}</a></h2>
+      <div>{{{ _highlightResult.name.value }}}</div>
+      <div><i>
+          joined on {{{ createdAt.date }}}
+        </i></div>
+      <hr/>
     {% endverbatim %}
   </script>
 
   {# Organization Template #}
   <script type="text/html" id="organization-template">
     {% verbatim %}
-          <h2><a href="/{{ name }}">{{{ _highlightResult.displayName.value }}}</a></h2>
-            <div>{{{ _highlightResult.name.value }}}</div>
-            <hr/>
+      <h2><a href="/{{ name }}">{{{ _highlightResult.displayName.value }}}</a></h2>
+      <div>{{{ _highlightResult.name.value }}}</div>
+      <hr/>
     {% endverbatim %}
   </script>
 
   {# Project Template #}
   <script type="text/html" id="projects-template">
     {% verbatim %}
-        <h2><a href="/{{ parentUserName }}/{{ name }}">{{{ _highlightResult.parentUserName.value }}}/{{{ _highlightResult.name.value }}}</a></h2>
-            <div>{{{ _highlightResult.tagName.value }}}</div>
-            <div class="classification-container">
-            {{#_highlightResult.classifications}}
-               <a href="/search?query={{ value }}&type=projects" class="classifiation-tag">{{{ value }}}</a>
-            {{/_highlightResult.classifications}}
-            </div>
-            <div><i>
-              added on {{{ creationDetails }}}
-            </i></div>
-            <div class="librecores-project-list-metadata">
-              <span class="metric metric-lang">
-                <i class="fa fa-code"></i>
-                <span class="sr-only">Major language: </span>
-                {{{ _highlightResult.mostUsedLanguage.value }}}
-              </span>
-              <span class="updated">
+      <h2><a href="/{{ parentUserName }}/{{ name }}">{{{ _highlightResult.parentUserName.value }}}/
+          {{{ _highlightResult.name.value }}}</a></h2>
+      <div>{{{ _highlightResult.tagName.value }}}</div>
+      <div class="classification-container">
+        {{#_highlightResult.classifications}}
+        <a href="/search?query={{ value }}&type=projects" class="classifiation-tag">{{{ value }}}</a>
+        {{/_highlightResult.classifications}}
+      </div>
+      <div>
+        <i>added on {{{ creationDetails }}}</i>
+      </div>
+      <div class="librecores-project-list-metadata">
+          <span class="metric metric-lang">
+              <i class="fa fa-code"></i>
+              <span class="sr-only">Major language: </span>
+            {{{ _highlightResult.mostUsedLanguage.value }}}
+          </span>
+        <span class="updated">
               <i class="fa fa-history"></i> Updated {{{ activityDetails }}}
-              </span>
-            </div>
-            <hr/>
+          </span>
+      </div>
+      <hr/>
     {% endverbatim %}
   </script>
-{% endblock %}
+  {% endblock %}
 
-{% block javascripts %}
+  {% block javascripts %}
   {{ parent() }}
   {% javascripts
   'assets/js/instantsearch.js'
@@ -120,8 +121,6 @@
 {% endblock %}
 
 {% block pagejs %}
-  {# do not use autofocus attribute to work around FF bug 712130 (FOUC) #}
-
   $(function() {
   searchFunctions();
   options =  {

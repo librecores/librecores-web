@@ -2,16 +2,11 @@
 
 namespace Librecores\ProjectRepoBundle\Controller;
 
-use Librecores\ProjectRepoBundle\Entity\Project;
-use Librecores\ProjectRepoBundle\Entity\ProjectClassification;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Librecores\ProjectRepoBundle\Entity\Organization;
 use Librecores\ProjectRepoBundle\Entity\User;
-use Librecores\ProjectRepoBundle\Form\Type\SearchQueryType;
-use Librecores\ProjectRepoBundle\Form\Model\SearchQuery;
 
 class DefaultController extends Controller
 {
@@ -99,7 +94,7 @@ class DefaultController extends Controller
         $searchType = $req->get('type');
         $searchQuery = $req->get('query');
 
-        // If searchType is null
+        // Search Project by default
         $searchType = ($searchType === null ? 'projects' : $searchType);
 
         return $this->render(
