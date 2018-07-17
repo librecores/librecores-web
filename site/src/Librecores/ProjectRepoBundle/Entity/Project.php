@@ -342,6 +342,31 @@ class Project
     }
 
     /**
+     * Get the classification hierarchy
+     *
+     * This functions returns the classification hierarchy levels
+     *
+     * @return array
+     */
+    public function getCategoryLists()
+    {
+        $classifications = $this->getClassificationArray();
+        $categoryLevels = [];
+        foreach ($classifications as $classification) {
+            $categories = explode('::', $classification);
+            $catIncrement = '';
+            for ($i = 0; $i < count($categories); $i++) {
+                if (isset($categories[$i])){
+                    $catIncrement = $i == 0 ? $categories[$i]: $catIncrement.'::'.$categories[$i] ;
+                    $categoryLevels['lvl'.$i][] = $catIncrement;
+                }
+            }
+        }
+
+        return $categoryLevels;
+    }
+
+    /**
      * Update $dateLastModified
      *
      * This is called automatically by Doctrine.

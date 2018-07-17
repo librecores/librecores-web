@@ -28,6 +28,7 @@ class ProjectNormalizer implements NormalizerInterface
             'dateLastActivityOccurred' => $object->getDateLastActivityOccurred(),
             'mostUsedLanguage' => $object->getSourceRepo()->getSourceStats()->getMostUsedLanguage(),
             'parentUserName' => $object->getParentName(),
+            'hierarchicalCategories' => $object->getCategoryLists(),
             'classifications' => $object->getClassificationArray(),
         ];
     }

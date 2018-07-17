@@ -94,7 +94,6 @@ class DefaultController extends Controller
         $searchType = $req->get('type');
         $searchQuery = $req->get('query');
 
-        // Search Project by default
         $searchType = ($searchType === null ? 'projects' : $searchType);
 
         return $this->render(

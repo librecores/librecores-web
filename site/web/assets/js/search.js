@@ -83,7 +83,8 @@ function algoliaInstantSearch(options, searchType) {
     routing: true,
     searchParameters: {
       hitsPerPage: 10,
-    }
+    },
+    searchFunction: options.searchFunction,
   });
 
   // Search Box Configuration
@@ -133,6 +134,25 @@ function algoliaInstantSearch(options, searchType) {
       },
     })
   );
+
+  if(searchType === 'projects') {
+    search.addWidget(
+      instantsearch.widgets.hierarchicalMenu({
+        container: '#hierarchical-categories',
+        attributes: [
+          'hierarchicalCategories.lvl0',
+          'hierarchicalCategories.lvl1',
+          'hierarchicalCategories.lvl2',
+          'hierarchicalCategories.lvl3'
+        ],
+        separator: '::',
+        templates: {
+          header: '<h3>Classifications</h3>',
+          item:  '<a href="{{url}}" class="facet-item {{#isRefined}}active{{/isRefined}}"><span class="facet-name"> {{label}}</span class="facet-name"><span class="ais-hierarchical-menu--count">{{count}}</span></a>'
+        },
+      })
+    );
+  }
 
   search.start();
 }
