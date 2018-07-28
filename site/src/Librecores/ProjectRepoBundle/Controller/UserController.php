@@ -13,7 +13,6 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class UserController extends Controller
 {
-
     /**
      * View a user's public profile
      *
@@ -27,6 +26,22 @@ class UserController extends Controller
         return $this->render(
             'LibrecoresProjectRepoBundle:User:view.html.twig',
             array('user' => $user)
+        );
+    }
+
+    /**
+     * View a dashboard after Login
+     *
+     * @param Request  $request
+     * @param User     $user
+     *
+     * @return Response
+     */
+    public function dashboardAction(Request $request)
+    {
+        return $this->render(
+            'LibrecoresProjectRepoBundle:User:dashboard.html.twig',
+            array('user' => $this->getUser())
         );
     }
 

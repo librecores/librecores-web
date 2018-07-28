@@ -23,12 +23,17 @@ security:
                 csrf_token_generator: security.csrf.token_manager
                 login_path: /user/login
                 check_path: /user/login_check
+                always_use_default_target_path: true
+                default_target_path: /user/dashboard
+                use_referer: true
             oauth:
                 resource_owners:
                     github: "/user/connect/check-github"
                     google: "/user/connect/check-google"
                 login_path: /user/login
                 failure_path: /user/register
+                always_use_default_target_path: true
+                default_target_path: /user/dashboard
 
                 oauth_user_provider:
                     service: librecores_user_provider

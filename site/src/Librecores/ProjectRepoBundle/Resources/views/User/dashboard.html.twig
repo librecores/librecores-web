@@ -1,0 +1,107 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}
+  {{ user.getName() ? user.getName() : user.getUsername() }} @ LibreCores
+{% endblock %}
+
+{% block content %}
+  <div class="librecores-user-page-header">
+    {% if user.getName() %}
+      <h1>{{ user.getName() }} <small>{{ user.getUsername() }}</small></h1>
+    {% else %}
+      <h1>{{ user.getUsername() }}</h1>
+    {% endif %}
+  </div>
+
+  {{ user.getUsername() }} joined LibreCores
+  <time datetime="{{ user.getCreatedAt()|date("c", "UTC") }}"
+        data-livestamp="{{ user.getCreatedAt()|date("c", "UTC") }}">
+    on {{ user.getCreatedAt()|date("d F Y H:i", "UTC") }} UTC
+  </time><div class=""></div>
+  <div class="row">
+    <div class="col-sm-2">
+    </div>
+    <div class="col-sm-7">
+      <h3>Projects</h3>
+    </div>
+    <div class="col-sm-3">
+      <h3>Organizations</h3>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-2">
+      <ul class="list-group">
+        <li class="list-group-item">
+          <a href="{{ path('librecores_project_repo_project_new') }}">
+            New Project
+          </a>
+        </li>
+        <li class="list-group-item">
+          <a href="{{ path('librecores_project_repo_organization_new') }}">
+            New Organization
+          </a>
+        </li>
+        <li class="list-group-item">
+          <a href="{{ path('librecores.user.settings.profile') }}" aria-controls="settings" role="tab">
+            Profile
+          </a>
+        </li>
+        <li class="list-group-item">
+          <a href="{{ path('librecores_project_repo_organization_list') }}">
+            Your Organizations
+          </a>
+        </li>
+      </ul>
+    </div>
+    <div class="col-sm-7">
+      {% for project in user.getProjects() %}
+        <h2><a href="{{ path('librecores_project_repo_project_view', {'parentName':
+            project.getParentName(), 'projectName': project.getName()}) }}">{{ project.getName() }}</a></h2>
+        <div><i>
+            added on {{ project.getDateAdded()|date('Y-m-d') }}
+          </i></div>
+        <div class="librecores-project-list-metadata">
+          {% if project.sourceRepo.sourceStats.available %}
+            <span class="metric metric-lang">
+            <i class="fa fa-code"></i>
+            <span class="sr-only">Major language: </span>
+              {{ project.sourceRepo.sourceStats.mostUsedLanguage }}
+          </span>
+          {%  endif %}
+          {% if project.dateLastActivityOccurred %}
+            <span class="updated">
+          <i class="fa fa-history"></i> Updated {{ project.dateLastActivityOccurred | time_diff }}
+          </span>
+          {% endif %}
+        </div>
+        <hr/>
+      {% else %}
+        {% if is_granted("IS_AUTHENTICATED_REMEMBERED") and (user.getUsername() == app.user.username) %}
+          <p>You have not yet created a project.</p>
+          <p><a href="{{ path('librecores_project_repo_project_new') }}">
+              Add project
+            </a></p>
+        {% else %}
+          {{ user.getUsername() }} has not yet created a project.
+        {% endif %}
+      {% endfor %}
+    </div>
+    <div class="col-sm-3">
+      {% for membership in user.getOrganizationMemberships() %}
+        <a href="{{ path('librecores_project_repo_user_org_view', {'userOrOrganization':
+          membership.getOrganization.getName()}) }}">{{ membership.getOrganization.getDisplayName() }}</a>
+        {% if membership.getPermission == 'MEMBER' %} (Member) {% endif %}
+        {% if membership.getPermission == 'ADMIN' %} (Admin) {% endif %}
+        {% if user == app.user %}
+          {% if membership.getPermission == 'REQUEST' %} (Join request in progress) {% endif %}
+          {% if membership.getPermission == 'DENY' %} (Denied your request to join) {% endif %}
+        {% endif %}
+        {% if membership.getOrganization.getDescription() is not null %}
+          - {{ membership.getOrganization.getDescription() }}{% endif %}<br/>
+        <hr/>
+      {% else %}
+        {{ user.getUsername() }} has not yet joined an organization.
+      {% endfor %}
+    </div>
+  </div>
+{% endblock %}
