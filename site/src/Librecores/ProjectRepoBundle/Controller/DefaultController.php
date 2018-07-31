@@ -5,11 +5,8 @@ namespace Librecores\ProjectRepoBundle\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Librecores\ProjectRepoBundle\Entity\Organization;
 use Librecores\ProjectRepoBundle\Entity\User;
-use Librecores\ProjectRepoBundle\Form\Type\SearchQueryType;
-use Librecores\ProjectRepoBundle\Form\Model\SearchQuery;
 
 class DefaultController extends Controller
 {
@@ -94,96 +91,16 @@ class DefaultController extends Controller
      */
     public function searchAction(Request $req)
     {
-        $searchQuery = new SearchQuery();
-        $searchQueryForm = $this->createForm(SearchQueryType::class, $searchQuery);
-        $searchQueryForm->add('search_users', SubmitType::class, array(
-            'label' => 'Users',
-        ));
-        $searchQueryForm->add('search_projects', SubmitType::class, array(
-            'label' => 'Projects',
-        ));
-        $searchQueryForm->add('search_orgs', SubmitType::class, array(
-            'label' => 'Organizations',
-        ));
-        $searchQueryForm->handleRequest($req);
+        $searchType = $req->get('type');
+        $searchQuery = $req->get('query');
 
-        // Form validation: If we encounter any invalid value, simply
-        // redirect to an empty search form.
-        if (!empty($searchQuery->getQ()) && !$searchQueryForm->isValid()) {
-            return $this->redirectToRoute($req->get('_route'));
-        }
-
-        // Handle switching of search type
-        // In order to have always copy&paste-able URLs, we adjust the type
-        // based on the button click event and then redirect to a "nice" URL
-        // with the search results.
-        $redirect = false;
-        if ($searchQueryForm->get('search_projects')->isClicked()) {
-            $searchQuery->setType(SearchQuery::TYPE_PROJECTS);
-            $redirect = true;
-        }
-        if ($searchQueryForm->get('search_users')->isClicked()) {
-            $searchQuery->setType(SearchQuery::TYPE_USERS);
-            $redirect = true;
-        }
-        if ($searchQueryForm->get('search_orgs')->isClicked()) {
-            $searchQuery->setType(SearchQuery::TYPE_ORGS);
-            $redirect = true;
-        }
-        if ($redirect) {
-            return $this->redirectToRoute(
-                $req->get('_route'),
-                [ 'q' => $searchQuery->getQ(), 'type' => $searchQuery->getType()]
-            );
-        }
-
-        // No query string given: no search necessary
-        if (empty($searchQuery->getQ())) {
-            return $this->render(
-                'LibrecoresProjectRepoBundle:Default:project_search.html.twig',
-                [
-                    'search_query_form' => $searchQueryForm->createView(),
-                    'search_query' => $searchQuery,
-                    'projects' => [],
-                    'users' => [],
-                    'orgs' => [],
-                ]
-            );
-        }
-
-        // Get the results
-        $projects = array();
-        $users = array();
-        $orgs = array();
-
-        // Search for projects
-        if ($searchQuery->getType() === SearchQuery::TYPE_PROJECTS) {
-            $projects = $this->getDoctrine()
-                ->getRepository('LibrecoresProjectRepoBundle:Project')
-                ->findByFqnameFragment($searchQuery->getQ());
-        }
-
-        // Search for users
-        if ($searchQuery->getType() === SearchQuery::TYPE_USERS) {
-            $userManager = $this->get('fos_user.user_manager');
-            $users = $userManager->findUsersBySearchString($searchQuery->getQ());
-        }
-
-        // Search for organizations
-        if ($searchQuery->getType() === SearchQuery::TYPE_ORGS) {
-            $orgs = $this->getDoctrine()
-                ->getRepository('LibrecoresProjectRepoBundle:Organization')
-                ->findByFragment($searchQuery->getQ());
-        }
+        $searchType = ($searchType === null ? 'projects' : $searchType);
 
         return $this->render(
             'LibrecoresProjectRepoBundle:Default:project_search.html.twig',
             [
-                'search_query_form' => $searchQueryForm->createView(),
-                'search_query' => $searchQuery,
-                'projects' => $projects,
-                'users' => $users,
-                'orgs' => $orgs,
+                'searchType' => $searchType,
+                'searchQuery' => $searchQuery,
             ]
         );
     }

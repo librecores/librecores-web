@@ -10,8 +10,6 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
  * This class normalizes the Organizations for getting indexed in algolia
  *
  * @author Sandip Kumar Bhuyan <sandipbhuyan@gmail.com>
- *
- * @package Librecores\ProjectRepoBundle\Serializer\Normalizer
  */
 class OrganizationNormalizer implements NormalizerInterface
 {

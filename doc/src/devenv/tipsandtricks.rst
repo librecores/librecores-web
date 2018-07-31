@@ -117,6 +117,9 @@ To configure Algolia in the development environment you need to specify the Appl
 the Admin API Key (site_algolia_api_key) in the ansible/secrets/dev-vagrant.secrets.yml file.
 you have to clear and import the search indices settings for pushing data to algolia.
 
+.. note::
+  To configuring the search settings for indices you need to backup the modified settings and then restore it into algolia.
+
 Clear indices
 -------------
 .. code-block:: bash
@@ -130,3 +133,17 @@ Import all indices
 
   vm$> cd /var/www/lc/site
   vm$> ./bin/console search:import
+
+Backup indices settings
+-----------------------
+.. code-block:: bash
+
+  vm$> cd /var/www/lc/site
+  vm$> ./bin/console search:settings:backup
+
+Restore indices settings
+------------------------
+.. code-block:: bash
+
+  vm$> cd /var/www/lc/site
+  vm$> ./bin/console search:settings:push

@@ -651,6 +651,7 @@ class ProjectController extends Controller
                 $classifications[$classHyc->getName()] = $classHyc;
             }
         }
+
         return true;
     }
 }
