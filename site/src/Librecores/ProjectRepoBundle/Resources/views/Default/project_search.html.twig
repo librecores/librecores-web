@@ -25,11 +25,14 @@
           <div class="input-group" style="width:100%">
             <input type="search" id="search-input" placeholder="Search for ..." class="form-control">
             <span class="input-group-btn">
-            <button class="btn btn-default search-query" type="submit">
-              <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-              Search
-            </button>
-          </span>
+              <button class="btn btn-default search-query" type="submit">
+                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                Search
+              </button>
+            </span>
+          </div>
+          <div class="algolia-search-logo">
+            <img src="https://www.algolia.com/assets/pricing_new/algolia-powered-by-2ab4dcc4def7b9fe7dfc1fd8eef1da99.svg" alt="Algolia powered by">
           </div>
         </div>
         <input type="hidden" id="q" name="query" value="{% if searchQuery %}{{ searchQuery }}{% endif %}">
@@ -128,6 +131,7 @@
     appId: '{{ algolia_app_id }}',
     apiKey: '{{ algolia_search_key }}',
     indexName: '{{ searchType }}',
+    searchPrefix: '{{ algolia_search_prefix }}',
     searchParameters: {
       hitsPerPage: 10,
     },

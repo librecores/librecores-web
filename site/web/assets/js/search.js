@@ -1,8 +1,8 @@
 function algoliaAutocomplete(algoliaConfig) {
   var client = algoliasearch(algoliaConfig.applicationId, algoliaConfig.searchKey)
-  var projects = client.initIndex('projects');
-  var classifications = client.initIndex('classifications');
-  var organization = client.initIndex('organization');
+  var projects = client.initIndex(algoliaConfig.searchPrefix + 'projects');
+  var classifications = client.initIndex(algoliaConfig.searchPrefix + 'classifications');
+  var organization = client.initIndex(algoliaConfig.searchPrefix + 'organization');
   var user = client.initIndex('user');
 
   autocomplete('#search-form-input', {} ,[
@@ -79,7 +79,7 @@ function algoliaInstantSearch(options, searchType) {
   var search = instantsearch({
     appId: options.appId,
     apiKey: options.apiKey,
-    indexName: options.indexName,
+    indexName: options.searchPrefix + options.indexName,
     routing: true,
     searchParameters: {
       hitsPerPage: 10,

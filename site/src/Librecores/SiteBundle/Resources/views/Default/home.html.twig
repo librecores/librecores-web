@@ -240,7 +240,8 @@
 $(function() {
   algoliaConfig = {
     applicationId: '{{ algolia_app_id }}',
-    searchKey: '{{ algolia_search_key }}'
+    searchKey: '{{ algolia_search_key }}',
+    searchPrefix: '{{ algolia_search_prefix }}'
   }
   $("#search-form-input").focus();
   algoliaAutocomplete(algoliaConfig);

@@ -857,3 +857,13 @@ a.classifiation-tag:hover {
   float: right;
   color: #999;
 }
+
+.algolia-search-logo {
+  display: flex;
+  margin: 5px 0;
+  justify-content: flex-end;
+}
+
+.algolia-search-logo img {
+  width: 90px;
+}
