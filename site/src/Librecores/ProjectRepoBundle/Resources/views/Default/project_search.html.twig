@@ -88,8 +88,11 @@
   {# Project Template #}
   <script type="text/html" id="projects-template">
     {% verbatim %}
-      <h2><a href="/{{ parentUserName }}/{{ name }}">{{{ _highlightResult.parentUserName.value }}}/
-          {{{ _highlightResult.name.value }}}</a></h2>
+      <h2>
+        <a href="/{{ parentUserName }}/{{ name }}">
+          {{{ _highlightResult.parentUserName.value }}}/{{{ _highlightResult.name.value }}}
+        </a>
+      </h2>
       <div>{{{ _highlightResult.tagName.value }}}</div>
       <div class="classification-container">
         {{#_highlightResult.classifications}}
