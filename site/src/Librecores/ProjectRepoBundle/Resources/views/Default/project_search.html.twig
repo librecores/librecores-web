@@ -95,9 +95,9 @@
       </h2>
       <div>{{{ _highlightResult.tagName.value }}}</div>
       <div class="classification-container">
-        {{#_highlightResult.classifications}}
-        <a href="/search?query={{ value }}&type=projects" class="classifiation-tag">{{{ value }}}</a>
-        {{/_highlightResult.classifications}}
+        {{#classifications}}
+        <a href="/search?query={{ classifications }}&type=projects" class="classifiation-tag">{{{ classifications }}}</a>
+        {{/classifications}}
       </div>
       <div>
         <i>added on {{{ creationDetails }}}</i>
