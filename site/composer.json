@@ -43,7 +43,7 @@
 		"php-http/guzzle6-adapter" : "^1.1",
 		"easycorp/easyadmin-bundle" : "^1.16",
 		"beberlei/DoctrineExtensions" : "^1.0",
-		"sentry/sentry-symfony" : "^0.8",
+		"sentry/sentry-symfony" : "^2.0",
 		"php-http/httplug-bundle" : "^1.10",
 		"algolia/search-bundle": "^3.1"
 	},
