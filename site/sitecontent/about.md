@@ -17,8 +17,7 @@ LibreCores is a project of the [Free and Open Source Silicon (FOSSi) Foundation]
 ### How does LibreCores relate to OpenCores?
 LibreCores advances the idea of OpenCores.org to give the community a place to share projects, ideas, and knowledge in the area of free and open source digital hardware design.
 
-As heavy users of OpenCores, we (the FOSSi Foundation) tried everything in our power to evolve the concept together with the owners of OpenCores. Unfortunately, to this day, we were not yet able to achieve this goal.
-Therefore, we decided to give it a real fresh start under the LibreCores brand.
+As heavy users of OpenCores, we (the FOSSi Foundation) tried everything in our power to evolve the concept together with the owners of OpenCores before we started LibreCores. Unfortunately, we were not able to achieve this goal at this time and decided to give it a real fresh start under the LibreCores brand. OpenCores has since then found a new home and we are happy that we have open, fruitful interaction with the new owners at [OliScience](https://oliscience.nl/).
 
 ### <a class="anchor" name="roadmap"></a> What are the future plans for LibreCores?
 
