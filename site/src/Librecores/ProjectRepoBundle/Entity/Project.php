@@ -1062,7 +1062,8 @@ class Project
     public function addClassification(ProjectClassification $classifications)
     {
         $this->classifications[] = $classifications;
-
+        $this->setDateLastModified(new \DateTime());
+        
         return $this;
     }
 

@@ -271,6 +271,7 @@ class ProjectController extends Controller
                         $projectClassification->setClassification($classification);
                         $projectClassification->setCreatedBy($this->getUser());
                         $em->persist($projectClassification);
+                        $p->addClassification($projectClassification);
                     } else {
                         $errorClassifications[] = $classification;
                     }
