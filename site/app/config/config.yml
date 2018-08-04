@@ -200,12 +200,6 @@ hwi_oauth:
             client_secret:       "%google_app_secret%"
             scope:               "email profile"
 
-# sentry
-sentry:
-    dsn: "%sentry_dsn%"
-    options:
-        environment: "%sentry_env%"
-
 # algolia search indices configuration
 algolia_search:
   prefix: "%algolia_search_prefix%"
