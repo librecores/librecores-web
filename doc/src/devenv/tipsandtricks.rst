@@ -87,6 +87,18 @@ Empty the queue
 
   vm$> sudo rabbitmqctl purge_queue update-project-info
 
+Run the consumer in debug mode
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Sometimes the consumer script re-spawns and no useful error messages are available in the log files.
+In this case you can manually run the consumer to see the log messages.
+
+.. code-block:: bash
+
+  # on staging/production
+  sudo systemctl stop librecores-rabbitmq.service
+  SYMFONY_ENV=prod SYMFONY_DEBUG=0 sudo -E -u www-data -- /usr/bin/php /var/www/lc/site/bin/console rabbitmq:consumer -vvv -w -l 256 -m 1 update_project_info
+  sudo systemctl start librecores-rabbitmq.service
 
 Clean the Symfony caches
 ------------------------
