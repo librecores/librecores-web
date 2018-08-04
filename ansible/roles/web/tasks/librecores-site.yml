@@ -87,6 +87,7 @@
 
 - name: Install dependencies through composer (production)
   command: composer install --no-dev --optimize-autoloader
+  environment: "{{ symfony_config }}"
   args:
     chdir: /var/www/lc/site
   when: symfony_config.SYMFONY_ENV == 'prod'
