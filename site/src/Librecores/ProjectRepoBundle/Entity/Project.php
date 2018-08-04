@@ -1063,7 +1063,7 @@ class Project
     {
         $this->classifications[] = $classifications;
         $this->setDateLastModified(new \DateTime());
-        
+
         return $this;
     }
 
@@ -1075,6 +1075,7 @@ class Project
     public function removeClassification(ProjectClassification $classifications)
     {
         $this->classifications->removeElement($classifications);
+        $this->setDateLastModified(new \DateTime());
     }
 
     /**

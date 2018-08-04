@@ -281,6 +281,7 @@ class ProjectController extends Controller
             if (isset($deleteClassification)) {
                 foreach ($deleteClassification as $delete) {
                     $projectClassification = $em->getRepository(ProjectClassification::class)->find($delete);
+                    $p->removeClassification($projectClassification);
                     $em->remove($projectClassification);
                 }
             }
