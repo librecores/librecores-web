@@ -1,7 +1,7 @@
 ---
 - name: Install MySQL server
   become: true
-  apt:  pkg=mysql-server state=installed
+  apt:  pkg=mysql-server state=present
 
 # move data directory to EBS
 - name: Check if /data/mysql exists

@@ -19,7 +19,7 @@
   apt:  update_cache=yes
 
 - name: Install ntp
-  apt: pkg=ntp state=installed
+  apt: pkg=ntp state=present
   tags: ntp
 
 - name: Configure ntp file
@@ -33,7 +33,7 @@
 
 - name: Install common system packages
   become: true
-  apt:  pkg={{ item }} state=installed
+  apt:  pkg={{ item }} state=present
   with_items:
     - curl
     - wget

@@ -18,7 +18,7 @@
 
 - name: Install RabbitMQ
   become: true
-  apt:  pkg=rabbitmq-server state=installed
+  apt:  pkg=rabbitmq-server state=present
 
 - name: Enable RabbitMQ plugins
   shell: rabbitmq-plugins enable rabbitmq_management
