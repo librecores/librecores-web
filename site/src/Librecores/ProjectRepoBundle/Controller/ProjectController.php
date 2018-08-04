@@ -271,6 +271,7 @@ class ProjectController extends Controller
                         $projectClassification->setClassification($classification);
                         $projectClassification->setCreatedBy($this->getUser());
                         $em->persist($projectClassification);
+                        $p->addClassification($projectClassification);
                     } else {
                         $errorClassifications[] = $classification;
                     }
@@ -280,6 +281,7 @@ class ProjectController extends Controller
             if (isset($deleteClassification)) {
                 foreach ($deleteClassification as $delete) {
                     $projectClassification = $em->getRepository(ProjectClassification::class)->find($delete);
+                    $p->removeClassification($projectClassification);
                     $em->remove($projectClassification);
                 }
             }
