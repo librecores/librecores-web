@@ -26,18 +26,22 @@ class AppKernel extends Kernel
             new Librecores\PlanetBundle\LibrecoresPlanetBundle(),
             new Exercise\HTMLPurifierBundle\ExerciseHTMLPurifierBundle(),
             new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle(),
-            new Sentry\SentryBundle\SentryBundle(),
             new Http\HttplugBundle\HttplugBundle(),
             new Algolia\SearchBundle\AlgoliaSearchBundle(),
         );
 
-        if (in_array($this->getEnvironment(), array('dev', 'test'))) {
+        if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {
             $bundles[] = new Symfony\Bundle\DebugBundle\DebugBundle();
             $bundles[] = new Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
             $bundles[] = new Sensio\Bundle\DistributionBundle\SensioDistributionBundle();
             $bundles[] = new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();
             $bundles[] = new Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle();
             $bundles[] = new JavierEguiluz\Bundle\EasyAdminBundle\EasyAdminBundle();
+        }
+
+        if (in_array($this->getEnvironment(), ['staging', 'prod'], true)) {
+            // do not enable Sentry in dev since it overwrites the Symfony deprecation handler
+            $bundles[] = new Sentry\SentryBundle\SentryBundle();
         }
 
         return $bundles;
