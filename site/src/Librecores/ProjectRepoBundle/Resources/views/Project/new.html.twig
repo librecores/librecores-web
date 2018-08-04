@@ -9,7 +9,7 @@ Add your project to LibreCores
 {% block stylesheets %}
   {{ parent() }}
   {% stylesheets filter="cssrewrite"
-  "assets/css/bootstrap-select.css"
+    "assets/css/bootstrap-select.css"
   %}
   <link rel="stylesheet" href="{{ asset_url }}" />
   {% endstylesheets %}
@@ -127,7 +127,9 @@ other information about your project automatically.</p>
 
 {% block javascripts %}
   {{ parent() }}
-  {% javascripts filter="?jsqueeze" output="js/app_body.js" 'assets/js/bootstrap-select.js' %}
+  {% javascripts filter="?jsqueeze"
+    "assets/js/bootstrap-select.js"
+  %}
     <script src="{{ asset_url }}"></script>
   {% endjavascripts %}
 {% endblock %}
