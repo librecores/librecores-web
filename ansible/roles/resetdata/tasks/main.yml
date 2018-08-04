@@ -3,6 +3,7 @@
   become: true
   become_user: "{{ web_user }}"
   command: php bin/console doctrine:schema:drop --force
+  environment: "{{ symfony_config }}"
   args:
     chdir: /var/www/lc/site
 
@@ -10,6 +11,7 @@
   become: true
   become_user: "{{ web_user }}"
   command: php bin/console doctrine:schema:create
+  environment: "{{ symfony_config }}"
   args:
     chdir: /var/www/lc/site
 
@@ -17,5 +19,6 @@
   become: true
   become_user: "{{ web_user }}"
   command: php bin/console doctrine:migrations:version --add --all
+  environment: "{{ symfony_config }}"
   args:
     chdir: /var/www/lc/site
