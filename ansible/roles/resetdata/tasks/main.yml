@@ -1,4 +1,7 @@
 ---
+- name: Remove all queued jobs from RabbitMQ
+  command: rabbitmqctl purge_queue update-project-info
+
 - name: Drop all tables from librecores database
   become: true
   become_user: "{{ web_user }}"
