@@ -624,7 +624,6 @@ a.classifiation-tag:hover {
   background-color: #fff;
   border: 1px solid rgba(228, 228, 228, 0.6);
   width: 100%;
-  margin-top: 10px;
   box-sizing: border-box;
   max-height: 300px;
   overflow-y: scroll;
