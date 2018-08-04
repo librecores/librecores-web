@@ -334,7 +334,8 @@ class GitRepoCrawler extends RepoCrawler
         $descriptionFile = FileUtil::findFile(
             $this->getRepoClonePath(),
             self::FILES_DESCRIPTION,
-            self::FILE_EXTENSIONS
+            self::FILE_EXTENSIONS,
+            false // case insensitive
         );
 
         if ($descriptionFile === false) {
@@ -372,7 +373,8 @@ class GitRepoCrawler extends RepoCrawler
         $licenseFile = FileUtil::findFile(
             $this->getRepoClonePath(),
             self::FILES_LICENSE,
-            self::FILE_EXTENSIONS
+            self::FILE_EXTENSIONS,
+            false // case insensitive
         );
 
         if ($licenseFile === false) {
