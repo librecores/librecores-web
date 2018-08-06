@@ -2,7 +2,8 @@ var insertClassification = function (classificationDetails) {
   var count = 1;
   for (var i = 0; i < classificationDetails.length; i++) {
     if (classificationDetails[i]['parentId'] === null) {
-      $('#category-' + count).append($('<option>').val(classificationDetails[i]['name']).html(classificationDetails[i]['name']));
+      $('#category-' + count).append($('<option>').val(classificationDetails[i]['name'])
+        .html(classificationDetails[i]['name']).attr('data-id', classificationDetails[i]['id']));
     }
   }
   // Adding tooltip to the button
@@ -21,24 +22,21 @@ var insertClassification = function (classificationDetails) {
       var value = $('#category-' + count).val();
       if (value !== 'NULL') {
         var increase = false;
-        var id = 0;
-        for (var i = 0; i < classificationDetails.length; i++) {
-          if (classificationDetails[i]['name'] === value) {
-            id = classificationDetails[i]['id'];
-            break;
-          }
-        }
+        var selected = $(this).find('option:selected');
+        var id = selected.data('id');
         for (var i = 0; i < classificationDetails.length; i++) {
           if (classificationDetails[i]['parentId'] === id) {
             if (increase === false) {
               var category = $('#category-' + count).clone().appendTo('.classification-system');
               count++;
               category.attr('id', 'category-' + count).empty().append('<option value="NULL">select a category</option>');
-              $('#category-' + count).append($('<option>').val(classificationDetails[i]['name']).html(classificationDetails[i]['name']));
+              $('#category-' + count).append($('<option>').val(classificationDetails[i]['name'])
+                .html(classificationDetails[i]['name']).attr('data-id', classificationDetails[i]['id']));
               increase = true;
             }
             else {
-              $('#category-' + count).append($('<option>').val(classificationDetails[i]['name']).html(classificationDetails[i]['name']));
+              $('#category-' + count).append($('<option>').val(classificationDetails[i]['name'])
+                .html(classificationDetails[i]['name']).attr('data-id', classificationDetails[i]['id']));
             }
           }
         }
@@ -92,7 +90,8 @@ var insertClassification = function (classificationDetails) {
       $('#category-' + count).append('<option value="NULL" selected="selected">select a category</option>')
       for (var i = 0; i < classificationDetails.length; i++) {
         if (classificationDetails[i]['parentId'] === null) {
-          $('#category-' + count).append($('<option>').val(classificationDetails[i]['name']).html(classificationDetails[i]['name']));
+          $('#category-' + count).append($('<option>').val(classificationDetails[i]['name'])
+            .html(classificationDetails[i]['name']).attr('data-id', classificationDetails[i]['id']));
         }
       }
       $('#category-' + count).nextAll().remove();
