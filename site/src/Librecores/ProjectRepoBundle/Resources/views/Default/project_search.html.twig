@@ -96,7 +96,7 @@
       <div>{{{ _highlightResult.tagName.value }}}</div>
       <div class="classification-container">
         {{#classifications}}
-        <a href="/search?query={{ classifications }}&type=projects" class="classifiation-tag">{{{ classifications }}}</a>
+        <a href="/search?query={{ . }}&type=projects" class="classifiation-tag">{{{ . }}}</a>
         {{/classifications}}
       </div>
       <div>
