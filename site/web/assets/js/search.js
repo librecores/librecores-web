@@ -164,7 +164,7 @@ function getTemplate(templateName) {
 
 function getTimeDiff(item) {
   if(item.dateLastActivityOccurred === null) {
-    return 0 + ' days before';
+    return 0 + ' days ago';
   }
   var time = item.dateLastActivityOccurred.date;
   var date = new Date(time);
@@ -174,18 +174,18 @@ function getTimeDiff(item) {
   var days = today.getUTCDate() - date.getUTCDate();
 
   if(years > 0) {
-    return years === 1 ? years + ' year before' : years + ' years before';
+    return years === 1 ? years + ' year ago' : years + ' years ago';
   }
 
   if(months > 0) {
-    return months === 1 ? months + ' month before' : months + ' months before';
+    return months === 1 ? months + ' month ago' : months + ' months ago';
   }
 
   if(days > 0) {
-    return days === 1 ? days + ' day before' : days + ' day before';
+    return days === 1 ? days + ' day ago' : days + ' day ago';
   }
 
-  return 0 + ' day before'
+  return 0 + ' day ago'
 }
 
 function getFormattedDate(item){
