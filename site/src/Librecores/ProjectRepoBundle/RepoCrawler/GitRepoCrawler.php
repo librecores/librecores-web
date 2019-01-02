@@ -8,6 +8,8 @@ use Librecores\ProjectRepoBundle\Entity\LanguageStat;
 use Librecores\ProjectRepoBundle\Entity\ProjectRelease;
 use Librecores\ProjectRepoBundle\Util\FileUtil;
 use Symfony\Component\Process\Process;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 
 /**
  * Crawl and extract metadata from a remote git repository
@@ -90,10 +92,13 @@ class GitRepoCrawler extends RepoCrawler
      */
     public function __destruct()
     {
-        if ($this->repoClonePath !== null) {
-            $this->logger->debug('Cleaning up repo clone directory '.$this->repoClonePath);
-            FileUtil::recursiveRmdir($this->repoClonePath);
+        if ($this->repoClonePath === null) {
+            return;
         }
+        $this->logger->debug('Cleaning up repo clone directory '.$this->repoClonePath);
+
+        $fileSystem = new Filesystem();
+        $fileSystem->remove($this->repoClonePath);
     }
 
     /**

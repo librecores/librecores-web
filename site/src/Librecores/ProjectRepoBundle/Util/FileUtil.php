@@ -78,30 +78,6 @@ class FileUtil
     }
 
     /**
-     * Recursive delete of a directory (rm -r)
-     *
-     * @param string $dir string directory to delete recursively
-     *
-     * @return
-     */
-    public static function recursiveRmdir($dir)
-    {
-        if (is_dir($dir)) {
-            $objects = scandir($dir);
-            foreach ($objects as $object) {
-                if ($object != "." && $object != "..") {
-                    if (is_dir($dir."/".$object)) {
-                        self::recursiveRmdir($dir."/".$object);
-                    } else {
-                        unlink($dir."/".$object);
-                    }
-                }
-            }
-            rmdir($dir);
-        }
-    }
-
-    /**
      * Create temporary directory with an unique name and return its path
      *
      * The directory must be manually deleted if not used any more.
@@ -109,8 +85,6 @@ class FileUtil
      * @return string path to the temporary directory
      *
      * @throws \RuntimeException
-     *
-     * @see recursiveRmdir()
      */
     public static function createTemporaryDirectory($prefix)
     {
