@@ -15,8 +15,10 @@ class FileUtil
      * the first basename and all possible extensions, and continues then with
      * the next basename.
      *
-     * If a case-insensitive find is requested the file names in the filesystem and the passed
-     * strings are assumed to be UTF-8 encoded.
+     * If a case-insensitive find is requested the file names in the filesystem
+     * and the passed strings are assumed to be UTF-8 encoded.
+     *
+     * The search is not recursive, only $basedir is searched.
      *
      * @param string   $basedir
      * @param string[] $basenames
@@ -27,41 +29,52 @@ class FileUtil
      *                        if a match was found, or false if no match was
      *                        found
      */
-    public static function findFile($basedir, $basenames, $extensions, $caseSensitive=true)
+    public static function findFile($basedir, $basenames, $extensions,
+                                    $caseSensitive=true)
     {
-        $basedirFilenames = @scandir($basedir);
-        if ($basedirFilenames === false) {
-            return false;
-        }
-
+        $searchFilenames = [];
         foreach ($basenames as $basename) {
             foreach ($extensions as $ext) {
-                $filename = $basename.$ext;
-
-                foreach ($basedirFilenames as $basedirFilename) {
-                    if (!$caseSensitive) {
-                        $s1 = mb_strtolower($basedirFilename, 'UTF-8');
-                        $s2 = mb_strtolower($filename, 'UTF-8');
-                        if ($s1 != $s2) {
-                            continue;
-                        }
-                    } else {
-                        if ($basedirFilename != $filename) {
-                            continue;
-                        }
-                    }
-                }
-
-                // found file; double-check if the file exists (and if it is a file)
-                $fullFilename = $basedir.'/'.$basedirFilename;
-                if (!is_file($fullFilename)) {
-                    return false;
-                }
-                return $fullFilename;
+                $searchFilenames[] = $basename.$ext;
             }
         }
 
-        return false;
+        $basedirFilenames = [];
+        $basedirFilenamesLc = [];
+        $it = new \FilesystemIterator($basedir);
+        foreach ($it as $fileinfo) {
+            if (!$fileinfo->isFile()) {
+                continue;
+            }
+            $basedirFilenames[] = $fileinfo->getFilename();
+            $basedirFilenamesLc[] = mb_strtolower($fileinfo->getFilename(), 'UTF-8');
+        }
+
+        $foundFilename = null;
+        foreach ($searchFilenames as $searchFilename) {
+            $idx = false;
+            if ($caseSensitive) {
+                $idx = array_search($searchFilename, $basedirFilenames);
+            } else {
+                $searchFilenameLc = mb_strtolower($searchFilename, 'UTF-8');
+                $idx = array_search($searchFilenameLc, $basedirFilenamesLc);
+            }
+            if ($idx !== false) {
+                $foundFilename = $basedirFilenames[$idx];
+                break;
+            }
+        }
+
+        if (!$foundFilename) {
+            return false;
+        }
+
+        // found file; double-check if the file exists (and if it is a file)
+        $fullFilename = $basedir.'/'.$foundFilename;
+        if (!is_file($fullFilename)) {
+            return false;
+        }
+        return $fullFilename;
     }
 
     /**
