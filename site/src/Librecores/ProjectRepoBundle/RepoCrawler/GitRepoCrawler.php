@@ -206,16 +206,8 @@ class GitRepoCrawler extends RepoCrawler
 
         $this->logger->info('Checking commits in '.$cwd);
 
-        $process = $this->processCreator->createProcess(
-            'git',
-            [
-                                                            'merge-base',
-                                                            '--is-ancestor',
-                                                            $commitId,
-                                                            'HEAD',
-            ]
-        );
-        $process->setWorkingDirectory($cwd);
+        $cmd = [ 'git', 'merge-base', '--is-ancestor', $commitId, 'HEAD' ];
+        $process = $this->processCreator->createProcess($cmd, $cwd);
         $this->executeProcess($process);
         $code = $process->getExitCode();
 
@@ -255,20 +247,18 @@ class GitRepoCrawler extends RepoCrawler
             .' of project '.$this->repo->getProject()->getFqname()
         );
 
-        $args = ['log', '--reverse', '--format=%H|%aN|%aE|%aD', '--shortstat', ];
+        $cmd = ['git', 'log', '--reverse', '--format=%H|%aN|%aE|%aD',
+                '--shortstat', ];
         if (null !== $sinceCommitId) {
-            // we don't need escapeshellargs here
-            // it is performed internally by ProcessBuilder
-            $args[] = $sinceCommitId;
-            $args[] = '...';
+            $cmd[] = $sinceCommitId;
+            $cmd[] = '...';
         }
 
         $cwd = $this->getRepoClonePath();
 
         $this->logger->info("Fetching commits in $cwd");
 
-        $process = $this->processCreator->createProcess('git', $args);
-        $process->setWorkingDirectory($cwd);
+        $process = $this->processCreator->createProcess($cmd, $cwd);
         $process->setTimeout(static::TIMEOUT_GIT_LOG);
         $this->mustExecuteProcess($process);
         $output = $process->getOutput();
@@ -285,10 +275,9 @@ class GitRepoCrawler extends RepoCrawler
      */
     protected function countLinesOfCode()
     {
-        $process = $this->processCreator->createProcess(
-            'cloc',
-            ['--json', '--skip-uniqueness', $this->getRepoClonePath()]
-        );
+        $cmd = ['cloc', '--json', '--skip-uniqueness',
+                $this->getRepoClonePath()];
+        $process = $this->processCreator->createProcess($cmd);
 
         $this->mustExecuteProcess($process);
         $result = $process->getOutput();
@@ -410,12 +399,9 @@ class GitRepoCrawler extends RepoCrawler
 
         $this->logger->info("Updating releases in $cwd");
 
-        $process = $this->processCreator
-            ->createProcess('git', [
-                                'tag', '--sort=-creatordate',
-                                '--format=%(refname:strip=2)|%(objectname:short)|%(creatordate)',
-            ]);
-        $process->setWorkingDirectory($cwd);
+        $cmd = ['git', 'tag', '--sort=-creatordate',
+            '--format=%(refname:strip=2)|%(objectname:short)|%(creatordate)'];
+        $process = $this->processCreator->createProcess($cmd, $cwd);
         $process->setTimeout(static::TIMEOUT_GIT_LOG);
 
         try {
@@ -472,7 +458,8 @@ class GitRepoCrawler extends RepoCrawler
 
         $this->logger->info('Cloning repository: '.$repoUrl);
 
-        $process = $this->processCreator->createProcess('git', ['clone', $repoUrl, $this->repoClonePath]);
+        $cmd = ['git', 'clone', $repoUrl, $this->repoClonePath];
+        $process = $this->processCreator->createProcess($cmd);
         $process->setTimeout(static::TIMEOUT_GIT_CLONE);
         $this->mustExecuteProcess($process);
         $this->logger->debug('Cloned repository '.$repoUrl);

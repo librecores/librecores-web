@@ -10,26 +10,24 @@ use Symfony\Component\Process\ProcessUtils;
 /**
  * Creates a process object
  *
+ * Inject this class as service instead of using Process directly if you want
+ * to be able to mock a process in a unit test.
+ *
  * @author Amitosh Swain Mahapatra <amitosh.swain@gmail.com>
  */
 class ProcessCreator
 {
 
     /**
-     * Create a new process
+     * Return a new Process object
      *
-     * @param string   $cmd
-     * @param string[] $args
+     * @param string[] $commandLine
+     * @param string $cwd working directory
      *
      * @return Process
      */
-    public function createProcess(string $cmd, array $args): Process
+    public function createProcess($commandLine, $cwd = null): Process
     {
-        $commandLine = ProcessUtils::escapeArgument($cmd)
-            .' '
-            .implode(' ', array_map([ProcessUtils::class, 'escapeArgument'], $args));
-        $process = new Process($commandLine);
-
-        return $process;
+        return new Process($commandLine, $cwd);
     }
 }

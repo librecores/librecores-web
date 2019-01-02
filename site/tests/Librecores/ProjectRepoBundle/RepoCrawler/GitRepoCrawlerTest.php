@@ -88,9 +88,9 @@ class GitRepoCrawlerTest extends TestCase
         $processCreator
             ->method('createProcess')
             ->willReturnCallback(
-                function ($cmd, $args) use ($mockGitTagProcess, $mockClocProcess, $mockGitLogProcess) {
-                    if ('git' === $cmd) {
-                        $process = ('log' === $args[0] ? $mockGitLogProcess : $mockGitTagProcess);
+                function ($commandLine, $cwd) use ($mockGitTagProcess, $mockClocProcess, $mockGitLogProcess) {
+                    if ($commandLine[0] === 'git') {
+                        $process = ('log' === $commandLine[1] ? $mockGitLogProcess : $mockGitTagProcess);
                     } else {
                         $process = $mockClocProcess;
                     }
