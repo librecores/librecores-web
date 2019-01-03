@@ -38,6 +38,7 @@ security:
                 # After logout, the user is redirected to this path.
                 target: /
             anonymous:    true
+            logout_on_user_change: true
 
         login:
             pattern:  ^/user/login$
