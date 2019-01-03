@@ -54,9 +54,6 @@ assetic:
 
 easy_admin:
     site_name: 'LibreCores Admin'
-    design:
-        form_theme:   'horizontal'
-        color_scheme: 'dark'
     entities:
         - Librecores\ProjectRepoBundle\Entity\GitSourceRepo
         - Librecores\ProjectRepoBundle\Entity\Organization
