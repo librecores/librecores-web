@@ -81,6 +81,7 @@ class GitRepoCrawler extends RepoCrawler
         '.adoc',
         '.asc',
         '.pod',
+        '.pod6',
         '.txt',
         '',
     ];
