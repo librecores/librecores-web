@@ -19,7 +19,6 @@ class AppKernel extends Kernel
             new Knp\Bundle\MarkdownBundle\KnpMarkdownBundle(),
             new Librecores\ProjectRepoBundle\LibrecoresProjectRepoBundle(),
             new Librecores\SiteBundle\LibrecoresSiteBundle(),
-            new Fkr\SimplePieBundle\FkrSimplePieBundle(),
             new OldSound\RabbitMqBundle\OldSoundRabbitMqBundle(),
             new FOS\UserBundle\FOSUserBundle(),
             new HWI\Bundle\OAuthBundle\HWIOAuthBundle(),

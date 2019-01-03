@@ -82,8 +82,10 @@ class DefaultController extends Controller
     {
         $blogUrl = $this->get('kernel')->getRootDir().'/../web/planet/atom.xml';
 
-        $feed = $this->get('fkr_simple_pie.rss');
-
+        $feed = new \SimplePie();
+        $feed->set_cache_duration(3600);
+        $feed->set_cache_location($this->get('kernel')->getCacheDir().'/rss');
+        $feed->enable_cache(true);
         $feed->set_feed_url($blogUrl);
         $feed->enable_order_by_date(false);
         $feed->init();
