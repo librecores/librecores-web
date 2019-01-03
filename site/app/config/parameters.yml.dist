@@ -54,3 +54,6 @@ parameters:
     ALGOLIA_SEARCH_KEY:     ~
     algolia_search_prefix:  ~
 
+    # Enable Symfony 4-like autowire behavior
+    # TODO: Remove this parameter after upgrading to Symfony 4
+    container.autowiring.strict_mode: true
