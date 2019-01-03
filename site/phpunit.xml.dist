@@ -14,7 +14,7 @@
     </testsuites>
 
     <php>
-        <server name="KERNEL_DIR" value="app/" />
+        <server name="KERNEL_CLASS" value="AppKernel" />
     </php>
 
     <filter>
