@@ -5,11 +5,16 @@ namespace Librecores\ProjectRepoBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+
+use FOS\UserBundle\Form\Type\ChangePasswordFormType;
+use FOS\UserBundle\Model\UserInterface;
+use FOS\UserBundle\Model\UserManagerInterface;
 
 use Librecores\ProjectRepoBundle\Entity\User;
 use Librecores\ProjectRepoBundle\Form\Type\UserProfileType;
-use FOS\UserBundle\Form\Type\ChangePasswordFormType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class UserController extends Controller
 {
@@ -132,20 +137,35 @@ class UserController extends Controller
      *
      * @return Response
      */
-    public function passwordSettingsAction(Request $request)
+    public function passwordSettingsAction(Request $request, UserManagerInterface $userManager)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         $user = $this->getUser();
+        if (!is_object($user) || !$user instanceof UserInterface) {
+            throw new AccessDeniedException('This user does not have access to this section.');
+        }
 
-        $form = $this->createForm(ChangePasswordFormType::class, $user);
+        $validationGroups = ['ChangePassword', 'Default'];
+        $form = $this->createForm(ChangePasswordFormType::class, $user,
+            ['validation_groups' => $validationGroups]);
         $form->add('save', SubmitType::class, array('label' => 'Change password'));
+        $form->setData($user);
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($user);
-            $em->flush();
+            $userManager->updateUser($user);
+
+            $this->addFlash(
+                'success',
+                "Your password was successfully changed."
+            );
+
+            $url = $this->generateUrl('fos_user_profile_show');
+            $response = new RedirectResponse($url);
+
+            return $response;
         }
 
         return $this->render(
