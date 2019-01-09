@@ -1,0 +1,27 @@
+{% extends "@FOSUser/layout.html.twig" %}
+
+{% trans_default_domain 'FOSUserBundle' %}
+
+{% block fos_user_content %}
+  <div class="center-block librecores-user-signupin-panel">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Reset Password</h3>
+      </div>
+      <div class="panel-body">
+        <form action="{{ path('fos_user_resetting_send_email') }}" method="POST" class="fos_user_resetting_request">
+          <div class="form-group">
+            <label for="username">Email or Username:</label>
+            <input type="text" class="form-control" id="username" name="username" required="required" />
+          </div>
+        <button class="btn btn-success btn-block" type="submit" id="_submit" name="_submit">Reset Password</button>
+        </form>
+        <hr/>
+        <div class="text-center">
+          Don't have an account yet?<br/>
+          <a href="{{ path('fos_user_registration_register') }}" style="font-weight: bold">Register now</a>
+        </div>
+      </div>
+      </div>
+    </div>
+{% endblock fos_user_content %}
