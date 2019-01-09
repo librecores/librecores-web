@@ -72,9 +72,9 @@
                 </option>
             </constraint>
             <constraint name="Length">
-                <option name="min">2</option>
+                <option name="min">5</option>
                 <option name="max">4096</option>
-                <option name="minMessage">fos_user.password.short</option>
+                <option name="minMessage">The password must be at least 5 characters long.</option>
                 <option name="groups">
                     <value>Registration</value>
                     <value>Profile</value>
@@ -162,9 +162,9 @@
                 </option>
             </constraint>
             <constraint name="Length">
-                <option name="min">2</option>
+                <option name="min">5</option>
                 <option name="max">4096</option>
-                <option name="minMessage">fos_user.password.short</option>
+                <option name="minMessage">The password must be at least 5 characters long.</option>
                 <option name="groups">
                     <value>Registration</value>
                     <value>Profile</value>
