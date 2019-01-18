@@ -7,17 +7,14 @@
 # We install it from source and not from the Ubuntu repository to get the
 # newest version which is also used on GitHub itself, avoiding rendering
 # differences as much as we can.
-- name: Install ruby
+- name: Install github markup dependencies
   apt:
-    name: ruby
-
-- name: Install ruby-dev
-  apt:
-    name: ruby-dev
-
-- name: Install ruby-bundler
-  apt:
-    name: ruby-bundler
+    package:
+        - ruby
+        - ruby-dev
+        - ruby-bundler
+        - python-docutils
+    state: present
 
 - name: Get Gemfile for github-markup dependencies
   template: src=github-markup/Gemfile dest=/tmp/github-markup-gemfile
@@ -25,10 +22,10 @@
 - name: Install github-markup dependencies
   command: bundle install --gemfile /tmp/github-markup-gemfile
 
-- name: Install docutils for github-markup
-#  command: easy_install docutils
-  apt:
-    name: python-docutils
+# - name: Install docutils for github-markup
+# #  command: easy_install docutils
+#   apt:
+#     name: python-docutils
 
 - name: Install github-markup
   command: gem install github-markup

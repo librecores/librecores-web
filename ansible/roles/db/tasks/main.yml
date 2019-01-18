@@ -45,5 +45,3 @@
   mysql_db: name=test state=absent
 
 - include: librecores-site.yml
-
-- include: librecores-blog.yml
