@@ -30,10 +30,14 @@ First, copy the default secrets file as starting point:
 
   cp ansible/secrets.dist/dev-vagrant.secrets.yml ansible/secrets/dev-vagrant.secrets.yml
 
-Now you have two options:
+Open the ``ansible/secrets/dev-vagrant.secrets.yml`` and follow the instructions in there to get a custom API key for the various providers.
 
-- Either open the ``ansible/secrets/dev-vagrant.secrets.yml`` and follow the instructions in there to get a custom API key for the various providers, or
-- Leave the file as-is and therefore disable all third-party APIs. This is sufficient if you do not want to change the user-login process.
+At minimum, we require:
+
+- GitHub for repository crawling
+- Algolia for search
+
+You can disable algolia by setting ``NullEngine`` as suggested `in their documentation <https://www.algolia.com/doc/framework-integration/symfony/advanced/#other-engines>`_.
 
 Step 3: Set up the development environment
 ------------------------------------------
