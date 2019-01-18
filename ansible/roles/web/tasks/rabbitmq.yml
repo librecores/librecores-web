@@ -2,19 +2,23 @@
 # Install RabbitMQ
 # see http://www.rabbitmq.com/install-debian.html
 
-- name: Add RabbitMQ repository
-  shell: echo 'deb http://www.rabbitmq.com/debian/ testing main' > /etc/apt/sources.list.d/rabbitmq.list creates=/etc/apt/sources.list.d/rabbitmq.list
-
-- name: Download RabbitMQ key
-  get_url: url=https://www.rabbitmq.com/rabbitmq-release-signing-key.asc dest=/tmp/rabbitmq-release-signing-key.asc
-
-- name: Add RabbitMQ key
+- name: Add RabbitMQ and Erlang key
   become: true
-  command: apt-key add /tmp/rabbitmq-release-signing-key.asc
+  apt_key:
+    url: "{{item}}"
+  with_items:
+    - 'https://packagecloud.io/rabbitmq/rabbitmq-server/gpgkey'
+    - 'https://packages.erlang-solutions.com/ubuntu/erlang_solutions.asc'
 
-- name: Update apt again
+- name: Add RabbitMQ and Erlang repository
   become: true
-  apt:  update_cache=yes
+  apt_repository:
+    repo: "{{item}}"
+    state: present
+    update_cache: yes
+  with_items:
+    - 'deb http://packages.erlang-solutions.com/ubuntu xenial contrib'
+    - 'deb https://packagecloud.io/rabbitmq/rabbitmq-server/ubuntu/ xenial main'
 
 - name: Install RabbitMQ
   become: true
