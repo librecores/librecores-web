@@ -1,7 +1,4 @@
-librecores_site_home:
+librecores_site:
     resource: '@LibrecoresSiteBundle/Controller/'
     type: annotation
 
-librecores_site_page:
-    resource: '@LibrecoresSiteBundle/Controller/'
-    type: annotation
