@@ -44,9 +44,9 @@ class DefaultController extends Controller
      * XXX: add caching for static pages
      * see http://symfony.com/doc/current/bundles/SensioFrameworkExtraBundle/annotations/cache.html
      *
-     * @Route("/{page}", name = "librecores_site_page", requirements = {"page" = ".+"})
+     * Route requirements: allow / inside path
      *
-     * allow / inside path
+     * @Route("/{page}", name = "librecores_site_page", requirements = {"page" = ".+"})
      *
      */
     public function pageAction($page = "home")
