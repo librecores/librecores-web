@@ -17,7 +17,7 @@ class DefaultController extends Controller
      *
      * @return \Symfony\Component\HttpFoundation\Response
      *
-     * @Route("/", name="librecores_site_home")
+     * @Route("/", name = "librecores_site_home")
      */
     public function homeAction(Request $request)
     {
@@ -44,7 +44,10 @@ class DefaultController extends Controller
      * XXX: add caching for static pages
      * see http://symfony.com/doc/current/bundles/SensioFrameworkExtraBundle/annotations/cache.html
      *
-     * @Route("/{page}", name="librecores_site_page", requirements={"page"=".+"})
+     * @Route("/{page}", name = "librecores_site_page", requirements = {"page" = ".+"})
+     *
+     * allow / inside path
+     *
      */
     public function pageAction($page = "home")
     {
