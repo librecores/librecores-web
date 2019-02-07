@@ -1,4 +1,3 @@
 ---
-- include: librecores-blog.yml
 - include: librecores-site.yml
 

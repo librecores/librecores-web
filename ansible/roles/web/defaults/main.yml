@@ -4,6 +4,5 @@ mysql_host: localhost
 site_mysql_password: "undefined"
 site_symfony_secret_token: "undefined"
 site_rabbitmq_password: "undefined"
-blog_mysql_password: "undefined"
 web_user: "www-data"
 use_https: no
