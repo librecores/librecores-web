@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Librecores\ProjectRepoBundle\Form\Type\SearchQueryType;
 use Librecores\ProjectRepoBundle\Form\Model\SearchQuery;
+use Symfony\Component\Routing\Annotation\Route;
 
 class DefaultController extends Controller
 {
@@ -15,6 +16,8 @@ class DefaultController extends Controller
      * @param Request $request
      *
      * @return \Symfony\Component\HttpFoundation\Response
+     *
+     * @Route("/", name = "librecores_site_home")
      */
     public function homeAction(Request $request)
     {
@@ -40,8 +43,13 @@ class DefaultController extends Controller
     /**
      * XXX: add caching for static pages
      * see http://symfony.com/doc/current/bundles/SensioFrameworkExtraBundle/annotations/cache.html
+     *
+     * Route requirements: allow / inside path
+     *
+     * @Route("/{page}", name = "librecores_site_page", requirements = {"page" = ".+"})
+     *
      */
-    public function pageAction($page)
+    public function pageAction($page = "home")
     {
         $siteContentRoot = $this->get('kernel')->getRootDir().'/../sitecontent';
 
