@@ -313,6 +313,14 @@ class Project
     private $releases;
 
     /**
+     * Code quality metrics for the project
+     * @var float
+     *
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $projectMetrics;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -1096,5 +1104,24 @@ class Project
     public function getClassifications()
     {
         return $this->classifications;
+    }
+
+    /**
+     * Set the code quality metrics for the project
+     *
+     * @param float $projectMetrics
+     */
+    public function setProjectMetrics($projectMetrics)
+    {
+        $this->projectMetrics = $projectMetrics;
+    }
+
+    /**
+     * Get the code quality metrics for the project
+     * @return Project
+     */
+    public function getProjectMetrics()
+    {
+        return $this->projectMetrics;
     }
 }

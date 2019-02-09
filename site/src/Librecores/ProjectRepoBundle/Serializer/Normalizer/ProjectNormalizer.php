@@ -30,6 +30,7 @@ class ProjectNormalizer implements NormalizerInterface
             'parentUserName' => $object->getParentName(),
             'hierarchicalCategories' => $object->getCategoryLists(),
             'classifications' => $object->getClassificationArray(),
+            'projectMetrics' => $object->getProjectMetrics(),
         ];
     }
 
