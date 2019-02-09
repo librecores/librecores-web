@@ -30,7 +30,9 @@
         "exact",
         "custom"
     ],
-    "customRanking": null,
+    "customRanking": [
+        "desc(projectMetrics)"
+    ],
     "separatorsToIndex": "",
     "removeWordsIfNoResults": "none",
     "queryType": "prefixLast",
