@@ -1107,7 +1107,7 @@ class Project
     }
 
     /**
-     * Set the code quality metrics for the project
+     * Set code quality metrics for the project
      *
      * @param float $projectMetrics
      */
@@ -1117,7 +1117,8 @@ class Project
     }
 
     /**
-     * Get the code quality metrics for the project
+     * Get code quality metrics for the project
+     *
      * @return Project
      */
     public function getProjectMetrics()
