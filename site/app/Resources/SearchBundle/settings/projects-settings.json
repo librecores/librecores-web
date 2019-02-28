@@ -31,7 +31,7 @@
         "custom"
     ],
     "customRanking": [
-        "desc(projectMetrics)"
+        "desc(score)"
     ],
     "separatorsToIndex": "",
     "removeWordsIfNoResults": "none",

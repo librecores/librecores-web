@@ -221,20 +221,6 @@ class ProjectController extends Controller
             'isHostedOnGithub' => GithubRepoCrawler::isGithubRepoUrl($p->getSourceRepo()->getUrl()),
         ];
 
-        // Retrieve the project and set the code quality metrics
-        $projectMetrics = ($metadata['qualityScore'])['value'];
-
-        $em = $this->getDoctrine()->getManager();
-
-        $project = $this->getDoctrine()->getManager()
-            ->getRepository(Project::class)
-            ->findOneByName($p->getName());
-
-        $project->setProjectMetrics($projectMetrics);
-
-        $em->persist($project);
-        $em->flush();
-
         // Retrieve the project classifications for a project
         $classifications = $this->getDoctrine()->getManager()
             ->getRepository(ProjectClassification::class)

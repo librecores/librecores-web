@@ -318,7 +318,7 @@ class Project
      *
      * @ORM\Column(type="float", nullable=true)
      */
-    private $projectMetrics;
+    private $score;
 
     /**
      * Constructor
@@ -1109,11 +1109,11 @@ class Project
     /**
      * Set code quality metrics for the project
      *
-     * @param float $projectMetrics
+     * @param float $score
      */
-    public function setProjectMetrics($projectMetrics)
+    public function setScore($score)
     {
-        $this->projectMetrics = $projectMetrics;
+        $this->score = $score;
     }
 
     /**
@@ -1121,8 +1121,8 @@ class Project
      *
      * @return Project
      */
-    public function getProjectMetrics()
+    public function getScore()
     {
-        return $this->projectMetrics;
+        return $this->score;
     }
 }
