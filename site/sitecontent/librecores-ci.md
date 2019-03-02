@@ -5,7 +5,7 @@ which provides Continuous Integration of projects being hosted on LibreCores.
 The objective of the service is to improve the contributor experience and to increase trust to projects by providing automated testing and health metrics of the projects.
 Currently the service is **under development**.
 
-<img src="/img/ci-overview.svg" width="400px" style="float: right; margin: 20px"/>
+<img src="/img/ci-overview.svg" class="img-responsive" style="float: right; margin: 20px"/>
 
 With LibreCores CI you will be able to...
 
@@ -25,7 +25,7 @@ The short-term plan is to provide a generic framework for automation of the Fuse
 
 Status overview from [ORCONF2016](http://orconf.org/):
 
-<script async class="speakerdeck-embed" data-id="51cda97e786f411abab92287754e486d" data-ratio="1.33333333333333" src="//speakerdeck.com/assets/embed.js"></script>
+<iframe id="51cda97e786f411abab92287754e486d" data-ratio="1.33333333333333" src="https://speakerd.s3.amazonaws.com/presentations/51cda97e786f411abab92287754e486d/ORCONF_LibrecoresCI.pdf" width="100%" height="500" style="border:0; padding:0; margin:0; background:transparent;" frameborder="0" allowtransparency="true" allowfullscreen="allowfullscreen" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
 
 In the case of any questions, please use bugtracker in [GitHub](https://github.com/librecores/librecores-ci/).
 
