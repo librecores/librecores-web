@@ -81,7 +81,7 @@ abstract class RepoCrawler
      * @param ProjectMetricsProvider $projectMetricsProvider
      * @return bool operation successful?
      */
-    abstract public function updateProject(ProjectMetricsProvider $projectMetricsProvider);
+    abstract public function updateProject();
 
     /**
      * Update the source repository entity with information obtained through

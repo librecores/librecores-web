@@ -54,9 +54,10 @@ class GithubRepoCrawler extends GitRepoCrawler
         ProcessCreator $processCreator,
         ObjectManager $manager,
         LoggerInterface $logger,
-        GithubApiService $ghApi
+        GithubApiService $ghApi,
+        ProjectMetricsProvider $projectMetricsProvider
     ) {
-        parent::__construct($repo, $markupConverter, $processCreator, $manager, $logger);
+        parent::__construct($repo, $markupConverter, $processCreator, $manager, $logger, $projectMetricsProvider);
         $this->githubApi = $ghApi;
         preg_match(static::GH_REGEX, $this->repo->getUrl(), $matches);
         $this->githubUser = $matches[1];
@@ -86,9 +87,9 @@ class GithubRepoCrawler extends GitRepoCrawler
     /**
      * {@inheritdoc}
      */
-    public function updateProject(ProjectMetricsProvider $projectMetricsProvider)
+    public function updateProject()
     {
-        $success = parent::updateProject($projectMetricsProvider);
+        $success = parent::updateProject();
         $this->updateGithubMetrics();
 
         return $success;

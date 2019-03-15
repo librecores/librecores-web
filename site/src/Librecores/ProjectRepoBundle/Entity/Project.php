@@ -1109,7 +1109,7 @@ class Project
     /**
      * Set code quality metrics for the project
      *
-     * @param float $qualityScore
+     * @param int $qualityScore
      */
     public function setQualityScore($qualityScore)
     {

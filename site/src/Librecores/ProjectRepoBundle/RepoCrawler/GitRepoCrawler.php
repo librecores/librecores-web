@@ -2,12 +2,17 @@
 
 namespace Librecores\ProjectRepoBundle\RepoCrawler;
 
+use Doctrine\Common\Persistence\ObjectManager;
 use Librecores\ProjectRepoBundle\Entity\Commit;
 use Librecores\ProjectRepoBundle\Entity\Contributor;
 use Librecores\ProjectRepoBundle\Entity\GitSourceRepo;
 use Librecores\ProjectRepoBundle\Entity\LanguageStat;
 use Librecores\ProjectRepoBundle\Entity\ProjectRelease;
+use Librecores\ProjectRepoBundle\Entity\SourceRepo;
 use Librecores\ProjectRepoBundle\Util\FileUtil;
+use Librecores\ProjectRepoBundle\Util\MarkupToHtmlConverter;
+use Librecores\ProjectRepoBundle\Util\ProcessCreator;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
@@ -93,6 +98,14 @@ class GitRepoCrawler extends RepoCrawler
 
     private $repoClonePath = null;
 
+    protected $projectMetricsProvider;
+
+    public function __construct(SourceRepo $repo, MarkupToHtmlConverter $markupConverter, ProcessCreator $processCreator, ObjectManager $manager, LoggerInterface $logger, ProjectMetricsProvider $projectMetricsProvider)
+    {
+        parent::__construct($repo, $markupConverter, $processCreator, $manager, $logger, $projectMetricsProvider);
+        $this->projectMetricsProvider = $projectMetricsProvider;
+    }
+
     /**
      * Clean up the resources used by this repository
      */
@@ -152,7 +165,7 @@ class GitRepoCrawler extends RepoCrawler
     /**
      * {@inheritdoc}
      */
-    public function updateProject(ProjectMetricsProvider $projectMetricsProvider)
+    public function updateProject()
     {
         $project = $this->repo->getProject();
         if ($project === null) {
@@ -181,7 +194,7 @@ class GitRepoCrawler extends RepoCrawler
         }
 
         // Retrieve the code quality score for the project and persist it in the database
-        $projectMetrics = $projectMetricsProvider->getCodeQualityScore($project);
+        $projectMetrics = $this->projectMetricsProvider->getCodeQualityScore($project);
 
         $qualityScore = $projectMetrics*100;
 

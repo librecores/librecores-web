@@ -3,6 +3,7 @@
 namespace Librecores\ProjectRepoBundle\RepoCrawler;
 
 use Doctrine\Common\Persistence\ObjectManager;
+use Librecores\ProjectRepoBundle\Doctrine\ProjectMetricsProvider;
 use Librecores\ProjectRepoBundle\Entity\GitSourceRepo;
 use Librecores\ProjectRepoBundle\Entity\SourceRepo;
 use Librecores\ProjectRepoBundle\Util\GithubApiService;
@@ -40,6 +41,8 @@ class RepoCrawlerFactory
      */
     private $ghApi;
 
+    private  $projectMetricsProvider;
+
     /**
      * Constructor: create a new instance
      *
@@ -48,19 +51,22 @@ class RepoCrawlerFactory
      * @param ObjectManager         $manager
      * @param ProcessCreator        $processCreator
      * @param GithubApiService      $ghApi
+     * @param ProjectMetricsProvider $projectMetricsProvider
      */
     public function __construct(
         MarkupToHtmlConverter $markupConverter,
         LoggerInterface $logger,
         ObjectManager $manager,
         ProcessCreator $processCreator,
-        GithubApiService $ghApi
+        GithubApiService $ghApi,
+        ProjectMetricsProvider $projectMetricsProvider
     ) {
         $this->markupConverter = $markupConverter;
         $this->logger = $logger;
         $this->manager = $manager;
         $this->processCreator = $processCreator;
         $this->ghApi = $ghApi;
+        $this->projectMetricsProvider = $projectMetricsProvider;
     }
 
     /**
@@ -83,7 +89,8 @@ class RepoCrawlerFactory
                     $this->processCreator,
                     $this->manager,
                     $this->logger,
-                    $this->ghApi
+                    $this->ghApi,
+                    $this->projectMetricsProvider
                 );
             }
 
@@ -92,7 +99,8 @@ class RepoCrawlerFactory
                 $this->markupConverter,
                 $this->processCreator,
                 $this->manager,
-                $this->logger
+                $this->logger,
+                $this->projectMetricsProvider
             );
         }
 

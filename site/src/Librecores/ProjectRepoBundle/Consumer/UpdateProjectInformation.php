@@ -11,7 +11,6 @@ use Doctrine\DBAL\DBALException;
 use Librecores\ProjectRepoBundle\Entity\Project;
 use Librecores\ProjectRepoBundle\Entity\SourceRepo;
 use Librecores\ProjectRepoBundle\RepoCrawler\RepoCrawlerFactory;
-use Librecores\ProjectRepoBundle\Doctrine\ProjectMetricsProvider;
 
 /**
  * Extract and update a project's information with data from a source repository
@@ -26,18 +25,15 @@ class UpdateProjectInformation implements ConsumerInterface
     private $logger;
     private $orm;
     private $repoCrawlerFactory;
-    private $projectMetricsProvider;
 
     public function __construct(
         RepoCrawlerFactory $repoCrawlerFactory,
         LoggerInterface $logger,
-        Registry $doctrine,
-        ProjectMetricsProvider $projectMetricsProvider
+        Registry $doctrine
     ) {
         $this->repoCrawlerFactory = $repoCrawlerFactory;
         $this->logger = $logger;
         $this->orm = $doctrine;
-        $this->projectMetricsProvider = $projectMetricsProvider;
     }
 
     /**
@@ -84,7 +80,7 @@ class UpdateProjectInformation implements ConsumerInterface
             // do the actual work: extract data from the repository
             $crawler = $this->repoCrawlerFactory->getCrawlerForSourceRepo($sourceRepo);
             $crawler->updateSourceRepo();
-            $crawler->updateProject($this->projectMetricsProvider);
+            $crawler->updateProject();
 
             // mark project as "done processing"
             // we don't use markInProcessing() to avoid the double DB flush
