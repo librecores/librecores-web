@@ -31,7 +31,7 @@
         "custom"
     ],
     "customRanking": [
-        "desc(score)"
+        "desc(qualityScore)"
     ],
     "separatorsToIndex": "",
     "removeWordsIfNoResults": "none",

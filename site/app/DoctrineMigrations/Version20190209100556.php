@@ -15,7 +15,7 @@ final class Version20190209100556 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE Project ADD score DOUBLE PRECISION DEFAULT NULL');
+        $this->addSql('ALTER TABLE Project ADD qualityScore INT DEFAULT NULL');
         $this->addSql('DROP INDEX classification_idx ON ProjectClassification');
     }
 
@@ -24,7 +24,7 @@ final class Version20190209100556 extends AbstractMigration
         // this down() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE Project DROP score');
+        $this->addSql('ALTER TABLE Project DROP qualityScore');
         $this->addSql('CREATE INDEX classification_idx ON ProjectClassification (classification(200))');
     }
 }

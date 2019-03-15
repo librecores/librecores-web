@@ -3,6 +3,7 @@
 namespace Librecores\ProjectRepoBundle\RepoCrawler;
 
 use Doctrine\Common\Persistence\ObjectManager;
+use Librecores\ProjectRepoBundle\Doctrine\ProjectMetricsProvider;
 use Librecores\ProjectRepoBundle\Entity\SourceRepo;
 use Librecores\ProjectRepoBundle\Util\MarkupToHtmlConverter;
 use Librecores\ProjectRepoBundle\Util\ProcessCreator;
@@ -77,9 +78,10 @@ abstract class RepoCrawler
      * Update the project associated with the crawled repository with
      * information extracted from the repo
      *
+     * @param ProjectMetricsProvider $projectMetricsProvider
      * @return bool operation successful?
      */
-    abstract public function updateProject();
+    abstract public function updateProject(ProjectMetricsProvider $projectMetricsProvider);
 
     /**
      * Update the source repository entity with information obtained through

@@ -314,11 +314,11 @@ class Project
 
     /**
      * Code quality metrics for the project
-     * @var float
+     * @var integer
      *
-     * @ORM\Column(type="float", nullable=true)
+     * @ORM\Column(type="integer", nullable=true)
      */
-    private $score;
+    private $qualityScore;
 
     /**
      * Constructor
@@ -1109,11 +1109,11 @@ class Project
     /**
      * Set code quality metrics for the project
      *
-     * @param float $score
+     * @param float $qualityScore
      */
-    public function setScore($score)
+    public function setQualityScore($qualityScore)
     {
-        $this->score = $score;
+        $this->qualityScore = $qualityScore;
     }
 
     /**
@@ -1121,8 +1121,8 @@ class Project
      *
      * @return Project
      */
-    public function getScore()
+    public function getQualityScore()
     {
-        return $this->score;
+        return $this->qualityScore;
     }
 }

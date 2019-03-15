@@ -4,6 +4,7 @@ namespace Librecores\ProjectRepoBundle\RepoCrawler;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Github\Client;
+use Librecores\ProjectRepoBundle\Doctrine\ProjectMetricsProvider;
 use Librecores\ProjectRepoBundle\Entity\SourceRepo;
 use Librecores\ProjectRepoBundle\Util\GithubApiService;
 use Librecores\ProjectRepoBundle\Util\MarkupToHtmlConverter;
@@ -85,9 +86,9 @@ class GithubRepoCrawler extends GitRepoCrawler
     /**
      * {@inheritdoc}
      */
-    public function updateProject()
+    public function updateProject(ProjectMetricsProvider $projectMetricsProvider)
     {
-        $success = parent::updateProject();
+        $success = parent::updateProject($projectMetricsProvider);
         $this->updateGithubMetrics();
 
         return $success;
