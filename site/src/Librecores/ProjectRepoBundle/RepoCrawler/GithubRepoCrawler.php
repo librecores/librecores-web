@@ -4,7 +4,6 @@ namespace Librecores\ProjectRepoBundle\RepoCrawler;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Github\Client;
-use Librecores\ProjectRepoBundle\Doctrine\ProjectMetricsProvider;
 use Librecores\ProjectRepoBundle\Entity\SourceRepo;
 use Librecores\ProjectRepoBundle\Util\GithubApiService;
 use Librecores\ProjectRepoBundle\Util\MarkupToHtmlConverter;
@@ -55,7 +54,7 @@ class GithubRepoCrawler extends GitRepoCrawler
         ObjectManager $manager,
         LoggerInterface $logger,
         GithubApiService $ghApi,
-        ProjectMetricsProvider $projectMetricsProvider
+        $projectMetricsProvider
     ) {
         parent::__construct($repo, $markupConverter, $processCreator, $manager, $logger, $projectMetricsProvider);
         $this->githubApi = $ghApi;

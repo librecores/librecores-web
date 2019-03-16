@@ -314,7 +314,7 @@ class Project
 
     /**
      * Code quality metrics for the project
-     * @var integer
+     * @var int
      *
      * @ORM\Column(type="integer", nullable=true)
      */

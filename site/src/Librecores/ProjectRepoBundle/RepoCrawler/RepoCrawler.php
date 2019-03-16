@@ -3,11 +3,11 @@
 namespace Librecores\ProjectRepoBundle\RepoCrawler;
 
 use Doctrine\Common\Persistence\ObjectManager;
-use Librecores\ProjectRepoBundle\Doctrine\ProjectMetricsProvider;
 use Librecores\ProjectRepoBundle\Entity\SourceRepo;
 use Librecores\ProjectRepoBundle\Util\MarkupToHtmlConverter;
 use Librecores\ProjectRepoBundle\Util\ProcessCreator;
 use Psr\Log\LoggerInterface;
+use Librecores\ProjectRepoBundle\Doctrine\ProjectMetricsProvider;
 
 /**
  * Repository crawler base class
@@ -42,25 +42,33 @@ abstract class RepoCrawler
     protected $manager;
 
     /**
+     * @var ProjectMetricsProvider
+     */
+    protected $projectMetricsProvider;
+
+    /**
      * RepoCrawler constructor.
-     * @param SourceRepo            $repo
-     * @param MarkupToHtmlConverter $markupConverter
-     * @param ProcessCreator        $processCreator
-     * @param ObjectManager         $manager
-     * @param LoggerInterface       $logger
+     * @param SourceRepo             $repo
+     * @param MarkupToHtmlConverter  $markupConverter
+     * @param ProcessCreator         $processCreator
+     * @param ObjectManager          $manager
+     * @param LoggerInterface        $logger
+     * @param ProjectMetricsProvider $projectMetricsProvider
      */
     public function __construct(
         SourceRepo $repo,
         MarkupToHtmlConverter $markupConverter,
         ProcessCreator $processCreator,
         ObjectManager $manager,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        ProjectMetricsProvider $projectMetricsProvider
     ) {
-        $this->repo            = $repo;
-        $this->markupConverter = $markupConverter;
-        $this->logger          = $logger;
-        $this->processCreator  = $processCreator;
-        $this->manager         = $manager;
+        $this->repo                   = $repo;
+        $this->markupConverter        = $markupConverter;
+        $this->logger                 = $logger;
+        $this->processCreator         = $processCreator;
+        $this->manager                = $manager;
+        $this->projectMetricsProvider = $projectMetricsProvider;
 
         if (!$this->isValidRepoType()) {
             throw new \RuntimeException("Repository type is not supported by this crawler.");
@@ -78,7 +86,6 @@ abstract class RepoCrawler
      * Update the project associated with the crawled repository with
      * information extracted from the repo
      *
-     * @param ProjectMetricsProvider $projectMetricsProvider
      * @return bool operation successful?
      */
     abstract public function updateProject();
@@ -90,5 +97,15 @@ abstract class RepoCrawler
     public function updateSourceRepo()
     {
         // the default implementation is empty
+    }
+
+    /**
+     * Access ProjectMetricsProvider class in GitRepoCrawler and GithubRepoCrawler
+     *
+     * @return ProjectMetricsProvider
+     */
+    public function getProjectMetricsProvider()
+    {
+        return $this->projectMetricsProvider;
     }
 }
