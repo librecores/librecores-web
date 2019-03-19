@@ -98,14 +98,4 @@ abstract class RepoCrawler
     {
         // the default implementation is empty
     }
-
-    /**
-     * Access ProjectMetricsProvider class in GitRepoCrawler and GithubRepoCrawler
-     *
-     * @return ProjectMetricsProvider
-     */
-    public function getProjectMetricsProvider()
-    {
-        return $this->projectMetricsProvider;
-    }
 }

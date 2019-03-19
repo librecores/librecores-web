@@ -16,7 +16,6 @@ final class Version20190209100556 extends AbstractMigration
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
         $this->addSql('ALTER TABLE Project ADD qualityScore INT DEFAULT NULL');
-        $this->addSql('DROP INDEX classification_idx ON ProjectClassification');
     }
 
     public function down(Schema $schema) : void
@@ -25,6 +24,5 @@ final class Version20190209100556 extends AbstractMigration
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
         $this->addSql('ALTER TABLE Project DROP qualityScore');
-        $this->addSql('CREATE INDEX classification_idx ON ProjectClassification (classification(200))');
     }
 }

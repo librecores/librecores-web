@@ -2,18 +2,20 @@
 
 namespace Librecores\ProjectRepoBundle\RepoCrawler;
 
-use Doctrine\Common\Persistence\ObjectManager;
 use Librecores\ProjectRepoBundle\Entity\Commit;
 use Librecores\ProjectRepoBundle\Entity\GitSourceRepo;
 use Librecores\ProjectRepoBundle\Entity\LanguageStat;
 use Librecores\ProjectRepoBundle\Entity\ProjectRelease;
-use Librecores\ProjectRepoBundle\Entity\SourceRepo;
 use Librecores\ProjectRepoBundle\Util\FileUtil;
+use Symfony\Component\Process\Process;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
+use Librecores\ProjectRepoBundle\Doctrine\ProjectMetricsProvider;
 use Librecores\ProjectRepoBundle\Util\MarkupToHtmlConverter;
 use Librecores\ProjectRepoBundle\Util\ProcessCreator;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Process\Process;
+use Doctrine\Common\Persistence\ObjectManager;
+use Librecores\ProjectRepoBundle\Entity\SourceRepo;
 
 /**
  * Crawl and extract metadata from a remote git repository
@@ -92,13 +94,22 @@ class GitRepoCrawler extends RepoCrawler
 
     private $repoClonePath = null;
 
+    /**
+     * RepoCrawler constructor.
+     * @param SourceRepo             $repo
+     * @param MarkupToHtmlConverter  $markupConverter
+     * @param ProcessCreator         $processCreator
+     * @param ObjectManager          $manager
+     * @param LoggerInterface        $logger
+     * @param ProjectMetricsProvider $projectMetricsProvider
+     */
     public function __construct(
         SourceRepo $repo,
         MarkupToHtmlConverter $markupConverter,
         ProcessCreator $processCreator,
         ObjectManager $manager,
         LoggerInterface $logger,
-        $projectMetricsProvider
+        ProjectMetricsProvider $projectMetricsProvider
     ) {
         parent::__construct($repo, $markupConverter, $processCreator, $manager, $logger, $projectMetricsProvider);
     }
@@ -191,7 +202,7 @@ class GitRepoCrawler extends RepoCrawler
         }
 
         // Retrieve the code quality score for the project and persist it in the database
-        $projectMetrics = $this->getProjectMetricsProvider()->getCodeQualityScore($project);
+        $projectMetrics = $this->projectMetricsProvider->getCodeQualityScore($project);
 
         $qualityScore = $projectMetrics*100;
 
