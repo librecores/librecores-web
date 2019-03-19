@@ -30,7 +30,9 @@
         "exact",
         "custom"
     ],
-    "customRanking": null,
+    "customRanking": [
+        "desc(qualityScore)"
+    ],
     "separatorsToIndex": "",
     "removeWordsIfNoResults": "none",
     "queryType": "prefixLast",

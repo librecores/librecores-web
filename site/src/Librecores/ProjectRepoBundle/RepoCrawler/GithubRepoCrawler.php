@@ -9,6 +9,7 @@ use Librecores\ProjectRepoBundle\Util\GithubApiService;
 use Librecores\ProjectRepoBundle\Util\MarkupToHtmlConverter;
 use Librecores\ProjectRepoBundle\Util\ProcessCreator;
 use Psr\Log\LoggerInterface;
+use Librecores\ProjectRepoBundle\Doctrine\ProjectMetricsProvider;
 
 /**
  * Crawl and extract metadata from a remote git repository
@@ -47,15 +48,26 @@ class GithubRepoCrawler extends GitRepoCrawler
     private $githubRepoName;
     private $githubData;
 
+    /**
+     * RepoCrawler constructor.
+     * @param SourceRepo             $repo
+     * @param MarkupToHtmlConverter  $markupConverter
+     * @param ProcessCreator         $processCreator
+     * @param ObjectManager          $manager
+     * @param LoggerInterface        $logger
+     * @param GithubApiService       $ghApi
+     * @param ProjectMetricsProvider $projectMetricsProvider
+     */
     public function __construct(
         SourceRepo $repo,
         MarkupToHtmlConverter $markupConverter,
         ProcessCreator $processCreator,
         ObjectManager $manager,
         LoggerInterface $logger,
-        GithubApiService $ghApi
+        GithubApiService $ghApi,
+        ProjectMetricsProvider $projectMetricsProvider
     ) {
-        parent::__construct($repo, $markupConverter, $processCreator, $manager, $logger);
+        parent::__construct($repo, $markupConverter, $processCreator, $manager, $logger, $projectMetricsProvider);
         $this->githubApi = $ghApi;
         preg_match(static::GH_REGEX, $this->repo->getUrl(), $matches);
         $this->githubUser = $matches[1];

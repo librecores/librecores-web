@@ -7,6 +7,7 @@ use Librecores\ProjectRepoBundle\Entity\SourceRepo;
 use Librecores\ProjectRepoBundle\Util\MarkupToHtmlConverter;
 use Librecores\ProjectRepoBundle\Util\ProcessCreator;
 use Psr\Log\LoggerInterface;
+use Librecores\ProjectRepoBundle\Doctrine\ProjectMetricsProvider;
 
 /**
  * Repository crawler base class
@@ -41,25 +42,33 @@ abstract class RepoCrawler
     protected $manager;
 
     /**
+     * @var ProjectMetricsProvider
+     */
+    protected $projectMetricsProvider;
+
+    /**
      * RepoCrawler constructor.
-     * @param SourceRepo            $repo
-     * @param MarkupToHtmlConverter $markupConverter
-     * @param ProcessCreator        $processCreator
-     * @param ObjectManager         $manager
-     * @param LoggerInterface       $logger
+     * @param SourceRepo             $repo
+     * @param MarkupToHtmlConverter  $markupConverter
+     * @param ProcessCreator         $processCreator
+     * @param ObjectManager          $manager
+     * @param LoggerInterface        $logger
+     * @param ProjectMetricsProvider $projectMetricsProvider
      */
     public function __construct(
         SourceRepo $repo,
         MarkupToHtmlConverter $markupConverter,
         ProcessCreator $processCreator,
         ObjectManager $manager,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        ProjectMetricsProvider $projectMetricsProvider
     ) {
-        $this->repo            = $repo;
-        $this->markupConverter = $markupConverter;
-        $this->logger          = $logger;
-        $this->processCreator  = $processCreator;
-        $this->manager         = $manager;
+        $this->repo                   = $repo;
+        $this->markupConverter        = $markupConverter;
+        $this->logger                 = $logger;
+        $this->processCreator         = $processCreator;
+        $this->manager                = $manager;
+        $this->projectMetricsProvider = $projectMetricsProvider;
 
         if (!$this->isValidRepoType()) {
             throw new \RuntimeException("Repository type is not supported by this crawler.");

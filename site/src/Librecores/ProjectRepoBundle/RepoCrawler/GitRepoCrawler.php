@@ -10,6 +10,12 @@ use Librecores\ProjectRepoBundle\Util\FileUtil;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
+use Librecores\ProjectRepoBundle\Doctrine\ProjectMetricsProvider;
+use Librecores\ProjectRepoBundle\Util\MarkupToHtmlConverter;
+use Librecores\ProjectRepoBundle\Util\ProcessCreator;
+use Psr\Log\LoggerInterface;
+use Doctrine\Common\Persistence\ObjectManager;
+use Librecores\ProjectRepoBundle\Entity\SourceRepo;
 
 /**
  * Crawl and extract metadata from a remote git repository
@@ -87,6 +93,26 @@ class GitRepoCrawler extends RepoCrawler
     ];
 
     private $repoClonePath = null;
+
+    /**
+     * RepoCrawler constructor.
+     * @param SourceRepo             $repo
+     * @param MarkupToHtmlConverter  $markupConverter
+     * @param ProcessCreator         $processCreator
+     * @param ObjectManager          $manager
+     * @param LoggerInterface        $logger
+     * @param ProjectMetricsProvider $projectMetricsProvider
+     */
+    public function __construct(
+        SourceRepo $repo,
+        MarkupToHtmlConverter $markupConverter,
+        ProcessCreator $processCreator,
+        ObjectManager $manager,
+        LoggerInterface $logger,
+        ProjectMetricsProvider $projectMetricsProvider
+    ) {
+        parent::__construct($repo, $markupConverter, $processCreator, $manager, $logger, $projectMetricsProvider);
+    }
 
     /**
      * Clean up the resources used by this repository
@@ -174,6 +200,13 @@ class GitRepoCrawler extends RepoCrawler
         if ($latestCommit) {
             $project->setDateLastActivityOccurred($latestCommit->getDateCommitted());
         }
+
+        // Retrieve the code quality score for the project and persist it in the database
+        $projectMetrics = $this->projectMetricsProvider->getCodeQualityScore($project);
+
+        $qualityScore = $projectMetrics*100;
+
+        $project->setQualityScore($qualityScore);
 
         $this->manager->persist($project);
 

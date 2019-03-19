@@ -313,6 +313,14 @@ class Project
     private $releases;
 
     /**
+     * Code quality metrics for the project
+     * @var int
+     *
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $qualityScore;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -1096,5 +1104,25 @@ class Project
     public function getClassifications()
     {
         return $this->classifications;
+    }
+
+    /**
+     * Set code quality metrics for the project
+     *
+     * @param int $qualityScore
+     */
+    public function setQualityScore($qualityScore)
+    {
+        $this->qualityScore = $qualityScore;
+    }
+
+    /**
+     * Get code quality metrics for the project
+     *
+     * @return Project
+     */
+    public function getQualityScore()
+    {
+        return $this->qualityScore;
     }
 }
