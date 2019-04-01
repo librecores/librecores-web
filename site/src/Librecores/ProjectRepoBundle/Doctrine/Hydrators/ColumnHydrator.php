@@ -17,7 +17,7 @@ use PDO;
  *
  * @author Amitosh Swain Mahapatra <amitosh.swain@gmail.com>
  *
- * @see PDO::FETCH_GROUP
+ * @see    PDO::FETCH_GROUP
  */
 class ColumnHydrator extends AbstractHydrator
 {

@@ -1,7 +1,9 @@
 <?php
+
 namespace Librecores\ProjectRepoBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Librecores\ProjectRepoBundle\Entity\Project;
 
 /**
  * ProjectRepository
@@ -17,6 +19,8 @@ class ProjectRepository extends EntityRepository
      * @param string $projectName
      *
      * @return NULL|Project
+     *
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function findProjectWithParent($parentName, $projectName)
     {
@@ -39,6 +43,9 @@ class ProjectRepository extends EntityRepository
      * Find a project using a fragment/substring of its fully qualified name
      *
      * @param string $fqnameFragment
+     * @param int    $limit
+     *
+     * @return NULL|Project
      */
     public function findByFqnameFragment($fqnameFragment, $limit = null)
     {
@@ -57,7 +64,7 @@ class ProjectRepository extends EntityRepository
                 'WHERE CONCAT(COALESCE(org.name, user.username), \'/\', p.name) LIKE :fqnameFragment'
             )
             ->setParameter('fqnameFragment', $fqnameFragment);
-        if ($limit != 0) {
+        if ($limit !== 0) {
             $p->setFirstResults(0)->setMaxResults($limit);
         }
 

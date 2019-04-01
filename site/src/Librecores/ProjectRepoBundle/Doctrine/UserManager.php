@@ -1,4 +1,5 @@
 <?php
+
 namespace Librecores\ProjectRepoBundle\Doctrine;
 
 use FOS\UserBundle\Doctrine\UserManager as BaseUserManager;
@@ -30,8 +31,7 @@ class UserManager extends BaseUserManager
             ->setParameter('username', $this->getCanonicalFieldsUpdater()->canonicalizeUsername($username))
             ->setParameter('email', $this->getCanonicalFieldsUpdater()->canonicalizeEmail($email))
             ->getQuery()
-            ->getOneOrNullResult()
-        ;
+            ->getOneOrNullResult();
     }
 
     /**
@@ -50,8 +50,7 @@ class UserManager extends BaseUserManager
             ->where("u.$columnName = :oAuthUserId")
             ->setParameter('oAuthUserId', $oAuthUserId)
             ->getQuery()
-            ->getOneOrNullResult()
-        ;
+            ->getOneOrNullResult();
     }
 
     /**
@@ -60,13 +59,14 @@ class UserManager extends BaseUserManager
      * This method currently tokenizes the input search string and then searches
      * the name and username fields.
      *
+     * @param string $searchString
+     *
+     * @return mixed
+     *
      * @todo This method is currently *very* rough. Switch to a proper search
      *       engine (e.g. Solr) to get more meaningful (e.g. better ranked) and
      *       faster results.
      *
-     * @param string $searchString
-     *
-     * @return mixed
      */
     public function findUsersBySearchString($searchString)
     {
@@ -78,10 +78,12 @@ class UserManager extends BaseUserManager
         // XXX: using ?$i is not really nice, but that's true for this method
         // as a whole.
         foreach ($tokens as $i => $token) {
-            $q->andWhere($q->expr()->orX(
-                $q->expr()->like('u.username', "?$i"),
-                $q->expr()->like('u.name', "?$i")
-            ));
+            $q->andWhere(
+                $q->expr()->orX(
+                    $q->expr()->like('u.username', "?$i"),
+                    $q->expr()->like('u.name', "?$i")
+                )
+            );
         }
         $q->setParameters($tokens);
 

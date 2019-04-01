@@ -2,7 +2,9 @@
 
 namespace Librecores\ProjectRepoBundle\Repository;
 
+use DateTimeImmutable;
 use Doctrine\ORM\EntityRepository;
+use InvalidArgumentException;
 use Librecores\ProjectRepoBundle\Entity\Commit;
 use Librecores\ProjectRepoBundle\Entity\Contributor;
 use Librecores\ProjectRepoBundle\Entity\SourceRepo;
@@ -117,12 +119,12 @@ class CommitRepository extends EntityRepository
     /**
      * Get a histogram of commits over a range of dates
      *
-     * @param SourceRepo         $repo
-     * @param int                $bucket one of the constants 'INTERVAL_DAY', 'INTERVAL_WEEK'
-     *                                   'INTERVAL_MONTH', 'INTERVAL_YEAR', which specifies
-     *                                   the histogram bucket size
-     * @param \DateTimeImmutable $start  start date of commits
-     * @param \DateTimeImmutable $end    end date of commits
+     * @param SourceRepo        $repo
+     * @param int               $bucket one of the constants 'INTERVAL_DAY', 'INTERVAL_WEEK'
+     *                                  'INTERVAL_MONTH', 'INTERVAL_YEAR', which specifies
+     *                                  the histogram bucket size
+     * @param DateTimeImmutable $start  start date of commits
+     * @param DateTimeImmutable $end    end date of commits
      *
      * @return array associative array of a time span index and commits in that
      *               time span
@@ -130,8 +132,8 @@ class CommitRepository extends EntityRepository
     public function getCommitHistogram(
         SourceRepo $repo,
         int $bucket,
-        \DateTimeImmutable $start = null,
-        \DateTimeImmutable $end = null
+        DateTimeImmutable $start = null,
+        DateTimeImmutable $end = null
     ): array {
         // TODO: Implement other aggregations
 
@@ -145,7 +147,7 @@ class CommitRepository extends EntityRepository
             case Dates::INTERVAL_YEAR:
                 return $this->getCommitHistogramByYear($repo, $start, $end);
             default:
-                throw new \InvalidArgumentException(
+                throw new InvalidArgumentException(
                     "Invaid value $bucket for \$bucket"
                 );
         }
@@ -154,12 +156,12 @@ class CommitRepository extends EntityRepository
     /**
      * Get a histogram of contributors over a range of dates
      *
-     * @param SourceRepo         $repo
-     * @param int                $bucket one of the constants 'INTERVAL_DAY', 'INTERVAL_WEEK'
-     *                                   'INTERVAL_MONTH', 'INTERVAL_YEAR', which specifies
-     *                                   the histogram bucket size
-     * @param \DateTimeImmutable $start  start date of commits
-     * @param \DateTimeImmutable $end    end date of commits
+     * @param SourceRepo        $repo
+     * @param int               $bucket one of the constants 'INTERVAL_DAY', 'INTERVAL_WEEK'
+     *                                  'INTERVAL_MONTH', 'INTERVAL_YEAR', which specifies
+     *                                  the histogram bucket size
+     * @param DateTimeImmutable $start  start date of commits
+     * @param DateTimeImmutable $end    end date of commits
      *
      * @return array associative array of a time span index and commits in that
      *               time span
@@ -167,16 +169,16 @@ class CommitRepository extends EntityRepository
     public function getCommitContributorHistogram(
         SourceRepo $repo,
         int $bucket,
-        \DateTimeImmutable $start = null,
-        \DateTimeImmutable $end = null
+        DateTimeImmutable $start = null,
+        DateTimeImmutable $end = null
     ): array {
-            // TODO: Implement other aggregations
+        // TODO: Implement other aggregations
 
         switch ($bucket) {
             case Dates::INTERVAL_YEAR:
                 return $this->getCommitContributorHistogramByYear($repo, $start, $end);
             default:
-                throw new \InvalidArgumentException(
+                throw new InvalidArgumentException(
                     "Invaid value $bucket for \$bucket"
                 );
         }
@@ -185,17 +187,17 @@ class CommitRepository extends EntityRepository
     /**
      * Get a histogram of commits per week
      *
-     * @param SourceRepo         $repo
-     * @param \DateTimeImmutable $start start date of commits
-     * @param \DateTimeImmutable $end   end date of commits
+     * @param SourceRepo        $repo
+     * @param DateTimeImmutable $start start date of commits
+     * @param DateTimeImmutable $end   end date of commits
      *
      * @return array associative array of a time span index and commits in that
      *               time span
      */
     private function getCommitHistogramByWeek(
         SourceRepo $repo,
-        ?\DateTimeImmutable $start,
-        ?\DateTimeImmutable $end
+        ?DateTimeImmutable $start,
+        ?DateTimeImmutable $end
     ) {
         // for week wise histograms, we need (week,year) tuple
         $query = $this->createQueryBuilder('c')
@@ -208,7 +210,7 @@ class CommitRepository extends EntityRepository
             ->addSelect('COUNT(1) as commits')
             ->where('c.sourceRepo = :repo');
 
-        $params = [ 'repo' => $repo  ];
+        $params = ['repo' => $repo];
 
         if (null !== $start) {
             $query->andWhere('c.dateCommitted >= :start');
@@ -225,8 +227,8 @@ class CommitRepository extends EntityRepository
         }
 
         $result = $query->setParameters($params)
-                        ->getQuery()
-                        ->getResult('group');
+            ->getQuery()
+            ->getResult('group');
 
         if (!empty($result)) {
             // insert missing values
@@ -249,10 +251,10 @@ class CommitRepository extends EntityRepository
                 }
 
 
-                $week     = (int) $startYear === $year ? $startWeek : 1;
+                $week = (int) $startYear === $year ? $startWeek : 1;
                 $weeklast = (int) $endYear === $year ? $endWeek
-                    : \DateTimeImmutable::createFromFormat('d m Y', "31 12 $year")
-                                        ->format('W');
+                    : DateTimeImmutable::createFromFormat('d m Y', "31 12 $year")
+                        ->format('W');
 
                 for (; $week <= $weeklast; $week++) {
                     if (!array_key_exists($week, $result[$year])) {
@@ -270,17 +272,17 @@ class CommitRepository extends EntityRepository
     /**
      * Get a histogram of commits per week
      *
-     * @param SourceRepo         $repo
-     * @param \DateTimeImmutable $start start date of commits
-     * @param \DateTimeImmutable $end   end date of commits
+     * @param SourceRepo        $repo
+     * @param DateTimeImmutable $start start date of commits
+     * @param DateTimeImmutable $end   end date of commits
      *
      * @return array associative array of a time span index and commits in that
      *               time span
      */
     private function getCommitHistogramByDay(
         $repo,
-        \DateTimeImmutable $start = null,
-        \DateTimeImmutable $end = null
+        DateTimeImmutable $start = null,
+        DateTimeImmutable $end = null
     ) {
         // for day wise histograms, we need (day,month,year)
         $query = $this->createQueryBuilder('c')
@@ -288,7 +290,7 @@ class CommitRepository extends EntityRepository
             ->addSelect('MONTH(c.dateCommitted) month')
             ->addSelect('DAY(c.dateCommitted) day')
             ->addSelect('COUNT(1) as commits');
-            // ->where('c.sourceRepo = :repo');
+        // ->where('c.sourceRepo = :repo');
 
         if (null !== $start) {
             $query->andWhere('c.dateCommitted >= :start');
@@ -324,17 +326,17 @@ class CommitRepository extends EntityRepository
     /**
      * Get a histogram of commits per month
      *
-     * @param SourceRepo         $repo
-     * @param \DateTimeImmutable $start start date of commits
-     * @param \DateTimeImmutable $end   end date of commits
+     * @param SourceRepo        $repo
+     * @param DateTimeImmutable $start start date of commits
+     * @param DateTimeImmutable $end   end date of commits
      *
      * @return array associative array of a time span index and commits in that
      *               time span
      */
     private function getCommitHistogramByMonth(
         SourceRepo $repo,
-        \DateTimeImmutable $start,
-        \DateTimeImmutable $end
+        DateTimeImmutable $start,
+        DateTimeImmutable $end
     ) {
         // for day wise histograms, we need (month,year)
         $query = $this->createQueryBuilder('c')
@@ -377,20 +379,20 @@ class CommitRepository extends EntityRepository
     /**
      * Get a histogram of commits per year
      *
-     * @param SourceRepo         $repo
-     * @param \DateTimeImmutable $start start date of commits
-     * @param \DateTimeImmutable $end   end date of commits
+     * @param SourceRepo        $repo
+     * @param DateTimeImmutable $start start date of commits
+     * @param DateTimeImmutable $end   end date of commits
      *
      * @return array associative array of a time span index and commits in that
      *               time span
      */
     private function getCommitHistogramByYear(
         SourceRepo $repo,
-        \DateTimeImmutable $start = null,
-        \DateTimeImmutable $end = null
+        DateTimeImmutable $start = null,
+        DateTimeImmutable $end = null
     ) {
 
-        $params = [ 'repo' => $repo ];
+        $params = ['repo' => $repo];
 
         $query = $this->createQueryBuilder('c')
             ->select('YEAR(c.dateCommitted) year')
@@ -419,24 +421,24 @@ class CommitRepository extends EntityRepository
     /**
      * Get number of unique contributors per year
      *
-     * @param SourceRepo         $repo
-     * @param \DateTimeImmutable $start start date of commits
-     * @param \DateTimeImmutable $end   end date of commits
+     * @param SourceRepo        $repo
+     * @param DateTimeImmutable $start start date of commits
+     * @param DateTimeImmutable $end   end date of commits
      *
      * @return array associative array of a time span index and commits in that
      *               time span
      */
     private function getCommitContributorHistogramByYear(
         SourceRepo $repo,
-        \DateTimeImmutable $start = null,
-        \DateTimeImmutable $end = null
+        DateTimeImmutable $start = null,
+        DateTimeImmutable $end = null
     ) {
-        $params = [ 'repo' => $repo ];
+        $params = ['repo' => $repo];
 
         $query = $this->createQueryBuilder('c')
-                      ->select('YEAR(c.dateCommitted) year')
-                      ->addSelect('COUNT(DISTINCT c.contributor) as contributors')
-                      ->where('c.sourceRepo = :repo');
+            ->select('YEAR(c.dateCommitted) year')
+            ->addSelect('COUNT(DISTINCT c.contributor) as contributors')
+            ->where('c.sourceRepo = :repo');
 
         if (null !== $start) {
             $query->andWhere('c.dateCommitted >= :start');
@@ -449,10 +451,10 @@ class CommitRepository extends EntityRepository
         }
 
         $result = $query->groupBy('year')
-                        ->orderBy('year', 'ASC')
-                        ->setParameters($params)
-                        ->getQuery()
-                        ->getResult('group');
+            ->orderBy('year', 'ASC')
+            ->setParameters($params)
+            ->getQuery()
+            ->getResult('group');
 
         return $this->zeroFillMissingYears($result, $start, $end);
     }
@@ -460,23 +462,23 @@ class CommitRepository extends EntityRepository
     /**
      * Zero fill missing year keys
      *
-     * @param array                   $result
-     * @param \DateTimeImmutable|null $start
-     * @param \DateTimeImmutable|null $end
+     * @param array                  $result
+     * @param DateTimeImmutable|null $start
+     * @param DateTimeImmutable|null $end
      *
      * @return array
      */
     private function zeroFillMissingYears(
         $result,
-        \DateTimeImmutable $start = null,
-        \DateTimeImmutable $end = null
-    ) : array {
+        DateTimeImmutable $start = null,
+        DateTimeImmutable $end = null
+    ): array {
         if (empty($result)) {
             return [];
         }
 
         $firstYear = array_keys($result)[0];
-        $lastYear  = date('Y');
+        $lastYear = date('Y');
 
         if (null !== $start) {
             $firstYear = $start->format('Y');

@@ -1,4 +1,5 @@
 <?php
+
 namespace Librecores\ProjectRepoBundle\Form\Model;
 
 use Symfony\Component\Validator\Constraints as Assert;
@@ -27,6 +28,16 @@ class SearchQuery
     protected $type = self::TYPE_PROJECTS;
 
     /**
+     * Get the query string
+     *
+     * @return string
+     */
+    public function getQ()
+    {
+        return $this->q;
+    }
+
+    /**
      * Set the query string
      *
      * @param string $q
@@ -36,19 +47,6 @@ class SearchQuery
         $this->q = $q;
     }
 
-    /**
-     * Get the query string
-     */
-    public function getQ()
-    {
-        return $this->q;
-    }
-
-    public function setType($type)
-    {
-        $this->type = $type;
-    }
-
     public function getType()
     {
         if (empty($this->type)) {
@@ -56,5 +54,10 @@ class SearchQuery
         }
 
         return $this->type;
+    }
+
+    public function setType($type)
+    {
+        $this->type = $type;
     }
 }

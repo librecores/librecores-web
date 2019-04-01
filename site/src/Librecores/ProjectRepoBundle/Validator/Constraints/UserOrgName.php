@@ -1,4 +1,5 @@
 <?php
+
 namespace Librecores\ProjectRepoBundle\Validator\Constraints;
 
 use Symfony\Component\Validator\Constraint;
@@ -13,13 +14,13 @@ use Symfony\Component\Validator\Constraint;
 class UserOrgName extends Constraint
 {
     public $messageTooShort = 'The user/organization name must be '.
-        'at least %minlength% characters long.';
+    'at least %minlength% characters long.';
     public $messageTooLong = 'The user/organization name must be '.
-        'not more than %maxlength% characters long.';
+    'not more than %maxlength% characters long.';
     public $messageReservedName = 'The chosen user/organization name is '.
-        'reserved for internal use.';
+    'reserved for internal use.';
     public $messageUniqueName = 'The user/organization name is already taken.';
     public $messageInvalidCharacters = 'The user/organization name contains '.
-        'invalid characters: it must start with a character, and be '.
-        'followed by characters, numbers or the dash (-).';
+    'invalid characters: it must start with a character, and be '.
+    'followed by characters, numbers or the dash (-).';
 }

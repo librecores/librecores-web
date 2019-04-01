@@ -1,13 +1,14 @@
 <?php
+
 namespace Librecores\ProjectRepoBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ProjectType extends AbstractType
 {
@@ -39,24 +40,30 @@ class ProjectType extends AbstractType
                 TextType::class,
                 array('label' => 'License Name (such as GPL or MIT)', 'required' => false)
             )
-            ->add('licenseTextAutoUpdate', ChoiceType::class, array(
-                'choices' => array(
-                    'Extract the full license text out of the LICENSE file in the source code.' => true,
-                    'Enter the license text here.' => false,
-                ),
-                'choices_as_values' => true,
-                'label' => 'Full License Text',
-                'expanded' => true,
-            'multiple' => false, ))
+            ->add(
+                'licenseTextAutoUpdate',
+                ChoiceType::class,
+                array(
+                    'choices' => array(
+                        'Extract the full license text out of the LICENSE file in the source code.' => true,
+                        'Enter the license text here.' => false,
+                    ),
+                    'choices_as_values' => true,
+                    'label' => 'Full License Text',
+                    'expanded' => true,
+                    'multiple' => false,
+                )
+            )
             ->add('licenseText', PurifiedTextareaType::class, array('label' => false, 'required' => false))
-            ->add('save', SubmitType::class, array('label' => 'Update Project', 'attr' => ['class' => 'btn-primary']))
-        ;
+            ->add('save', SubmitType::class, array('label' => 'Update Project', 'attr' => ['class' => 'btn-primary']));
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class' => 'Librecores\ProjectRepoBundle\Entity\Project',
-        ));
+        $resolver->setDefaults(
+            array(
+                'data_class' => 'Librecores\ProjectRepoBundle\Entity\Project',
+            )
+        );
     }
 }

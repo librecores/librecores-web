@@ -1,4 +1,5 @@
 <?php
+
 namespace Librecores\ProjectRepoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;

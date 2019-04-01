@@ -1,13 +1,13 @@
 <?php
+
 namespace Librecores\ProjectRepoBundle\Form\Type;
 
 use Librecores\ProjectRepoBundle\Form\Model\SearchQuery;
-
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\SearchType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\SearchType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
 /**
  * Form Type: the search query box
@@ -23,11 +23,13 @@ class SearchQueryType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class' => SearchQuery::class,
-            'csrf_protection' => false,
-            'method' => 'GET',
-        ));
+        $resolver->setDefaults(
+            array(
+                'data_class' => SearchQuery::class,
+                'csrf_protection' => false,
+                'method' => 'GET',
+            )
+        );
     }
 
     /**

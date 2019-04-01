@@ -2,6 +2,7 @@
 
 namespace Librecores\ProjectRepoBundle\Controller;
 
+use Librecores\ProjectRepoBundle\Doctrine\ProjectMetricsProvider;
 use Librecores\ProjectRepoBundle\Entity\ClassificationHierarchy;
 use Librecores\ProjectRepoBundle\Entity\GitSourceRepo;
 use Librecores\ProjectRepoBundle\Entity\LanguageStat;
@@ -20,7 +21,6 @@ use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Url;
@@ -60,29 +60,41 @@ class ProjectController extends Controller
 
         // build form
         $formBuilder = $this->createFormBuilder($p)
-            ->add('parentName', ChoiceType::class, [
-                'mapped' => false,
-                'choices' => $parentChoices,
-                'multiple' => false,
-            ])
+            ->add(
+                'parentName',
+                ChoiceType::class,
+                [
+                    'mapped' => false,
+                    'choices' => $parentChoices,
+                    'multiple' => false,
+                ]
+            )
             ->add('name')
             ->add('displayName')
-            ->add('gitSourceRepoUrl', UrlType::class, [
-                'mapped' => false,
-                'label' => 'Git URL',
-                'required' => false,
-                'constraints' => [
-                    new NotBlank(['groups' => ["git_url"]]),
-                    new Url(['groups' => ["git_url"]]),
-                ],
-            ])
-            ->add('saveGitSourceRepoUrl', SubmitType::class, [
-                'label' => 'Create Project from Git repository',
-                'attr' => [
-                    'class' => 'btn-primary',
-                ],
-                'validation_groups' => ['Default', 'git_url'],
-            ]);
+            ->add(
+                'gitSourceRepoUrl',
+                UrlType::class,
+                [
+                    'mapped' => false,
+                    'label' => 'Git URL',
+                    'required' => false,
+                    'constraints' => [
+                        new NotBlank(['groups' => ["git_url"]]),
+                        new Url(['groups' => ["git_url"]]),
+                    ],
+                ]
+            )
+            ->add(
+                'saveGitSourceRepoUrl',
+                SubmitType::class,
+                [
+                    'label' => 'Create Project from Git repository',
+                    'attr' => [
+                        'class' => 'btn-primary',
+                    ],
+                    'validation_groups' => ['Default', 'git_url'],
+                ]
+            );
 
         // only add GitHub repository selection if the user can actually select
         // something
@@ -90,17 +102,25 @@ class ProjectController extends Controller
         $noGithubRepos = empty($githubSourceRepoChoices);
         if ($isGithubConnected && !$noGithubRepos) {
             $formBuilder
-                ->add('githubSourceRepo', ChoiceType::class, [
-                    'mapped' => false,
-                    'choices' => $githubSourceRepoChoices,
-                    'multiple' => false,
-                    'required' => true,
-                ])
-                ->add('saveGithubSourceRepo', SubmitType::class, [
-                    'label' => 'Import project from GitHub',
-                    'attr' => ['class' => 'btn-primary'],
-                    'validation_groups' => ['Default', 'github'],
-                ]);
+                ->add(
+                    'githubSourceRepo',
+                    ChoiceType::class,
+                    [
+                        'mapped' => false,
+                        'choices' => $githubSourceRepoChoices,
+                        'multiple' => false,
+                        'required' => true,
+                    ]
+                )
+                ->add(
+                    'saveGithubSourceRepo',
+                    SubmitType::class,
+                    [
+                        'label' => 'Import project from GitHub',
+                        'attr' => ['class' => 'btn-primary'],
+                        'validation_groups' => ['Default', 'github'],
+                    ]
+                );
         }
 
         $form = $formBuilder->getForm();
@@ -154,15 +174,22 @@ class ProjectController extends Controller
     /**
      * Display the project
      *
-     * @param Request $request
-     * @param string  $parentName  URL component: name of the parent
-     *                             (user or organization)
-     * @param string  $projectName URL component: name of the project
+     * @param Request                $request
+     * @param string                 $parentName             URL component: name of the parent
+     *                                                       (user or organization)
+     * @param string                 $projectName            URL component: name of the project
+     * @param ProjectMetricsProvider $projectMetricsProvider
      *
      * @return Response
+     *
+     * @throws \Exception
      */
-    public function viewAction(Request $request, $parentName, $projectName)
-    {
+    public function viewAction(
+        Request $request,
+        $parentName,
+        $projectName,
+        ProjectMetricsProvider $projectMetricsProvider
+    ) {
         $p = $this->getProject($parentName, $projectName);
 
         // redirect to wait page until processing is done
@@ -178,8 +205,6 @@ class ProjectController extends Controller
         }
 
         // fetch project metadata
-        $projectMetricsProvider = $this->get('librecores.project_metrics_provider');
-
         $current = new \DateTimeImmutable();
 
         $qualityScore = $projectMetricsProvider->getCodeQualityScore($p);
@@ -303,8 +328,8 @@ class ProjectController extends Controller
         foreach ($classificationCategories as $category) {
             $temp = [
                 "id" => $category->getId(),
-                "parentId" => $category->getParent() == null ?
-                    $category->getParent(): $category->getParent()->getId(),
+                "parentId" => $category->getParent() ?
+                    $category->getParent() : $category->getParent()->getId(),
                 "name" => $category->getName(),
             ];
             $classificationHierarchy[] = $temp;
@@ -344,11 +369,12 @@ class ProjectController extends Controller
     /**
      * List all projects available on LibreCores
      *
-     * @todo paginate result
-     *
      * @param Request $req
      *
      * @return \Symfony\Component\HttpFoundation\Response
+     *
+     * @todo paginate result
+     *
      */
     public function listAction(Request $req)
     {
@@ -372,13 +398,15 @@ class ProjectController extends Controller
      * done asynchronously through RabbitMQ.
      *
      * @param Request $req
+     * @param string  $parentName
+     * @param string  $projectName
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function updateAction(Request $req, $parentName, $projectName)
     {
         if ($ghEvent = $req->headers->has('X-GitHub-Event')) {
-            if ($ghEvent != 'push') {
+            if ($ghEvent !== 'push') {
                 // We only react to push events, all other events signal any
                 // change we are interested in.
                 return new Response();
@@ -394,53 +422,16 @@ class ProjectController extends Controller
         return new Response(
             'project update queued',
             200,
-            [ 'Content-Type' => 'text/plain' ]
+            ['Content-Type' => 'text/plain']
         );
-    }
-
-    /**
-     * @return GithubApiService
-     */
-    private function getGithubApiService()
-    {
-        return $this->get('librecores.util.githubapiservice');
-    }
-
-    /**
-     * @return QueueDispatcherService
-     */
-    private function getQueueDispatcherService()
-    {
-        return $this->get('librecores.util.queuedispatcherservice');
-    }
-
-    /**
-     * Get project object from parentName and projectName
-     *
-     * @param string $parentName
-     * @param string $projectName
-     *
-     * @return Project
-     *
-     * @throws NotFoundHttpException
-     */
-    private function getProject($parentName, $projectName)
-    {
-        $p = $this->getDoctrine()
-            ->getRepository('LibrecoresProjectRepoBundle:Project')
-            ->findProjectWithParent($parentName, $projectName);
-
-        if (!$p) {
-            throw $this->createNotFoundException('No project found with that name.');
-        }
-
-        return $p;
     }
 
     /**
      * Get all GitHub repositories accessible by the current user
      *
      * @return array
+     *
+     * @throws \Http\Client\Exception
      */
     private function getGithubRepos()
     {
@@ -470,24 +461,11 @@ class ProjectController extends Controller
     }
 
     /**
-     * Get the type of source (repository) from the form
-     *
-     * @param FormInterface $form
-     *
-     * @return NULL|string 'git_url' or 'github'
+     * @return GithubApiService
      */
-    private function getSourceTypeFromForm(FormInterface $form)
+    private function getGithubApiService()
     {
-        $sourceType = null;
-        if ($form->get('saveGitSourceRepoUrl')->isClicked()) {
-            $sourceType = 'git_url';
-        } elseif ($form->get('saveGithubSourceRepo')->isClicked()) {
-            $sourceType = 'github';
-        } else {
-            new \Exception('No submit button with associated source type clicked?');
-        }
-
-        return $sourceType;
+        return $this->get('librecores.util.githubapiservice');
     }
 
     /**
@@ -509,7 +487,7 @@ class ProjectController extends Controller
         $sourceType = $this->getSourceTypeFromForm($form);
 
         // Repository is specified as Git URL
-        if ($sourceType == 'git_url') {
+        if ($sourceType === 'git_url') {
             $gitSourceRepoUrl = $form->get('gitSourceRepoUrl')->getData();
             $gitSourceRepo = new GitSourceRepo();
             $gitSourceRepo->setUrl($gitSourceRepoUrl);
@@ -517,7 +495,7 @@ class ProjectController extends Controller
         }
 
         // Repository is imported from GitHub
-        if ($sourceType == 'github') {
+        if ($sourceType === 'github') {
             $githubSourceRepoName = $form->get('githubSourceRepo')->getData();
             if (!empty($githubSourceRepoName)) {
                 [$owner, $name] = explode('/', $githubSourceRepoName);
@@ -577,6 +555,58 @@ class ProjectController extends Controller
 
             $p->setParentOrganization($organization);
         }
+    }
+
+    /**
+     * Get the type of source (repository) from the form
+     *
+     * @param FormInterface $form
+     *
+     * @return NULL|string 'git_url' or 'github'
+     */
+    private function getSourceTypeFromForm(FormInterface $form)
+    {
+        $sourceType = null;
+        if ($form->get('saveGitSourceRepoUrl')->isClicked()) {
+            $sourceType = 'git_url';
+        } elseif ($form->get('saveGithubSourceRepo')->isClicked()) {
+            $sourceType = 'github';
+        } else {
+            new \Exception('No submit button with associated source type clicked?');
+        }
+
+        return $sourceType;
+    }
+
+    /**
+     * @return QueueDispatcherService
+     */
+    private function getQueueDispatcherService()
+    {
+        return $this->get('librecores.util.queuedispatcherservice');
+    }
+
+    /**
+     * Get project object from parentName and projectName
+     *
+     * @param string $parentName
+     * @param string $projectName
+     *
+     * @return Project
+     *
+     * @throws NotFoundHttpException
+     */
+    private function getProject($parentName, $projectName)
+    {
+        $p = $this->getDoctrine()
+            ->getRepository('LibrecoresProjectRepoBundle:Project')
+            ->findProjectWithParent($parentName, $projectName);
+
+        if (!$p) {
+            throw $this->createNotFoundException('No project found with that name.');
+        }
+
+        return $p;
     }
 
     /**

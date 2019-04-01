@@ -3,6 +3,7 @@
 namespace Librecores\ProjectRepoBundle\RepoCrawler;
 
 use Doctrine\Common\Persistence\ObjectManager;
+use InvalidArgumentException;
 use Librecores\ProjectRepoBundle\Doctrine\ProjectMetricsProvider;
 use Librecores\ProjectRepoBundle\Entity\GitSourceRepo;
 use Librecores\ProjectRepoBundle\Entity\SourceRepo;
@@ -41,16 +42,16 @@ class RepoCrawlerFactory
      */
     private $ghApi;
 
-    private  $projectMetricsProvider;
+    private $projectMetricsProvider;
 
     /**
      * Constructor: create a new instance
      *
-     * @param MarkupToHtmlConverter $markupConverter
-     * @param LoggerInterface       $logger
-     * @param ObjectManager         $manager
-     * @param ProcessCreator        $processCreator
-     * @param GithubApiService      $ghApi
+     * @param MarkupToHtmlConverter  $markupConverter
+     * @param LoggerInterface        $logger
+     * @param ObjectManager          $manager
+     * @param ProcessCreator         $processCreator
+     * @param GithubApiService       $ghApi
      * @param ProjectMetricsProvider $projectMetricsProvider
      */
     public function __construct(
@@ -74,9 +75,10 @@ class RepoCrawlerFactory
      *
      * @param SourceRepo $repo
      *
-     * @throws \InvalidArgumentException if the source repository type is not
-     *                                   supported by an available crawler
      * @return RepoCrawler
+     *
+     * @throws InvalidArgumentException if the source repository type is not
+     *                                   supported by an available crawler
      */
     public function getCrawlerForSourceRepo(SourceRepo $repo): RepoCrawler
     {
@@ -104,7 +106,7 @@ class RepoCrawlerFactory
             );
         }
 
-        throw new \InvalidArgumentException(
+        throw new InvalidArgumentException(
             sprintf(
                 "No crawler for source repository of type %s found.",
                 get_class($repo)

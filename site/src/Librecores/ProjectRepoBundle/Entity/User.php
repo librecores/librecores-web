@@ -1,8 +1,11 @@
 <?php
+
 namespace Librecores\ProjectRepoBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\User as BaseUser;
 
 /**
@@ -108,7 +111,7 @@ class User extends BaseUser
     /**
      * When was this user created?
      *
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(type="datetime")
      */
@@ -117,7 +120,7 @@ class User extends BaseUser
     /**
      * When was this user last updated?
      *
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(type="datetime")
      */
@@ -127,8 +130,8 @@ class User extends BaseUser
     public function __construct()
     {
         parent::__construct();
-        $this->projects                = new ArrayCollection();
-        $this->organizationsCreated    = new ArrayCollection();
+        $this->projects = new ArrayCollection();
+        $this->organizationsCreated = new ArrayCollection();
         $this->organizationMemberships = new ArrayCollection();
     }
 
@@ -139,8 +142,8 @@ class User extends BaseUser
      */
     public function prePersist()
     {
-        $this->createdAt = new \DateTime();
-        $this->updatedAt = new \DateTime();
+        $this->createdAt = new DateTime();
+        $this->updatedAt = new DateTime();
     }
 
     /**
@@ -150,7 +153,7 @@ class User extends BaseUser
      */
     public function preUpdate()
     {
-        $this->updatedAt = new \DateTime();
+        $this->updatedAt = new DateTime();
     }
 
     /**
@@ -180,10 +183,10 @@ class User extends BaseUser
      */
     public function isConnectedToOAuthService($serviceName)
     {
-        if ($serviceName == 'github') {
+        if ($serviceName === 'github') {
             return $this->githubOAuthUserId !== null;
         }
-        if ($serviceName == 'google') {
+        if ($serviceName === 'google') {
             return $this->googleOAuthUserId !== null;
         }
 
@@ -231,7 +234,7 @@ class User extends BaseUser
     /**
      * Get projects
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getProjects()
     {
@@ -269,7 +272,7 @@ class User extends BaseUser
     /**
      * Get organizations created
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getOrganizationsCreated()
     {
@@ -307,7 +310,7 @@ class User extends BaseUser
     /**
      * Get organization memberships
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getOrganizationMemberships()
     {
@@ -317,7 +320,7 @@ class User extends BaseUser
     /**
      * Get organizations mapped through organization memberships
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getOrganizations()
     {
@@ -330,9 +333,19 @@ class User extends BaseUser
     }
 
     /**
+     * Get createdAt
+     *
+     * @return DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
      * Set createdAt
      *
-     * @param \DateTime $createdAt
+     * @param DateTime $createdAt
      *
      * @return User
      */
@@ -344,19 +357,19 @@ class User extends BaseUser
     }
 
     /**
-     * Get createdAt
+     * Get updatedAt
      *
-     * @return \DateTime
+     * @return DateTime
      */
-    public function getCreatedAt()
+    public function getUpdatedAt()
     {
-        return $this->createdAt;
+        return $this->updatedAt;
     }
 
     /**
      * Set updatedAt
      *
-     * @param \DateTime $updatedAt
+     * @param DateTime $updatedAt
      *
      * @return User
      */
@@ -368,13 +381,13 @@ class User extends BaseUser
     }
 
     /**
-     * Get updatedAt
+     * Get name
      *
-     * @return \DateTime
+     * @return string
      */
-    public function getUpdatedAt()
+    public function getName()
     {
-        return $this->updatedAt;
+        return $this->name;
     }
 
     /**
@@ -392,13 +405,13 @@ class User extends BaseUser
     }
 
     /**
-     * Get name
+     * Get githubOAuthUserId
      *
      * @return string
      */
-    public function getName()
+    public function getGithubOAuthUserId()
     {
-        return $this->name;
+        return $this->githubOAuthUserId;
     }
 
     /**
@@ -416,13 +429,13 @@ class User extends BaseUser
     }
 
     /**
-     * Get githubOAuthUserId
+     * Get githubOAuthAccessToken
      *
      * @return string
      */
-    public function getGithubOAuthUserId()
+    public function getGithubOAuthAccessToken()
     {
-        return $this->githubOAuthUserId;
+        return $this->githubOAuthAccessToken;
     }
 
     /**
@@ -440,13 +453,13 @@ class User extends BaseUser
     }
 
     /**
-     * Get githubOAuthAccessToken
+     * Get googleOAuthUserId
      *
      * @return string
      */
-    public function getGithubOAuthAccessToken()
+    public function getGoogleOAuthUserId()
     {
-        return $this->githubOAuthAccessToken;
+        return $this->googleOAuthUserId;
     }
 
     /**
@@ -464,13 +477,13 @@ class User extends BaseUser
     }
 
     /**
-     * Get googleOAuthUserId
+     * Get googleOAuthAccessToken
      *
      * @return string
      */
-    public function getGoogleOAuthUserId()
+    public function getGoogleOAuthAccessToken()
     {
-        return $this->googleOAuthUserId;
+        return $this->googleOAuthAccessToken;
     }
 
     /**
@@ -488,23 +501,13 @@ class User extends BaseUser
     }
 
     /**
-     * Get googleOAuthAccessToken
-     *
-     * @return string
-     */
-    public function getGoogleOAuthAccessToken()
-    {
-        return $this->googleOAuthAccessToken;
-    }
-
-    /**
      * Add organizationsCreated
      *
-     * @param \Librecores\ProjectRepoBundle\Entity\Organization $organizationsCreated
+     * @param Organization $organizationsCreated
      *
      * @return User
      */
-    public function addOrganizationsCreated(\Librecores\ProjectRepoBundle\Entity\Organization $organizationsCreated)
+    public function addOrganizationsCreated(Organization $organizationsCreated)
     {
         $this->organizationsCreated[] = $organizationsCreated;
 
@@ -514,9 +517,9 @@ class User extends BaseUser
     /**
      * Remove organizationsCreated
      *
-     * @param \Librecores\ProjectRepoBundle\Entity\Organization $organizationsCreated
+     * @param Organization $organizationsCreated
      */
-    public function removeOrganizationsCreated(\Librecores\ProjectRepoBundle\Entity\Organization $organizationsCreated)
+    public function removeOrganizationsCreated(Organization $organizationsCreated)
     {
         $this->organizationsCreated->removeElement($organizationsCreated);
     }

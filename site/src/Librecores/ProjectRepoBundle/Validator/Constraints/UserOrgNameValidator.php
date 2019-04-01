@@ -1,10 +1,11 @@
 <?php
+
 namespace Librecores\ProjectRepoBundle\Validator\Constraints;
 
+use Doctrine\Bundle\DoctrineBundle\Registry;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
-use Doctrine\Bundle\DoctrineBundle\Registry;
 
 /**
  * Validate a user or organization name
@@ -38,8 +39,19 @@ class UserOrgNameValidator extends ConstraintValidator
      *
      * @var string[]
      */
-    const RESERVED_NAMES = [ 'org', 'orgs', 'planet', 'project', 'projects',
-                             'search', 'static', 'unassigned', 'user', 'admin', 'administrator', ];
+    const RESERVED_NAMES = [
+        'org',
+        'orgs',
+        'planet',
+        'project',
+        'projects',
+        'search',
+        'static',
+        'unassigned',
+        'user',
+        'admin',
+        'administrator',
+    ];
 
     /**
      * Routes that are excluded from checking for a match in userOrgReserved()
@@ -48,7 +60,7 @@ class UserOrgNameValidator extends ConstraintValidator
      *
      * @var string[]
      */
-    const EXCLUDE_ROUTE_CHECK = [ 'librecores_project_repo_user_org_view' ];
+    const EXCLUDE_ROUTE_CHECK = ['librecores_project_repo_user_org_view'];
 
     /**
      * Regular expression checking for valid characters in an user or org name
@@ -74,7 +86,7 @@ class UserOrgNameValidator extends ConstraintValidator
 
     public function __construct(Registry $doctrine, Router $router)
     {
-        $this->orm    = $doctrine;
+        $this->orm = $doctrine;
         $this->router = $router;
     }
 
@@ -142,7 +154,7 @@ class UserOrgNameValidator extends ConstraintValidator
             $cntUser = $em->createQuery($q)
                 ->setParameter('name', $name)
                 ->getSingleScalarResult();
-            if ($cntUser != 0) {
+            if ($cntUser !== 0) {
                 return true;
             }
         }
@@ -155,7 +167,7 @@ class UserOrgNameValidator extends ConstraintValidator
             $cntOrg = $em->createQuery($q)
                 ->setParameter('name', $name)
                 ->getSingleScalarResult();
-            if ($cntOrg != 0) {
+            if ($cntOrg !== 0) {
                 return true;
             }
         }

@@ -1,13 +1,14 @@
 <?php
+
 namespace Librecores\ProjectRepoBundle\Util;
 
-use Librecores\ProjectRepoBundle\Entity\User;
-use Librecores\ProjectRepoBundle\Entity\Project;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Github;
 use Librecores\ProjectRepoBundle\Entity\GitSourceRepo;
+use Librecores\ProjectRepoBundle\Entity\Project;
+use Librecores\ProjectRepoBundle\Entity\User;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 /**
  * Wrap the KnpLabs/php-github-api GitHub API as Symfony service
@@ -209,7 +210,7 @@ class GithubApiService
             'config' => [
                 'url' => $webhookUrl,
             ],
-            'events' => [ 'push' ],
+            'events' => ['push'],
         ];
 
         $this->getAuthenticatedClient()->repo()

@@ -2,11 +2,11 @@
 
 namespace Librecores\ProjectRepoBundle\Controller;
 
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Librecores\ProjectRepoBundle\Entity\Organization;
 use Librecores\ProjectRepoBundle\Entity\User;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class DefaultController extends Controller
 {
@@ -128,8 +128,8 @@ class DefaultController extends Controller
     {
         // try user first
         $user = $this->getDoctrine()
-        ->getRepository('LibrecoresProjectRepoBundle:User')
-        ->findOneByUsername($userOrOrganization);
+            ->getRepository('LibrecoresProjectRepoBundle:User')
+            ->findOneByUsername($userOrOrganization);
 
         if ($user !== null) {
             return $user;
@@ -137,8 +137,8 @@ class DefaultController extends Controller
 
         // then organization
         $org = $this->getDoctrine()
-        ->getRepository('LibrecoresProjectRepoBundle:Organization')
-        ->findOneByName($userOrOrganization);
+            ->getRepository('LibrecoresProjectRepoBundle:Organization')
+            ->findOneByName($userOrOrganization);
 
         return $org;
     }

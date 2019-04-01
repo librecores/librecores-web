@@ -2,8 +2,6 @@
 
 namespace Librecores\ProjectRepoBundle\Util;
 
-use Symfony\Component\Finder\Iterator\DateRangeFilterIterator;
-
 /**
  * Utility methods for dates
  *

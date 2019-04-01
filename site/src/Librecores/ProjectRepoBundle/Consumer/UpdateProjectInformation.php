@@ -1,16 +1,14 @@
 <?php
+
 namespace Librecores\ProjectRepoBundle\Consumer;
 
+use Doctrine\Bundle\DoctrineBundle\Registry;
+use Doctrine\DBAL\DBALException;
+use Librecores\ProjectRepoBundle\Entity\Project;
+use Librecores\ProjectRepoBundle\RepoCrawler\RepoCrawlerFactory;
 use OldSound\RabbitMqBundle\RabbitMq\ConsumerInterface;
 use PhpAmqpLib\Message\AMQPMessage;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Process\Exception;
-use Doctrine\Bundle\DoctrineBundle\Registry;
-use Doctrine\DBAL\DBALException;
-
-use Librecores\ProjectRepoBundle\Entity\Project;
-use Librecores\ProjectRepoBundle\Entity\SourceRepo;
-use Librecores\ProjectRepoBundle\RepoCrawler\RepoCrawlerFactory;
 
 /**
  * Extract and update a project's information with data from a source repository

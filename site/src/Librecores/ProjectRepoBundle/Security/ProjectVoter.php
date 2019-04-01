@@ -1,9 +1,11 @@
 <?php
+
 namespace Librecores\ProjectRepoBundle\Security;
 
+use Librecores\ProjectRepoBundle\Entity\OrganizationMember;
 use Librecores\ProjectRepoBundle\Entity\Project;
 use Librecores\ProjectRepoBundle\Entity\User;
-use Librecores\ProjectRepoBundle\Entity\OrganizationMember;
+use LogicException;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
@@ -37,7 +39,7 @@ class ProjectVoter extends Voter
         $user = $token->getUser();
 
         // viewing is always allowed
-        if ($attribute == self::VIEW) {
+        if ($attribute === self::VIEW) {
             return true;
         }
 
@@ -54,7 +56,7 @@ class ProjectVoter extends Voter
                 return $this->canEdit($project, $user);
         }
 
-        throw new \LogicException('This code should not be reached!');
+        throw new LogicException('This code should not be reached!');
     }
 
     /**
@@ -85,9 +87,9 @@ class ProjectVoter extends Voter
 
         if ($parentOrganization !== null) {
             foreach ($parentOrganization->getMembers() as $m) {
-                if (($m->getUser()        === $user) &&
+                if (($m->getUser() === $user) &&
                     ($m->getPermission() === OrganizationMember::PERMISSION_MEMBER ||
-                     $m->getPermission() === OrganizationMember::PERMISSION_ADMIN)) {
+                        $m->getPermission() === OrganizationMember::PERMISSION_ADMIN)) {
                     $orgResult = true;
                     break;
                 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace Librecores\ProjectRepoBundle\Security\Core\Exception;
 
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
@@ -14,8 +15,8 @@ class InsufficientOAuthDataProvidedException extends AuthenticationException
     public function getMessageKey()
     {
         return 'No username or email address is provided by the '.
-               'OAuth service. Please create a local account and connect '.
-               'it then.';
+            'OAuth service. Please create a local account and connect '.
+            'it then.';
     }
 
     /**
@@ -63,11 +64,13 @@ class InsufficientOAuthDataProvidedException extends AuthenticationException
      */
     public function serialize()
     {
-        return serialize(array(
-            $this->username,
-            $this->email,
-            parent::serialize(),
-        ));
+        return serialize(
+            array(
+                $this->username,
+                $this->email,
+                parent::serialize(),
+            )
+        );
     }
 
     /**

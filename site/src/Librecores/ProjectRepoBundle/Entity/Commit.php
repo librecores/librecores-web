@@ -2,6 +2,7 @@
 
 namespace Librecores\ProjectRepoBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -60,7 +61,7 @@ class Commit
     /**
      * Time of creation of this commit
      *
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(type="datetime")
      */
@@ -104,6 +105,16 @@ class Commit
     }
 
     /**
+     * Get repository
+     *
+     * @return SourceRepo
+     */
+    public function getSourceRepo()
+    {
+        return $this->sourceRepo;
+    }
+
+    /**
      * Set repository
      *
      * @param SourceRepo $sourceRepo
@@ -119,13 +130,13 @@ class Commit
     }
 
     /**
-     * Get repository
+     * Get commitId
      *
-     * @return SourceRepo
+     * @return string
      */
-    public function getSourceRepo()
+    public function getCommitId()
     {
-        return $this->sourceRepo;
+        return $this->commitId;
     }
 
     /**
@@ -143,13 +154,13 @@ class Commit
     }
 
     /**
-     * Get commitId
+     * Get contributor
      *
-     * @return string
+     * @return Contributor
      */
-    public function getCommitId()
+    public function getContributor()
     {
-        return $this->commitId;
+        return $this->contributor;
     }
 
     /**
@@ -168,19 +179,19 @@ class Commit
     }
 
     /**
-     * Get contributor
+     * Get dateCommitted
      *
-     * @return Contributor
+     * @return DateTime
      */
-    public function getContributor()
+    public function getDateCommitted()
     {
-        return $this->contributor;
+        return $this->dateCommitted;
     }
 
     /**
      * Set dateCommitted
      *
-     * @param \DateTime $dateCommitted
+     * @param DateTime $dateCommitted
      *
      * @return Commit
      */
@@ -192,13 +203,13 @@ class Commit
     }
 
     /**
-     * Get dateCommitted
+     * Get filesModified
      *
-     * @return \DateTime
+     * @return int
      */
-    public function getDateCommitted()
+    public function getFilesModified()
     {
-        return $this->dateCommitted;
+        return $this->filesModified;
     }
 
     /**
@@ -216,13 +227,13 @@ class Commit
     }
 
     /**
-     * Get filesModified
+     * Get linesAdded
      *
      * @return int
      */
-    public function getFilesModified()
+    public function getLinesAdded()
     {
-        return $this->filesModified;
+        return $this->linesAdded;
     }
 
     /**
@@ -240,13 +251,13 @@ class Commit
     }
 
     /**
-     * Get linesAdded
+     * Get linesRemoved
      *
      * @return int
      */
-    public function getLinesAdded()
+    public function getLinesRemoved()
     {
-        return $this->linesAdded;
+        return $this->linesRemoved;
     }
 
     /**
@@ -261,15 +272,5 @@ class Commit
         $this->linesRemoved = $linesRemoved;
 
         return $this;
-    }
-
-    /**
-     * Get linesRemoved
-     *
-     * @return int
-     */
-    public function getLinesRemoved()
-    {
-        return $this->linesRemoved;
     }
 }

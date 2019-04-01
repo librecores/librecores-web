@@ -2,10 +2,7 @@
 
 namespace Librecores\ProjectRepoBundle\Util;
 
-use Psr\Log\LoggerInterface;
 use Symfony\Component\Process\Process;
-use Symfony\Component\Process\ProcessBuilder;
-use Symfony\Component\Process\ProcessUtils;
 
 /**
  * Creates a process object
@@ -22,7 +19,7 @@ class ProcessCreator
      * Return a new Process object
      *
      * @param string[] $commandLine
-     * @param string $cwd working directory
+     * @param string   $cwd         working directory
      *
      * @return Process
      */

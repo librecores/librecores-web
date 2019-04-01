@@ -11,36 +11,52 @@ class LanguageStat
 {
     /**
      * Language represented by this entity
+     *
      * @var string
      */
     private $language;
 
     /**
      * Files of this language in the repository
+     *
      * @var int
      */
     private $fileCount;
 
     /**
      * Lines of code of this language in the repository
+     *
      * @var int
      */
     private $linesOfCode;
 
     /**
      * Comment lines consisting of this language in the repository
+     *
      * @var int
      */
     private $commentLineCount;
 
     /**
      * Blank lines in files of this language in the repository
+     *
      * @var int
      */
     private $blankLineCount;
 
     /**
+     * Get language
+     *
+     * @return string
+     */
+    public function getLanguage(): string
+    {
+        return $this->language;
+    }
+
+    /**
      * Set language
+     *
      * @param string $language
      *
      * @return LanguageStat
@@ -53,16 +69,16 @@ class LanguageStat
     }
 
     /**
-     * Get language
-     * @return string
+     * @return int
      */
-    public function getLanguage(): string
+    public function getFileCount(): int
     {
-        return $this->language;
+        return $this->fileCount;
     }
 
     /**
      * Set fileCount
+     *
      * @param int $fileCount
      *
      * @return LanguageStat
@@ -77,9 +93,9 @@ class LanguageStat
     /**
      * @return int
      */
-    public function getFileCount(): int
+    public function getLinesOfCode(): int
     {
-        return $this->fileCount;
+        return $this->linesOfCode;
     }
 
     /**
@@ -97,9 +113,9 @@ class LanguageStat
     /**
      * @return int
      */
-    public function getLinesOfCode(): int
+    public function getCommentLineCount(): int
     {
-        return $this->linesOfCode;
+        return $this->commentLineCount;
     }
 
     /**
@@ -117,9 +133,9 @@ class LanguageStat
     /**
      * @return int
      */
-    public function getCommentLineCount(): int
+    public function getBlankLineCount(): int
     {
-        return $this->commentLineCount;
+        return $this->blankLineCount;
     }
 
     /**
@@ -132,13 +148,5 @@ class LanguageStat
         $this->blankLineCount = $blankLineCount;
 
         return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getBlankLineCount(): int
-    {
-        return $this->blankLineCount;
     }
 }

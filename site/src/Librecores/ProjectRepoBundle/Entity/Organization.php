@@ -2,10 +2,12 @@
 
 namespace Librecores\ProjectRepoBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
 use Librecores\ProjectRepoBundle\Validator\Constraints as LcAssert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -100,7 +102,7 @@ class Organization
     /**
      * When was this organization created?
      *
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(type="datetime", nullable=false)
      */
@@ -109,7 +111,7 @@ class Organization
     /**
      * When was this organization last updated?
      *
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(type="datetime", nullable=false)
      */
@@ -121,7 +123,7 @@ class Organization
     public function __construct()
     {
         $this->projects = new ArrayCollection();
-        $this->members  = new ArrayCollection();
+        $this->members = new ArrayCollection();
     }
 
     /**
@@ -131,8 +133,8 @@ class Organization
      */
     public function prePersist()
     {
-        $this->createdAt = new \DateTime();
-        $this->updatedAt = new \DateTime();
+        $this->createdAt = new DateTime();
+        $this->updatedAt = new DateTime();
     }
 
     /**
@@ -142,7 +144,7 @@ class Organization
      */
     public function preUpdate()
     {
-        $this->updatedAt = new \DateTime();
+        $this->updatedAt = new DateTime();
     }
 
     /**
@@ -153,6 +155,16 @@ class Organization
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 
     /**
@@ -170,13 +182,13 @@ class Organization
     }
 
     /**
-     * Get name
+     * Get displayName
      *
      * @return string
      */
-    public function getName()
+    public function getDisplayName()
     {
-        return $this->name;
+        return $this->displayName;
     }
 
     /**
@@ -194,13 +206,13 @@ class Organization
     }
 
     /**
-     * Get displayName
+     * Get description
      *
      * @return string
      */
-    public function getDisplayName()
+    public function getDescription()
     {
-        return $this->displayName;
+        return $this->description;
     }
 
     /**
@@ -215,16 +227,6 @@ class Organization
         $this->description = $description;
 
         return $this;
-    }
-
-    /**
-     * Get description
-     *
-     * @return string
-     */
-    public function getDescription()
-    {
-        return $this->description;
     }
 
     /**
@@ -258,7 +260,7 @@ class Organization
     /**
      * Get projects
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getProjects()
     {
@@ -296,7 +298,7 @@ class Organization
     /**
      * Get members
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getMembers()
     {
@@ -306,7 +308,7 @@ class Organization
     /**
      * Get users mapped through organization memberships
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getMemberUsers()
     {
@@ -316,6 +318,16 @@ class Organization
             },
             $this->members->toArray()
         );
+    }
+
+    /**
+     * Get creator
+     *
+     * @return User
+     */
+    public function getCreator()
+    {
+        return $this->creator;
     }
 
     /**
@@ -341,19 +353,19 @@ class Organization
     }
 
     /**
-     * Get creator
+     * Get createdAt
      *
-     * @return User
+     * @return DateTime
      */
-    public function getCreator()
+    public function getCreatedAt()
     {
-        return $this->creator;
+        return $this->createdAt;
     }
 
     /**
      * Set createdAt
      *
-     * @param \DateTime $createdAt
+     * @param DateTime $createdAt
      *
      * @return Organization
      */
@@ -365,19 +377,19 @@ class Organization
     }
 
     /**
-     * Get createdAt
+     * Get updatedAt
      *
-     * @return \DateTime
+     * @return DateTime
      */
-    public function getCreatedAt()
+    public function getUpdatedAt()
     {
-        return $this->createdAt;
+        return $this->updatedAt;
     }
 
     /**
      * Set updatedAt
      *
-     * @param \DateTime $updatedAt
+     * @param DateTime $updatedAt
      *
      * @return Organization
      */
@@ -386,15 +398,5 @@ class Organization
         $this->updatedAt = $updatedAt;
 
         return $this;
-    }
-
-    /**
-     * Get updatedAt
-     *
-     * @return \DateTime
-     */
-    public function getUpdatedAt()
-    {
-        return $this->updatedAt;
     }
 }

@@ -1,15 +1,16 @@
 <?php
+
 namespace Librecores\ProjectRepoBundle\EventListener;
 
+use FOS\UserBundle\Event\FormEvent;
+use FOS\UserBundle\Event\GetResponseUserEvent;
 use FOS\UserBundle\FOSUserEvents;
+use FOS\UserBundle\Model\UserManagerInterface;
+use Librecores\ProjectRepoBundle\Security\Core\User\LibreCoresUserProvider;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Session\Session;
-use FOS\UserBundle\Event\GetResponseUserEvent;
-use Symfony\Component\Security\Core\Security;
-use FOS\UserBundle\Event\FormEvent;
-use Librecores\ProjectRepoBundle\Security\Core\User\LibreCoresUserProvider;
 use Symfony\Component\PropertyAccess\PropertyAccess;
-use FOS\UserBundle\Model\UserManagerInterface;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * Event listener: Insert data from failed OAuth auto-registration into manual
@@ -132,9 +133,10 @@ class OAuthRegistrationListener implements EventSubscriberInterface
      * LibreCoresUserProvider but failed to do so. This data is used in this
      * class to pre-fill and extend the user-entered data.
      *
+     * @return string[] the data array prepared by LibreCoresUserProvider::registerNewUser()
+     *
      * @see LibreCoresUserProvider::registerNewUser()
      *
-     * @return string[] the data array prepared by LibreCoresUserProvider::registerNewUser()
      */
     private function getFailedOAuthData()
     {

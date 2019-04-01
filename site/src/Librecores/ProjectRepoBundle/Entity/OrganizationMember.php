@@ -1,7 +1,10 @@
 <?php
+
 namespace Librecores\ProjectRepoBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use InvalidArgumentException;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -16,20 +19,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 class OrganizationMember
 {
     const PERMISSION_REQUEST = 'REQUEST';
-    const PERMISSION_DENY    = 'DENY';
+    const PERMISSION_DENY = 'DENY';
     const PERMISSION_SUPPORT = 'SUPPORT';
-    const PERMISSION_MEMBER  = 'MEMBER';
-    const PERMISSION_ADMIN   = 'ADMIN';
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
-
+    const PERMISSION_MEMBER = 'MEMBER';
+    const PERMISSION_ADMIN = 'ADMIN';
     /**
      * @var Organization
      *
@@ -37,7 +30,6 @@ class OrganizationMember
      * @ORM\JoinColumn(name="organizationId", referencedColumnName="id", nullable=FALSE)
      */
     protected $organization;
-
     /**
      * @var User
      *
@@ -45,7 +37,6 @@ class OrganizationMember
      * @ORM\JoinColumn(name="userId", referencedColumnName="id", nullable=FALSE)
      */
     protected $user;
-
     /**
      * @var string
      *
@@ -54,26 +45,32 @@ class OrganizationMember
      * @ORM\Column(type="string")
      */
     protected $permission = self::PERMISSION_REQUEST;
-
-    // metadata
     /**
      * When was this mapping created?
      *
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(type="datetime")
      */
     protected $createdAt;
 
+    // metadata
     /**
      * When was this mapping last updated?
      *
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(type="datetime")
      */
     protected $updatedAt;
-
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
 
     public function __construct()
     {
@@ -86,8 +83,8 @@ class OrganizationMember
      */
     public function prePersist()
     {
-        $this->createdAt = new \DateTime();
-        $this->updatedAt = new \DateTime();
+        $this->createdAt = new DateTime();
+        $this->updatedAt = new DateTime();
     }
 
     /**
@@ -97,7 +94,7 @@ class OrganizationMember
      */
     public function preUpdate()
     {
-        $this->updatedAt = new \DateTime();
+        $this->updatedAt = new DateTime();
     }
 
     /**
@@ -108,6 +105,16 @@ class OrganizationMember
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Get user
+     *
+     * @return User
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 
     /**
@@ -133,22 +140,22 @@ class OrganizationMember
     }
 
     /**
-     * Get user
+     * Get organization
      *
-     * @return User
+     * @return Organization
      */
-    public function getUser()
+    public function getOrganization()
     {
-        return $this->user;
+        return $this->organization;
     }
 
     /**
-    * Set organization
-    *
-    * @param Organization $organization
-    *
-    * @return OrganizationMember
-    */
+     * Set organization
+     *
+     * @param Organization $organization
+     *
+     * @return OrganizationMember
+     */
     public function setOrganization(Organization $organization = null)
     {
         if ($this->organization !== null) {
@@ -165,13 +172,13 @@ class OrganizationMember
     }
 
     /**
-     * Get organization
+     * Get permission
      *
-     * @return Organization
+     * @return string
      */
-    public function getOrganization()
+    public function getPermission()
     {
-        return $this->organization;
+        return $this->permission;
     }
 
     /**
@@ -179,7 +186,7 @@ class OrganizationMember
      *
      * @param string $permission One of the self::PERMISSION_* constants
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function setPermission($permission)
     {
@@ -191,7 +198,7 @@ class OrganizationMember
             self::PERMISSION_ADMIN,
         ];
         if (!in_array($permission, $permissions, false)) {
-            throw new \InvalidArgumentException('Invalid Permission');
+            throw new InvalidArgumentException('Invalid Permission');
         }
 
         if ($this->permission === $permission) {
@@ -202,19 +209,19 @@ class OrganizationMember
     }
 
     /**
-     * Get permission
+     * Get createdAt
      *
-     * @return string
+     * @return DateTime
      */
-    public function getPermission()
+    public function getCreatedAt()
     {
-        return $this->permission;
+        return $this->createdAt;
     }
 
     /**
      * Set createdAt
      *
-     * @param \DateTime $createdAt
+     * @param DateTime $createdAt
      *
      * @return OrganizationMember
      */
@@ -226,19 +233,19 @@ class OrganizationMember
     }
 
     /**
-     * Get createdAt
+     * Get updatedAt
      *
-     * @return \DateTime
+     * @return DateTime
      */
-    public function getCreatedAt()
+    public function getUpdatedAt()
     {
-        return $this->createdAt;
+        return $this->updatedAt;
     }
 
     /**
      * Set updatedAt
      *
-     * @param \DateTime $updatedAt
+     * @param DateTime $updatedAt
      *
      * @return OrganizationMember
      */
@@ -247,15 +254,5 @@ class OrganizationMember
         $this->updatedAt = $updatedAt;
 
         return $this;
-    }
-
-    /**
-     * Get updatedAt
-     *
-     * @return \DateTime
-     */
-    public function getUpdatedAt()
-    {
-        return $this->updatedAt;
     }
 }

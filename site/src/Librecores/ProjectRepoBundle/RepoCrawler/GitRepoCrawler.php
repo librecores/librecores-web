@@ -2,20 +2,23 @@
 
 namespace Librecores\ProjectRepoBundle\RepoCrawler;
 
+use DateTime;
+use DateTimeZone;
+use Doctrine\Common\Persistence\ObjectManager;
+use Exception;
+use Librecores\ProjectRepoBundle\Doctrine\ProjectMetricsProvider;
 use Librecores\ProjectRepoBundle\Entity\Commit;
 use Librecores\ProjectRepoBundle\Entity\GitSourceRepo;
 use Librecores\ProjectRepoBundle\Entity\LanguageStat;
 use Librecores\ProjectRepoBundle\Entity\ProjectRelease;
+use Librecores\ProjectRepoBundle\Entity\SourceRepo;
 use Librecores\ProjectRepoBundle\Util\FileUtil;
-use Symfony\Component\Process\Process;
-use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
-use Librecores\ProjectRepoBundle\Doctrine\ProjectMetricsProvider;
 use Librecores\ProjectRepoBundle\Util\MarkupToHtmlConverter;
 use Librecores\ProjectRepoBundle\Util\ProcessCreator;
 use Psr\Log\LoggerInterface;
-use Doctrine\Common\Persistence\ObjectManager;
-use Librecores\ProjectRepoBundle\Entity\SourceRepo;
+use RuntimeException;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Process\Process;
 
 /**
  * Crawl and extract metadata from a remote git repository
@@ -96,6 +99,7 @@ class GitRepoCrawler extends RepoCrawler
 
     /**
      * RepoCrawler constructor.
+     *
      * @param SourceRepo             $repo
      * @param MarkupToHtmlConverter  $markupConverter
      * @param ProcessCreator         $processCreator
@@ -142,10 +146,12 @@ class GitRepoCrawler extends RepoCrawler
      */
     public function updateSourceRepo()
     {
-        $this->logger->info('Fetching commits for the repository '.$this->repo->getId().' of project '.
-        $this->repo->getProject()->getFqname());
+        $this->logger->info(
+            'Fetching commits for the repository '.$this->repo->getId().' of project '.
+            $this->repo->getProject()->getFqname()
+        );
         $commitRepository = $this->manager->getRepository(Commit::class);
-        $lastCommit       = $commitRepository->getLatestCommit($this->repo);
+        $lastCommit = $commitRepository->getLatestCommit($this->repo);
 
         // determine if our latest commit exists and fetch new commits since
         // what we have on DB
@@ -177,8 +183,10 @@ class GitRepoCrawler extends RepoCrawler
     {
         $project = $this->repo->getProject();
         if ($project === null) {
-            $this->logger->debug('No project associated with source '.
-            'repository '.$this->repo->getId());
+            $this->logger->debug(
+                'No project associated with source '.
+                'repository '.$this->repo->getId()
+            );
 
             return false;
         }
@@ -204,7 +212,7 @@ class GitRepoCrawler extends RepoCrawler
         // Retrieve the code quality score for the project and persist it in the database
         $projectMetrics = $this->projectMetricsProvider->getCodeQualityScore($project);
 
-        $qualityScore = $projectMetrics*100;
+        $qualityScore = $projectMetrics * 100;
 
         $project->setQualityScore($qualityScore);
 
@@ -245,7 +253,7 @@ class GitRepoCrawler extends RepoCrawler
 
         $this->logger->info('Checking commits in '.$cwd);
 
-        $cmd = [ 'git', 'merge-base', '--is-ancestor', $commitId, 'HEAD' ];
+        $cmd = ['git', 'merge-base', '--is-ancestor', $commitId, 'HEAD'];
         $process = $this->processCreator->createProcess($cmd, $cwd);
         $this->executeProcess($process);
         $code = $process->getExitCode();
@@ -256,7 +264,7 @@ class GitRepoCrawler extends RepoCrawler
             if (1 === $code || 128 === $code) {
                 $value = false;    // commit does not exist in repository or branch
             } else {
-                throw new \RuntimeException(
+                throw new RuntimeException(
                     sprintf(
                         "Unable to fetch commits from %s: %s",
                         $cwd,
@@ -277,17 +285,23 @@ class GitRepoCrawler extends RepoCrawler
      *
      * @param string|null $sinceCommitId ID of commit after which the commits are to be
      *                                   returned
+     *
      * @return int Commits updated
      */
-    protected function updateCommits(?string $sinceCommitId = null) : int
+    protected function updateCommits(?string $sinceCommitId = null): int
     {
         $this->logger->info(
             'Fetching commits for the repository '.$this->repo->getId()
             .' of project '.$this->repo->getProject()->getFqname()
         );
 
-        $cmd = ['git', 'log', '--reverse', '--format=%H|%aN|%aE|%aD',
-                '--shortstat', ];
+        $cmd = [
+            'git',
+            'log',
+            '--reverse',
+            '--format=%H|%aN|%aE|%aD',
+            '--shortstat',
+        ];
         if (null !== $sinceCommitId) {
             $cmd[] = $sinceCommitId;
             $cmd[] = '...';
@@ -314,8 +328,12 @@ class GitRepoCrawler extends RepoCrawler
      */
     protected function countLinesOfCode()
     {
-        $cmd = ['cloc', '--json', '--skip-uniqueness',
-                $this->getRepoClonePath()];
+        $cmd = [
+            'cloc',
+            '--json',
+            '--skip-uniqueness',
+            $this->getRepoClonePath(),
+        ];
         $process = $this->processCreator->createProcess($cmd);
 
         $this->mustExecuteProcess($process);
@@ -325,10 +343,10 @@ class GitRepoCrawler extends RepoCrawler
 
         $sourceStats = $this->repo->getSourceStats();
         $sourceStats->setAvailable(true)
-                    ->setTotalFiles($cloc['header']['n_files'])
-                    ->setTotalLinesOfCode($cloc['SUM']['code'])
-                    ->setTotalBlankLines($cloc['SUM']['blank'])
-                    ->setTotalLinesOfComments($cloc['SUM']['comment']);
+            ->setTotalFiles($cloc['header']['n_files'])
+            ->setTotalLinesOfCode($cloc['SUM']['code'])
+            ->setTotalBlankLines($cloc['SUM']['blank'])
+            ->setTotalLinesOfComments($cloc['SUM']['comment']);
 
         unset($cloc['header'], $cloc['SUM']);
 
@@ -336,10 +354,10 @@ class GitRepoCrawler extends RepoCrawler
             $languageStat = new LanguageStat();
 
             $languageStat->setLanguage($lang)
-                         ->setFileCount($value['nFiles'])
-                         ->setLinesOfCode($value['code'])
-                         ->setCommentLineCount($value['comment'])
-                         ->setBlankLineCount($value['blank']);
+                ->setFileCount($value['nFiles'])
+                ->setLinesOfCode($value['code'])
+                ->setCommentLineCount($value['comment'])
+                ->setBlankLineCount($value['blank']);
             $sourceStats->addLanguageStat($languageStat);
         }
 
@@ -376,9 +394,11 @@ class GitRepoCrawler extends RepoCrawler
 
         try {
             $sanitizedHtml = $this->markupConverter->convertFile($descriptionFile);
-        } catch (\Exception $e) {
-            $this->logger->error("Unable to convert $descriptionFile to HTML ".
-            "for license text.");
+        } catch (Exception $e) {
+            $this->logger->error(
+                "Unable to convert $descriptionFile to HTML ".
+                "for license text."
+            );
 
             return null;
         }
@@ -415,7 +435,7 @@ class GitRepoCrawler extends RepoCrawler
 
         try {
             $sanitizedHtml = $this->markupConverter->convertFile($licenseFile);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->logger->error(
                 "Unable to convert $licenseFile to HTML for license text."
             );
@@ -438,15 +458,19 @@ class GitRepoCrawler extends RepoCrawler
 
         $this->logger->info("Updating releases in $cwd");
 
-        $cmd = ['git', 'tag', '--sort=-creatordate',
-            '--format=%(refname:strip=2)|%(objectname:short)|%(creatordate)'];
+        $cmd = [
+            'git',
+            'tag',
+            '--sort=-creatordate',
+            '--format=%(refname:strip=2)|%(objectname:short)|%(creatordate)',
+        ];
         $process = $this->processCreator->createProcess($cmd, $cwd);
         $process->setTimeout(static::TIMEOUT_GIT_LOG);
 
         try {
             $this->mustExecuteProcess($process);
             $output = $process->getOutput();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->logger->error(
                 "Unable to fetch releases from $cwd. Process execution "
                 ."failed: ".$e->getMessage()
@@ -466,12 +490,12 @@ class GitRepoCrawler extends RepoCrawler
                 if (preg_match($tagRegex, $line, $matches)) {
                     $release = new ProjectRelease();
                     $release->setName($matches[1])
-                            ->setPublishedAt(new \DateTime($matches[3]))
-                            ->setCommitID($matches[2])
-                            ->setIsPrerelease(preg_match($preReleaseRegex, $matches[1]));
+                        ->setPublishedAt(new DateTime($matches[3]))
+                        ->setCommitID($matches[2])
+                        ->setIsPrerelease(preg_match($preReleaseRegex, $matches[1]));
                     $releases[] = $release;
                 }
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->logger->warning("Skipped release tag due to parse error: $line");
             }
         }
@@ -488,7 +512,7 @@ class GitRepoCrawler extends RepoCrawler
     /**
      * Clone a repository
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     private function cloneRepo()
     {
@@ -511,15 +535,15 @@ class GitRepoCrawler extends RepoCrawler
      *
      * @return int
      */
-    private function parseCommits(string $outputString) : int
+    private function parseCommits(string $outputString): int
     {
         $this->logger->info('Parsing commits for repo '.$this->getRepoClonePath());
 
         $outputString = preg_replace('/^\h*\v+/m', '', trim($outputString));    // remove blank lines
-        $output       = explode("\n", $outputString);  // explode lines into array
+        $output = explode("\n", $outputString);  // explode lines into array
 
         $commits = []; // stores the array of commits
-        $len     = count($output);
+        $len = count($output);
         for ($i = 0; $i < $len; $i++) {
             // Every commit has 4 parts, id, author name, email, commit timestamp
             // in the format id|name|email|timestamp
@@ -527,13 +551,13 @@ class GitRepoCrawler extends RepoCrawler
             $commitMatches = [];
             if (preg_match('/^([\da-f]+)\|(.+)\|(.+@.+)\|(.+)$/', $output[$i], $commitMatches)) {
                 $contributor = $this->manager->getRepository('LibrecoresProjectRepoBundle:Contributor')
-                ->getContributorForRepository(
-                    $this->repo,
-                    $commitMatches[3],
-                    $commitMatches[2]
-                );
-                $date        = new \DateTime($commitMatches[4]);
-                $date->setTimezone(new \DateTimeZone('UTC'));
+                    ->getContributorForRepository(
+                        $this->repo,
+                        $commitMatches[3],
+                        $commitMatches[2]
+                    );
+                $date = new DateTime($commitMatches[4]);
+                $date->setTimezone(new DateTimeZone('UTC'));
                 $commit = new Commit();
                 $commit
                     ->setCommitId($commitMatches[1])
@@ -548,7 +572,7 @@ class GitRepoCrawler extends RepoCrawler
                         $output[$i + 1],
                         $modificationMatches
                     )) {
-                            $commit->setFilesModified($modificationMatches[1]);
+                    $commit->setFilesModified($modificationMatches[1]);
 
                     if (array_key_exists(2, $modificationMatches) && strlen($modificationMatches[2])) {
                         $commit->setLinesAdded($modificationMatches[2]);
@@ -556,10 +580,10 @@ class GitRepoCrawler extends RepoCrawler
                     if (array_key_exists(3, $modificationMatches) && strlen($modificationMatches[3])) {
                         $commit->setLinesRemoved($modificationMatches[3]);
                     }
-                            $i++;   // skip the next line
+                    $i++;   // skip the next line
                 }
-                        $this->manager->persist($commit);
-                        $commits[] = $commit;
+                $this->manager->persist($commit);
+                $commits[] = $commit;
             }
         }
         $count = count($commits);
@@ -570,6 +594,7 @@ class GitRepoCrawler extends RepoCrawler
 
     /**
      * Helper for executing a process
+     *
      * @param Process $process
      */
     private function executeProcess(Process $process)

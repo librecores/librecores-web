@@ -36,7 +36,7 @@ function algoliaAutocomplete(algoliaConfig) {
       templates: {
         header: '<div class="aa-suggestions-category">Users</div>',
         suggestion: function(suggestion) {
-          var name = suggestion._highlightResult.name == null ?
+          var name = suggestion._highlightResult.name ?
             suggestion._highlightResult.username.value : suggestion._highlightResult.name.value;
           return '<span>' +
              name + '</span>  <span>'

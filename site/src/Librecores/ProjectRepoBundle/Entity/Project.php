@@ -1,10 +1,14 @@
 <?php
+
 namespace Librecores\ProjectRepoBundle\Entity;
 
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
+use InvalidArgumentException;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * A project
@@ -28,52 +32,8 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  */
 class Project
 {
-    const STATUS_ASSIGNED   = 'ASSIGNED';
+    const STATUS_ASSIGNED = 'ASSIGNED';
     const STATUS_UNASSIGNED = 'UNASSIGNED';
-
-    /**
-     * Internal project ID
-     *
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
-
-    /**
-     * Status of the project
-     *
-     * @var string
-     *
-     * @Assert\Choice(choices = {"ASSIGNED", "UNASSIGNED"})
-     *
-     * @ORM\Column(type="string", options={"default" : Project::STATUS_ASSIGNED})
-     */
-    private $status = self::STATUS_ASSIGNED;
-
-    /**
-     * User owning this project
-     *
-     * @var User
-     *
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="projects")
-     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
-     */
-    private $parentUser;
-
-    /**
-     * Organization owning this project
-     *
-     * @var Organization
-     *
-     * @ORM\ManyToOne(targetEntity="Organization", inversedBy="projects")
-     * @ORM\JoinColumn(nullable=true)
-     */
-    private $parentOrganization;
-
-    // Associations
     /**
      * Classifications assigned to this project
      *
@@ -84,7 +44,46 @@ class Project
      * @ORM\JoinColumn(name="projectId", referencedColumnName="id")
      */
     protected $classifications;
+    /**
+     * Internal project ID
+     *
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+    /**
+     * Status of the project
+     *
+     * @var string
+     *
+     * @Assert\Choice(choices = {"ASSIGNED", "UNASSIGNED"})
+     *
+     * @ORM\Column(type="string", options={"default" : Project::STATUS_ASSIGNED})
+     */
+    private $status = self::STATUS_ASSIGNED;
+    /**
+     * User owning this project
+     *
+     * @var User
+     *
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="projects")
+     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
+     */
+    private $parentUser;
 
+    // Associations
+    /**
+     * Organization owning this project
+     *
+     * @var Organization
+     *
+     * @ORM\ManyToOne(targetEntity="Organization", inversedBy="projects")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $parentOrganization;
     /**
      * Short name of the project
      *
@@ -229,7 +228,7 @@ class Project
     /**
      * The date when this project was added to LibreCores
      *
-     * @var \DateTime date/time in UTC
+     * @var DateTime date/time in UTC
      *
      * @see __construct()
      *
@@ -246,7 +245,7 @@ class Project
      * @see __construct()
      * @see updateDateLastModified()
      *
-     * @var \DateTime date/time in UTC
+     * @var DateTime date/time in UTC
      *
      * @ORM\Column(type="datetime")
      */
@@ -258,7 +257,7 @@ class Project
      * Commits, discussions in issue trackers, releases, pull requests
      * are treated as activity.
      *
-     * @var \DateTime date/time in UTC
+     * @var DateTime date/time in UTC
      *
      * @ORM\Column(type="datetime", nullable=true)
      */
@@ -266,6 +265,7 @@ class Project
 
     /**
      * Forks of this repository in the repository host
+     *
      * @var int
      *
      * @ORM\Column(type="integer", nullable=true)
@@ -274,6 +274,7 @@ class Project
 
     /**
      * Forks of this repository in the repository host
+     *
      * @var int
      *
      * @ORM\Column(type="integer", nullable=true)
@@ -282,6 +283,7 @@ class Project
 
     /**
      * Forks of this repository in the repository host
+     *
      * @var int
      *
      * @ORM\Column(type="integer", nullable=true)
@@ -290,6 +292,7 @@ class Project
 
     /**
      * Stars of this repository in the repository host
+     *
      * @var int
      *
      * @ORM\Column(type="integer", nullable=true)
@@ -298,6 +301,7 @@ class Project
 
     /**
      * Watchers of this repository in the repository host
+     *
      * @var int
      *
      * @ORM\Column(type="integer", nullable=true)
@@ -306,6 +310,7 @@ class Project
 
     /**
      * Releases of this project
+     *
      * @var ProjectRelease[]
      *
      * @ORM\Column(type="array")
@@ -314,6 +319,7 @@ class Project
 
     /**
      * Code quality metrics for the project
+     *
      * @var int
      *
      * @ORM\Column(type="integer", nullable=true)
@@ -326,8 +332,8 @@ class Project
     public function __construct()
     {
         // record the date/time of the project creation
-        $this->setDateAdded(new \DateTime());
-        $this->setDateLastModified(new \DateTime());
+        $this->setDateAdded(new DateTime());
+        $this->setDateLastModified(new DateTime());
         $this->classifications = new ArrayCollection();
     }
 
@@ -364,8 +370,8 @@ class Project
             $categories = explode('::', $classification);
             $catIncrement = '';
             for ($i = 0; $i < count($categories); $i++) {
-                if (isset($categories[$i])){
-                    $catIncrement = $i == 0 ? $categories[$i]: $catIncrement.'::'.$categories[$i] ;
+                if (isset($categories[$i])) {
+                    $catIncrement = $i === 0 ? $categories[$i] : $catIncrement.'::'.$categories[$i];
                     $categoryLevels['lvl'.$i][] = $catIncrement;
                 }
             }
@@ -384,7 +390,7 @@ class Project
      */
     public function updateDateLastModified()
     {
-        $this->setDateLastModified(new \DateTime());
+        $this->setDateLastModified(new DateTime());
     }
 
     /**
@@ -418,29 +424,6 @@ class Project
     }
 
     /**
-     * Set the project status
-     *
-     * @param string $status one of the self::STATUS_* constants
-     *
-     * @throws \InvalidArgumentException
-     */
-    public function setStatus($status)
-    {
-        if (!in_array($status, array(self::STATUS_ASSIGNED, self::STATUS_UNASSIGNED))) {
-            throw new \InvalidArgumentException("Invalid status");
-        }
-        if ($this->status === $status) {
-            return;
-        }
-
-        // all unassigned projects are collected in the "unassigned" organization
-        if ($status === self::STATUS_UNASSIGNED) {
-            $this->setParentOrganization(Organization::SPECIAL_UNASSIGNED_ID);
-        }
-        $this->status = $status;
-    }
-
-    /**
      * Get id
      *
      * @return integer
@@ -448,6 +431,16 @@ class Project
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Get parentUser
+     *
+     * @return User
+     */
+    public function getParentUser()
+    {
+        return $this->parentUser;
     }
 
     /**
@@ -474,13 +467,13 @@ class Project
     }
 
     /**
-     * Get parentUser
+     * Get parentOrganization
      *
-     * @return User
+     * @return Organization
      */
-    public function getParentUser()
+    public function getParentOrganization()
     {
-        return $this->parentUser;
+        return $this->parentOrganization;
     }
 
     /**
@@ -507,13 +500,13 @@ class Project
     }
 
     /**
-     * Get parentOrganization
+     * Get name
      *
-     * @return Organization
+     * @return string
      */
-    public function getParentOrganization()
+    public function getName()
     {
-        return $this->parentOrganization;
+        return $this->name;
     }
 
     /**
@@ -531,13 +524,13 @@ class Project
     }
 
     /**
-     * Get name
+     * Get projectUrl
      *
      * @return string
      */
-    public function getName()
+    public function getProjectUrl()
     {
-        return $this->name;
+        return $this->projectUrl;
     }
 
     /**
@@ -555,13 +548,13 @@ class Project
     }
 
     /**
-     * Get projectUrl
+     * Get issueTracker
      *
      * @return string
      */
-    public function getProjectUrl()
+    public function getIssueTracker()
     {
-        return $this->projectUrl;
+        return $this->issueTracker;
     }
 
     /**
@@ -579,16 +572,6 @@ class Project
     }
 
     /**
-     * Get issueTracker
-     *
-     * @return string
-     */
-    public function getIssueTracker()
-    {
-        return $this->issueTracker;
-    }
-
-    /**
      * Get status
      *
      * @return string
@@ -596,6 +579,29 @@ class Project
     public function getStatus()
     {
         return $this->status;
+    }
+
+    /**
+     * Set the project status
+     *
+     * @param string $status one of the self::STATUS_* constants
+     *
+     * @throws InvalidArgumentException
+     */
+    public function setStatus($status)
+    {
+        if (!in_array($status, array(self::STATUS_ASSIGNED, self::STATUS_UNASSIGNED))) {
+            throw new InvalidArgumentException("Invalid status");
+        }
+        if ($this->status === $status) {
+            return;
+        }
+
+        // all unassigned projects are collected in the "unassigned" organization
+        if ($status === self::STATUS_UNASSIGNED) {
+            $this->setParentOrganization(Organization::SPECIAL_UNASSIGNED_ID);
+        }
+        $this->status = $status;
     }
 
     /**
@@ -625,7 +631,17 @@ class Project
      */
     public function isAssigned()
     {
-        return ($this->getStatus() == self::STATUS_ASSIGNED);
+        return ($this->getStatus() === self::STATUS_ASSIGNED);
+    }
+
+    /**
+     * Get licenseName
+     *
+     * @return string
+     */
+    public function getLicenseName()
+    {
+        return $this->licenseName;
     }
 
     /**
@@ -643,13 +659,13 @@ class Project
     }
 
     /**
-     * Get licenseName
+     * Get licenseText
      *
      * @return string
      */
-    public function getLicenseName()
+    public function getLicenseText()
     {
-        return $this->licenseName;
+        return $this->licenseText;
     }
 
     /**
@@ -667,13 +683,13 @@ class Project
     }
 
     /**
-     * Get licenseText
+     * Get licenseTextAutoUpdate
      *
-     * @return string
+     * @return boolean
      */
-    public function getLicenseText()
+    public function getLicenseTextAutoUpdate()
     {
-        return $this->licenseText;
+        return $this->licenseTextAutoUpdate;
     }
 
     /**
@@ -691,13 +707,13 @@ class Project
     }
 
     /**
-     * Get licenseTextAutoUpdate
+     * Get descriptionText
      *
-     * @return boolean
+     * @return string
      */
-    public function getLicenseTextAutoUpdate()
+    public function getDescriptionText()
     {
-        return $this->licenseTextAutoUpdate;
+        return $this->descriptionText;
     }
 
     /**
@@ -715,13 +731,13 @@ class Project
     }
 
     /**
-     * Get descriptionText
+     * Get descriptionTextAutoUpdate
      *
-     * @return string
+     * @return boolean
      */
-    public function getDescriptionText()
+    public function getDescriptionTextAutoUpdate()
     {
-        return $this->descriptionText;
+        return $this->descriptionTextAutoUpdate;
     }
 
     /**
@@ -739,13 +755,13 @@ class Project
     }
 
     /**
-     * Get descriptionTextAutoUpdate
+     * Get inProcessing
      *
      * @return boolean
      */
-    public function getDescriptionTextAutoUpdate()
+    public function getInProcessing()
     {
-        return $this->descriptionTextAutoUpdate;
+        return $this->inProcessing;
     }
 
     /**
@@ -763,13 +779,13 @@ class Project
     }
 
     /**
-     * Get inProcessing
+     * Get tagline
      *
-     * @return boolean
+     * @return string
      */
-    public function getInProcessing()
+    public function getTagline()
     {
-        return $this->inProcessing;
+        return $this->tagline;
     }
 
     /**
@@ -787,19 +803,19 @@ class Project
     }
 
     /**
-     * Get tagline
+     * Get dateAdded
      *
-     * @return string
+     * @return DateTime
      */
-    public function getTagline()
+    public function getDateAdded()
     {
-        return $this->tagline;
+        return $this->dateAdded;
     }
 
     /**
      * Set dateAdded
      *
-     * @param \DateTime $dateAdded
+     * @param DateTime $dateAdded
      *
      * @return Project
      */
@@ -811,19 +827,19 @@ class Project
     }
 
     /**
-     * Get dateAdded
+     * Get dateLastModified
      *
-     * @return \DateTime
+     * @return DateTime
      */
-    public function getDateAdded()
+    public function getDateLastModified()
     {
-        return $this->dateAdded;
+        return $this->dateLastModified;
     }
 
     /**
      * Set dateLastModified
      *
-     * @param \DateTime $dateLastModified
+     * @param DateTime $dateLastModified
      *
      * @return Project
      */
@@ -835,19 +851,19 @@ class Project
     }
 
     /**
-     * Get dateLastModified
+     * Get dateLastActivityOccurred
      *
-     * @return \DateTime
+     * @return DateTime
      */
-    public function getDateLastModified()
+    public function getDateLastActivityOccurred()
     {
-        return $this->dateLastModified;
+        return $this->dateLastActivityOccurred;
     }
 
     /**
      * Set dateLastActivityOccurred
      *
-     * @param \DateTime $date
+     * @param DateTime $date
      *
      * @return Project
      */
@@ -859,23 +875,23 @@ class Project
     }
 
     /**
-     * Get dateLastActivityOccurred
+     * Get sourceRepo
      *
-     * @return \DateTime
+     * @return SourceRepo
      */
-    public function getDateLastActivityOccurred()
+    public function getSourceRepo()
     {
-        return $this->dateLastActivityOccurred;
+        return $this->sourceRepo;
     }
 
     /**
      * Set sourceRepo
      *
-     * @param \Librecores\ProjectRepoBundle\Entity\SourceRepo $sourceRepo
+     * @param SourceRepo $sourceRepo
      *
      * @return Project
      */
-    public function setSourceRepo(\Librecores\ProjectRepoBundle\Entity\SourceRepo $sourceRepo = null)
+    public function setSourceRepo(SourceRepo $sourceRepo = null)
     {
         $this->sourceRepo = $sourceRepo;
 
@@ -883,13 +899,13 @@ class Project
     }
 
     /**
-     * Get sourceRepo
+     * Get displayName
      *
-     * @return \Librecores\ProjectRepoBundle\Entity\SourceRepo
+     * @return string
      */
-    public function getSourceRepo()
+    public function getDisplayName()
     {
-        return $this->sourceRepo;
+        return $this->displayName;
     }
 
     /**
@@ -904,16 +920,6 @@ class Project
         $this->displayName = $displayName;
 
         return $this;
-    }
-
-    /**
-     * Get displayName
-     *
-     * @return string
-     */
-    public function getDisplayName()
-    {
-        return $this->displayName;
     }
 
     /**
@@ -1063,14 +1069,14 @@ class Project
     /**
      * Add Classification
      *
-     * @param \Librecores\ProjectRepoBundle\Entity\ProjectClassification $classifications
+     * @param ProjectClassification $classifications
      *
      * @return Project
      */
     public function addClassification(ProjectClassification $classifications)
     {
         $this->classifications[] = $classifications;
-        $this->setDateLastModified(new \DateTime());
+        $this->setDateLastModified(new DateTime());
 
         return $this;
     }
@@ -1078,18 +1084,18 @@ class Project
     /**
      * Remove Classification
      *
-     * @param \Librecores\ProjectRepoBundle\Entity\ProjectClassification $classifications
+     * @param ProjectClassification $classifications
      */
     public function removeClassification(ProjectClassification $classifications)
     {
         $this->classifications->removeElement($classifications);
-        $this->setDateLastModified(new \DateTime());
+        $this->setDateLastModified(new DateTime());
     }
 
     /**
      * Get Classification
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getClassification()
     {
@@ -1099,21 +1105,11 @@ class Project
     /**
      * Get classifications
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getClassifications()
     {
         return $this->classifications;
-    }
-
-    /**
-     * Set code quality metrics for the project
-     *
-     * @param int $qualityScore
-     */
-    public function setQualityScore($qualityScore)
-    {
-        $this->qualityScore = $qualityScore;
     }
 
     /**
@@ -1124,5 +1120,15 @@ class Project
     public function getQualityScore()
     {
         return $this->qualityScore;
+    }
+
+    /**
+     * Set code quality metrics for the project
+     *
+     * @param int $qualityScore
+     */
+    public function setQualityScore($qualityScore)
+    {
+        $this->qualityScore = $qualityScore;
     }
 }

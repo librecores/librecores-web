@@ -2,15 +2,17 @@
 
 namespace Librecores\ProjectRepoBundle\RepoCrawler;
 
+use Exception;
 use Librecores\ProjectRepoBundle\Entity\SourceRepo;
 use Throwable;
 
-class CrawlerException extends \Exception
+class CrawlerException extends Exception
 {
     protected $repository;
 
     /**
      * CrawlerException constructor.
+     *
      * @param SourceRepo     $repository repository on which the crawl error occured
      * @param string         $message    the error message
      * @param int            $code       error code, if available
@@ -34,6 +36,7 @@ class CrawlerException extends \Exception
 
     /**
      * Get the repository associated with this exception
+     *
      * @return SourceRepo
      */
     public function getRepository(): SourceRepo

@@ -2,10 +2,12 @@
 
 namespace Librecores\SiteBundle\Controller;
 
+use Librecores\ProjectRepoBundle\Form\Model\SearchQuery;
+use Librecores\ProjectRepoBundle\Form\Type\SearchQueryType;
+use SimplePie;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Librecores\ProjectRepoBundle\Form\Type\SearchQueryType;
-use Librecores\ProjectRepoBundle\Form\Model\SearchQuery;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class DefaultController extends Controller
@@ -15,7 +17,7 @@ class DefaultController extends Controller
      *
      * @param Request $request
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      *
      * @Route("/", name = "librecores_site_home")
      */
@@ -48,6 +50,9 @@ class DefaultController extends Controller
      *
      * @Route("/{page}", name = "librecores_site_page", requirements = {"page" = ".+"})
      *
+     * @param string $page
+     *
+     * @return Response
      */
     public function pageAction($page = "home")
     {
@@ -58,7 +63,7 @@ class DefaultController extends Controller
         $page = preg_replace('|[^a-zA-Z0-9_/-]|i', '', $page);
 
         // strip trailing slash
-        if (substr($page, -1) == '/') {
+        if (substr($page, -1) === '/') {
             $page = substr($page, 0, -1);
         }
 
@@ -85,12 +90,14 @@ class DefaultController extends Controller
      * and updated async to the HTTP request path through a cron job
      *
      * XXX: Also, put the blog URL into a config file
+     *
+     * @return array
      */
     private function getBlogPosts()
     {
         $blogUrl = $this->get('kernel')->getRootDir().'/../web/planet/atom.xml';
 
-        $feed = new \SimplePie();
+        $feed = new SimplePie();
         $feed->set_cache_duration(3600);
         $feed->set_cache_location($this->get('kernel')->getCacheDir().'/rss');
         $feed->enable_cache(true);
@@ -131,7 +138,7 @@ class DefaultController extends Controller
         // If the text is longer than $maxLength, we try to cut it at the
         // closest white space character, and suffix it with ' ...'.
         if ($maxLength !== -1 && mb_strlen($text) > $maxLength) {
-            $cutpos = strpos($text, ' ', $maxLength-4)+1;
+            $cutpos = strpos($text, ' ', $maxLength - 4) + 1;
             $text = mb_substr($text, 0, $cutpos).' ...';
         }
 
