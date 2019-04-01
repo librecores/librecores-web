@@ -80,6 +80,7 @@ class Contributor
 
     /**
      * Constructor
+     *
      * @param null|string $name
      * @param null|string $email
      */
@@ -101,6 +102,16 @@ class Contributor
     }
 
     /**
+     * Get repository
+     *
+     * @return SourceRepo
+     */
+    public function getSourceRepo()
+    {
+        return $this->sourceRepo;
+    }
+
+    /**
      * Set repository
      *
      * @param SourceRepo $sourceRepo
@@ -116,13 +127,13 @@ class Contributor
     }
 
     /**
-     * Get repository
+     * Get name
      *
-     * @return SourceRepo
+     * @return string
      */
-    public function getSourceRepo()
+    public function getName()
     {
-        return $this->sourceRepo;
+        return $this->name;
     }
 
     /**
@@ -140,13 +151,13 @@ class Contributor
     }
 
     /**
-     * Get name
+     * Get email
      *
      * @return string
      */
-    public function getName()
+    public function getEmail()
     {
-        return $this->name;
+        return $this->email;
     }
 
     /**
@@ -161,16 +172,6 @@ class Contributor
         $this->email = $email;
 
         return $this;
-    }
-
-    /**
-     * Get email
-     *
-     * @return string
-     */
-    public function getEmail()
-    {
-        return $this->email;
     }
 
     /**
@@ -200,7 +201,7 @@ class Contributor
     /**
      * Get commits
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getCommits()
     {

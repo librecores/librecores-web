@@ -28,10 +28,12 @@ class ContributorRepository extends EntityRepository
      */
     public function getContributorForRepository(SourceRepo $repo, string $email, ?string $name = null): ?Contributor
     {
-        $contributor = $this->findOneBy([
-            'sourceRepo' => $repo,
-            'email' => $email,
-        ]);
+        $contributor = $this->findOneBy(
+            [
+                'sourceRepo' => $repo,
+                'email' => $email,
+            ]
+        );
 
         // create and return and entity only when the name is specified
         if (null === $contributor && $name !== null) {
@@ -57,9 +59,11 @@ class ContributorRepository extends EntityRepository
      */
     public function getContributorsForRepository(SourceRepo $repo)
     {
-        return $this->findBy([
-            'sourceRepo' => $repo,
-        ]);
+        return $this->findBy(
+            [
+                'sourceRepo' => $repo,
+            ]
+        );
     }
 
     /**
@@ -81,6 +85,7 @@ class ContributorRepository extends EntityRepository
 
     /**
      * Gets top n contributors from repositories by commit count, lines added and lines removed
+     *
      * @param SourceRepo $repo  repository to query for
      * @param int        $count number of top contributors to return
      *

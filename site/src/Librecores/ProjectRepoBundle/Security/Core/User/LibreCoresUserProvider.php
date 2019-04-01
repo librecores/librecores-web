@@ -1,17 +1,18 @@
 <?php
+
 namespace Librecores\ProjectRepoBundle\Security\Core\User;
 
-use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
-use Librecores\ProjectRepoBundle\Entity\User;
-use Symfony\Component\Security\Core\User\UserProviderInterface;
-use HWI\Bundle\OAuthBundle\Connect\AccountConnectorInterface;
-use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthAwareUserProviderInterface;
 use FOS\UserBundle\Model\UserManagerInterface;
-use Symfony\Component\PropertyAccess\PropertyAccess;
-use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
+use HWI\Bundle\OAuthBundle\Connect\AccountConnectorInterface;
+use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
+use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthAwareUserProviderInterface;
+use Librecores\ProjectRepoBundle\Entity\User;
 use Librecores\ProjectRepoBundle\Security\Core\Exception\OAuthUserLinkingException;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\PropertyAccess\PropertyAccess;
+use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
@@ -74,6 +75,8 @@ class LibreCoresUserProvider implements
      * Constructor.
      *
      * @param UserManagerInterface $userManager the user manager
+     * @param ValidatorInterface   $validator
+     * @param Session              $session
      */
     public function __construct(
         UserManagerInterface $userManager,
@@ -261,9 +264,9 @@ class LibreCoresUserProvider implements
      *
      * @param UserResponseInterface $response
      *
-     * @throws OAuthUserLinkingException
-     *
      * @return User
+     *
+     * @throws OAuthUserLinkingException
      *
      * @see OAuthRegistrationListener
      */

@@ -2,6 +2,8 @@
 
 namespace Librecores\ProjectRepoBundle\Entity;
 
+use DateTime;
+
 class ProjectRelease
 {
     /**
@@ -14,7 +16,7 @@ class ProjectRelease
     /**
      * Date when release was published
      *
-     * @var \DateTime
+     * @var DateTime
      */
     private $publishedAt;
 
@@ -61,7 +63,7 @@ class ProjectRelease
     /**
      * Get when this release was published
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getPublishedAt()
     {
@@ -71,11 +73,11 @@ class ProjectRelease
     /**
      * Set when this release was published
      *
-     * @param \DateTime $publishedAt
+     * @param DateTime $publishedAt
      *
      * @return ProjectRelease
      */
-    public function setPublishedAt(\DateTime $publishedAt)
+    public function setPublishedAt(DateTime $publishedAt)
     {
         $this->publishedAt = $publishedAt;
 

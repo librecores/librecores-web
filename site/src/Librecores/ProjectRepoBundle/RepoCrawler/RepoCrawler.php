@@ -3,11 +3,12 @@
 namespace Librecores\ProjectRepoBundle\RepoCrawler;
 
 use Doctrine\Common\Persistence\ObjectManager;
+use Librecores\ProjectRepoBundle\Doctrine\ProjectMetricsProvider;
 use Librecores\ProjectRepoBundle\Entity\SourceRepo;
 use Librecores\ProjectRepoBundle\Util\MarkupToHtmlConverter;
 use Librecores\ProjectRepoBundle\Util\ProcessCreator;
 use Psr\Log\LoggerInterface;
-use Librecores\ProjectRepoBundle\Doctrine\ProjectMetricsProvider;
+use RuntimeException;
 
 /**
  * Repository crawler base class
@@ -48,6 +49,7 @@ abstract class RepoCrawler
 
     /**
      * RepoCrawler constructor.
+     *
      * @param SourceRepo             $repo
      * @param MarkupToHtmlConverter  $markupConverter
      * @param ProcessCreator         $processCreator
@@ -63,15 +65,15 @@ abstract class RepoCrawler
         LoggerInterface $logger,
         ProjectMetricsProvider $projectMetricsProvider
     ) {
-        $this->repo                   = $repo;
-        $this->markupConverter        = $markupConverter;
-        $this->logger                 = $logger;
-        $this->processCreator         = $processCreator;
-        $this->manager                = $manager;
+        $this->repo = $repo;
+        $this->markupConverter = $markupConverter;
+        $this->logger = $logger;
+        $this->processCreator = $processCreator;
+        $this->manager = $manager;
         $this->projectMetricsProvider = $projectMetricsProvider;
 
         if (!$this->isValidRepoType()) {
-            throw new \RuntimeException("Repository type is not supported by this crawler.");
+            throw new RuntimeException("Repository type is not supported by this crawler.");
         }
     }
 

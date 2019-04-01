@@ -1,11 +1,12 @@
 <?php
+
 namespace Librecores\ProjectRepoBundle\Form\Extension;
 
 use Symfony\Component\Form\AbstractTypeExtension;
+use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
-use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ButtonTypeIconExtension extends AbstractTypeExtension
@@ -34,9 +35,11 @@ class ButtonTypeIconExtension extends AbstractTypeExtension
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
-            'icon' => null,
-        ));
+        $resolver->setDefaults(
+            array(
+                'icon' => null,
+            )
+        );
     }
 
     /**

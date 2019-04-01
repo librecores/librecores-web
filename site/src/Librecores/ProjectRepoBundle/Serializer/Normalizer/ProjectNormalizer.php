@@ -1,4 +1,5 @@
 <?php
+
 namespace Librecores\ProjectRepoBundle\Serializer\Normalizer;
 
 use Librecores\ProjectRepoBundle\Entity\Project;
@@ -30,7 +31,7 @@ class ProjectNormalizer implements NormalizerInterface
             'parentUserName' => $object->getParentName(),
             'hierarchicalCategories' => $object->getCategoryLists(),
             'classifications' => $object->getClassificationArray(),
-            'qualityScore' => $object->getQualityScore()
+            'qualityScore' => $object->getQualityScore(),
         ];
     }
 

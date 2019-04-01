@@ -39,9 +39,12 @@ class StatsUtil
             return $values;
         }
 
-        return array_map(function ($v) use ($maxValue) {
-            return $v / $maxValue;
-        }, $values);
+        return array_map(
+            function ($v) use ($maxValue) {
+                return $v / $maxValue;
+            },
+            $values
+        );
     }
 
     /**
@@ -64,10 +67,10 @@ class StatsUtil
         $trend = 0;
 
         for ($i = 1; $i < count($values); $i++) {
-            if ($values[$i - 1] != 0) {
+            if ($values[$i - 1] !== 0) {
                 $trend += ($values[$i] - $values[$i - 1]) / $values[$i - 1];
             } else {
-                $trend += $values[$i] == 0 ? 0 : 1;
+                $trend += $values[$i] === 0 ? 0 : 1;
             }
         }
 

@@ -72,6 +72,16 @@ class ClassificationHierarchy
     }
 
     /**
+     * Get parent category
+     *
+     * @return ClassificationHierarchy
+     */
+    public function getParent()
+    {
+        return $this->parent;
+    }
+
+    /**
      * Set parent category
      *
      * @param ClassificationHierarchy $parent
@@ -94,13 +104,13 @@ class ClassificationHierarchy
     }
 
     /**
-     * Get parent category
+     * Get Category name
      *
-     * @return ClassificationHierarchy
+     * @return string
      */
-    public function getParent()
+    public function getName()
     {
-        return $this->parent;
+        return $this->name;
     }
 
     /**
@@ -115,16 +125,6 @@ class ClassificationHierarchy
         $this->name = $name;
 
         return $this;
-    }
-
-    /**
-     * Get Category name
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
     }
 
     /**

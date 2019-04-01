@@ -1,9 +1,12 @@
 <?php
+
 namespace Librecores\ProjectRepoBundle\Util;
 
-use Symfony\Component\Process\Process;
+use HTMLPurifier;
 use Psr\Log\LoggerInterface;
+use RuntimeException;
 use Symfony\Component\Process\Exception\ProcessFailedException;
+use Symfony\Component\Process\Process;
 
 /**
  * Convert text written in a markup language to safe HTML
@@ -34,7 +37,7 @@ class MarkupToHtmlConverter
 
     public function __construct(
         LoggerInterface $logger,
-        \HTMLPurifier $htmlPurifier
+        HTMLPurifier $htmlPurifier
     ) {
         $this->logger = $logger;
         $this->htmlPurifier = $htmlPurifier;
@@ -81,7 +84,7 @@ class MarkupToHtmlConverter
      *
      * @return string HTML
      *
-     * @throws \RuntimeException processing failed (see message for details)
+     * @throws RuntimeException processing failed (see message for details)
      *
      * @see markupFileToHtml()
      */
@@ -90,7 +93,7 @@ class MarkupToHtmlConverter
         // write $markupInput into temporary file
         $tmpFilename = tempnam(sys_get_temp_dir(), 'lc-markup-conv-');
         if ($tmpFilename === false) {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 sprintf(
                     'Unable to create temporary file in %s.',
                     sys_get_temp_dir()
@@ -100,7 +103,7 @@ class MarkupToHtmlConverter
         try {
             $rv = file_put_contents($tmpFilename, $markupInput);
             if ($rv === false) {
-                throw new \RuntimeException("Unable to write to file $tmpFilename");
+                throw new RuntimeException("Unable to write to file $tmpFilename");
             }
 
             $unsafeHtml = $this->markupFileToUnsafeHtml($tmpFilename);
@@ -118,12 +121,12 @@ class MarkupToHtmlConverter
      *
      * @return string string of HTML data, UTF-8 encoded
      *
-     * @throws \RuntimeException processing failed (see message for details)
+     * @throws RuntimeException processing failed (see message for details)
      */
     protected function markupFileToUnsafeHtml($markupInputFile)
     {
         $fileExtension = pathinfo($markupInputFile, PATHINFO_EXTENSION);
-        if (in_array($fileExtension, [ '.txt', ''])) {
+        if (in_array($fileExtension, ['.txt', ''])) {
             return $this->markupFileToUnsafeHtmlPlaintext($markupInputFile);
         }
 

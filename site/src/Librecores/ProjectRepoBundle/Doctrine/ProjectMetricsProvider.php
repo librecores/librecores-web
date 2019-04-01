@@ -35,6 +35,7 @@ class ProjectMetricsProvider
 
     /**
      * DefaultMetadataManager constructor.
+     *
      * @param CommitRepository      $commitRepository
      * @param ContributorRepository $contributorRepository
      */
@@ -42,7 +43,7 @@ class ProjectMetricsProvider
         CommitRepository $commitRepository,
         ContributorRepository $contributorRepository
     ) {
-        $this->commitRepository      = $commitRepository;
+        $this->commitRepository = $commitRepository;
         $this->contributorRepository = $contributorRepository;
     }
 
@@ -63,6 +64,7 @@ class ProjectMetricsProvider
 
     /**
      * Fetch the commits in a given project
+     *
      * @param Project $project
      *
      * @return array
@@ -310,7 +312,7 @@ class ProjectMetricsProvider
         $lastActivity = $project->getDateLastActivityOccurred();
 
         if ($lastActivity) {
-            $now        = new \DateTimeImmutable();
+            $now = new \DateTimeImmutable();
             $difference = $now->diff($lastActivity);
 
             if ($difference->days < 30) {
@@ -464,10 +466,12 @@ class ProjectMetricsProvider
     public function getPhaseWiseAverageRateOfChangeOfCommits(Project $project)
     {
         $yearlyCommitCount =
-            array_values($this->commitRepository->getCommitHistogram(
-                $project->getSourceRepo(),
-                Dates::INTERVAL_YEAR
-            ));
+            array_values(
+                $this->commitRepository->getCommitHistogram(
+                    $project->getSourceRepo(),
+                    Dates::INTERVAL_YEAR
+                )
+            );
 
         if (empty($yearlyCommitCount)) {
             return [
@@ -532,10 +536,12 @@ class ProjectMetricsProvider
     public function getPhaseWiseAverageCommitCount(Project $project)
     {
         $yearlyCommitCount =
-            array_values($this->commitRepository->getCommitHistogram(
-                $project->getSourceRepo(),
-                Dates::INTERVAL_YEAR
-            ));
+            array_values(
+                $this->commitRepository->getCommitHistogram(
+                    $project->getSourceRepo(),
+                    Dates::INTERVAL_YEAR
+                )
+            );
 
         if (empty($yearlyCommitCount)) {
             return [
@@ -591,10 +597,12 @@ class ProjectMetricsProvider
      */
     public function getAverageRateOfChangeOfYearlyContributors(Project $project)
     {
-        $contributorsPerYear = array_values($this->getContributorHistogram(
-            $project,
-            Dates::INTERVAL_YEAR
-        ));
+        $contributorsPerYear = array_values(
+            $this->getContributorHistogram(
+                $project,
+                Dates::INTERVAL_YEAR
+            )
+        );
 
         return StatsUtil::averageRateOfChange($contributorsPerYear);
     }

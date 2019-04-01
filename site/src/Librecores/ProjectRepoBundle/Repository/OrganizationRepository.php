@@ -1,7 +1,7 @@
 <?php
+
 namespace Librecores\ProjectRepoBundle\Repository;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityRepository;
 use Librecores\ProjectRepoBundle\Entity\User;
 
@@ -22,15 +22,15 @@ class OrganizationRepository extends EntityRepository
     public function findAllByMemberOrderedByName(User $user)
     {
         return $this->getEntityManager()
-                    ->createQueryBuilder()
-                    ->select('o.name', 'o.displayName', 'o.description', 'm.permission')
-                    ->from('LibrecoresProjectRepoBundle:Organization', 'o')
-                    ->innerJoin('o.members', 'm')
-                    ->where('m.user = :member')
-                    ->setParameter('member', $user->getId())
-                    ->orderBy('o.name', 'ASC')
-                    ->getQuery()
-                    ->getResult();
+            ->createQueryBuilder()
+            ->select('o.name', 'o.displayName', 'o.description', 'm.permission')
+            ->from('LibrecoresProjectRepoBundle:Organization', 'o')
+            ->innerJoin('o.members', 'm')
+            ->where('m.user = :member')
+            ->setParameter('member', $user->getId())
+            ->orderBy('o.name', 'ASC')
+            ->getQuery()
+            ->getResult();
     }
 
     /**
@@ -43,13 +43,13 @@ class OrganizationRepository extends EntityRepository
     public function findOneByName($organizationName)
     {
         return $this->getEntityManager()
-                    ->createQueryBuilder()
-                    ->select('o')
-                    ->from('LibrecoresProjectRepoBundle:Organization', 'o')
-                    ->where('o.name = :name')
-                    ->setParameter('name', $organizationName)
-                    ->getQuery()
-                    ->getOneOrNullResult();
+            ->createQueryBuilder()
+            ->select('o')
+            ->from('LibrecoresProjectRepoBundle:Organization', 'o')
+            ->where('o.name = :name')
+            ->setParameter('name', $organizationName)
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 
     /**
@@ -62,14 +62,14 @@ class OrganizationRepository extends EntityRepository
     public function findByFragment($fragment)
     {
         return $this->getEntityManager()
-                    ->createQueryBuilder()
-                    ->select('o')
-                    ->from('LibrecoresProjectRepoBundle:Organization', 'o')
-                    ->where('o.name LIKE :name')
-                    ->orWhere('o.displayName LIKE :name')
-                    ->orWhere('o.description LIKE :name')
-                    ->setParameter('name', "%$fragment%")
-                    ->getQuery()
-                    ->getResult();
+            ->createQueryBuilder()
+            ->select('o')
+            ->from('LibrecoresProjectRepoBundle:Organization', 'o')
+            ->where('o.name LIKE :name')
+            ->orWhere('o.displayName LIKE :name')
+            ->orWhere('o.description LIKE :name')
+            ->setParameter('name', "%$fragment%")
+            ->getQuery()
+            ->getResult();
     }
 }

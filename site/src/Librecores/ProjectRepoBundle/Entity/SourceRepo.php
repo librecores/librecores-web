@@ -1,4 +1,5 @@
 <?php
+
 namespace Librecores\ProjectRepoBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -97,6 +98,7 @@ abstract class SourceRepo
 
     /**
      * Statistics about the source code of this repository
+     *
      * @var SourceStats
      *
      * @ORM\Embedded(class="SourceStats", columnPrefix="source_stats_")
@@ -135,6 +137,16 @@ abstract class SourceRepo
     }
 
     /**
+     * Get url
+     *
+     * @return string
+     */
+    public function getUrl()
+    {
+        return $this->url;
+    }
+
+    /**
      * Set url
      *
      * @param string $url
@@ -149,13 +161,13 @@ abstract class SourceRepo
     }
 
     /**
-     * Get url
+     * Get project
      *
-     * @return string
+     * @return Project
      */
-    public function getUrl()
+    public function getProject()
     {
-        return $this->url;
+        return $this->project;
     }
 
     /**
@@ -174,13 +186,13 @@ abstract class SourceRepo
     }
 
     /**
-     * Get project
+     * Get webViewUrl
      *
-     * @return Project
+     * @return string
      */
-    public function getProject()
+    public function getWebViewUrl()
     {
-        return $this->project;
+        return $this->webViewUrl;
     }
 
     /**
@@ -195,16 +207,6 @@ abstract class SourceRepo
         $this->webViewUrl = $webViewUrl;
 
         return $this;
-    }
-
-    /**
-     * Get webViewUrl
-     *
-     * @return string
-     */
-    public function getWebViewUrl()
-    {
-        return $this->webViewUrl;
     }
 
     /**
@@ -234,7 +236,7 @@ abstract class SourceRepo
     /**
      * Get contributors
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getContributors()
     {
@@ -275,6 +277,15 @@ abstract class SourceRepo
         return $this->commits;
     }
 
+    /**
+     * Get sourceStats
+     *
+     * @return SourceStats
+     */
+    public function getSourceStats()
+    {
+        return $this->sourceStats;
+    }
 
     /**
      * Set sourceStats
@@ -288,15 +299,5 @@ abstract class SourceRepo
         $this->sourceStats = $sourceStats;
 
         return $this;
-    }
-
-    /**
-     * Get sourceStats
-     *
-     * @return SourceStats
-     */
-    public function getSourceStats()
-    {
-        return $this->sourceStats;
     }
 }

@@ -1,9 +1,10 @@
 <?php
+
 namespace Librecores\ProjectRepoBundle\Util;
 
 use Librecores\ProjectRepoBundle\Entity\Project;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 /**
  * Dispatch requests to a asynchronous worker queue

@@ -2,14 +2,16 @@
 
 namespace Librecores\ProjectRepoBundle\RepoCrawler;
 
+use DateTime;
 use Doctrine\Common\Persistence\ObjectManager;
+use Exception;
 use Github\Client;
+use Librecores\ProjectRepoBundle\Doctrine\ProjectMetricsProvider;
 use Librecores\ProjectRepoBundle\Entity\SourceRepo;
 use Librecores\ProjectRepoBundle\Util\GithubApiService;
 use Librecores\ProjectRepoBundle\Util\MarkupToHtmlConverter;
 use Librecores\ProjectRepoBundle\Util\ProcessCreator;
 use Psr\Log\LoggerInterface;
-use Librecores\ProjectRepoBundle\Doctrine\ProjectMetricsProvider;
 
 /**
  * Crawl and extract metadata from a remote git repository
@@ -23,6 +25,7 @@ class GithubRepoCrawler extends GitRepoCrawler
 
     /**
      * Github URL regex
+     *
      * @var string
      */
     private const GH_REGEX = '/^https:\/\/github\.com\/([^\/]+)\/([^\/]+?)(?:\.git)?$/';
@@ -50,6 +53,7 @@ class GithubRepoCrawler extends GitRepoCrawler
 
     /**
      * RepoCrawler constructor.
+     *
      * @param SourceRepo             $repo
      * @param MarkupToHtmlConverter  $markupConverter
      * @param ProcessCreator         $processCreator
@@ -76,6 +80,7 @@ class GithubRepoCrawler extends GitRepoCrawler
 
     /**
      * Check whether the given URL is a valid Github repository URL
+     *
      * @param string $repoUrl
      *
      * @return bool
@@ -111,7 +116,7 @@ class GithubRepoCrawler extends GitRepoCrawler
      *
      * @return Client
      *
-     * @throws \Exception if GitHub credentials are not found
+     * @throws Exception if GitHub credentials are not found
      */
     protected function getGithubClient()
     {
@@ -127,7 +132,7 @@ class GithubRepoCrawler extends GitRepoCrawler
             ->getAuthenticatedClientForUser($user);
 
         if (null === $this->githubClient) {
-            throw new \Exception('GitHub access token not available');
+            throw new Exception('GitHub access token not available');
         }
 
         return $this->githubClient;
@@ -138,7 +143,7 @@ class GithubRepoCrawler extends GitRepoCrawler
      *
      * @return array
      *
-     * @throws \Exception
+     * @throws Exception
      */
     protected function getGithubData()
     {
@@ -211,14 +216,16 @@ QUERY;
             $project->setStars($data['stargazers']['totalCount']);
             $project->setWatchers($data['watchers']['totalCount']);
 
-            $dateLastActivity = new \DateTime($data['updatedAt']);
+            $dateLastActivity = new DateTime($data['updatedAt']);
             $project->setDateLastActivityOccurred($dateLastActivity);
 
             $this->manager->persist($project);
             $this->logger->info('Fetched GitHub metrics successfully');
-        } catch (\Exception $ex) {
-            $this->logger->error('Unable to fetch data from Github: '
-            .$ex->getMessage());
+        } catch (Exception $ex) {
+            $this->logger->error(
+                'Unable to fetch data from Github: '
+                .$ex->getMessage()
+            );
         }
     }
 }

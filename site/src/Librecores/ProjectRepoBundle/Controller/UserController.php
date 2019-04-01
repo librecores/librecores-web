@@ -133,7 +133,8 @@ class UserController extends Controller
     /**
      * Change user password
      *
-     * @param Request $request
+     * @param Request              $request
+     * @param UserManagerInterface $userManager
      *
      * @return Response
      */
@@ -147,8 +148,11 @@ class UserController extends Controller
         }
 
         $validationGroups = ['ChangePassword', 'Default'];
-        $form = $this->createForm(ChangePasswordFormType::class, $user,
-            ['validation_groups' => $validationGroups]);
+        $form = $this->createForm(
+            ChangePasswordFormType::class,
+            $user,
+            ['validation_groups' => $validationGroups]
+        );
         $form->add('save', SubmitType::class, array('label' => 'Change password'));
         $form->setData($user);
 

@@ -3,6 +3,7 @@
 namespace Librecores\ProjectRepoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use InvalidArgumentException;
 
 /**
  * Statistics about the source code of a repository
@@ -80,6 +81,7 @@ class SourceStats
 
     /**
      * Stats about all other languages used by this repository
+     *
      * @var LanguageStat[]
      *
      * @ORM\Column(type="array")
@@ -115,6 +117,14 @@ class SourceStats
     }
 
     /**
+     * @return int
+     */
+    public function getTotalFiles(): int
+    {
+        return $this->totalFiles;
+    }
+
+    /**
      * @param int $totalFiles
      *
      * @return SourceStats
@@ -129,9 +139,9 @@ class SourceStats
     /**
      * @return int
      */
-    public function getTotalFiles(): int
+    public function getTotalLinesOfCode(): int
     {
-        return $this->totalFiles;
+        return $this->totalLinesOfCode;
     }
 
     /**
@@ -149,9 +159,9 @@ class SourceStats
     /**
      * @return int
      */
-    public function getTotalLinesOfCode(): int
+    public function getTotalLinesOfComments(): int
     {
-        return $this->totalLinesOfCode;
+        return $this->totalLinesOfComments;
     }
 
     /**
@@ -169,9 +179,9 @@ class SourceStats
     /**
      * @return int
      */
-    public function getTotalLinesOfComments(): int
+    public function getTotalBlankLines(): int
     {
-        return $this->totalLinesOfComments;
+        return $this->totalBlankLines;
     }
 
     /**
@@ -184,14 +194,6 @@ class SourceStats
         $this->totalBlankLines = $totalBlankLines;
 
         return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getTotalBlankLines(): int
-    {
-        return $this->totalBlankLines;
     }
 
     /**
@@ -223,6 +225,14 @@ class SourceStats
     }
 
     /**
+     * @return LanguageStat[]
+     */
+    public function getLanguageStats(): array
+    {
+        return $this->languageStats;
+    }
+
+    /**
      * Set languageStats
      *
      * @param LanguageStat[] $languageStats
@@ -237,15 +247,8 @@ class SourceStats
     }
 
     /**
-     * @return LanguageStat[]
-     */
-    public function getLanguageStats(): array
-    {
-        return $this->languageStats;
-    }
-
-    /**
      * Get the total number of lines in the codebase
+     *
      * @return int
      */
     public function getTotalLines(): int
@@ -255,6 +258,7 @@ class SourceStats
 
     /**
      * Get comment to code ratio
+     *
      * @return float
      */
     public function getCommentToCodeRatio(): float
@@ -274,7 +278,7 @@ class SourceStats
      * @return string|null the primary language of this repository or false if
      *                      such information does not exist
      */
-    public function getMostUsedLanguage() : ?string
+    public function getMostUsedLanguage(): ?string
     {
         $language = null;
 
@@ -338,7 +342,7 @@ class SourceStats
                 $b = 1.2;
                 break;
             default:
-                throw new \InvalidArgumentException('Invalid development type');
+                throw new InvalidArgumentException('Invalid development type');
         }
 
         return $a * pow($kLoc, $b);
@@ -367,7 +371,7 @@ class SourceStats
                 $d = 0.32;
                 break;
             default:
-                throw new \InvalidArgumentException('Invalid development type');
+                throw new InvalidArgumentException('Invalid development type');
         }
 
         return 2.5 * pow($kLoc, $d);
@@ -375,6 +379,7 @@ class SourceStats
 
     /**
      * Get estimated number of developers
+     *
      * @param int $type Development type of the repository
      *
      * @return int estimated number of developers

@@ -2,6 +2,7 @@
 
 namespace Librecores\ProjectRepoBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -51,7 +52,7 @@ class ProjectClassification
     /**
      * ProjectClassification creation date/time
      *
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(type="datetime")
      */
@@ -69,7 +70,7 @@ class ProjectClassification
 
     public function __construct()
     {
-        $this->createdAt = new \DateTime();
+        $this->createdAt = new DateTime();
     }
 
     /**
@@ -80,6 +81,16 @@ class ProjectClassification
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Get classification
+     *
+     * @return string
+     */
+    public function getClassification()
+    {
+        return $this->classification;
     }
 
     /**
@@ -97,19 +108,19 @@ class ProjectClassification
     }
 
     /**
-     * Get classification
+     * Get createdAt
      *
-     * @return string
+     * @return DateTime
      */
-    public function getClassification()
+    public function getCreatedAt()
     {
-        return $this->classification;
+        return $this->createdAt;
     }
 
     /**
      * Set createdAt
      *
-     * @param \DateTime $createdAt
+     * @param DateTime $createdAt
      *
      * @return ProjectClassification
      */
@@ -121,19 +132,19 @@ class ProjectClassification
     }
 
     /**
-     * Get createdAt
+     * Get project
      *
-     * @return \DateTime
+     * @return Project
      */
-    public function getCreatedAt()
+    public function getProject()
     {
-        return $this->createdAt;
+        return $this->project;
     }
 
     /**
      * Set the Project for the given ProjectClassification object
      *
-     * @param \Librecores\ProjectRepoBundle\Entity\Project $project
+     * @param Project $project
      *
      * @return ProjectClassification
      */
@@ -153,36 +164,26 @@ class ProjectClassification
     }
 
     /**
-     * Get project
+     * Get createdBy
      *
-     * @return \Librecores\ProjectRepoBundle\Entity\Project
+     * @return User
      */
-    public function getProject()
+    public function getCreatedBy()
     {
-        return $this->project;
+        return $this->createdBy;
     }
 
     /**
      * Set createdBy
      *
-     * @param \Librecores\ProjectRepoBundle\Entity\User $createdBy
+     * @param User $createdBy
      *
      * @return ProjectClassification
      */
-    public function setCreatedBy(\Librecores\ProjectRepoBundle\Entity\User $createdBy)
+    public function setCreatedBy(User $createdBy)
     {
         $this->createdBy = $createdBy;
 
         return $this;
-    }
-
-    /**
-     * Get createdBy
-     *
-     * @return \Librecores\ProjectRepoBundle\Entity\User
-     */
-    public function getCreatedBy()
-    {
-        return $this->createdBy;
     }
 }

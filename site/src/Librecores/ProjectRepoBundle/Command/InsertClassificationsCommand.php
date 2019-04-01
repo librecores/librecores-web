@@ -1,13 +1,14 @@
 <?php
+
 namespace Librecores\ProjectRepoBundle\Command;
 
 use Doctrine\Common\Persistence\ObjectManager;
+use Librecores\ProjectRepoBundle\Entity\ClassificationHierarchy;
+use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\HttpKernel\Config\FileLocator;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Yaml\Yaml;
-use Librecores\ProjectRepoBundle\Entity\ClassificationHierarchy;
 
 /**
  * Insert the classification hierarchy into the database

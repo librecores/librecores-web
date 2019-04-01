@@ -1,18 +1,17 @@
 <?php
+
 namespace Librecores\ProjectRepoBundle\DataFixtures\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-use Librecores\ProjectRepoBundle\Entity\ClassificationHierarchy;
+use Librecores\ProjectRepoBundle\Entity\GitSourceRepo;
+use Librecores\ProjectRepoBundle\Entity\Organization;
+use Librecores\ProjectRepoBundle\Entity\OrganizationMember;
+use Librecores\ProjectRepoBundle\Entity\Project;
+use Librecores\ProjectRepoBundle\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
-
-use Librecores\ProjectRepoBundle\Entity\User;
-use Librecores\ProjectRepoBundle\Entity\Organization;
-use Librecores\ProjectRepoBundle\Entity\Project;
-use Librecores\ProjectRepoBundle\Entity\OrganizationMember;
-use Librecores\ProjectRepoBundle\Entity\GitSourceRepo;
 
 /**
  * Create a basic test environment

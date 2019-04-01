@@ -42,7 +42,7 @@ class GroupHydrator extends AbstractHydrator
 
         $result = [];
         foreach ($rows as $row) {
-            $value             = array_slice($row, 1);
+            $value = array_slice($row, 1);
             $result[$row[0]][] = count($value) > 1 ? $value : $value[0];
         }
 

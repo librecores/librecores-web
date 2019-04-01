@@ -1,4 +1,5 @@
 <?php
+
 namespace Librecores\ProjectRepoBundle\Serializer\Normalizer;
 
 use Librecores\ProjectRepoBundle\Entity\User;

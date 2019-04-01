@@ -62,7 +62,7 @@ var insertClassification = function (classificationDetails) {
     var classification = '';
     for (var j = 1; j <= count; j++) {
       if ($('#category-' + j).val() !== 'NULL') {
-        if (j == 1) {
+        if (j === 1) {
           classification = $('#category-' + j).val();
         }
         else {

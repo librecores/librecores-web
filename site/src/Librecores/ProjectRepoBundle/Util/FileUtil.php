@@ -1,6 +1,9 @@
 <?php
+
 namespace Librecores\ProjectRepoBundle\Util;
 
+use FilesystemIterator;
+use RuntimeException;
 use Symfony\Component\Process\Process;
 
 /**
@@ -29,9 +32,12 @@ class FileUtil
      *                        if a match was found, or false if no match was
      *                        found
      */
-    public static function findFile($basedir, $basenames, $extensions,
-                                    $caseSensitive=true)
-    {
+    public static function findFile(
+        $basedir,
+        $basenames,
+        $extensions,
+        $caseSensitive = true
+    ) {
         $searchFilenames = [];
         foreach ($basenames as $basename) {
             foreach ($extensions as $ext) {
@@ -41,7 +47,7 @@ class FileUtil
 
         $basedirFilenames = [];
         $basedirFilenamesLc = [];
-        $it = new \FilesystemIterator($basedir);
+        $it = new FilesystemIterator($basedir);
         foreach ($it as $fileinfo) {
             if (!$fileinfo->isFile()) {
                 continue;
@@ -74,6 +80,7 @@ class FileUtil
         if (!is_file($fullFilename)) {
             return false;
         }
+
         return $fullFilename;
     }
 
@@ -82,9 +89,10 @@ class FileUtil
      *
      * The directory must be manually deleted if not used any more.
      *
+     * @param string $prefix
+     *
      * @return string path to the temporary directory
      *
-     * @throws \RuntimeException
      */
     public static function createTemporaryDirectory($prefix)
     {
@@ -92,7 +100,7 @@ class FileUtil
         $process = new Process($cmd);
         $process->run();
         if (!$process->isSuccessful()) {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 sprintf(
                     'Unable to create temporary directory: %s',
                     $process->getErrorOutput()

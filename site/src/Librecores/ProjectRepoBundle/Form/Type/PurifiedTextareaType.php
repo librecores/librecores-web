@@ -1,11 +1,12 @@
 <?php
+
 namespace Librecores\ProjectRepoBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\DataTransformerInterface;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 /**
  * Textarea form control type which purifies (sanitizes) its contents
@@ -34,9 +35,11 @@ class PurifiedTextareaType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
-            'compound' => false,
-        ));
+        $resolver->setDefaults(
+            array(
+                'compound' => false,
+            )
+        );
     }
 
     public function getName()

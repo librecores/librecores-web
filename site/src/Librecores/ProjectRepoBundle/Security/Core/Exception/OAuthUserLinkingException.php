@@ -1,4 +1,5 @@
 <?php
+
 namespace Librecores\ProjectRepoBundle\Security\Core\Exception;
 
 use HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException;
@@ -25,10 +26,12 @@ class OAuthUserLinkingException extends AccountNotLinkedException
      */
     public function serialize()
     {
-        return serialize(array(
-            $this->oAuthData,
-            parent::serialize(),
-        ));
+        return serialize(
+            array(
+                $this->oAuthData,
+                parent::serialize(),
+            )
+        );
     }
 
     /**
@@ -39,7 +42,7 @@ class OAuthUserLinkingException extends AccountNotLinkedException
         list(
             $this->oAuthData,
             $parentData
-        ) = unserialize($str);
+            ) = unserialize($str);
         parent::unserialize($parentData);
     }
 }
