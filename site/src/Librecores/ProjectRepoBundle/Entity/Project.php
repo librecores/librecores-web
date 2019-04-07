@@ -759,7 +759,7 @@ class Project
      *
      * @return boolean
      */
-    public function getInProcessing()
+    public function isInProcessing()
     {
         return $this->inProcessing;
     }

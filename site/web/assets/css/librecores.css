@@ -866,3 +866,7 @@ a.classifiation-tag:hover {
 .algolia-search-logo img {
   width: 90px;
 }
+
+.project-in-processing {
+    margin-top: 2rem;
+}
