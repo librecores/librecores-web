@@ -17,6 +17,10 @@
 
 {% block content %}
 <div class="librecores-project-header">
+    <div class="project-in-processing alert alert-warning alert-dismissible">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        We are currently processing this project. Project information will be available in a while.
+    </div>
   <h1>
     {{ project.displayName }}
     <small> by <a href="{{ path('librecores_project_repo_user_org_view', {'userOrOrganization': project.parentName }) }}">{{ project.parentName }}</a></small>
@@ -29,7 +33,7 @@
   <div class="row">
     <div class="project-info col-md-8 col-sm-12">
       <div class="project-quality">
-        {% if metadata.qualityScore.value > 0 %}
+        {% if not project.inProcessing and metadata.qualityScore.value > 0 %}
         <span class="stars">
           {% for _ in range(1,metadata.qualityScore.fullStars) %}
             <span class="fa fa-star" aria-hidden="true"></span>

@@ -192,18 +192,6 @@ class ProjectController extends Controller
     ) {
         $p = $this->getProject($parentName, $projectName);
 
-        // redirect to wait page until processing is done
-        if ($p->getInProcessing()) {
-            $waitTemplate = 'LibrecoresProjectRepoBundle:Project:view_wait_processing.html.twig';
-            $response = new Response(
-                $this->renderView($waitTemplate, array('project' => $p)),
-                Response::HTTP_OK
-            );
-            $response->headers->set('refresh', '5;url='.$request->getUri());
-
-            return $response;
-        }
-
         // fetch project metadata
         $current = new \DateTimeImmutable();
 
