@@ -33,14 +33,15 @@
 
 - name: Install common system packages
   become: true
-  apt:  pkg={{ item }} state=present
-  with_items:
-    - curl
-    - wget
-    - git
-    - unzip
-    # required for ansible
-    - python-mysqldb
+  apt:
+    pkg:
+      - curl
+      - wget
+      - git
+      - unzip
+      # required for ansible
+      - python-mysqldb
+    state: present
 
 # the data partition is on EBS in production/staging
 - name: Ensure data directory
