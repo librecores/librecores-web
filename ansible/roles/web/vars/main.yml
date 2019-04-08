@@ -2,14 +2,13 @@
 # PHP version to be used
 # Packages are expected to be named php<php_version>, e.g. php7.0, php7.0-xml,
 # etc. The same is true for the binaries.
-php_version: 7.1
+php_version: 7.3
 
 # PHP extensions, installed from OS packages (preferred)
 # All packages are expected to be named "php{{ php_version }}-EXTENSION_NAME"
 php_extensions_packaged:
   - dev
   - curl
-  - mcrypt
   - mysql
   - xml
   - bcmath
