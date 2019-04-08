@@ -13,8 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @author Amitosh Swain Mahapatra <amitosh.swain@gmail.com>
  *
- * @ORM\Table
- * @ORM\Entity(repositoryClass="Librecores\ProjectRepoBundle\Repository\CommitRepository")
+ * @ORM\Entity
  */
 class Commit
 {

@@ -2,16 +2,27 @@
 
 namespace Librecores\ProjectRepoBundle\Repository;
 
-use Doctrine\ORM\EntityRepository;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
+use Librecores\ProjectRepoBundle\Entity\Organization;
 use Librecores\ProjectRepoBundle\Entity\Project;
+use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
  * ProjectRepository
  *
  * Extends the default repository with custom functionality.
  */
-class ProjectRepository extends EntityRepository
+class ProjectRepository extends ServiceEntityRepository
 {
+    /**
+     * {@inheritDoc}
+     */
+    public function __construct(RegistryInterface $registry)
+    {
+        parent::__construct($registry, Organization::class);
+    }
+
     /**
      * Find a project based using the parent/name scheme.
      *
@@ -20,7 +31,7 @@ class ProjectRepository extends EntityRepository
      *
      * @return NULL|Project
      *
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws NonUniqueResultException
      */
     public function findProjectWithParent($parentName, $projectName)
     {

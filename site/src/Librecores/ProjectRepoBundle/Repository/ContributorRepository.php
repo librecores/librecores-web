@@ -2,9 +2,12 @@
 
 namespace Librecores\ProjectRepoBundle\Repository;
 
-use Doctrine\ORM\EntityRepository;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 use Librecores\ProjectRepoBundle\Entity\Contributor;
 use Librecores\ProjectRepoBundle\Entity\SourceRepo;
+use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
  * ContributorRepository
@@ -13,8 +16,16 @@ use Librecores\ProjectRepoBundle\Entity\SourceRepo;
  *
  * @author Amitosh Swain Mahapatra <amitosh.swain@gmail.com>
  */
-class ContributorRepository extends EntityRepository
+class ContributorRepository extends ServiceEntityRepository
 {
+    /**
+     * {@inheritDoc}
+     */
+    public function __construct(RegistryInterface $registry)
+    {
+        parent::__construct($registry, Contributor::class);
+    }
+
     /**
      * Get contributor for a source repository from an email.
      *
@@ -25,6 +36,8 @@ class ContributorRepository extends EntityRepository
      * @param null|string $name  name of the contributor
      *
      * @return Contributor|null
+     * @throws ORMException
+     * @throws OptimisticLockException
      */
     public function getContributorForRepository(SourceRepo $repo, string $email, ?string $name = null): ?Contributor
     {
@@ -72,6 +85,7 @@ class ContributorRepository extends EntityRepository
      * @param SourceRepo $repo repository to query for
      *
      * @return mixed
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function getContributorCountForRepository(SourceRepo $repo): int
     {

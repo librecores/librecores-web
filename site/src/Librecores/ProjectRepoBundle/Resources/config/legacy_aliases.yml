@@ -13,8 +13,5 @@ services:
         librecores_user_provider: '@Librecores\ProjectRepoBundle\Security\Core\User\LibreCoresUserProvider'
         librecores.user.registration_event_listener: '@Librecores\ProjectRepoBundle\EventListener\OAuthRegistrationListener'
         librecores_project_voter: '@Librecores\ProjectRepoBundle\Security\ProjectVoter'
-        librecores.repository.contributor: '@Librecores\ProjectRepoBundle\Repository\ContributorRepository'
-        librecores.repository.commit: '@Librecores\ProjectRepoBundle\Repository\CommitRepository'
         librecores.process_creator: '@Librecores\ProjectRepoBundle\Util\ProcessCreator'
         librecores.repocrawlerfactory: '@Librecores\ProjectRepoBundle\RepoCrawler\RepoCrawlerFactory'
-        librecores.project_metrics_provider: '@Librecores\ProjectRepoBundle\Doctrine\ProjectMetricsProvider'

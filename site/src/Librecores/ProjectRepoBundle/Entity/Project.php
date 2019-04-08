@@ -20,7 +20,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     @ORM\UniqueConstraint(name="projectname_full",
  *         columns={"name", "parentUser_id", "parentOrganization_id"})
  * })
- * @ORM\Entity(repositoryClass="Librecores\ProjectRepoBundle\Repository\ProjectRepository")
+ * @ORM\Entity
  * @ORM\HasLifecycleCallbacks
  *
  * @UniqueEntity(
