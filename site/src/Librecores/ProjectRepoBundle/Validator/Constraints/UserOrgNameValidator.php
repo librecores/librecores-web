@@ -149,11 +149,7 @@ class UserOrgNameValidator extends ConstraintValidator
 
         // Check the org name against existing usernames
         if ($type === "org") {
-            $q = 'SELECT COUNT(u.id) FROM LibrecoresProjectRepoBundle:User u '.
-                'WHERE u.usernameCanonical = :name';
-            $cntUser = $em->createQuery($q)
-                ->setParameter('name', $name)
-                ->getSingleScalarResult();
+            $cntUser = $em->getRepository('LibrecoresProjectRepoBundle:User')->count([ 'usernameCanonical' => $name ]);
             if ($cntUser !== 0) {
                 return true;
             }
@@ -161,12 +157,7 @@ class UserOrgNameValidator extends ConstraintValidator
 
         // Check the username against existing org names
         if ($type === "user") {
-            $q = 'SELECT COUNT(o.id) '.
-                'FROM LibrecoresProjectRepoBundle:Organization o '.
-                'WHERE LOWER(o.name) = :name';
-            $cntOrg = $em->createQuery($q)
-                ->setParameter('name', $name)
-                ->getSingleScalarResult();
+            $cntOrg = $em->getRepository('LibrecoresProjectRepoBundle:Organization')->count([ 'name' => $name ]);
             if ($cntOrg !== 0) {
                 return true;
             }
