@@ -14,7 +14,14 @@ services:
     # this creates a service per class whose id is the fully-qualified class name
     Librecores\ProjectRepoBundle\:
         resource: '../../../ProjectRepoBundle/*'
-        exclude: '../../../ProjectRepoBundle/{Entity,Repository}'
+        exclude: '../../../ProjectRepoBundle/{Entity, DataFixtures}'
+
+    # controllers are imported separately to make sure services can be injected
+    # as action arguments even if you don't extend any base controller class
+    Librecores\ProjectRepoBundle\Controller\:
+        resource: '../../../ProjectRepoBundle/Controller'
+        tags: ['controller.service_arguments']
+
 
     # Consumer Services (called through RabbitMQ)
     Librecores\ProjectRepoBundle\Consumer\UpdateProjectInformation:
@@ -97,16 +104,6 @@ services:
             - { name: security.voter }
         public: false
 
-    Librecores\ProjectRepoBundle\Repository\ContributorRepository:
-        factory: ['@doctrine.orm.default_entity_manager', 'getRepository']
-        arguments:
-            - Librecores\ProjectRepoBundle\Entity\Contributor
-
-    Librecores\ProjectRepoBundle\Repository\CommitRepository:
-        factory: ['@doctrine.orm.default_entity_manager', 'getRepository']
-        arguments:
-            - Librecores\ProjectRepoBundle\Entity\Commit
-
     Librecores\ProjectRepoBundle\Util\ProcessCreator: ~
 
     Librecores\ProjectRepoBundle\RepoCrawler\RepoCrawlerFactory:
@@ -116,8 +113,3 @@ services:
             - '@doctrine.orm.default_entity_manager'
             - '@librecores.process_creator'
             - '@librecores.util.githubapiservice'
-
-    Librecores\ProjectRepoBundle\Doctrine\ProjectMetricsProvider:
-        arguments:
-            - '@librecores.repository.commit'
-            - '@librecores.repository.contributor'

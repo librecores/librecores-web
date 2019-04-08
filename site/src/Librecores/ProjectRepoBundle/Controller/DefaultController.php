@@ -4,11 +4,12 @@ namespace Librecores\ProjectRepoBundle\Controller;
 
 use Librecores\ProjectRepoBundle\Entity\Organization;
 use Librecores\ProjectRepoBundle\Entity\User;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Librecores\ProjectRepoBundle\Repository\OrganizationRepository;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class DefaultController extends Controller
+class DefaultController extends AbstractController
 {
     /**
      * Render the project overview page
@@ -23,13 +24,16 @@ class DefaultController extends Controller
     /**
      * Display a user or an organization
      *
-     * @param string $userOrOrganization
+     * @param string                 $userOrOrganization
+     *
+     * @param OrganizationRepository $organizationRepository
      *
      * @return Response
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function userOrgViewAction($userOrOrganization)
+    public function userOrgViewAction($userOrOrganization, OrganizationRepository $organizationRepository)
     {
-        $uoo = $this->getUserOrOrg($userOrOrganization);
+        $uoo = $this->getUserOrOrg($userOrOrganization, $organizationRepository);
 
         if ($uoo instanceof User) {
             return $this->forward(
@@ -51,14 +55,17 @@ class DefaultController extends Controller
     /**
      * Display the organization settings page
      *
-     * @param Request $request
-     * @param string  $userOrOrganization name of the organization
+     * @param Request                $request
+     * @param string                 $userOrOrganization name of the organization
+     *
+     * @param OrganizationRepository $organizationRepository
      *
      * @return Response
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function userOrgSettingsAction(Request $request, $userOrOrganization)
+    public function userOrgSettingsAction(Request $request, $userOrOrganization, OrganizationRepository $organizationRepository)
     {
-        $uoo = $this->getUserOrOrg($userOrOrganization);
+        $uoo = $this->getUserOrOrg($userOrOrganization, $organizationRepository);
 
         if ($uoo instanceof User) {
             if ($uoo->getId() !== $this->getUser()->getId()) {
@@ -119,12 +126,15 @@ class DefaultController extends Controller
     /**
      * Get an user or organization entity with the given name
      *
-     * @param string $userOrOrganization
+     * @param string                 $userOrOrganization
+     *
+     * @param OrganizationRepository $organizationRepository
      *
      * @return User|Organization|null user or organization entity, or null if
      *   no entity with the given name exists.
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    private function getUserOrOrg($userOrOrganization)
+    private function getUserOrOrg($userOrOrganization, OrganizationRepository $organizationRepository)
     {
         // try user first
         $user = $this->getDoctrine()
@@ -136,9 +146,7 @@ class DefaultController extends Controller
         }
 
         // then organization
-        $org = $this->getDoctrine()
-            ->getRepository('LibrecoresProjectRepoBundle:Organization')
-            ->findOneByName($userOrOrganization);
+        $org = $organizationRepository->findOneByName($userOrOrganization);
 
         return $org;
     }

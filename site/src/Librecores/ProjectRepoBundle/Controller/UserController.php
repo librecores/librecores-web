@@ -2,21 +2,20 @@
 
 namespace Librecores\ProjectRepoBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-
 use FOS\UserBundle\Form\Type\ChangePasswordFormType;
 use FOS\UserBundle\Model\UserInterface;
 use FOS\UserBundle\Model\UserManagerInterface;
-
+use HWI\Bundle\OAuthBundle\Connect\AccountConnectorInterface;
 use Librecores\ProjectRepoBundle\Entity\User;
 use Librecores\ProjectRepoBundle\Form\Type\UserProfileType;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
-class UserController extends Controller
+class UserController extends AbstractController
 {
 
     /**
@@ -94,7 +93,7 @@ class UserController extends Controller
      * @param Request $request
      * @param string  $serviceName
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
     public function connectionSuccessAction(Request $request, $serviceName)
     {
@@ -110,16 +109,20 @@ class UserController extends Controller
     /**
      * Disconnect the user account from an OAuth service
      *
-     * @param Request $request
-     * @param string  $serviceName
+     * @param Request                   $request
+     * @param string                    $serviceName
+     * @param AccountConnectorInterface $accountConnector
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
-    public function disconnectFromOAuthServiceAction(Request $request, $serviceName)
-    {
+    public function disconnectFromOAuthServiceAction(
+        Request $request,
+        $serviceName,
+        AccountConnectorInterface $accountConnector
+    ) {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        $this->get('hwi_oauth.account.connector')->disconnect($this->getUser(), $serviceName);
+        $accountConnector->disconnect($this->getUser(), $serviceName);
 
         $this->addFlash(
             'success',
@@ -138,8 +141,10 @@ class UserController extends Controller
      *
      * @return Response
      */
-    public function passwordSettingsAction(Request $request, UserManagerInterface $userManager)
-    {
+    public function passwordSettingsAction(
+        Request $request,
+        UserManagerInterface $userManager
+    ) {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         $user = $this->getUser();

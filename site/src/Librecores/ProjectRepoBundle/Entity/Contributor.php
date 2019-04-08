@@ -16,7 +16,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @author Amitosh Swain Mahapatra <amitosh.swain@gmail.com>
  *
  * @ORM\Table(uniqueConstraints={@UniqueConstraint(columns={"email", "sourceRepo_id"})})
- * @ORM\Entity(repositoryClass="Librecores\ProjectRepoBundle\Repository\ContributorRepository")
+ * @ORM\Entity
  */
 class Contributor
 {
@@ -74,7 +74,8 @@ class Contributor
      *
      * @var Collection
      *
-     * @ORM\OneToMany(targetEntity="Commit", mappedBy="contributor", cascade={"persist"}, fetch="EXTRA_LAZY")
+     * @ORM\OneToMany(targetEntity="Commit", mappedBy="contributor",
+     *      cascade={"persist"}, fetch="EXTRA_LAZY")
      */
     private $commits;
 

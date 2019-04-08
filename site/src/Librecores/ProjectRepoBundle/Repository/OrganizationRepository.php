@@ -2,16 +2,27 @@
 
 namespace Librecores\ProjectRepoBundle\Repository;
 
-use Doctrine\ORM\EntityRepository;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
+use Librecores\ProjectRepoBundle\Entity\Organization;
 use Librecores\ProjectRepoBundle\Entity\User;
+use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
  * OrganizationRepository
  *
  * Extends the default repository with custom functionality.
  */
-class OrganizationRepository extends EntityRepository
+class OrganizationRepository extends ServiceEntityRepository
 {
+    /**
+     * {@inheritDoc}
+     */
+    public function __construct(RegistryInterface $registry)
+    {
+        parent::__construct($registry, Organization::class);
+    }
+
     /**
      * Find all the organizations that a user is a member of.
      *
@@ -39,6 +50,7 @@ class OrganizationRepository extends EntityRepository
      * @param string $organizationName
      *
      * @return NULL|Organization
+     * @throws NonUniqueResultException
      */
     public function findOneByName($organizationName)
     {

@@ -18,7 +18,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * projects.
  *
  * @ORM\Table("Organization")
- * @ORM\Entity(repositoryClass="Librecores\ProjectRepoBundle\Repository\OrganizationRepository")
+ * @ORM\Entity
  * @ORM\HasLifecycleCallbacks
  *
  * @UniqueEntity(

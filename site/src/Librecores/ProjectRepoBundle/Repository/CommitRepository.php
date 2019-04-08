@@ -3,12 +3,13 @@
 namespace Librecores\ProjectRepoBundle\Repository;
 
 use DateTimeImmutable;
-use Doctrine\ORM\EntityRepository;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use InvalidArgumentException;
 use Librecores\ProjectRepoBundle\Entity\Commit;
 use Librecores\ProjectRepoBundle\Entity\Contributor;
 use Librecores\ProjectRepoBundle\Entity\SourceRepo;
 use Librecores\ProjectRepoBundle\Util\Dates;
+use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
  * CommitRepository
@@ -17,8 +18,17 @@ use Librecores\ProjectRepoBundle\Util\Dates;
  *
  * @author Amitosh Swain Mahapatra <amitosh.swain@gmail.com>
  */
-class CommitRepository extends EntityRepository
+class CommitRepository extends ServiceEntityRepository
 {
+
+    /**
+     * {@inheritDoc}
+     */
+    public function __construct(RegistryInterface $registry)
+    {
+        parent::__construct($registry, Commit::class);
+    }
+
     /**
      * Get the latest commit on the database
      *
@@ -105,6 +115,7 @@ class CommitRepository extends EntityRepository
      * @param Contributor $contributor
      *
      * @return int
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function getCommitsByContributorCount(Contributor $contributor): int
     {

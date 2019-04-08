@@ -2,26 +2,29 @@
 
 namespace Librecores\ProjectRepoBundle\Controller;
 
+use Doctrine\ORM\NonUniqueResultException;
+use FOS\UserBundle\Model\UserManagerInterface;
 use Librecores\ProjectRepoBundle\Entity\Organization;
 use Librecores\ProjectRepoBundle\Entity\OrganizationMember;
 use Librecores\ProjectRepoBundle\Form\Type\OrganizationType;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Librecores\ProjectRepoBundle\Repository\OrganizationRepository;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class OrganizationController extends Controller
+class OrganizationController extends AbstractController
 {
     /**
      * List the organizations that current user belongs
      *
+     * @param OrganizationRepository $organizationRepository
+     *
      * @return Response
      */
-    public function listAction()
+    public function listAction(OrganizationRepository $organizationRepository)
     {
-        $organizations = $this->getDoctrine()
-            ->getRepository('LibrecoresProjectRepoBundle:Organization')
-            ->findAllByMemberOrderedByName($this->getUser());
+        $organizations = $organizationRepository->findAllByMemberOrderedByName($this->getUser());
 
 
         return $this->render(
@@ -186,15 +189,15 @@ class OrganizationController extends Controller
     /**
      * Request to join an organization
      *
-     * @param string $organizationName
+     * @param string                 $organizationName
+     *
+     * @param OrganizationRepository $repository
      *
      * @return Response
+     * @throws NonUniqueResultException
      */
-    public function joinAction($organizationName)
-    {
-        $o = $this->getDoctrine()
-            ->getRepository('LibrecoresProjectRepoBundle:Organization')
-            ->findOneByName($organizationName);
+    public function joinAction($organizationName, OrganizationRepository $repository) {
+        $o = $repository->findOneByName($organizationName);
 
         if (!$o) {
             throw $this->createNotFoundException(
@@ -222,15 +225,16 @@ class OrganizationController extends Controller
     /**
      * Leave an organization
      *
-     * @param string $organizationName
+     * @param string                 $organizationName
+     *
+     * @param OrganizationRepository $repository
      *
      * @return Response
+     * @throws NonUniqueResultException
      */
-    public function leaveAction($organizationName)
+    public function leaveAction($organizationName, OrganizationRepository $repository)
     {
-        $o = $this->getDoctrine()
-            ->getRepository('LibrecoresProjectRepoBundle:Organization')
-            ->findOneByName($organizationName);
+        $o = $repository->findOneByName($organizationName);
 
         if (!$o) {
             throw $this->createNotFoundException(
@@ -307,22 +311,29 @@ class OrganizationController extends Controller
     /**
      * Approve an organization join request
      *
-     * @param string $organizationName
-     * @param string $userName
+     * @param string                 $organizationName
+     * @param string                 $userName
+     *
+     * @param OrganizationRepository $repository
+     *
+     * @param UserManagerInterface   $userManager
      *
      * @return Response
+     *
+     * @throws NonUniqueResultException
      */
-    public function approveAction($organizationName, $userName)
-    {
-        $o = $this->getDoctrine()
-            ->getRepository('LibrecoresProjectRepoBundle:Organization')
-            ->findOneByName($organizationName);
+    public function approveAction(
+        $organizationName,
+        $userName,
+        OrganizationRepository $repository,
+        UserManagerInterface $userManager
+    ) {
+        $o = $repository->findOneByName($organizationName);
 
         if (!$o) {
             throw $this->createNotFoundException('No organization found with that name.');
         }
 
-        $userManager = $this->container->get('fos_user.user_manager');
         $user = $userManager->findUserByUsername($userName);
 
         if (!$user) {
@@ -349,15 +360,23 @@ class OrganizationController extends Controller
     /**
      * Deny an organization join request
      *
-     * @param string $organizationName
-     * @param string $userName
+     * @param string                 $organizationName
+     * @param string                 $userName
+     *
+     * @param OrganizationRepository $repository
+     *
+     * @param UserManagerInterface   $userManager
      *
      * @return Response
+     * @throws NonUniqueResultException
      */
-    public function denyAction($organizationName, $userName)
-    {
-        $o = $this->getDoctrine()
-            ->getRepository('LibrecoresProjectRepoBundle:Organization')
+    public function denyAction(
+        $organizationName,
+        $userName,
+        OrganizationRepository $repository,
+        UserManagerInterface $userManager
+    ) {
+        $o = $repository
             ->findOneByName($organizationName);
 
         if (!$o) {
@@ -366,7 +385,6 @@ class OrganizationController extends Controller
             );
         }
 
-        $userManager = $this->container->get('fos_user.user_manager');
         $user = $userManager->findUserByUsername($userName);
 
         if (!$user) {
@@ -393,15 +411,24 @@ class OrganizationController extends Controller
     /**
      * Remove an organization member
      *
-     * @param string $organizationName
-     * @param string $userName
+     * @param string                 $organizationName
+     * @param string                 $userName
+     *
+     * @param OrganizationRepository $repository
+     *
+     * @param UserManagerInterface   $userManager
      *
      * @return Response
+     *
+     * @throws NonUniqueResultException
      */
-    public function removeAction($organizationName, $userName)
-    {
-        $o = $this->getDoctrine()
-            ->getRepository('LibrecoresProjectRepoBundle:Organization')
+    public function removeAction(
+        $organizationName,
+        $userName,
+        OrganizationRepository $repository,
+        UserManagerInterface $userManager
+    ) {
+        $o = $repository
             ->findOneByName($organizationName);
 
         if (!$o) {
@@ -410,7 +437,6 @@ class OrganizationController extends Controller
             );
         }
 
-        $userManager = $this->container->get('fos_user.user_manager');
         $user = $userManager->findUserByUsername($userName);
 
         if (!$user) {
