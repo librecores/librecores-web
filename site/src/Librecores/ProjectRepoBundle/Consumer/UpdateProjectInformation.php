@@ -56,9 +56,6 @@ class UpdateProjectInformation implements ConsumerInterface
                     "Unable to update project with ID $projectId: project does "
                     ."not exist."
                 );
-
-                $this->markInProcessing($project, false);
-
                 return true; // don't requeue
             }
 
