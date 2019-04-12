@@ -328,8 +328,7 @@ class ProjectController extends Controller
         foreach ($classificationCategories as $category) {
             $temp = [
                 "id" => $category->getId(),
-                "parentId" => $category->getParent() ?
-                    $category->getParent() : $category->getParent()->getId(),
+                "parentId" => $category->getParent() ? $category->getParent()->getId() : null,
                 "name" => $category->getName(),
             ];
             $classificationHierarchy[] = $temp;
