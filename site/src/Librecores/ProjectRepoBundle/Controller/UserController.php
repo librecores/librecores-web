@@ -3,10 +3,14 @@
 namespace Librecores\ProjectRepoBundle\Controller;
 
 use FOS\UserBundle\Form\Type\ChangePasswordFormType;
+use FOS\UserBundle\Mailer\MailerInterface;
 use FOS\UserBundle\Model\UserInterface;
 use FOS\UserBundle\Model\UserManagerInterface;
+use FOS\UserBundle\Util\TokenGeneratorInterface;
 use HWI\Bundle\OAuthBundle\Connect\AccountConnectorInterface;
 use Librecores\ProjectRepoBundle\Entity\User;
+use Librecores\ProjectRepoBundle\Form\Model\ResendConfirmationEmailRequest;
+use Librecores\ProjectRepoBundle\Form\Type\ResendConfirmationEmailRequestType;
 use Librecores\ProjectRepoBundle\Form\Type\UserProfileType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -181,5 +185,42 @@ class UserController extends AbstractController
             'LibrecoresProjectRepoBundle:User:settings_password.html.twig',
             array('user' => $user, 'form' => $form->createView())
         );
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return RedirectResponse|Response
+     */
+    public function resendConfirmationEmailAction(
+        Request $request,
+        MailerInterface $mailer,
+        TokenGeneratorInterface $tokenGenerator
+    ) {
+
+        $resendEmailRequest = new ResendConfirmationEmailRequest();
+        $form = $this->createForm(ResendConfirmationEmailRequestType::class, $resendEmailRequest);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $user = $resendEmailRequest->getUser();
+
+            if (!$user->isEnabled()) {
+                if (null === $user->getConfirmationToken()) {
+                    $user->setConfirmationToken($tokenGenerator->generateToken());
+                }
+
+                $mailer->sendConfirmationEmailMessage($resendEmailRequest->getUser());
+
+                $request->getSession()->set('fos_user_send_confirmation_email/email', $user->getEmail());
+
+                return $this->redirectToRoute('fos_user_registration_check_email');
+            } else {
+                $this->addFlash('warning', 'Account is already confirmed');
+            }
+        }
+
+        return $this->render('LibrecoresProjectRepoBundle:User:resend_confirmation_email.html.twig', [ 'form' => $form->createView() ]);
     }
 }

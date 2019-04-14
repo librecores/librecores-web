@@ -1,0 +1,24 @@
+{% extends "@FOSUser/layout.html.twig" %}
+
+{% trans_default_domain 'FOSUserBundle' %}
+
+{% block fos_user_content %}
+  <div class="center-block librecores-user-signupin-panel">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Resend confirmation email</h3>
+      </div>
+      <div class="panel-body">
+        {{ form_start(form) }}
+          {{ form_row(form.user) }}
+          <button class="btn btn-success btn-block" type="submit" id="_submit" name="_submit">Resend email</button>
+        {{ form_end(form) }}
+        <hr/>
+        <div class="text-center">
+          Don't have an account yet?<br/>
+          <a href="{{ path('fos_user_registration_register') }}" style="font-weight: bold">Register now</a>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

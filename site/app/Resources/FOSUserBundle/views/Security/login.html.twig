@@ -12,7 +12,8 @@
 {% if error %}
   <div class="alert alert-danger" role="alert">
     {% if get_class(error) == "Symfony\\Component\\Security\\Core\\Exception\\DisabledException" %}
-    <p>Your need to activate your account before you can login. Follow the instructions sent to your registered email address.</p>
+      <p>Your need to activate your account before you can login. Follow the instructions sent to your registered email address.</p>
+      <p>To resend your confirmation email <a href="{{ path('librecores_user_resend_confirmation') }}">click here</a>.</p>
     {% else %}
     {{ error.messageKey|trans(error.messageData, 'security') }}
     {% endif %}
