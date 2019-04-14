@@ -33,6 +33,9 @@ librecores.user.settings.password:
     path: /user/settings/password
     defaults: { _controller: LibrecoresProjectRepoBundle:User:passwordSettings }
 
+librecores_user_resend_confirmation:
+    path: /user/resend-confirmation
+    defaults: { _controller: LibrecoresProjectRepoBundle:User:resendConfirmationEmail }
 # FOSUser
 fos_user_security:
     resource: "@FOSUserBundle/Resources/config/routing/security.xml"

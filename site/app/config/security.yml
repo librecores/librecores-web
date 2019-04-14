@@ -59,6 +59,7 @@ security:
         - { path: ^/user/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/user/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/user/connect, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/user/resend-confirmation, role: IS_AUTHENTICATED_ANONYMOUSLY }
 
         # all other user setting functionality requires a login
         - { path: ^/user/.+$, role: IS_AUTHENTICATED_FULLY }
