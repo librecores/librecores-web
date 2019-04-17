@@ -56,6 +56,7 @@ class UpdateProjectInformation implements ConsumerInterface
                     "Unable to update project with ID $projectId: project does "
                     ."not exist."
                 );
+
                 return true; // don't requeue
             }
 
