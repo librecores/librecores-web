@@ -204,11 +204,11 @@ class ProjectController extends AbstractController
      * Display the project
      *
      * @param Request                $request
-     * @param string                 $parentName        URL component: name of
-     *                                                  the parent (user or
-     *                                                  organization)
-     * @param string                 $projectName       URL component: name of
-     *                                                  the project
+     * @param string                 $parentName             URL component: name of
+     *                                                       the parent (user or
+     *                                                       organization)
+     * @param string                 $projectName            URL component: name of
+     *                                                       the project
      * @param ProjectRepository      $projectRepository
      * @param ProjectMetricsProvider $projectMetricsProvider
      *
@@ -294,6 +294,7 @@ class ProjectController extends AbstractController
      * @param ProjectRepository $repository
      *
      * @return Response
+     *
      * @throws NonUniqueResultException
      */
     public function settingsAction(
@@ -384,6 +385,7 @@ class ProjectController extends AbstractController
      * @param ProjectRepository $repository
      *
      * @return Response
+     *
      * @throws NonUniqueResultException
      */
     public function settingsTeamAction(

@@ -29,6 +29,7 @@ class DefaultController extends AbstractController
      * @param OrganizationRepository $organizationRepository
      *
      * @return Response
+     *
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function userOrgViewAction($userOrOrganization, OrganizationRepository $organizationRepository)
@@ -55,15 +56,15 @@ class DefaultController extends AbstractController
     /**
      * Display the organization settings page
      *
-     * @param Request                $request
-     * @param string                 $userOrOrganization name of the organization
+     * @param string                 $userOrOrganization     name of the organization
      *
      * @param OrganizationRepository $organizationRepository
      *
      * @return Response
+     *
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function userOrgSettingsAction(Request $request, $userOrOrganization, OrganizationRepository $organizationRepository)
+    public function userOrgSettingsAction($userOrOrganization, OrganizationRepository $organizationRepository)
     {
         $uoo = $this->getUserOrOrg($userOrOrganization, $organizationRepository);
 

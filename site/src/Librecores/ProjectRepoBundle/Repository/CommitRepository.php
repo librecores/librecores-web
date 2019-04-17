@@ -115,6 +115,7 @@ class CommitRepository extends ServiceEntityRepository
      * @param Contributor $contributor
      *
      * @return int
+     *
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function getCommitsByContributorCount(Contributor $contributor): int

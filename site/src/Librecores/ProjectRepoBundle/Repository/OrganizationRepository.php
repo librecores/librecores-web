@@ -50,6 +50,7 @@ class OrganizationRepository extends ServiceEntityRepository
      * @param string $organizationName
      *
      * @return NULL|Organization
+     *
      * @throws NonUniqueResultException
      */
     public function findOneByName($organizationName)

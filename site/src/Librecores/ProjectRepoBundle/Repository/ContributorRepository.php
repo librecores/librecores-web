@@ -36,6 +36,7 @@ class ContributorRepository extends ServiceEntityRepository
      * @param null|string $name  name of the contributor
      *
      * @return Contributor|null
+     *
      * @throws ORMException
      * @throws OptimisticLockException
      */
@@ -85,6 +86,7 @@ class ContributorRepository extends ServiceEntityRepository
      * @param SourceRepo $repo repository to query for
      *
      * @return mixed
+     *
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function getContributorCountForRepository(SourceRepo $repo): int

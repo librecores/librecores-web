@@ -33,40 +33,76 @@ class FileUtilTest extends TestCase
         ];
         $fs = vfsStream::setup('basedir', null, $directory);
 
-        $foundFile = FileUtil::findFile($fs->url(), [ 'doesntexist' ],
-                                        [ '.md', '.pod', '' ], true);
+        $foundFile = FileUtil::findFile(
+            $fs->url(),
+            [ 'doesntexist' ],
+            [ '.md', '.pod', '' ],
+            true
+        );
         $this->assertFalse($foundFile);
 
-        $foundFile = FileUtil::findFile($fs->url(), [ 'README', 'READYOU' ],
-                                        [ '.md', '.pod', '' ], true);
+        $foundFile = FileUtil::findFile(
+            $fs->url(),
+            [ 'README', 'READYOU' ],
+            [ '.md', '.pod', '' ],
+            true
+        );
         $this->assertEquals(vfsStream::url('basedir/README.md'), $foundFile);
 
-        $foundFile = FileUtil::findFile($fs->url(), [ 'READYOU', 'README' ],
-                                        [ '.md', '.pod', '' ], true);
+        $foundFile = FileUtil::findFile(
+            $fs->url(),
+            [ 'READYOU', 'README' ],
+            [ '.md', '.pod', '' ],
+            true
+        );
         $this->assertEquals(vfsStream::url('basedir/READYOU.md'), $foundFile);
 
-        $foundFile = FileUtil::findFile($fs->url(), [ 'README', 'READYOU' ],
-                                        [ '.pod', '.md', '' ], true);
+        $foundFile = FileUtil::findFile(
+            $fs->url(),
+            [ 'README', 'READYOU' ],
+            [ '.pod', '.md', '' ],
+            true
+        );
         $this->assertEquals(vfsStream::url('basedir/README.pod'), $foundFile);
 
-        $foundFile = FileUtil::findFile($fs->url(), [ 'README', 'READYOU' ],
-                                        [ '.asdf', '.pod', '.md', '' ], true);
+        $foundFile = FileUtil::findFile(
+            $fs->url(),
+            [ 'README', 'READYOU' ],
+            [ '.asdf', '.pod', '.md', '' ],
+            true
+        );
         $this->assertEquals(vfsStream::url('basedir/README.pod'), $foundFile);
 
-        $foundFile = FileUtil::findFile($fs->url(), [ 'LOWER', 'READYOU' ],
-                                        [ '.md', '.pod', '.md', '' ], true);
+        $foundFile = FileUtil::findFile(
+            $fs->url(),
+            [ 'LOWER', 'READYOU' ],
+            [ '.md', '.pod', '.md', '' ],
+            true
+        );
         $this->assertEquals(vfsStream::url('basedir/READYOU.md'), $foundFile);
 
-        $foundFile = FileUtil::findFile($fs->url(), [ 'LOWER', 'READYOU' ],
-                                        [ '.md', '.pod', '' ], false);
+        $foundFile = FileUtil::findFile(
+            $fs->url(),
+            [ 'LOWER', 'READYOU' ],
+            [ '.md', '.pod', '' ],
+            false
+        );
         $this->assertEquals(vfsStream::url('basedir/lower.md'), $foundFile);
 
-        $foundFile = FileUtil::findFile($fs->url(), [ 'subdir' ],
-                                        [ '', '.md' ], true);
+        $foundFile = FileUtil::findFile(
+            $fs->url(),
+            [ 'subdir' ],
+            [ '', '.md' ],
+            true
+        );
         $this->assertEquals(vfsStream::url('basedir/subdir.md'), $foundFile);
 
-        $foundFile = FileUtil::findFile($fs->url(), [ 'subdir' ],
-                                        [ '' ], true);
+        $foundFile = FileUtil::findFile(
+            $fs->url(),
+            [ 'subdir' ],
+            [ '' ],
+            true
+        );
         $this->assertFalse($foundFile);
     }
 }

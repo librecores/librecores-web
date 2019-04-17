@@ -194,9 +194,11 @@ class OrganizationController extends AbstractController
      * @param OrganizationRepository $repository
      *
      * @return Response
+     *
      * @throws NonUniqueResultException
      */
-    public function joinAction($organizationName, OrganizationRepository $repository) {
+    public function joinAction($organizationName, OrganizationRepository $repository)
+    {
         $o = $repository->findOneByName($organizationName);
 
         if (!$o) {
@@ -230,6 +232,7 @@ class OrganizationController extends AbstractController
      * @param OrganizationRepository $repository
      *
      * @return Response
+     *
      * @throws NonUniqueResultException
      */
     public function leaveAction($organizationName, OrganizationRepository $repository)
@@ -368,6 +371,7 @@ class OrganizationController extends AbstractController
      * @param UserManagerInterface   $userManager
      *
      * @return Response
+     *
      * @throws NonUniqueResultException
      */
     public function denyAction(
