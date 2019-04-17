@@ -4,5 +4,6 @@
 ./bin/console lint:twig app && \
 ./bin/console lint:twig src && \
 ./bin/console doctrine:schema:validate --skip-sync && \
-./vendor/bin/phpunit
+./vendor/bin/phpunit && \
+./vendor/bin/phpcs
 

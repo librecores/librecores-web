@@ -3,6 +3,7 @@
 namespace Tests\Librecores\ProjectRepoBundle\RepoCrawler;
 
 use Doctrine\Common\Persistence\ObjectManager;
+use Librecores\ProjectRepoBundle\Doctrine\ProjectMetricsProvider;
 use Librecores\ProjectRepoBundle\Entity\Contributor;
 use Librecores\ProjectRepoBundle\Entity\GitSourceRepo;
 use Librecores\ProjectRepoBundle\Entity\Organization;
@@ -110,6 +111,10 @@ class GitRepoCrawlerTest extends TestCase
                 ->setDescriptionTextAutoUpdate(false)
                 ->setLicenseTextAutoUpdate(false);
 
+        $mockProjectMetricsProvider = $this->createMock(ProjectMetricsProvider::class);
+
+        $mockProjectMetricsProvider->method('getCodeQualityScore')->willReturn(4.5);
+
         $repo = new GitSourceRepo();
         $repo->setProject($project);
 
@@ -120,7 +125,8 @@ class GitRepoCrawlerTest extends TestCase
             $mockMarkupConverter,
             $processCreator,
             $mockManager,
-            $mockLogger
+            $mockLogger,
+            $mockProjectMetricsProvider
         );
         $crawler->updateSourceRepo();
         $crawler->updateProject();
