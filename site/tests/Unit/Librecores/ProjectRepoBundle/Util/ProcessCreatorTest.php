@@ -2,12 +2,9 @@
 
 namespace Tests\Librecores\Util;
 
-use Librecores\ProjectRepoBundle\Util\ProcessCreator;
 use Librecores\ProjectRepoBundle\Util\ExecutorInterface;
+use Librecores\ProjectRepoBundle\Util\ProcessCreator;
 use PHPUnit\Framework\TestCase;
-use Psr\Log\LoggerInterface;
-use Symfony\Component\Process\Exception\ProcessFailedException;
-use Symfony\Component\Process\Process;
 
 /**
  * Tests for DefaultExecutor

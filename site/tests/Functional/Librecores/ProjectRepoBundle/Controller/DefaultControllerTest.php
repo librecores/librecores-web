@@ -2,11 +2,6 @@
 
 namespace Tests\Librecores\ProjectRepoBundle\Controller;
 
-use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\ORM\EntityRepository;
-use FOS\UserBundle\Doctrine\UserManager;
-use Librecores\ProjectRepoBundle\Entity\User;
-use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 /**
@@ -23,7 +18,7 @@ class DefaultControllerTest extends WebTestCase
         // else fallback to default. This is required for all tests
 
         $env = getenv('SYMFONY_ENV');
-        $client = static::createClient($env ? [ 'environment' => $env ] : []);
+        $client = static::createClient($env ? ['environment' => $env] : []);
 
         // test for a user
 
