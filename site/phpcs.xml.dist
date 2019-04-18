@@ -73,4 +73,12 @@
 
   <!-- Require a space after an inline comment (e.g. "// text") -->
   <rule ref="Squiz.Commenting.InlineComment.NoSpaceBefore"/>
+
+  <rule ref="vendor/sirbrillig/phpcs-variable-analysis/VariableAnalysis">
+   <properties>
+     <property name="ignoreUnusedRegexp" value="/^_ignored/"/>
+   </properties>
+  </rule>
+
+  <rule ref="vendor/sirbrillig/phpcs-import-detection/ImportDetection"/>
 </ruleset>
