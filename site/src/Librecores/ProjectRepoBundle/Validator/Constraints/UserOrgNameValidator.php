@@ -2,8 +2,10 @@
 
 namespace Librecores\ProjectRepoBundle\Validator\Constraints;
 
-use Doctrine\Bundle\DoctrineBundle\Registry;
-use Symfony\Bundle\FrameworkBundle\Routing\Router;
+use Doctrine\ORM\NonUniqueResultException;
+use Librecores\ProjectRepoBundle\Repository\OrganizationRepository;
+use Librecores\ProjectRepoBundle\Repository\UserRepository;
+use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
@@ -74,20 +76,34 @@ class UserOrgNameValidator extends ConstraintValidator
      */
     const VALID_NAME_REGEX = '/^[a-z][a-z0-9-]+$/';
 
-    /**
-     * @var Doctrine\Bundle\DoctrineBundle\Registry
-     */
-    private $orm;
+    /** @var UserRepository */
+    private $userRepository;
 
     /**
-     * @var Router
+     * @var OrganizationRepository
+     */
+    private $organizationRepository;
+
+    /**
+     * @var RouterInterface
      */
     private $router;
 
-    public function __construct(Registry $doctrine, Router $router)
-    {
-        $this->orm = $doctrine;
+    /**
+     * UserOrgNameValidator constructor.
+     *
+     * @param RouterInterface        $router
+     * @param UserRepository         $userRepository
+     * @param OrganizationRepository $organizationRepository
+     */
+    public function __construct(
+        RouterInterface $router,
+        UserRepository $userRepository,
+        OrganizationRepository $organizationRepository
+    ) {
         $this->router = $router;
+        $this->userRepository = $userRepository;
+        $this->organizationRepository = $organizationRepository;
     }
 
     public function validate($value, Constraint $constraint)
@@ -141,15 +157,16 @@ class UserOrgNameValidator extends ConstraintValidator
      * @param string $type "user" or "org"
      *
      * @return bool
+     *
+     * @throws NonUniqueResultException
      */
     private function userOrOrgNameExists($name, $type)
     {
         $name = strtolower($name);
-        $em = $this->orm->getManager();
 
         // Check the org name against existing usernames
         if ($type === "org") {
-            $cntUser = $em->getRepository('LibrecoresProjectRepoBundle:User')->count([ 'usernameCanonical' => $name ]);
+            $cntUser = $this->userRepository->count(['usernameCanonical' => $name]);
             if ($cntUser !== 0) {
                 return true;
             }
@@ -157,7 +174,7 @@ class UserOrgNameValidator extends ConstraintValidator
 
         // Check the username against existing org names
         if ($type === "user") {
-            $cntOrg = $em->getRepository('LibrecoresProjectRepoBundle:Organization')->count([ 'name' => $name ]);
+            $cntOrg = $this->organizationRepository->countByNameIgnoreCase($name);
             if ($cntOrg !== 0) {
                 return true;
             }
