@@ -14,7 +14,7 @@ use Librecores\ProjectRepoBundle\Entity\Project;
 use Librecores\ProjectRepoBundle\Entity\ProjectClassification;
 use Librecores\ProjectRepoBundle\Entity\User;
 use Librecores\ProjectRepoBundle\Form\Type\ProjectType;
-use Librecores\ProjectRepoBundle\RepoCrawler\GithubRepoCrawler;
+use App\RepoCrawler\GithubRepoCrawler;
 use Librecores\ProjectRepoBundle\Repository\OrganizationRepository;
 use Librecores\ProjectRepoBundle\Repository\ProjectRepository;
 use Librecores\ProjectRepoBundle\Service\GitHub\AuthenticationRequiredException;

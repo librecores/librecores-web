@@ -1,6 +1,6 @@
 <?php
 
-namespace Librecores\ProjectRepoBundle\RepoCrawler;
+namespace App\RepoCrawler;
 
 use App\Util\MarkupToHtmlConverter;
 use App\Util\ProcessCreator;
@@ -330,7 +330,7 @@ class GitRepoCrawlerTest extends TestCase
     {
         $testDataPath = join(
             DIRECTORY_SEPARATOR,
-            [__DIR__, '..', 'Resources', $testDataFilename]
+            [__DIR__, 'Resources', $testDataFilename]
         );
 
         return file_get_contents($testDataPath);

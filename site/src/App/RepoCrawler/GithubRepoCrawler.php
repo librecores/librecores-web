@@ -1,6 +1,6 @@
 <?php
 
-namespace Librecores\ProjectRepoBundle\RepoCrawler;
+namespace App\RepoCrawler;
 
 use App\Util\MarkupToHtmlConverter;
 use App\Util\ProcessCreator;

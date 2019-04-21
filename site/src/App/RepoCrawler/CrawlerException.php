@@ -1,6 +1,6 @@
 <?php
 
-namespace Librecores\ProjectRepoBundle\RepoCrawler;
+namespace App\RepoCrawler;
 
 use Exception;
 use Librecores\ProjectRepoBundle\Entity\SourceRepo;
@@ -13,7 +13,7 @@ class CrawlerException extends Exception
     /**
      * CrawlerException constructor.
      *
-     * @param SourceRepo     $repository repository on which the crawl error occured
+     * @param SourceRepo     $repository repository on which the error occurred
      * @param string         $message    the error message
      * @param int            $code       error code, if available
      * @param Throwable|null $previous   the error/exception that

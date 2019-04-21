@@ -7,8 +7,8 @@ use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Librecores\ProjectRepoBundle\Entity\Project;
-use Librecores\ProjectRepoBundle\RepoCrawler\RepoCrawlerFactory;
 use Librecores\ProjectRepoBundle\Repository\ProjectRepository;
+use App\RepoCrawler\RepoCrawlerFactory;
 use OldSound\RabbitMqBundle\RabbitMq\ConsumerInterface;
 use PhpAmqpLib\Message\AMQPMessage;
 use Psr\Log\LoggerInterface;
@@ -103,7 +103,7 @@ class UpdateProjectInformation implements ConsumerInterface
             $project->setInProcessing(false);
 
             // persist all changes made to to DB
-            $this->entityManager->flush();
+            $this->orm->getManager()->flush();
         } catch (DBALException $e) {
             // We assume we got a database exception. Most likely the connection to
             // the DB server died for some reason (probably due to a timeout).
@@ -119,7 +119,7 @@ class UpdateProjectInformation implements ConsumerInterface
                 ."systemd."
             );
             exit(0);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             // We got an unexpected Exception. We assume this is a one-off event
             // and just log it, but otherwise keep the consumer running for the
             // next requests.
@@ -134,7 +134,7 @@ class UpdateProjectInformation implements ConsumerInterface
             // changes.
             try {
                 $this->markInProcessing($project, false);
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 // Ignore -- we're already in the error handling path.
                 // The project will most likely remain in the "in processing"
                 // state.
