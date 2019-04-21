@@ -1,0 +1,18 @@
+hwi_oauth:
+    connect:
+        confirmation: false
+        account_connector: librecores_user_provider
+    firewall_names: [main]
+    resource_owners:
+        github:
+            type:                github
+            client_id:           "%github_app_id%"
+            client_secret:       "%github_app_secret%"
+            scope:               "user:email admin:repo_hook read:org"
+            options:
+                csrf:            true
+        google:
+            type:                google
+            client_id:           "%google_app_id%"
+            client_secret:       "%google_app_secret%"
+            scope:               "email profile"

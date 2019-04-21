@@ -1,0 +1,35 @@
+framework:
+    #esi:             ~
+    default_locale:  "%locale%"
+    #translator:      { fallback: en }
+    translator:      { fallbacks: ["%locale%"] }
+    secret:          "%secret%"
+    router:
+        resource: "%kernel.root_dir%/config/routing.yml"
+        strict_requirements: ~
+    form:            ~
+    csrf_protection: ~
+    validation:      { enable_annotations: true }
+    templating:
+        engines: ['twig']
+        #assets_version: SomeVersionScheme
+    trusted_hosts:   ~
+    session:
+        # handler_id set to null will use default session handler from php.ini
+        handler_id:  ~
+        save_path: ~
+        # On Debian/Ubuntu session files are deleted by a cron job and directory
+        # permissions prevent PHP from reading the session directory. This makes
+        # all attempts by PHP to clean the sessions itself fail. Setting
+        # gc_probability to 0 avoids such failures.
+        gc_probability: 0
+    fragments:       ~
+    http_method_override: true
+    assets: ~
+    cache:
+        pools:
+            # Cache pool for all GitHub API requests done through
+            # GithubApiService
+            app.cache.githubapi:
+                adapter: cache.app
+    serializer: { enabled: true }

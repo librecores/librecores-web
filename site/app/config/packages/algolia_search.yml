@@ -1,0 +1,11 @@
+algolia_search:
+    prefix: "%algolia_search_prefix%"
+    indices:
+        - name: projects
+          class: Librecores\ProjectRepoBundle\Entity\Project
+
+        - name: organization
+          class: Librecores\ProjectRepoBundle\Entity\Organization
+
+        - name: user
+          class: Librecores\ProjectRepoBundle\Entity\User

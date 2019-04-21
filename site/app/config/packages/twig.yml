@@ -1,0 +1,13 @@
+twig:
+    debug:            "%kernel.debug%"
+    strict_variables: "%kernel.debug%"
+    paths:
+        "%kernel.project_dir%/sitecontent": site_content
+    # Use Bootstrap Form styling by default
+    form_themes:
+        - 'bootstrap_3_layout.html.twig'
+        - 'LibrecoresProjectRepoBundle:Form:fields.html.twig'
+    globals:
+        algolia_app_id: "%env(ALGOLIA_APP_ID)%"
+        algolia_search_key: "%ALGOLIA_SEARCH_KEY%"
+        algolia_search_prefix: "%algolia_search_prefix%"
