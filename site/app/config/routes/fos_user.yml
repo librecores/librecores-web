@@ -1,0 +1,33 @@
+fos_user_security:
+    resource: "@FOSUserBundle/Resources/config/routing/security.xml"
+    prefix:   /user
+
+fos_user_register:
+    resource: "@FOSUserBundle/Resources/config/routing/registration.xml"
+    prefix: /user/register
+
+fos_user_resetting:
+    resource: "@FOSUserBundle/Resources/config/routing/resetting.xml"
+    prefix: /user/resetting
+
+# Default landing page after user's password reset
+#
+# Disable if there is a better way (than overriding the FOS controller) to force the
+# landing page of a successful reset into the 'librecores.user.settings.profile' route
+# or even better to the 'librecores.user.settings.password' route.
+#
+fos_user_profile_show: # = librecores.user.settings.profile
+    path: /user/settings/profile
+    defaults: { _controller: LibrecoresProjectRepoBundle:User:profileSettings }
+
+# Handled by the 'librecores.user.settings.profile' route
+#
+#fos_user_profile:
+#    resource: "@FOSUserBundle/Resources/config/routing/profile.xml"
+#    prefix: /user/profile
+
+# Handled by the 'librecores.user.settings.password' route
+#
+#fos_user_change_password:
+#    resource: "@FOSUserBundle/Resources/config/routing/change_password.xml"
+#    prefix: /user/profile
