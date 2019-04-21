@@ -69,13 +69,6 @@ services:
         arguments:
             - '@exercise_html_purifier.default'
 
-    Librecores\ProjectRepoBundle\Validator\Constraints\UserOrgNameValidator:
-        arguments:
-            - '@doctrine'
-            - '@router'
-        tags:
-            - { name: validator.constraint_validator }
-
     # User/auth management
     Librecores\ProjectRepoBundle\Doctrine\UserManager:
         arguments:

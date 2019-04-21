@@ -85,4 +85,23 @@ class OrganizationRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    /**
+     * @param string $name
+     *
+     * @return int
+     *
+     * @throws NonUniqueResultException
+     */
+    public function countByNameIgnoreCase(string $name): int
+    {
+        $name = strtolower($name);
+
+        return (int) $this->createQueryBuilder('o')
+            ->select('COUNT(o.id)')
+            ->where('LOWER(o.name) = :name')
+            ->getQuery()
+            ->setParameter('name', $name)
+            ->getSingleScalarResult();
+    }
 }
