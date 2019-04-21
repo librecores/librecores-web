@@ -1,6 +1,6 @@
 <?php
 
-namespace Librecores\ProjectRepoBundle\Util;
+namespace App\Util;
 
 use FilesystemIterator;
 use RuntimeException;

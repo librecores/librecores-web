@@ -8,8 +8,8 @@ use Librecores\ProjectRepoBundle\Entity\LanguageStat;
 use Librecores\ProjectRepoBundle\Entity\Project;
 use Librecores\ProjectRepoBundle\Repository\CommitRepository;
 use Librecores\ProjectRepoBundle\Repository\ContributorRepository;
-use Librecores\ProjectRepoBundle\Util\Dates;
-use Librecores\ProjectRepoBundle\Util\StatsUtil;
+use App\Util\Dates;
+use App\Util\StatsUtil;
 
 /**
  * Store and provide metrics for Projects

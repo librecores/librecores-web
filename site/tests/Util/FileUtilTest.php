@@ -1,8 +1,8 @@
 <?php
 
-namespace Tests\Librecores\Util;
+namespace App\Util;
 
-use Librecores\ProjectRepoBundle\Util\FileUtil;
+use App\Util\FileUtil;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use org\bovigo\vfs\vfsStream;

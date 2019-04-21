@@ -27,7 +27,7 @@ class InsertClassificationsCommand extends ContainerAwareCommand
      *
      * @var string
      */
-    const YAML_PATH_DEFAULT = '@LibrecoresProjectRepoBundle/DataFixtures/classifications.yml';
+    const YAML_PATH_DEFAULT = 'classifications.yml';
 
     /**
      * ORM Object Manager

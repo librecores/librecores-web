@@ -1,9 +1,9 @@
 <?php
 
-namespace Tests\Librecores\Util;
+namespace App\Util;
 
-use Librecores\ProjectRepoBundle\Util\ProcessCreator;
-use Librecores\ProjectRepoBundle\Util\ExecutorInterface;
+use App\Util\ProcessCreator;
+use App\Util\ExecutorInterface;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Process\Exception\ProcessFailedException;

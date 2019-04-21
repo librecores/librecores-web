@@ -8,7 +8,7 @@ use InvalidArgumentException;
 use Librecores\ProjectRepoBundle\Entity\Commit;
 use Librecores\ProjectRepoBundle\Entity\Contributor;
 use Librecores\ProjectRepoBundle\Entity\SourceRepo;
-use Librecores\ProjectRepoBundle\Util\Dates;
+use App\Util\Dates;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**

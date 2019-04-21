@@ -2,9 +2,6 @@
 
 namespace Librecores\ProjectRepoBundle\RepoCrawler;
 
-use Librecores\ProjectRepoBundle\Util\FileUtil;
-use Librecores\ProjectRepoBundle\Util\MarkupToHtmlConverter;
-use Librecores\ProjectRepoBundle\Util\ProcessCreator;
 use DateTime;
 use DateTimeZone;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -15,6 +12,9 @@ use Librecores\ProjectRepoBundle\Entity\GitSourceRepo;
 use Librecores\ProjectRepoBundle\Entity\LanguageStat;
 use Librecores\ProjectRepoBundle\Entity\ProjectRelease;
 use Librecores\ProjectRepoBundle\Entity\SourceRepo;
+use App\Util\FileUtil;
+use App\Util\MarkupToHtmlConverter;
+use App\Util\ProcessCreator;
 use Librecores\ProjectRepoBundle\Repository\CommitRepository;
 use Librecores\ProjectRepoBundle\Repository\ContributorRepository;
 use Psr\Log\LoggerInterface;
