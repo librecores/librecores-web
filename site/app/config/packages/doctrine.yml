@@ -1,0 +1,24 @@
+doctrine:
+    dbal:
+        driver:   "%database_driver%"
+        host:     "%database_host%"
+        port:     "%database_port%"
+        dbname:   "%database_name%"
+        user:     "%database_user%"
+        password: "%database_password%"
+        charset:  utf8mb4
+        default_table_options:
+            charset: utf8mb4
+            collate: utf8mb4_unicode_520_ci
+
+    orm:
+        auto_generate_proxy_classes: "%kernel.debug%"
+        auto_mapping: true
+        dql:
+            datetime_functions:
+                DAY: 'DoctrineExtensions\Query\Mysql\Day'
+                WEEK: 'DoctrineExtensions\Query\Mysql\Week'
+                MONTH: 'DoctrineExtensions\Query\Mysql\Month'
+                YEAR: 'DoctrineExtensions\Query\Mysql\Year'
+        hydrators:
+            group: 'Librecores\ProjectRepoBundle\Doctrine\Hydrators\GroupHydrator'

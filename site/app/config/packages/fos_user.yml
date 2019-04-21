@@ -1,0 +1,17 @@
+fos_user:
+    db_driver: orm
+    firewall_name: main
+    user_class: 'Librecores\ProjectRepoBundle\Entity\User'
+    service:
+        user_manager: librecores_user_manager
+        mailer: fos_user.mailer.twig_swift
+    from_email:
+        address:        'noreply@librecores.org'
+        sender_name:    'LibreCores'
+    registration:
+        confirmation:
+            from_email:
+                address:        'noreply@librecores.org'
+                sender_name:    'LibreCores'
+            enabled:    "%user_email_confirmation_enabled%"
+            template:   'FOSUserBundle:Registration:email.html.twig'
