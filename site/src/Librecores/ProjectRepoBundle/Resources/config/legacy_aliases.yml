@@ -14,4 +14,4 @@ services:
     librecores.user.registration_event_listener: '@Librecores\ProjectRepoBundle\EventListener\OAuthRegistrationListener'
     librecores_project_voter: '@Librecores\ProjectRepoBundle\Security\ProjectVoter'
     librecores.process_creator: '@App\Util\ProcessCreator'
-    librecores.repocrawlerfactory: '@Librecores\ProjectRepoBundle\RepoCrawler\RepoCrawlerFactory'
+    librecores.repocrawlerfactory: '@App\RepoCrawler\RepoCrawlerFactory'

@@ -92,4 +92,4 @@ services:
             - { name: security.voter }
         public: false
 
-    Librecores\ProjectRepoBundle\RepoCrawler\RepoCrawlerFactory: ~
+    App\RepoCrawler\RepoCrawlerFactory: ~

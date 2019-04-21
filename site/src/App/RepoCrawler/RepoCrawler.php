@@ -1,6 +1,6 @@
 <?php
 
-namespace Librecores\ProjectRepoBundle\RepoCrawler;
+namespace App\RepoCrawler;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Librecores\ProjectRepoBundle\Doctrine\ProjectMetricsProvider;

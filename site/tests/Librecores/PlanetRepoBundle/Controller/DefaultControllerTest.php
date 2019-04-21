@@ -5,7 +5,7 @@ namespace Tests\Librecores\ProjectRepoBundle\Controller;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityRepository;
 use FOS\UserBundle\Doctrine\UserManager;
-use Librecores\ProjectRepoBundle\Entity\User;
+use App\Entity\User;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
