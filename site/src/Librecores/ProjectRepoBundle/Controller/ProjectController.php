@@ -196,7 +196,7 @@ class ProjectController extends AbstractController
         }
 
         return $this->render(
-            'LibrecoresProjectRepoBundle:Project:new.html.twig',
+            'project/new.html.twig',
             array(
                 'project' => $p,
                 'form' => $form->createView(),
@@ -281,7 +281,7 @@ class ProjectController extends AbstractController
 
         // the actual project page
         return $this->render(
-            'LibrecoresProjectRepoBundle:Project:view.html.twig',
+            'project/view.html.twig',
             [
                 'project' => $p,
                 'metadata' => $metadata,
@@ -371,7 +371,7 @@ class ProjectController extends AbstractController
         }
 
         return $this->render(
-            'LibrecoresProjectRepoBundle:Project:settings.html.twig',
+            'project/settings.html.twig',
             [
                 'project' => $p,
                 'form' => $form->createView(),
@@ -403,7 +403,7 @@ class ProjectController extends AbstractController
         $p = $this->getProject($parentName, $projectName, $repository);
 
         return $this->render(
-            'LibrecoresProjectRepoBundle:Project:settings_team.html.twig',
+            'project/settings_team.html.twig',
             array('project' => $p)
         );
     }
@@ -422,7 +422,7 @@ class ProjectController extends AbstractController
         $projects = $repository->findAll();
 
         return $this->render(
-            'LibrecoresProjectRepoBundle:Project:list.html.twig',
+            'project/list.html.twig',
             ['projects' => $projects]
         );
     }

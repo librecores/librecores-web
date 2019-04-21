@@ -28,7 +28,7 @@ class OrganizationController extends AbstractController
 
 
         return $this->render(
-            'LibrecoresProjectRepoBundle:Organization:list.html.twig',
+            'organization/list.html.twig',
             array('organizations' => $organizations)
         );
     }
@@ -79,7 +79,7 @@ class OrganizationController extends AbstractController
         }
 
         return $this->render(
-            'LibrecoresProjectRepoBundle:Organization:new.html.twig',
+            'organization/new.html.twig',
             ['organization' => $o, 'form' => $form->createView()]
         );
     }
@@ -136,7 +136,7 @@ class OrganizationController extends AbstractController
         }
 
         return $this->render(
-            'LibrecoresProjectRepoBundle:Organization:view.html.twig',
+            'organization/view.html.twig',
             array(
                 'organization' => $organization,
                 'user' => $user,
@@ -181,7 +181,7 @@ class OrganizationController extends AbstractController
         }
 
         return $this->render(
-            'LibrecoresProjectRepoBundle:Organization:settings.html.twig',
+            'organization/settings.html.twig',
             ['organization' => $organization, 'form' => $form->createView()]
         );
     }
@@ -219,7 +219,7 @@ class OrganizationController extends AbstractController
         $em->flush();
 
         return $this->render(
-            'LibrecoresProjectRepoBundle:Organization:join.html.twig',
+            'organization/join.html.twig',
             ['organization' => $o]
         );
     }
@@ -267,7 +267,7 @@ class OrganizationController extends AbstractController
         // as they are now invalid and need to be fetched again if needed for use
 
         return $this->render(
-            'LibrecoresProjectRepoBundle:Organization:leave.html.twig',
+            'organization/leave.html.twig',
             ['organization' => $o, 'userIsCreator' => $userIsCreator]
         );
     }
@@ -307,7 +307,7 @@ class OrganizationController extends AbstractController
         // $em->flush();
 
         return $this->render(
-            'LibrecoresProjectRepoBundle:Organization:delete.html.twig',
+            'organization/delete.html.twig',
             ['organization' => $o]
         );
     }
@@ -357,7 +357,7 @@ class OrganizationController extends AbstractController
         $em->flush();
 
         return $this->render(
-            'LibrecoresProjectRepoBundle:Organization:approve.html.twig',
+            'organization/approve.html.twig',
             ['organization' => $o, 'user' => $user]
         );
     }
@@ -409,7 +409,7 @@ class OrganizationController extends AbstractController
         $em->flush();
 
         return $this->render(
-            'LibrecoresProjectRepoBundle:Organization:deny.html.twig',
+            'organization/deny.html.twig',
             ['organization' => $o, 'user' => $user]
         );
     }
@@ -472,7 +472,7 @@ class OrganizationController extends AbstractController
         // needed for use
 
         return $this->render(
-            'LibrecoresProjectRepoBundle:Organization:remove.html.twig',
+            'organization/remove.html.twig',
             [
                 'organization' => $o,
                 'user' => $user,

@@ -38,7 +38,7 @@ class DefaultController extends Controller
         $templateArgs['blogposts'] = $this->getBlogPosts();
 
         return $this->render(
-            'LibrecoresSiteBundle:Default:home.html.twig',
+            'default/home.html.twig',
             $templateArgs
         );
     }
@@ -82,7 +82,7 @@ class DefaultController extends Controller
 
         // show the page
         return $this->render(
-            'LibrecoresSiteBundle:Default:contentwrapper.html.twig',
+            'default/content_wrapper.html.twig',
             [
                 'title' => $document->matter('title', 'LibreCores'),
                 'content' => $document->body(),

@@ -18,7 +18,7 @@ class DefaultController extends Controller
         $templateArgs['feedLastUpdate'] = $this->feedLastUpdate;
 
         return $this->render(
-            'LibrecoresPlanetBundle:Default:index.html.twig',
+            'planet/index.html.twig',
             $templateArgs
         );
     }
