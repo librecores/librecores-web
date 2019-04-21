@@ -34,7 +34,7 @@ class UserController extends AbstractController
     public function viewAction(Request $request, User $user)
     {
         return $this->render(
-            'LibrecoresProjectRepoBundle:User:view.html.twig',
+            'user/view.html.twig',
             array('user' => $user)
         );
     }
@@ -62,7 +62,7 @@ class UserController extends AbstractController
         }
 
         return $this->render(
-            'LibrecoresProjectRepoBundle:User:settings_profile.html.twig',
+            'user/settings_profile.html.twig',
             array('user' => $user, 'form' => $form->createView())
         );
     }
@@ -81,7 +81,7 @@ class UserController extends AbstractController
         $user = $this->getUser();
 
         return $this->render(
-            'LibrecoresProjectRepoBundle:User:settings_connections.html.twig',
+            'user/settings_connections.html.twig',
             array('user' => $user)
         );
     }
@@ -183,7 +183,7 @@ class UserController extends AbstractController
         }
 
         return $this->render(
-            'LibrecoresProjectRepoBundle:User:settings_password.html.twig',
+            'user/settings_password.html.twig',
             array('user' => $user, 'form' => $form->createView())
         );
     }
@@ -222,6 +222,6 @@ class UserController extends AbstractController
             }
         }
 
-        return $this->render('LibrecoresProjectRepoBundle:User:resend_confirmation_email.html.twig', [ 'form' => $form->createView() ]);
+        return $this->render('user/resend_confirmation_email.html.twig', [ 'form' => $form->createView() ]);
     }
 }

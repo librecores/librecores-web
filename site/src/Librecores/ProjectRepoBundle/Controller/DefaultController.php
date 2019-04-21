@@ -20,7 +20,7 @@ class DefaultController extends AbstractController
      */
     public function indexAction()
     {
-        return $this->render('LibrecoresProjectRepoBundle:Default:index.html.twig');
+        return $this->render('default/index.html.twig');
     }
 
     /**
@@ -122,7 +122,7 @@ class DefaultController extends AbstractController
         $searchType = ($searchType === null ? 'projects' : $searchType);
 
         return $this->render(
-            'LibrecoresProjectRepoBundle:Default:project_search.html.twig',
+            'default/project_search.html.twig',
             [
                 'searchType' => $searchType,
                 'searchQuery' => $searchQuery,
