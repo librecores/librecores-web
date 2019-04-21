@@ -2,9 +2,8 @@
 
 namespace Librecores\ProjectRepoBundle\RepoCrawler;
 
-use Librecores\ProjectRepoBundle\Service\GitHub\GitHubApiService;
-use Librecores\ProjectRepoBundle\Util\MarkupToHtmlConverter;
-use Librecores\ProjectRepoBundle\Util\ProcessCreator;
+use App\Util\MarkupToHtmlConverter;
+use App\Util\ProcessCreator;
 use DateTime;
 use Doctrine\Common\Persistence\ObjectManager;
 use Exception;
@@ -13,6 +12,7 @@ use Librecores\ProjectRepoBundle\Doctrine\ProjectMetricsProvider;
 use Librecores\ProjectRepoBundle\Entity\SourceRepo;
 use Librecores\ProjectRepoBundle\Repository\CommitRepository;
 use Librecores\ProjectRepoBundle\Repository\ContributorRepository;
+use Librecores\ProjectRepoBundle\Service\GitHub\GitHubApiService;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -51,6 +51,7 @@ class GithubRepoCrawler extends GitRepoCrawler
      * @var string
      */
     private $githubRepoName;
+
     private $githubData;
 
     /**

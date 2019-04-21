@@ -2,16 +2,16 @@
 
 namespace Librecores\ProjectRepoBundle\RepoCrawler;
 
+use App\Util\MarkupToHtmlConverter;
+use App\Util\ProcessCreator;
 use DateTime;
+use Doctrine\Common\Persistence\ObjectManager;
+use Librecores\ProjectRepoBundle\Doctrine\ProjectMetricsProvider;
 use Librecores\ProjectRepoBundle\Entity\Contributor;
 use Librecores\ProjectRepoBundle\Entity\GitSourceRepo;
 use Librecores\ProjectRepoBundle\Entity\LanguageStat;
 use Librecores\ProjectRepoBundle\Entity\Organization;
 use Librecores\ProjectRepoBundle\Entity\Project;
-use Librecores\ProjectRepoBundle\Util\MarkupToHtmlConverter;
-use Librecores\ProjectRepoBundle\Util\ProcessCreator;
-use Doctrine\Common\Persistence\ObjectManager;
-use Librecores\ProjectRepoBundle\Doctrine\ProjectMetricsProvider;
 use Librecores\ProjectRepoBundle\Repository\CommitRepository;
 use Librecores\ProjectRepoBundle\Repository\ContributorRepository;
 use PHPUnit\Framework\TestCase;

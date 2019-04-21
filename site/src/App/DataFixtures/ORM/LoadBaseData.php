@@ -1,6 +1,6 @@
 <?php
 
-namespace Librecores\ProjectRepoBundle\DataFixtures\ORM;
+namespace App\DataFixtures\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\FixtureInterface;

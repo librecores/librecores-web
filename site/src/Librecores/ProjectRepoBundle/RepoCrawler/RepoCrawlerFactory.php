@@ -2,6 +2,8 @@
 
 namespace Librecores\ProjectRepoBundle\RepoCrawler;
 
+use App\Util\MarkupToHtmlConverter;
+use App\Util\ProcessCreator;
 use Doctrine\Common\Persistence\ObjectManager;
 use InvalidArgumentException;
 use Librecores\ProjectRepoBundle\Doctrine\ProjectMetricsProvider;
@@ -10,8 +12,6 @@ use Librecores\ProjectRepoBundle\Entity\SourceRepo;
 use Librecores\ProjectRepoBundle\Repository\CommitRepository;
 use Librecores\ProjectRepoBundle\Repository\ContributorRepository;
 use Librecores\ProjectRepoBundle\Service\GitHub\GitHubApiService;
-use Librecores\ProjectRepoBundle\Util\MarkupToHtmlConverter;
-use Librecores\ProjectRepoBundle\Util\ProcessCreator;
 use Psr\Log\LoggerInterface;
 
 /**
