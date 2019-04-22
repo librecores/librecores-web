@@ -2,8 +2,8 @@
 
 namespace Librecores\ProjectRepoBundle\Validator\Constraints;
 
-use Librecores\ProjectRepoBundle\Repository\OrganizationRepository;
-use Librecores\ProjectRepoBundle\Repository\UserRepository;
+use App\Repository\OrganizationRepository;
+use App\Repository\UserRepository;
 use LibreCores\TestUtils\Generator;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;

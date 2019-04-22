@@ -1,9 +1,9 @@
 <?php
 
-namespace Librecores\ProjectRepoBundle\Repository;
+namespace App\Repository;
 
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Librecores\ProjectRepoBundle\Entity\User;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**

@@ -6,8 +6,8 @@ use App\Entity\Commit;
 use App\Entity\Contributor;
 use App\Entity\LanguageStat;
 use App\Entity\Project;
-use Librecores\ProjectRepoBundle\Repository\CommitRepository;
-use Librecores\ProjectRepoBundle\Repository\ContributorRepository;
+use App\Repository\CommitRepository;
+use App\Repository\ContributorRepository;
 use App\Util\Dates;
 use App\Util\StatsUtil;
 

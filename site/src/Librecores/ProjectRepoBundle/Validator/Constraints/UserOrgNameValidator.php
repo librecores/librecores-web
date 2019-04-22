@@ -3,8 +3,8 @@
 namespace Librecores\ProjectRepoBundle\Validator\Constraints;
 
 use Doctrine\ORM\NonUniqueResultException;
-use Librecores\ProjectRepoBundle\Repository\OrganizationRepository;
-use Librecores\ProjectRepoBundle\Repository\UserRepository;
+use App\Repository\OrganizationRepository;
+use App\Repository\UserRepository;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;

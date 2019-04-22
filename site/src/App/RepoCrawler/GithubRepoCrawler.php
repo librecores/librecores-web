@@ -10,9 +10,9 @@ use Exception;
 use Github\Client;
 use Librecores\ProjectRepoBundle\Doctrine\ProjectMetricsProvider;
 use App\Entity\SourceRepo;
-use Librecores\ProjectRepoBundle\Repository\CommitRepository;
-use Librecores\ProjectRepoBundle\Repository\ContributorRepository;
 use Librecores\ProjectRepoBundle\Service\GitHub\GitHubApiService;
+use App\Repository\CommitRepository;
+use App\Repository\ContributorRepository;
 use Psr\Log\LoggerInterface;
 
 /**

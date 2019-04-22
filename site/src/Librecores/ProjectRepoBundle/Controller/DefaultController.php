@@ -4,9 +4,9 @@ namespace Librecores\ProjectRepoBundle\Controller;
 
 use App\Entity\Organization;
 use App\Entity\User;
+use App\Repository\OrganizationRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\NonUniqueResultException;
-use Librecores\ProjectRepoBundle\Repository\OrganizationRepository;
-use Librecores\ProjectRepoBundle\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
