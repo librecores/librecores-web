@@ -2,15 +2,15 @@
 
 namespace App\RepoCrawler;
 
+use App\Entity\GitSourceRepo;
+use App\Entity\SourceRepo;
+use App\Repository\CommitRepository;
+use App\Repository\ContributorRepository;
 use App\Util\MarkupToHtmlConverter;
 use App\Util\ProcessCreator;
 use Doctrine\Common\Persistence\ObjectManager;
 use InvalidArgumentException;
 use Librecores\ProjectRepoBundle\Doctrine\ProjectMetricsProvider;
-use App\Entity\GitSourceRepo;
-use App\Entity\SourceRepo;
-use Librecores\ProjectRepoBundle\Repository\CommitRepository;
-use Librecores\ProjectRepoBundle\Repository\ContributorRepository;
 use Librecores\ProjectRepoBundle\Service\GitHub\GitHubApiService;
 use Psr\Log\LoggerInterface;
 

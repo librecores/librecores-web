@@ -3,7 +3,7 @@
 namespace Librecores\ProjectRepoBundle\Command;
 
 use App\Entity\Project;
-use Librecores\ProjectRepoBundle\Repository\ProjectRepository;
+use App\Repository\ProjectRepository;
 use OldSound\RabbitMqBundle\RabbitMq\ProducerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;

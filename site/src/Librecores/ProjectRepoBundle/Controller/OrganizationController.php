@@ -4,10 +4,10 @@ namespace Librecores\ProjectRepoBundle\Controller;
 
 use App\Entity\Organization;
 use App\Entity\OrganizationMember;
+use App\Repository\OrganizationRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use FOS\UserBundle\Model\UserManagerInterface;
 use Librecores\ProjectRepoBundle\Form\Type\OrganizationType;
-use Librecores\ProjectRepoBundle\Repository\OrganizationRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Librecores\ProjectRepoBundle\Repository;
+namespace App\Repository;
 
 use App\Entity\Contributor;
 use App\Entity\SourceRepo;

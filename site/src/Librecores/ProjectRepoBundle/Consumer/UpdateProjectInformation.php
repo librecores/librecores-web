@@ -4,7 +4,7 @@ namespace Librecores\ProjectRepoBundle\Consumer;
 
 use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\EntityManagerInterface;
-use Librecores\ProjectRepoBundle\Repository\ProjectRepository;
+use App\Repository\ProjectRepository;
 use App\Entity\Project;
 use App\RepoCrawler\RepoCrawlerFactory;
 use OldSound\RabbitMqBundle\RabbitMq\ConsumerInterface;

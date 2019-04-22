@@ -7,8 +7,8 @@ use Librecores\ProjectRepoBundle\Doctrine\ProjectMetricsProvider;
 use App\Entity\SourceRepo;
 use App\Util\MarkupToHtmlConverter;
 use App\Util\ProcessCreator;
-use Librecores\ProjectRepoBundle\Repository\CommitRepository;
-use Librecores\ProjectRepoBundle\Repository\ContributorRepository;
+use App\Repository\CommitRepository;
+use App\Repository\ContributorRepository;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
 

@@ -1,33 +1,33 @@
 <?php
 
-namespace Librecores\ProjectRepoBundle\Repository;
+namespace App\Repository;
 
 
-use App\Entity\Organization;
+use App\Entity\Contributor;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
-class OrganizationRepositoryTest extends TestCase
+class ContributorRepositoryTest extends TestCase
 {
-    public function testOrganizationRepositoryIsMappedToOrganizationEntity()
+    public function testContributorRepositoryIsMappedToContributorEntity()
     {
         $mockEntityManager = $this->createMock(EntityManagerInterface::class);
         $mockEntityManager->expects($this->once())
             ->method('getClassMetadata')
-            ->with(Organization::class)
-            ->willReturn(new ClassMetadata(Organization::class));
+            ->with(Contributor::class)
+            ->willReturn(new ClassMetadata(Contributor::class));
 
         $mockRegistry = $this->createMock(RegistryInterface::class);
         $mockRegistry->expects($this->once())
             ->method('getManagerForClass')
-            ->with(Organization::class)
+            ->with(Contributor::class)
             ->willReturn($mockEntityManager);
 
         /** @var RegistryInterface $mockRegistry */
-        $repository = new OrganizationRepository($mockRegistry);
+        $repository = new ContributorRepository($mockRegistry);
 
-        $this->assertEquals(Organization::class, $repository->getClassName());
+        $this->assertEquals(Contributor::class, $repository->getClassName());
     }
 }

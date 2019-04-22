@@ -5,7 +5,7 @@ namespace Librecores\ProjectRepoBundle\Command;
 
 use App\Entity\GitSourceRepo;
 use App\Entity\Project;
-use Librecores\ProjectRepoBundle\Repository\ProjectRepository;
+use App\Repository\ProjectRepository;
 use LibreCores\TestUtils\Mocks\MockProducer;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Input\InputInterface;

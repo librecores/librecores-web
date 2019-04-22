@@ -1,31 +1,33 @@
 <?php
 
-namespace Librecores\ProjectRepoBundle\Repository;
+namespace App\Repository;
 
 
-use App\Entity\Commit;
+use App\Entity\Organization;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
-class CommitRepositoryTest extends TestCase
+class OrganizationRepositoryTest extends TestCase
 {
-    public function testCommitRepositoryIsMappedToCommitEntity()
+    public function testOrganizationRepositoryIsMappedToOrganizationEntity()
     {
         $mockEntityManager = $this->createMock(EntityManagerInterface::class);
         $mockEntityManager->expects($this->once())
             ->method('getClassMetadata')
-            ->with(Commit::class)
-            ->willReturn(new ClassMetadata(Commit::class));
+            ->with(Organization::class)
+            ->willReturn(new ClassMetadata(Organization::class));
 
         $mockRegistry = $this->createMock(RegistryInterface::class);
         $mockRegistry->expects($this->once())
             ->method('getManagerForClass')
-            ->with(Commit::class)
+            ->with(Organization::class)
             ->willReturn($mockEntityManager);
 
         /** @var RegistryInterface $mockRegistry */
-        new CommitRepository($mockRegistry);
+        $repository = new OrganizationRepository($mockRegistry);
+
+        $this->assertEquals(Organization::class, $repository->getClassName());
     }
 }

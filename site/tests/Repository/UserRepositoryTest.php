@@ -1,31 +1,31 @@
 <?php
 
-namespace Librecores\ProjectRepoBundle\Repository;
+namespace App\Repository;
 
 
-use App\Entity\Project;
+use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
-class ProjectRepositoryTest extends TestCase
+class UserRepositoryTest extends TestCase
 {
-    public function testProjectRepositoryIsMappedToProjectEntity()
+    public function testUserRepositoryIsMappedToUserEntity()
     {
         $mockEntityManager = $this->createMock(EntityManagerInterface::class);
         $mockEntityManager->expects($this->once())
             ->method('getClassMetadata')
-            ->with(Project::class)
-            ->willReturn(new ClassMetadata(Project::class));
+            ->with(User::class)
+            ->willReturn(new ClassMetadata(User::class));
 
         $mockRegistry = $this->createMock(RegistryInterface::class);
         $mockRegistry->expects($this->once())
             ->method('getManagerForClass')
-            ->with(Project::class)
+            ->with(User::class)
             ->willReturn($mockEntityManager);
 
         /** @var RegistryInterface $mockRegistry */
-        new ProjectRepository($mockRegistry);
+        new UserRepository($mockRegistry);
     }
 }
