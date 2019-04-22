@@ -3,7 +3,7 @@
 namespace App\RepoCrawler;
 
 use Exception;
-use Librecores\ProjectRepoBundle\Entity\SourceRepo;
+use App\Entity\SourceRepo;
 use Throwable;
 
 class CrawlerException extends Exception

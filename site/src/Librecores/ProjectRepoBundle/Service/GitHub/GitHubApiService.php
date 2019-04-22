@@ -5,9 +5,9 @@ namespace Librecores\ProjectRepoBundle\Service\GitHub;
 use Github;
 use Github\Client;
 use Github\HttpClient\Builder;
-use Librecores\ProjectRepoBundle\Entity\GitSourceRepo;
-use Librecores\ProjectRepoBundle\Entity\Project;
-use Librecores\ProjectRepoBundle\Entity\User;
+use App\Entity\GitSourceRepo;
+use App\Entity\Project;
+use App\Entity\User;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\Routing\RouterInterface;
 
@@ -58,7 +58,7 @@ class GitHubApiService
      * Constructor
      *
      * Set the user object from the token storage, as injected by Symfony.
-     * This class only supports the \Librecores\ProjectRepoBundle\Entity\User
+     * This class only supports the \App\Entity\User
      * user object since it contains the necessary methods to work with Github
      * access tokens.
      *

@@ -2,8 +2,7 @@
 
 namespace Librecores\ProjectRepoBundle\Command;
 
-use Doctrine\ORM\EntityManagerInterface;
-use Librecores\ProjectRepoBundle\Entity\Project;
+use App\Entity\Project;
 use Librecores\ProjectRepoBundle\Repository\ProjectRepository;
 use OldSound\RabbitMqBundle\RabbitMq\ProducerInterface;
 use Symfony\Component\Console\Command\Command;

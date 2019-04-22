@@ -29,7 +29,7 @@ class SourceRepoType extends AbstractType
     {
         $resolver->setDefaults(
             array(
-                'data_class' => 'Librecores\ProjectRepoBundle\Entity\GitSourceRepo',
+                'data_class' => 'App\Entity\GitSourceRepo',
             )
         );
     }

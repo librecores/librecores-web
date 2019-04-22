@@ -2,9 +2,9 @@
 
 namespace Librecores\ProjectRepoBundle\Security;
 
-use Librecores\ProjectRepoBundle\Entity\OrganizationMember;
-use Librecores\ProjectRepoBundle\Entity\Project;
-use Librecores\ProjectRepoBundle\Entity\User;
+use App\Entity\OrganizationMember;
+use App\Entity\Project;
+use App\Entity\User;
 use LogicException;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;

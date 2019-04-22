@@ -2,19 +2,19 @@
 
 namespace App\RepoCrawler;
 
+use App\Util\FileUtil;
+use App\Util\MarkupToHtmlConverter;
+use App\Util\ProcessCreator;
 use DateTime;
 use DateTimeZone;
 use Doctrine\Common\Persistence\ObjectManager;
 use Exception;
 use Librecores\ProjectRepoBundle\Doctrine\ProjectMetricsProvider;
-use Librecores\ProjectRepoBundle\Entity\Commit;
-use Librecores\ProjectRepoBundle\Entity\GitSourceRepo;
-use Librecores\ProjectRepoBundle\Entity\LanguageStat;
-use Librecores\ProjectRepoBundle\Entity\ProjectRelease;
-use Librecores\ProjectRepoBundle\Entity\SourceRepo;
-use App\Util\FileUtil;
-use App\Util\MarkupToHtmlConverter;
-use App\Util\ProcessCreator;
+use App\Entity\Commit;
+use App\Entity\GitSourceRepo;
+use App\Entity\LanguageStat;
+use App\Entity\ProjectRelease;
+use App\Entity\SourceRepo;
 use Librecores\ProjectRepoBundle\Repository\CommitRepository;
 use Librecores\ProjectRepoBundle\Repository\ContributorRepository;
 use Psr\Log\LoggerInterface;

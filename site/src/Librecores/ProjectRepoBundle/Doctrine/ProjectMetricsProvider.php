@@ -2,10 +2,10 @@
 
 namespace Librecores\ProjectRepoBundle\Doctrine;
 
-use Librecores\ProjectRepoBundle\Entity\Commit;
-use Librecores\ProjectRepoBundle\Entity\Contributor;
-use Librecores\ProjectRepoBundle\Entity\LanguageStat;
-use Librecores\ProjectRepoBundle\Entity\Project;
+use App\Entity\Commit;
+use App\Entity\Contributor;
+use App\Entity\LanguageStat;
+use App\Entity\Project;
 use Librecores\ProjectRepoBundle\Repository\CommitRepository;
 use Librecores\ProjectRepoBundle\Repository\ContributorRepository;
 use App\Util\Dates;

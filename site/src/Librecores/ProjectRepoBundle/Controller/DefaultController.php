@@ -2,9 +2,9 @@
 
 namespace Librecores\ProjectRepoBundle\Controller;
 
+use App\Entity\Organization;
+use App\Entity\User;
 use Doctrine\ORM\NonUniqueResultException;
-use Librecores\ProjectRepoBundle\Entity\Organization;
-use Librecores\ProjectRepoBundle\Entity\User;
 use Librecores\ProjectRepoBundle\Repository\OrganizationRepository;
 use Librecores\ProjectRepoBundle\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

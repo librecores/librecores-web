@@ -1,6 +1,6 @@
 <?php
 
-namespace Librecores\ProjectRepoBundle\Entity;
+namespace App\Entity;
 
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -30,6 +30,7 @@ class User extends BaseUser
 
 
     // OAuth-related entries
+
     /**
      * GitHub User ID provided by the OAuth service.
      *
@@ -73,6 +74,7 @@ class User extends BaseUser
     protected $googleOAuthAccessToken;
 
     // associations
+
     /**
      * @var ArrayCollection
      *
@@ -98,6 +100,7 @@ class User extends BaseUser
     protected $organizationMemberships;
 
     // profile data
+
     /**
      * Full (real) name of the user
      *
@@ -108,6 +111,7 @@ class User extends BaseUser
     protected $name;
 
     // metadata
+
     /**
      * When was this user created?
      *

@@ -4,7 +4,7 @@ namespace App\RepoCrawler;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Librecores\ProjectRepoBundle\Doctrine\ProjectMetricsProvider;
-use Librecores\ProjectRepoBundle\Entity\SourceRepo;
+use App\Entity\SourceRepo;
 use App\Util\MarkupToHtmlConverter;
 use App\Util\ProcessCreator;
 use Librecores\ProjectRepoBundle\Repository\CommitRepository;

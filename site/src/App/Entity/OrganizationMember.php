@@ -1,6 +1,6 @@
 <?php
 
-namespace Librecores\ProjectRepoBundle\Entity;
+namespace App\Entity;
 
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
@@ -23,6 +23,7 @@ class OrganizationMember
     const PERMISSION_SUPPORT = 'SUPPORT';
     const PERMISSION_MEMBER = 'MEMBER';
     const PERMISSION_ADMIN = 'ADMIN';
+
     /**
      * @var Organization
      *
@@ -30,6 +31,7 @@ class OrganizationMember
      * @ORM\JoinColumn(name="organizationId", referencedColumnName="id", nullable=FALSE)
      */
     protected $organization;
+
     /**
      * @var User
      *
@@ -37,6 +39,7 @@ class OrganizationMember
      * @ORM\JoinColumn(name="userId", referencedColumnName="id", nullable=FALSE)
      */
     protected $user;
+
     /**
      * @var string
      *
@@ -45,6 +48,7 @@ class OrganizationMember
      * @ORM\Column(type="string")
      */
     protected $permission = self::PERMISSION_REQUEST;
+
     /**
      * When was this mapping created?
      *
@@ -55,6 +59,7 @@ class OrganizationMember
     protected $createdAt;
 
     // metadata
+
     /**
      * When was this mapping last updated?
      *
@@ -63,6 +68,7 @@ class OrganizationMember
      * @ORM\Column(type="datetime")
      */
     protected $updatedAt;
+
     /**
      * @var int
      *

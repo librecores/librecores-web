@@ -2,11 +2,12 @@
 
 namespace Librecores\ProjectRepoBundle\Repository;
 
+use App\Entity\Contributor;
+use App\Entity\SourceRepo;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
-use Librecores\ProjectRepoBundle\Entity\Contributor;
-use Librecores\ProjectRepoBundle\Entity\SourceRepo;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -87,7 +88,7 @@ class ContributorRepository extends ServiceEntityRepository
      *
      * @return mixed
      *
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws NonUniqueResultException
      */
     public function getContributorCountForRepository(SourceRepo $repo): int
     {

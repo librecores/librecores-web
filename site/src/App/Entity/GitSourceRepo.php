@@ -1,6 +1,6 @@
 <?php
 
-namespace Librecores\ProjectRepoBundle\Entity;
+namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -24,7 +24,7 @@ class GitSourceRepo extends SourceRepo
 
     /**
      * {@inheritDoc}
-     * @see \Librecores\ProjectRepoBundle\Entity\SourceRepo::getType()
+     * @see \App\Entity\SourceRepo::getType()
      */
     public function getType()
     {

@@ -23,7 +23,7 @@ class OrganizationType extends AbstractType
     {
         $resolver->setDefaults(
             [
-                'data_class' => 'Librecores\ProjectRepoBundle\Entity\Organization',
+                'data_class' => 'App\Entity\Organization',
                 'label' => 'Organization Details',
             ]
         );

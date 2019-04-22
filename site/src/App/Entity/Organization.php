@@ -1,6 +1,6 @@
 <?php
 
-namespace Librecores\ProjectRepoBundle\Entity;
+namespace App\Entity;
 
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -99,6 +99,7 @@ class Organization
     private $creator;
 
     // metadata
+
     /**
      * When was this organization created?
      *

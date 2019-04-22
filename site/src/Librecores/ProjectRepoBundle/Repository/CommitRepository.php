@@ -2,13 +2,14 @@
 
 namespace Librecores\ProjectRepoBundle\Repository;
 
+use App\Entity\Commit;
+use App\Entity\Contributor;
+use App\Entity\SourceRepo;
+use App\Util\Dates;
 use DateTimeImmutable;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use InvalidArgumentException;
-use Librecores\ProjectRepoBundle\Entity\Commit;
-use Librecores\ProjectRepoBundle\Entity\Contributor;
-use Librecores\ProjectRepoBundle\Entity\SourceRepo;
-use App\Util\Dates;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -116,7 +117,7 @@ class CommitRepository extends ServiceEntityRepository
      *
      * @return int
      *
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws NonUniqueResultException
      */
     public function getCommitsByContributorCount(Contributor $contributor): int
     {

@@ -2,7 +2,7 @@
 
 namespace Librecores\ProjectRepoBundle\Service;
 
-use Librecores\ProjectRepoBundle\Entity\Project;
+use App\Entity\Project;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 

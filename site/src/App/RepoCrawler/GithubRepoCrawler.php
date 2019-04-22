@@ -9,7 +9,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Exception;
 use Github\Client;
 use Librecores\ProjectRepoBundle\Doctrine\ProjectMetricsProvider;
-use Librecores\ProjectRepoBundle\Entity\SourceRepo;
+use App\Entity\SourceRepo;
 use Librecores\ProjectRepoBundle\Repository\CommitRepository;
 use Librecores\ProjectRepoBundle\Repository\ContributorRepository;
 use Librecores\ProjectRepoBundle\Service\GitHub\GitHubApiService;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Librecores\ProjectRepoBundle\Entity;
+namespace App\Entity;
 
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;

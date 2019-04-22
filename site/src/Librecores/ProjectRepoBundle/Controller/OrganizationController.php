@@ -2,10 +2,10 @@
 
 namespace Librecores\ProjectRepoBundle\Controller;
 
+use App\Entity\Organization;
+use App\Entity\OrganizationMember;
 use Doctrine\ORM\NonUniqueResultException;
 use FOS\UserBundle\Model\UserManagerInterface;
-use Librecores\ProjectRepoBundle\Entity\Organization;
-use Librecores\ProjectRepoBundle\Entity\OrganizationMember;
 use Librecores\ProjectRepoBundle\Form\Type\OrganizationType;
 use Librecores\ProjectRepoBundle\Repository\OrganizationRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -256,7 +256,7 @@ class OrganizationController extends AbstractController
             // Remove the organization membership
             $userIsCreator = false;
             $member = $this->getDoctrine()
-                ->getRepository('LibrecoresProjectRepoBundle:OrganizationMember')
+                ->getRepository('App:OrganizationMember')
                 ->findOneBy(['organization' => $o, 'user' => $user]);
             $em = $this->getDoctrine()->getManager();
             $em->remove($member);
@@ -349,7 +349,7 @@ class OrganizationController extends AbstractController
 
         // Update the organization membership
         $member = $this->getDoctrine()
-            ->getRepository('LibrecoresProjectRepoBundle:OrganizationMember')
+            ->getRepository('App:OrganizationMember')
             ->findOneBy(['organization' => $o, 'user' => $user]);
         $member->setPermission(OrganizationMember::PERMISSION_MEMBER);
         $em = $this->getDoctrine()->getManager();
@@ -401,7 +401,7 @@ class OrganizationController extends AbstractController
 
         // Update the organization membership
         $member = $this->getDoctrine()
-            ->getRepository('LibrecoresProjectRepoBundle:OrganizationMember')
+            ->getRepository('App:OrganizationMember')
             ->findOneBy(['organization' => $o, 'user' => $user]);
         $member->setPermission(OrganizationMember::PERMISSION_DENY);
         $em = $this->getDoctrine()->getManager();
@@ -460,7 +460,7 @@ class OrganizationController extends AbstractController
             // Remove the organization membership
             $memberIsCreator = false;
             $member = $this->getDoctrine()
-                ->getRepository('LibrecoresProjectRepoBundle:OrganizationMember')
+                ->getRepository('App:OrganizationMember')
                 ->findOneBy(['organization' => $o, 'user' => $user]);
             $em = $this->getDoctrine()->getManager();
             $em->remove($member);

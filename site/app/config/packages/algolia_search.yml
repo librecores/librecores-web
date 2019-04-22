@@ -2,10 +2,10 @@ algolia_search:
     prefix: "%algolia_search_prefix%"
     indices:
         - name: projects
-          class: Librecores\ProjectRepoBundle\Entity\Project
+          class: App\Entity\Project
 
         - name: organization
-          class: Librecores\ProjectRepoBundle\Entity\Organization
+          class: App\Entity\Organization
 
         - name: user
-          class: Librecores\ProjectRepoBundle\Entity\User
+          class: App\Entity\User

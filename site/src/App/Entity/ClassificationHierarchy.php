@@ -1,15 +1,16 @@
 <?php
 
-namespace Librecores\ProjectRepoBundle\Entity;
+namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * A classification hierarchy for the projects
  *
- * This class contains classification categories that can be use to classify a project
- * for better categorization
+ * This class contains classification categories that can be use to classify a
+ * project for better categorization
  *
  * @author Sandip Kumar Bhuyan <sandipbhuyan@gmail.com>
  *
@@ -130,7 +131,7 @@ class ClassificationHierarchy
     /**
      * Add child category
      *
-     * @param \Librecores\ProjectRepoBundle\Entity\ClassificationHierarchy $child
+     * @param ClassificationHierarchy $child
      *
      * @return ClassificationHierarchy
      */
@@ -144,7 +145,7 @@ class ClassificationHierarchy
     /**
      * Remove child category
      *
-     * @param \Librecores\ProjectRepoBundle\Entity\ClassificationHierarchy $child
+     * @param ClassificationHierarchy $child
      */
     public function removeChild(ClassificationHierarchy $child)
     {
@@ -154,7 +155,7 @@ class ClassificationHierarchy
     /**
      * Get children category
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getChildren()
     {

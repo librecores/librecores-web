@@ -2,13 +2,13 @@
 
 namespace Librecores\ProjectRepoBundle\Controller;
 
+use App\Entity\User;
 use FOS\UserBundle\Form\Type\ChangePasswordFormType;
 use FOS\UserBundle\Mailer\MailerInterface;
 use FOS\UserBundle\Model\UserInterface;
 use FOS\UserBundle\Model\UserManagerInterface;
 use FOS\UserBundle\Util\TokenGeneratorInterface;
 use HWI\Bundle\OAuthBundle\Connect\AccountConnectorInterface;
-use Librecores\ProjectRepoBundle\Entity\User;
 use Librecores\ProjectRepoBundle\Form\Model\ResendConfirmationEmailRequest;
 use Librecores\ProjectRepoBundle\Form\Type\ResendConfirmationEmailRequestType;
 use Librecores\ProjectRepoBundle\Form\Type\UserProfileType;

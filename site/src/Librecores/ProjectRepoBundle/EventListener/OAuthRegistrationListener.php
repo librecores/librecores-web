@@ -101,7 +101,7 @@ class OAuthRegistrationListener implements EventSubscriberInterface
             return null;
         }
 
-        /** @var $user \Librecores\ProjectRepoBundle\Entity\User */
+        /** @var $user \App\Entity\User */
         $user = $event->getForm()->getData();
 
         // Connect the OAuth account to the LibreCores user
