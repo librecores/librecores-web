@@ -3,8 +3,8 @@
 namespace Librecores\ProjectRepoBundle\Command;
 
 
-use Librecores\ProjectRepoBundle\Entity\GitSourceRepo;
-use Librecores\ProjectRepoBundle\Entity\Project;
+use App\Entity\GitSourceRepo;
+use App\Entity\Project;
 use Librecores\ProjectRepoBundle\Repository\ProjectRepository;
 use LibreCores\TestUtils\Mocks\MockProducer;
 use PHPUnit\Framework\TestCase;
@@ -51,7 +51,7 @@ class UpdateReposCommandTest extends TestCase
     {
         $projects = [
             $this->createMockProject(1, new GitSourceRepo()),
-            $this->createMockProject(2,),
+            $this->createMockProject(2),
             $this->createMockProject(3, new GitSourceRepo()),
         ];
 

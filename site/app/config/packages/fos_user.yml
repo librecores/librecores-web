@@ -1,7 +1,7 @@
 fos_user:
     db_driver: orm
     firewall_name: main
-    user_class: 'Librecores\ProjectRepoBundle\Entity\User'
+    user_class: 'App\Entity\User'
     service:
         user_manager: librecores_user_manager
         mailer: fos_user.mailer.twig_swift

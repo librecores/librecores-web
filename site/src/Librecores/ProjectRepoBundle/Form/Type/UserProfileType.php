@@ -24,7 +24,7 @@ class UserProfileType extends AbstractType
     {
         $resolver->setDefaults(
             [
-                'data_class' => 'Librecores\ProjectRepoBundle\Entity\User',
+                'data_class' => 'App\Entity\User',
                 'label' => 'User Profile Settings',
             ]
         );

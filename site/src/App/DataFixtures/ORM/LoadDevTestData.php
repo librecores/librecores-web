@@ -5,11 +5,11 @@ namespace App\DataFixtures\ORM;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-use Librecores\ProjectRepoBundle\Entity\GitSourceRepo;
-use Librecores\ProjectRepoBundle\Entity\Organization;
-use Librecores\ProjectRepoBundle\Entity\OrganizationMember;
-use Librecores\ProjectRepoBundle\Entity\Project;
-use Librecores\ProjectRepoBundle\Entity\User;
+use App\Entity\GitSourceRepo;
+use App\Entity\Organization;
+use App\Entity\OrganizationMember;
+use App\Entity\Project;
+use App\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
@@ -105,7 +105,7 @@ class LoadDevTestData extends AbstractFixture implements FixtureInterface, Conta
      * @param string $username
      * @param string $password
      *
-     * @return \Librecores\ProjectRepoBundle\Entity\User
+     * @return \App\Entity\User
      */
     private function createUser($username, $password)
     {

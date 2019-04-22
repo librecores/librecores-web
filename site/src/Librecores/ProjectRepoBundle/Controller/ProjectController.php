@@ -2,25 +2,27 @@
 
 namespace Librecores\ProjectRepoBundle\Controller;
 
+use App\Entity\ClassificationHierarchy;
+use App\Entity\GitSourceRepo;
+use App\Entity\LanguageStat;
+use App\Entity\OrganizationMember;
+use App\Entity\Project;
+use App\Entity\ProjectClassification;
+use App\Entity\User;
+use App\RepoCrawler\GithubRepoCrawler;
+use App\Util\Dates;
+use DateInterval;
+use DateTimeImmutable;
 use Doctrine\ORM\NonUniqueResultException;
 use Exception;
 use FOS\UserBundle\Model\UserManagerInterface;
 use Librecores\ProjectRepoBundle\Doctrine\ProjectMetricsProvider;
-use Librecores\ProjectRepoBundle\Entity\ClassificationHierarchy;
-use Librecores\ProjectRepoBundle\Entity\GitSourceRepo;
-use Librecores\ProjectRepoBundle\Entity\LanguageStat;
-use Librecores\ProjectRepoBundle\Entity\OrganizationMember;
-use Librecores\ProjectRepoBundle\Entity\Project;
-use Librecores\ProjectRepoBundle\Entity\ProjectClassification;
-use Librecores\ProjectRepoBundle\Entity\User;
 use Librecores\ProjectRepoBundle\Form\Type\ProjectType;
-use App\RepoCrawler\GithubRepoCrawler;
 use Librecores\ProjectRepoBundle\Repository\OrganizationRepository;
 use Librecores\ProjectRepoBundle\Repository\ProjectRepository;
 use Librecores\ProjectRepoBundle\Service\GitHub\AuthenticationRequiredException;
 use Librecores\ProjectRepoBundle\Service\GitHub\GitHubApiService;
 use Librecores\ProjectRepoBundle\Service\QueueDispatcherService;
-use App\Util\Dates;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -233,7 +235,7 @@ class ProjectController extends AbstractController
         $p = $this->getProject($parentName, $projectName, $projectRepository);
 
         // fetch project metadata
-        $current = new \DateTimeImmutable();
+        $current = new DateTimeImmutable();
 
         $qualityScore = $projectMetricsProvider->getCodeQualityScore($p);
         $twoTimesQualityScore = (int) ($qualityScore * 2);
@@ -253,7 +255,7 @@ class ProjectController extends AbstractController
                     $p,
                     Dates::INTERVAL_WEEK,
                     $current->sub(
-                        \DateInterval::createFromDateString('1 year')
+                        DateInterval::createFromDateString('1 year')
                     ),
                     $current
                 )
@@ -495,7 +497,7 @@ class ProjectController extends AbstractController
             throw $this->createNotFoundException('Project not found');
         }
 
-        return new JsonResponse([ 'inProcessing' => $prj->isInProcessing() ]);
+        return new JsonResponse(['inProcessing' => $prj->isInProcessing()]);
     }
 
     /**
@@ -660,7 +662,7 @@ QUERY;
             $organization = $organizationRepository->findOneByName($formParentName);
 
             if (null === $organization) {
-                throw new \Exception("form manipulated");
+                throw new Exception("form manipulated");
             }
 
             $p->setParentOrganization($organization);
@@ -682,7 +684,7 @@ QUERY;
         } elseif ($form->get('saveGithubSourceRepo')->isClicked()) {
             $sourceType = 'github';
         } else {
-            new \Exception('No submit button with associated source type clicked?');
+            new Exception('No submit button with associated source type clicked?');
         }
 
         return $sourceType;

@@ -2,7 +2,7 @@
 
 namespace Librecores\ProjectRepoBundle\Serializer\Normalizer;
 
-use Librecores\ProjectRepoBundle\Entity\User;
+use App\Entity\User;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 /**

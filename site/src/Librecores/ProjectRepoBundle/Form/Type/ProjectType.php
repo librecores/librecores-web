@@ -62,7 +62,7 @@ class ProjectType extends AbstractType
     {
         $resolver->setDefaults(
             array(
-                'data_class' => 'Librecores\ProjectRepoBundle\Entity\Project',
+                'data_class' => 'App\Entity\Project',
             )
         );
     }

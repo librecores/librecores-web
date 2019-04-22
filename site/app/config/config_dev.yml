@@ -55,11 +55,11 @@ assetic:
 easy_admin:
     site_name: 'LibreCores Admin'
     entities:
-        - Librecores\ProjectRepoBundle\Entity\GitSourceRepo
-        - Librecores\ProjectRepoBundle\Entity\Organization
-        - Librecores\ProjectRepoBundle\Entity\OrganizationMember
-        - Librecores\ProjectRepoBundle\Entity\Project
-#        - Librecores\ProjectRepoBundle\Entity\SourceStats
-#        - Librecores\ProjectRepoBundle\Entity\SourceStatsAuthor
-#        - Librecores\ProjectRepoBundle\Entity\SourceStatsCommitHistogram
-        - Librecores\ProjectRepoBundle\Entity\User
+        - App\Entity\GitSourceRepo
+        - App\Entity\Organization
+        - App\Entity\OrganizationMember
+        - App\Entity\Project
+#        - App\Entity\SourceStats
+#        - App\Entity\SourceStatsAuthor
+#        - App\Entity\SourceStatsCommitHistogram
+        - App\Entity\User

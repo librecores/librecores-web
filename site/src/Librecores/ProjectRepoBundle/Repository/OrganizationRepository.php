@@ -2,10 +2,10 @@
 
 namespace Librecores\ProjectRepoBundle\Repository;
 
+use App\Entity\Organization;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
-use Librecores\ProjectRepoBundle\Entity\Organization;
-use Librecores\ProjectRepoBundle\Entity\User;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -35,7 +35,7 @@ class OrganizationRepository extends ServiceEntityRepository
         return $this->getEntityManager()
             ->createQueryBuilder()
             ->select('o.name', 'o.displayName', 'o.description', 'm.permission')
-            ->from('LibrecoresProjectRepoBundle:Organization', 'o')
+            ->from('App:Organization', 'o')
             ->innerJoin('o.members', 'm')
             ->where('m.user = :member')
             ->setParameter('member', $user->getId())
@@ -58,7 +58,7 @@ class OrganizationRepository extends ServiceEntityRepository
         return $this->getEntityManager()
             ->createQueryBuilder()
             ->select('o')
-            ->from('LibrecoresProjectRepoBundle:Organization', 'o')
+            ->from('App:Organization', 'o')
             ->where('o.name = :name')
             ->setParameter('name', $organizationName)
             ->getQuery()
@@ -77,7 +77,7 @@ class OrganizationRepository extends ServiceEntityRepository
         return $this->getEntityManager()
             ->createQueryBuilder()
             ->select('o')
-            ->from('LibrecoresProjectRepoBundle:Organization', 'o')
+            ->from('App:Organization', 'o')
             ->where('o.name LIKE :name')
             ->orWhere('o.displayName LIKE :name')
             ->orWhere('o.description LIKE :name')

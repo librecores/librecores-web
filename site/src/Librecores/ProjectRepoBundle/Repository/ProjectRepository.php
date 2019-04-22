@@ -2,9 +2,9 @@
 
 namespace Librecores\ProjectRepoBundle\Repository;
 
+use App\Entity\Project;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
-use Librecores\ProjectRepoBundle\Entity\Project;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -36,7 +36,7 @@ class ProjectRepository extends ServiceEntityRepository
     {
         $p = $this->getEntityManager()
             ->createQuery(
-                'SELECT p FROM LibrecoresProjectRepoBundle:Project p '.
+                'SELECT p FROM App:Project p '.
                 'LEFT JOIN p.parentOrganization org '.
                 'LEFT JOIN p.parentUser user '.
                 'WHERE p.name = :projectName '.
@@ -68,7 +68,7 @@ class ProjectRepository extends ServiceEntityRepository
         $p = $this->getEntityManager()
             ->createQuery(
                 'SELECT p '.
-                'FROM LibrecoresProjectRepoBundle:Project p '.
+                'FROM App:Project p '.
                 'LEFT JOIN p.parentOrganization org '.
                 'LEFT JOIN p.parentUser user '.
                 'WHERE CONCAT(COALESCE(org.name, user.username), \'/\', p.name) LIKE :fqnameFragment'

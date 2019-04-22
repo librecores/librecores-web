@@ -3,9 +3,9 @@
 namespace Librecores\ProjectRepoBundle\Repository;
 
 
+use App\Entity\Project;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
-use Librecores\ProjectRepoBundle\Entity\Project;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 

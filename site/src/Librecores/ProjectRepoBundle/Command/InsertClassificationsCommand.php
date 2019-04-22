@@ -3,7 +3,7 @@
 namespace Librecores\ProjectRepoBundle\Command;
 
 use Doctrine\Common\Persistence\ObjectManager;
-use Librecores\ProjectRepoBundle\Entity\ClassificationHierarchy;
+use App\Entity\ClassificationHierarchy;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;

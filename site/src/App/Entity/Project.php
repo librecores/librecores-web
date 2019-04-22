@@ -1,6 +1,6 @@
 <?php
 
-namespace Librecores\ProjectRepoBundle\Entity;
+namespace App\Entity;
 
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -34,6 +34,7 @@ class Project
 {
     const STATUS_ASSIGNED = 'ASSIGNED';
     const STATUS_UNASSIGNED = 'UNASSIGNED';
+
     /**
      * Classifications assigned to this project
      *
@@ -44,6 +45,7 @@ class Project
      * @ORM\JoinColumn(name="projectId", referencedColumnName="id")
      */
     protected $classifications;
+
     /**
      * Internal project ID
      *
@@ -54,6 +56,7 @@ class Project
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+
     /**
      * Status of the project
      *
@@ -64,6 +67,7 @@ class Project
      * @ORM\Column(type="string", options={"default" : Project::STATUS_ASSIGNED})
      */
     private $status = self::STATUS_ASSIGNED;
+
     /**
      * User owning this project
      *
@@ -75,6 +79,7 @@ class Project
     private $parentUser;
 
     // Associations
+
     /**
      * Organization owning this project
      *
@@ -84,6 +89,7 @@ class Project
      * @ORM\JoinColumn(nullable=true)
      */
     private $parentOrganization;
+
     /**
      * Short name of the project
      *
@@ -157,7 +163,7 @@ class Project
     /**
      * @var SourceRepo
      *
-     * @Assert\Type(type="Librecores\ProjectRepoBundle\Entity\SourceRepo")
+     * @Assert\Type(type="App\Entity\SourceRepo")
      * @Assert\Valid()
      *
      * @ORM\OneToOne(targetEntity="SourceRepo", inversedBy="project", cascade={"persist", "remove"})
