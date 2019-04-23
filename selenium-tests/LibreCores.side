@@ -1,0 +1,1027 @@
+{
+  "id": "4c06153c-89e2-4d2c-9ab6-2fd3ecbe25db",
+  "version": "2.0",
+  "name": "LibreCores",
+  "url": "https://www.stage.librecores.org/",
+  "tests": [{
+    "id": "b5190d9b-afd2-4dcb-acaf-e12d20c69f97",
+    "name": "Home Page",
+    "commands": [{
+      "id": "c19799c8-2f09-49af-8382-372b0620bb2f",
+      "comment": "",
+      "command": "open",
+      "target": "/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "92cd13ae-58dd-48e3-9065-5dccace08f67",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "css=.navbar",
+      "targets": [
+        ["css=.navbar", "css:finder"],
+        ["xpath=//nav", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "645caa73-640c-473c-ac32-4d533ad3ab21",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "css=.librecores-home-startpane",
+      "targets": [
+        ["css=.librecores-home-startpane", "css:finder"],
+        ["xpath=//div[5]", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "b7dbf07c-6f4a-40ac-9886-257222c361f7",
+      "comment": "",
+      "command": "click",
+      "target": "css=.librecores-home-banner-wordmark",
+      "targets": [
+        ["css=.librecores-home-banner-wordmark", "css:finder"],
+        ["xpath=//div[4]/div/div/div", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "9b9616aa-8ba6-4bc2-a5f1-65365559cd58",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "id=search-form-input",
+      "targets": [
+        ["id=search-form-input", "id"],
+        ["name=query", "name"],
+        ["css=#search-form-input", "css:finder"],
+        ["xpath=//input[@id='search-form-input']", "xpath:attributes"],
+        ["xpath=//input[2]", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "0765e027-3f62-4144-a847-c88ec52ded9e",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "linkText=Log in",
+      "targets": [
+        ["linkText=Log in", "linkText"],
+        ["css=.navbar-right > li:nth-child(2) > a", "css:finder"],
+        ["xpath=//a[contains(text(),'Log in')]", "xpath:link"],
+        ["xpath=//a[contains(@href, '/user/login')]", "xpath:href"],
+        ["xpath=//ul[2]/li[2]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Log in')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "8a655762-4166-4940-b04a-612cac397ed4",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "linkText=Register",
+      "targets": [
+        ["linkText=Register", "linkText"],
+        ["css=.navbar-right > li:nth-child(1) > a", "css:finder"],
+        ["xpath=//a[contains(text(),'Register')]", "xpath:link"],
+        ["xpath=//a[contains(@href, '/user/register/')]", "xpath:href"],
+        ["xpath=//ul[2]/li/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Register')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "2d4db7f8-4907-4b83-b895-c3383b1841bc",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "linkText=Search",
+      "targets": [
+        ["linkText=Search", "linkText"],
+        ["css=.nav:nth-child(1) > li:nth-child(1) > a", "css:finder"],
+        ["xpath=//a[contains(text(),'Search')]", "xpath:link"],
+        ["xpath=//a[contains(@href, '/search')]", "xpath:href"],
+        ["xpath=//li/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Search')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "9f102b69-e96d-4b22-adbc-3b38d1134404",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "linkText=Learn",
+      "targets": [
+        ["linkText=Learn", "linkText"],
+        ["css=.nav:nth-child(1) > li:nth-child(2) > a", "css:finder"],
+        ["xpath=(//a[contains(text(),'Learn')])[2]", "xpath:link"],
+        ["xpath=//a[contains(@href, '/static/docs')]", "xpath:href"],
+        ["xpath=//li[2]/a", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "2027eae2-88e0-4f3e-814f-d495bde9b8f9",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "linkText=Community",
+      "targets": [
+        ["linkText=Community", "linkText"],
+        ["css=.dropdown-toggle", "css:finder"],
+        ["xpath=//a[contains(text(),'Community')]", "xpath:link"],
+        ["xpath=//a[contains(@href, '#')]", "xpath:href"],
+        ["xpath=//li[3]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Community ')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "e46ba962-c25e-44a2-9594-3f61f7f9cecc",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "linkText=LibreCores CI",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "21f61427-ef9d-4985-b55d-582ec0b29604",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "linkText=About",
+      "targets": [
+        ["linkText=About", "linkText"],
+        ["css=li:nth-child(5) > a", "css:finder"],
+        ["xpath=//a[contains(text(),'About')]", "xpath:link"],
+        ["xpath=//a[contains(@href, '/static/about')]", "xpath:href"],
+        ["xpath=//li[5]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'About')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "4825cdb0-5ae8-4271-b2c2-f15c271e9121",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "css=.librecores-home-banner > .container",
+      "targets": [
+        ["css=.librecores-home-banner > .container", "css:finder"],
+        ["xpath=//div[4]/div/div", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "ad04ce26-1918-4478-88e0-6fba7b8e8ef8",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "css=body > .container",
+      "targets": [
+        ["css=.container:nth-child(7)", "css:finder"],
+        ["xpath=//body/div[6]", "xpath:position"]
+      ],
+      "value": ""
+    }]
+  }, {
+    "id": "0c9f649b-bcfc-4bc7-bf92-f933d9928d1f",
+    "name": "Login Page",
+    "commands": [{
+      "id": "efcb8459-4a04-4ae2-8459-03d710dd970c",
+      "comment": "",
+      "command": "open",
+      "target": "/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "ecdc46aa-053b-449a-a806-ffbd4c01dcf4",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1238x778",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "091bf19e-492b-448b-bd9b-bce42d362247",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Log in",
+      "targets": [
+        ["linkText=Log in", "linkText"],
+        ["css=.navbar-right > li:nth-child(2) > a", "css:finder"],
+        ["xpath=//a[contains(text(),'Log in')]", "xpath:link"],
+        ["xpath=//a[contains(@href, '/user/login')]", "xpath:href"],
+        ["xpath=//ul[2]/li[2]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Log in')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "2ba82425-2507-411c-ae43-0d51f447b70c",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=.panel-title",
+      "targets": [
+        ["css=.panel-title", "css:finder"],
+        ["xpath=//div[@id='maincontent']/div/div/div/h3", "xpath:idRelative"],
+        ["xpath=//h3", "xpath:position"],
+        ["xpath=//h3[contains(.,'Log in')]", "xpath:innerText"]
+      ],
+      "value": "Log in"
+    }, {
+      "id": "6161bfdc-a572-4d90-b3f7-10f696e868d8",
+      "comment": "",
+      "command": "assertEditable",
+      "target": "id=username",
+      "targets": [
+        ["id=username", "id"],
+        ["name=_username", "name"],
+        ["css=#username", "css:finder"],
+        ["xpath=//input[@id='username']", "xpath:attributes"],
+        ["xpath=//div[@id='maincontent']/div/div/div[2]/form/div/input", "xpath:idRelative"],
+        ["xpath=//div/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "f87e3b11-f4f9-45cf-8902-5f53991ad151",
+      "comment": "",
+      "command": "assertEditable",
+      "target": "id=password",
+      "targets": [
+        ["id=password", "id"],
+        ["name=_password", "name"],
+        ["css=#password", "css:finder"],
+        ["xpath=//input[@id='password']", "xpath:attributes"],
+        ["xpath=//div[@id='maincontent']/div/div/div[2]/form/div[2]/input", "xpath:idRelative"],
+        ["xpath=//div[2]/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "c3ee8a23-bf29-44cf-ad15-476057cb720f",
+      "comment": "",
+      "command": "assertText",
+      "target": "id=_submit",
+      "targets": [
+        ["id=_submit", "id"],
+        ["name=_submit", "name"],
+        ["css=#\\_submit", "css:finder"],
+        ["xpath=//button[@id='_submit']", "xpath:attributes"],
+        ["xpath=//div[@id='maincontent']/div/div/div[2]/form/button", "xpath:idRelative"],
+        ["xpath=//form/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Log in')]", "xpath:innerText"]
+      ],
+      "value": "Log in"
+    }, {
+      "id": "d0c5a5f1-574f-4742-a6c1-c5b4a98038a6",
+      "comment": "",
+      "command": "assertNotChecked",
+      "target": "css=#remember_me",
+      "targets": [
+        ["css=.checkbox > label", "css:finder"],
+        ["xpath=//div[@id='maincontent']/div/div/div[2]/form/div[3]/label", "xpath:idRelative"],
+        ["xpath=//div[3]/label", "xpath:position"],
+        ["xpath=//label[contains(.,'Remember me')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "af3e4e85-4866-4b18-bbfe-fb28d72dc008",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "linkText=Register now",
+      "targets": [
+        ["linkText=Register now", "linkText"],
+        ["css=.text-center:nth-child(6) > a", "css:finder"],
+        ["xpath=//a[contains(text(),'Register now')]", "xpath:link"],
+        ["xpath=//div[@id='maincontent']/div/div/div[2]/div[2]/a", "xpath:idRelative"],
+        ["xpath=(//a[contains(@href, '/user/register/')])[2]", "xpath:href"],
+        ["xpath=//div[2]/div[2]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Register now')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "ab4c03dd-fa5c-4f04-8122-7ad813058d64",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "linkText=Reset Password",
+      "targets": [
+        ["linkText=Reset Password", "linkText"],
+        ["css=.text-center:nth-child(8) > a", "css:finder"],
+        ["xpath=//a[contains(text(),'Reset Password')]", "xpath:link"],
+        ["xpath=//div[@id='maincontent']/div/div/div[2]/div[3]/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '/user/resetting/request')]", "xpath:href"],
+        ["xpath=//div[3]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Reset Password')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }]
+  }, {
+    "id": "b09c5b80-38fb-40a1-90d7-764dcaecb34d",
+    "name": "Register Page",
+    "commands": [{
+      "id": "bc1ce84b-b015-4291-ac1b-eac6e2c6a3e7",
+      "comment": "",
+      "command": "open",
+      "target": "/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "3a1dbb6a-0322-4465-8cc1-a699787365f9",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1238x778",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "028d6883-2fee-4bc0-879e-65e30cf24da8",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Register",
+      "targets": [
+        ["linkText=Register", "linkText"],
+        ["css=.navbar-right > li:nth-child(1) > a", "css:finder"],
+        ["xpath=//a[contains(text(),'Register')]", "xpath:link"],
+        ["xpath=//a[contains(@href, '/user/register/')]", "xpath:href"],
+        ["xpath=//ul[2]/li/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Register')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "acbd8057-b7b0-4719-b9c6-475c5f4b6ed4",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=.panel-title",
+      "targets": [
+        ["css=.panel-title", "css:finder"],
+        ["xpath=//div[@id='maincontent']/div/div/div/h3", "xpath:idRelative"],
+        ["xpath=//h3", "xpath:position"],
+        ["xpath=//h3[contains(.,'Register account')]", "xpath:innerText"]
+      ],
+      "value": "Register account"
+    }, {
+      "id": "dd95f208-28c6-444d-bf32-004fdda34157",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "id=fos_user_registration_form",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "d363b359-3808-45a0-8a0e-d06d352d6db3",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=.form-group:nth-child(1) > .control-label",
+      "targets": [
+        ["css=.form-group:nth-child(1) > .control-label", "css:finder"],
+        ["xpath=//div[@id='fos_user_registration_form']/div/label", "xpath:idRelative"],
+        ["xpath=//label", "xpath:position"],
+        ["xpath=//label[contains(.,'Email')]", "xpath:innerText"]
+      ],
+      "value": "Email"
+    }, {
+      "id": "f409e5e9-41c9-4df7-9e02-0bfab9c94615",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=.form-group:nth-child(2) > .control-label",
+      "targets": [
+        ["css=.form-group:nth-child(2) > .control-label", "css:finder"],
+        ["xpath=//div[@id='fos_user_registration_form']/div[2]/label", "xpath:idRelative"],
+        ["xpath=//div[2]/label", "xpath:position"],
+        ["xpath=//label[contains(.,'Username')]", "xpath:innerText"]
+      ],
+      "value": "Username"
+    }, {
+      "id": "413672ea-5b7f-4fa8-b4c8-310a60ce9b4e",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=.form-group:nth-child(3) > .control-label",
+      "targets": [
+        ["css=.form-group:nth-child(3) > .control-label", "css:finder"],
+        ["xpath=//div[@id='fos_user_registration_form']/div[3]/label", "xpath:idRelative"],
+        ["xpath=//div[3]/label", "xpath:position"],
+        ["xpath=//label[contains(.,'Password')]", "xpath:innerText"]
+      ],
+      "value": "Password"
+    }, {
+      "id": "1b45e2fa-1135-48b9-9078-7198ef3746f1",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=.form-group:nth-child(4) > .control-label",
+      "targets": [
+        ["css=.form-group:nth-child(4) > .control-label", "css:finder"],
+        ["xpath=//div[@id='fos_user_registration_form']/div[4]/label", "xpath:idRelative"],
+        ["xpath=//div[4]/label", "xpath:position"],
+        ["xpath=//label[contains(.,'Repeat password')]", "xpath:innerText"]
+      ],
+      "value": "Repeat password"
+    }, {
+      "id": "5a6e6e36-b853-489c-b489-bb0a373c6d9e",
+      "comment": "",
+      "command": "assertEditable",
+      "target": "id=fos_user_registration_form_email",
+      "targets": [
+        ["id=fos_user_registration_form_email", "id"],
+        ["name=fos_user_registration_form[email]", "name"],
+        ["css=#fos_user_registration_form_email", "css:finder"],
+        ["xpath=//input[@id='fos_user_registration_form_email']", "xpath:attributes"],
+        ["xpath=//div[@id='fos_user_registration_form']/div/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "5c33d457-ec08-4544-a89e-cbde18e5269d",
+      "comment": "",
+      "command": "assertEditable",
+      "target": "id=fos_user_registration_form_username",
+      "targets": [
+        ["id=fos_user_registration_form_username", "id"],
+        ["name=fos_user_registration_form[username]", "name"],
+        ["css=#fos_user_registration_form_username", "css:finder"],
+        ["xpath=//input[@id='fos_user_registration_form_username']", "xpath:attributes"],
+        ["xpath=//div[@id='fos_user_registration_form']/div[2]/input", "xpath:idRelative"],
+        ["xpath=//div[2]/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "6c0dd752-c5bc-4eac-92d1-354e7a87318b",
+      "comment": "",
+      "command": "assertEditable",
+      "target": "id=fos_user_registration_form_plainPassword_first",
+      "targets": [
+        ["id=fos_user_registration_form_plainPassword_first", "id"],
+        ["name=fos_user_registration_form[plainPassword][first]", "name"],
+        ["css=#fos_user_registration_form_plainPassword_first", "css:finder"],
+        ["xpath=//input[@id='fos_user_registration_form_plainPassword_first']", "xpath:attributes"],
+        ["xpath=//div[@id='fos_user_registration_form']/div[3]/input", "xpath:idRelative"],
+        ["xpath=//div[3]/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "6ffbe245-affa-473a-be03-795fa9df9c55",
+      "comment": "",
+      "command": "assertEditable",
+      "target": "id=fos_user_registration_form_plainPassword_second",
+      "targets": [
+        ["id=fos_user_registration_form_plainPassword_second", "id"],
+        ["name=fos_user_registration_form[plainPassword][second]", "name"],
+        ["css=#fos_user_registration_form_plainPassword_second", "css:finder"],
+        ["xpath=//input[@id='fos_user_registration_form_plainPassword_second']", "xpath:attributes"],
+        ["xpath=//div[@id='fos_user_registration_form']/div[4]/input", "xpath:idRelative"],
+        ["xpath=//div[4]/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "808af0ec-655d-45ab-85c0-64cad00f955e",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "id=_submit",
+      "targets": [
+        ["id=_submit", "id"],
+        ["name=_submit", "name"],
+        ["css=#\\_submit", "css:finder"],
+        ["xpath=//button[@id='_submit']", "xpath:attributes"],
+        ["xpath=//div[@id='maincontent']/div/div/div[2]/form/button", "xpath:idRelative"],
+        ["xpath=//form/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Create account')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "819b3dd2-b483-4c5f-b3dc-f09bd352cd06",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "linkText=Sign in with GitHub",
+      "targets": [
+        ["linkText=Sign in with GitHub", "linkText"],
+        ["css=.btn-github", "css:finder"],
+        ["xpath=//div[@id='maincontent']/div/div/div[2]/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, 'https://www.stage.librecores.org/user/connect/github')]", "xpath:href"],
+        ["xpath=//div[2]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Sign in with GitHub')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "26b5fa41-da59-46c3-8f2c-4a91de82e745",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "linkText=Sign in with Google",
+      "targets": [
+        ["linkText=Sign in with Google", "linkText"],
+        ["css=.btn-google", "css:finder"],
+        ["xpath=//div[@id='maincontent']/div/div/div[2]/a[2]", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, 'https://www.stage.librecores.org/user/connect/google')]", "xpath:href"],
+        ["xpath=//a[2]", "xpath:position"],
+        ["xpath=//a[contains(.,'Sign in with Google')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "be5e5725-da89-4014-a3b1-62b11ec8dd6a",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "linkText=Log in",
+      "targets": [
+        ["css=.text-center > a", "css:finder"],
+        ["xpath=(//a[contains(text(),'Log in')])[2]", "xpath:link"],
+        ["xpath=//div[@id='maincontent']/div/div/div[2]/div[2]/a", "xpath:idRelative"],
+        ["xpath=(//a[contains(@href, '/user/login')])[2]", "xpath:href"],
+        ["xpath=//div[2]/div[2]/a", "xpath:position"]
+      ],
+      "value": ""
+    }]
+  }, {
+    "id": "8311962e-b67b-4d3a-922a-d072d2ea2ece",
+    "name": "Search Page",
+    "commands": [{
+      "id": "8d6fb343-a9e0-4183-87c1-b7ce29772b43",
+      "comment": "",
+      "command": "open",
+      "target": "https://www.stage.librecores.org/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "8c816e5e-9685-4b00-9ef3-b15e6731ff51",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1238x781",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "485577b5-e147-4843-be2b-3872c1a35e61",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Search",
+      "targets": [
+        ["linkText=Search", "linkText"],
+        ["css=.nav:nth-child(1) > li:nth-child(1) > a", "css:finder"],
+        ["xpath=//a[contains(text(),'Search')]", "xpath:link"],
+        ["xpath=//a[contains(@href, '/search')]", "xpath:href"],
+        ["xpath=//li/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Search')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "6168131f-4b4c-4291-a4dd-33d9a9f8c296",
+      "comment": "",
+      "command": "assertEditable",
+      "target": "id=search-input",
+      "targets": [
+        ["id=search-input", "id"],
+        ["css=#search-input", "css:finder"],
+        ["xpath=//input[@id='search-input']", "xpath:attributes"],
+        ["xpath=//div[@id='maincontent']/form/div/div/div[2]/div/div/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "b8634adb-2afc-4eb0-bd57-3967ff2ab36a",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "css=.algolia-search-logo > img",
+      "targets": [
+        ["css=.algolia-search-logo > img", "css:finder"],
+        ["xpath=//img[@alt='Algolia powered by']", "xpath:img"],
+        ["xpath=//div[@id='maincontent']/form/div/div/div[2]/div[2]/img", "xpath:idRelative"],
+        ["xpath=//div[2]/img", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "05ab867e-3766-4da9-901e-1c1d80f6afa3",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "css=#stats",
+      "targets": [
+        ["css=.row:nth-child(2) > .col-sm-9", "css:finder"],
+        ["xpath=//div[@id='maincontent']/form/div/div[2]/div[2]", "xpath:idRelative"],
+        ["xpath=//form/div/div[2]/div[2]", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "344e4832-39d7-43f4-b0d4-f5de69028ecf",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "css=#hits",
+      "targets": [
+        ["css=.row:nth-child(2) > .col-sm-9", "css:finder"],
+        ["xpath=//div[@id='maincontent']/form/div/div[2]/div[2]", "xpath:idRelative"],
+        ["xpath=//form/div/div[2]/div[2]", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "201a9c2b-a52f-4068-8d99-365a271aff36",
+      "comment": "",
+      "command": "click",
+      "target": "id=organization",
+      "targets": [
+        ["id=organization", "id"],
+        ["linkText=Organization", "linkText"],
+        ["css=#organization", "css:finder"],
+        ["xpath=//a[@id='organization']", "xpath:attributes"],
+        ["xpath=//div[@id='maincontent']/form/div/div[2]/div/ul/a[2]", "xpath:idRelative"],
+        ["xpath=(//a[contains(@href, '#')])[3]", "xpath:href"],
+        ["xpath=//a[2]", "xpath:position"],
+        ["xpath=//a[contains(.,' Organization')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "a2f868b3-efe6-4a27-b1c1-e1da7c374cca",
+      "comment": "",
+      "command": "assertEditable",
+      "target": "id=search-input",
+      "targets": [
+        ["id=search-input", "id"],
+        ["css=#search-input", "css:finder"],
+        ["xpath=//input[@id='search-input']", "xpath:attributes"],
+        ["xpath=//div[@id='maincontent']/form/div/div/div[2]/div/div/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "2aff13c0-d39a-4f4b-b135-6eda40022e69",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "css=#stats",
+      "targets": [
+        ["css=.row:nth-child(2) > .col-sm-9", "css:finder"],
+        ["xpath=//div[@id='maincontent']/form/div/div[2]/div[2]", "xpath:idRelative"],
+        ["xpath=//form/div/div[2]/div[2]", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "dc821d9c-58a8-4041-aece-47c33ff0c9c4",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "css=#hits",
+      "targets": [
+        ["css=.row:nth-child(2) > .col-sm-9", "css:finder"],
+        ["xpath=//div[@id='maincontent']/form/div/div[2]/div[2]", "xpath:idRelative"],
+        ["xpath=//form/div/div[2]/div[2]", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "69643d70-e57d-4a9b-84f5-e4ccd0c8fd01",
+      "comment": "",
+      "command": "click",
+      "target": "id=user",
+      "targets": [
+        ["id=user", "id"],
+        ["linkText=Users", "linkText"],
+        ["css=#user", "css:finder"],
+        ["xpath=//a[@id='user']", "xpath:attributes"],
+        ["xpath=//div[@id='maincontent']/form/div/div[2]/div/ul/a[3]", "xpath:idRelative"],
+        ["xpath=(//a[contains(@href, '#')])[4]", "xpath:href"],
+        ["xpath=//a[3]", "xpath:position"],
+        ["xpath=//a[contains(.,' Users')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "8acfac53-0a35-4b2a-9d4c-a77ea8e3221c",
+      "comment": "",
+      "command": "assertEditable",
+      "target": "id=search-input",
+      "targets": [
+        ["id=search-input", "id"],
+        ["css=#search-input", "css:finder"],
+        ["xpath=//input[@id='search-input']", "xpath:attributes"],
+        ["xpath=//div[@id='maincontent']/form/div/div/div[2]/div/div/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "124fa7b2-a160-4b62-b34f-360e27d7ef7d",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "css=#stats",
+      "targets": [
+        ["css=.row:nth-child(2) > .col-sm-9", "css:finder"],
+        ["xpath=//div[@id='maincontent']/form/div/div[2]/div[2]", "xpath:idRelative"],
+        ["xpath=//form/div/div[2]/div[2]", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "8bb388bb-9501-4413-b4fe-439cef5b2009",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "css=#hits",
+      "targets": [
+        ["css=.row:nth-child(2) > .col-sm-9", "css:finder"],
+        ["xpath=//div[@id='maincontent']/form/div/div[2]/div[2]", "xpath:idRelative"],
+        ["xpath=//form/div/div[2]/div[2]", "xpath:position"]
+      ],
+      "value": ""
+    }]
+  }, {
+    "id": "9d24f61b-3e12-48c0-8ac5-878afe6dccb5",
+    "name": "Learn Page",
+    "commands": [{
+      "id": "1f8a1cbd-fda6-413a-bbb5-29f67ae02065",
+      "comment": "",
+      "command": "open",
+      "target": "/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "4b3a1e58-7504-46a0-a044-31bd23ba52a9",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1238x778",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "8989e111-274b-4675-bec1-88d6a3dbca00",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Learn",
+      "targets": [
+        ["linkText=Learn", "linkText"],
+        ["css=.nav:nth-child(1) > li:nth-child(2) > a", "css:finder"],
+        ["xpath=(//a[contains(text(),'Learn')])[2]", "xpath:link"],
+        ["xpath=//a[contains(@href, '/static/docs')]", "xpath:href"],
+        ["xpath=//li[2]/a", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "f3afd402-3ddc-48d8-8e95-c3f4e104ed19",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=h1",
+      "targets": [
+        ["css=h1", "css:finder"],
+        ["xpath=//div[@id='maincontent']/h1", "xpath:idRelative"],
+        ["xpath=//h1", "xpath:position"],
+        ["xpath=//h1[contains(.,'LibreCores Documentation')]", "xpath:innerText"]
+      ],
+      "value": "LibreCores Documentation"
+    }]
+  }, {
+    "id": "c452b84a-8f4c-43ac-8e76-283d48988031",
+    "name": "Planet",
+    "commands": [{
+      "id": "8b39c3df-79c0-4374-aadc-5fae03ea4a37",
+      "comment": "",
+      "command": "open",
+      "target": "/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "9bd06fc0-a55f-40a7-a834-117beebe0ca0",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1238x778",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "1cf00cb2-4014-49eb-b764-27e87eb95365",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Community",
+      "targets": [
+        ["linkText=Community", "linkText"],
+        ["css=.dropdown-toggle", "css:finder"],
+        ["xpath=//a[contains(text(),'Community')]", "xpath:link"],
+        ["xpath=//a[contains(@href, '#')]", "xpath:href"],
+        ["xpath=//li[3]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Community ')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "afdc0210-6dae-4c14-8721-e21160118a97",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "linkText=Planet LibreCores",
+      "targets": [
+        ["linkText=Planet LibreCores", "linkText"],
+        ["css=.dropdown-menu > li:nth-child(1) > a", "css:finder"],
+        ["xpath=//a[contains(text(),'Planet LibreCores')]", "xpath:link"],
+        ["xpath=//a[contains(@href, '/planet/')]", "xpath:href"],
+        ["xpath=//li[3]/ul/li/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Planet LibreCores')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "e4a236af-e186-4ef3-aa35-f212c3b882a2",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "linkText=Community Hub",
+      "targets": [
+        ["linkText=Community Hub", "linkText"],
+        ["css=.dropdown-menu > li:nth-child(2) > a", "css:finder"],
+        ["xpath=//a[contains(text(),'Community Hub')]", "xpath:link"],
+        ["xpath=//a[contains(@href, '/static/community-hub')]", "xpath:href"],
+        ["xpath=//li[3]/ul/li[2]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Community Hub')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "e73ee8a1-0aaf-4112-b9a9-c247a780cd35",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Planet LibreCores",
+      "targets": [
+        ["linkText=Planet LibreCores", "linkText"],
+        ["css=.dropdown-menu > li:nth-child(1) > a", "css:finder"],
+        ["xpath=//a[contains(text(),'Planet LibreCores')]", "xpath:link"],
+        ["xpath=//a[contains(@href, '/planet/')]", "xpath:href"],
+        ["xpath=//li[3]/ul/li/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Planet LibreCores')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "354aa8f3-64ef-4520-8c7e-b510816123ff",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "css=h1",
+      "targets": [
+        ["css=h1", "css:finder"],
+        ["xpath=//div[@id='maincontent']/h1", "xpath:idRelative"],
+        ["xpath=//h1", "xpath:position"],
+        ["xpath=//h1[contains(.,'Planet LibreCores')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "30ba517e-f038-493d-a226-a79488c552e9",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "css=.col-md-9",
+      "targets": [
+        ["css=.col-md-9", "css:finder"],
+        ["xpath=//div[@id='maincontent']/div", "xpath:idRelative"],
+        ["xpath=//div[5]/div", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "274794a0-be7b-4d0c-8fb7-b0505ee6c583",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "css=.col-md-3 > p:nth-child(1)",
+      "targets": [
+        ["css=.col-md-3 > p:nth-child(1)", "css:finder"],
+        ["xpath=//div[@id='maincontent']/div[2]/p", "xpath:idRelative"],
+        ["xpath=//p", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "e6a28976-3941-4283-b628-2f4c37a0fb1c",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "css=.col-md-3",
+      "targets": [
+        ["css=.col-md-3", "css:finder"],
+        ["xpath=//div[@id='maincontent']/div[2]", "xpath:idRelative"],
+        ["xpath=//div[8]/div[2]", "xpath:position"]
+      ],
+      "value": ""
+    }]
+  }, {
+    "id": "71310bd3-207f-494e-9a57-99e4098f0681",
+    "name": "CI Page",
+    "commands": [{
+      "id": "dffce3f3-8c39-4ebf-8eb7-45506deb3e6b",
+      "comment": "",
+      "command": "open",
+      "target": "/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "c80986e2-9d1b-45d2-b3c8-1a827a593242",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1238x778",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "cb523d59-22f2-4464-84c8-09c18c0eff6f",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=LibreCores CI",
+      "targets": [
+        ["linkText=LibreCores CI", "linkText"],
+        ["css=li:nth-child(4) > a", "css:finder"],
+        ["xpath=//a[contains(text(),'LibreCores CI')]", "xpath:link"],
+        ["xpath=//a[contains(@href, '/static/librecores-ci')]", "xpath:href"],
+        ["xpath=//li[4]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'LibreCores CI')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "e0534717-ea6f-48d5-8e74-18ca03cde974",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=h1",
+      "targets": [
+        ["css=h1", "css:finder"],
+        ["xpath=//div[@id='maincontent']/h1", "xpath:idRelative"],
+        ["xpath=//h1", "xpath:position"],
+        ["xpath=//h1[contains(.,'LibreCores CI')]", "xpath:innerText"]
+      ],
+      "value": "LibreCores CI"
+    }]
+  }, {
+    "id": "3052a04b-ccc5-4385-8b95-c5ba0c63bb92",
+    "name": "About Page",
+    "commands": [{
+      "id": "933583e7-1953-45db-be47-32b8f983d21a",
+      "comment": "",
+      "command": "open",
+      "target": "/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "535e8aef-359b-4ad5-a20f-ba1e48b9c8ea",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=About",
+      "targets": [
+        ["linkText=About", "linkText"],
+        ["css=li:nth-child(5) > a", "css:finder"],
+        ["xpath=//a[contains(text(),'About')]", "xpath:link"],
+        ["xpath=//a[contains(@href, '/static/about')]", "xpath:href"],
+        ["xpath=//li[5]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'About')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "f3ee5f75-4379-44e6-b29e-1a6f38d63eb4",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=h1",
+      "targets": [
+        ["css=h1", "css:finder"],
+        ["xpath=//div[@id='maincontent']/h1", "xpath:idRelative"],
+        ["xpath=//h1", "xpath:position"],
+        ["xpath=//h1[contains(.,'About LibreCores')]", "xpath:innerText"]
+      ],
+      "value": "About LibreCores"
+    }, {
+      "id": "6638bfbd-04c3-4bc6-a001-301ca9c85a87",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "id=maincontent",
+      "targets": [
+        ["id=maincontent", "id"],
+        ["css=#maincontent", "css:finder"],
+        ["xpath=//div[@id='maincontent']", "xpath:attributes"],
+        ["xpath=//div[5]", "xpath:position"]
+      ],
+      "value": ""
+    }]
+  }, {
+    "id": "4d009603-66cd-4f36-be70-1182087ab70c",
+    "name": "Community Hub",
+    "commands": [{
+      "id": "78e39e58-95d1-43bc-bb18-d8718a93a85a",
+      "comment": "",
+      "command": "open",
+      "target": "/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "d43340ce-7f78-437e-8003-efdec6430ee7",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1238x778",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "1fae8c03-27ed-4166-8b23-918f5d1095de",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Community",
+      "targets": [
+        ["linkText=Community", "linkText"],
+        ["css=.dropdown-toggle", "css:finder"],
+        ["xpath=//a[contains(text(),'Community')]", "xpath:link"],
+        ["xpath=//a[contains(@href, '#')]", "xpath:href"],
+        ["xpath=//li[3]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Community ')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "ac1b398b-bb64-4fde-a1d6-11ee92032213",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Community Hub",
+      "targets": [
+        ["linkText=Community Hub", "linkText"],
+        ["css=.dropdown-menu > li:nth-child(2) > a", "css:finder"],
+        ["xpath=//a[contains(text(),'Community Hub')]", "xpath:link"],
+        ["xpath=//a[contains(@href, '/static/community-hub')]", "xpath:href"],
+        ["xpath=//li[3]/ul/li[2]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Community Hub')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "7c15da20-7c51-4339-be72-8028dac15287",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=h1",
+      "targets": [
+        ["css=h1", "css:finder"],
+        ["xpath=//div[@id='maincontent']/h1", "xpath:idRelative"],
+        ["xpath=//h1", "xpath:position"],
+        ["xpath=//h1[contains(.,'LibreCores Community Hub')]", "xpath:innerText"]
+      ],
+      "value": "LibreCores Community Hub"
+    }, {
+      "id": "87bef4cb-8584-481b-8cab-17ffee1ce838",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "id=maincontent",
+      "targets": [
+        ["id=maincontent", "id"],
+        ["css=#maincontent", "css:finder"],
+        ["xpath=//div[@id='maincontent']", "xpath:attributes"],
+        ["xpath=//div[5]", "xpath:position"]
+      ],
+      "value": ""
+    }]
+  }],
+  "suites": [{
+    "id": "d965f94e-cd49-4570-b7e8-d7bc601b3d12",
+    "name": "Basic Tests",
+    "persistSession": false,
+    "parallel": false,
+    "timeout": 300,
+    "tests": ["b5190d9b-afd2-4dcb-acaf-e12d20c69f97", "3052a04b-ccc5-4385-8b95-c5ba0c63bb92", "71310bd3-207f-494e-9a57-99e4098f0681", "4d009603-66cd-4f36-be70-1182087ab70c", "9d24f61b-3e12-48c0-8ac5-878afe6dccb5", "0c9f649b-bcfc-4bc7-bf92-f933d9928d1f", "c452b84a-8f4c-43ac-8e76-283d48988031", "b09c5b80-38fb-40a1-90d7-764dcaecb34d", "8311962e-b67b-4d3a-922a-d072d2ea2ece"]
+  }],
+  "urls": ["https://www.stage.librecores.org/"],
+  "plugins": []
+}
