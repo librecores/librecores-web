@@ -28,3 +28,6 @@ php_extensions_pecl: []
 
 # PHP FPM socket (for web servers)
 php_fpm_sock: "/var/run/php/php{{ php_version }}-fpm.sock"
+
+# Major version of nodejs to be used
+nodejs_major_version: 10

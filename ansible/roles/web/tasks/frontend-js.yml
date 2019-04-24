@@ -1,0 +1,27 @@
+- name: Add yarn repository key
+  apt_key:
+    url: https://dl.yarnpkg.com/debian/pubkey.gpg
+    state: present
+
+- name: Add yarn repository
+  apt_repository:
+    repo: deb https://dl.yarnpkg.com/debian/ stable main
+    state: present
+
+- name: Add NodeSource repository key
+  apt_key:
+    url: https://deb.nodesource.com/gpgkey/nodesource.gpg.key
+    state: present
+
+- name: Add node.js repository from NodeSource
+  apt_repository:
+    repo: "deb https://deb.nodesource.com/node_{{ nodejs_major_version }}.x xenial main"
+    state: present
+
+- name: Install frontend packages
+  apt:
+    pkg:
+      - nodejs
+      - yarn
+    state: present
+    update_cache: yes
