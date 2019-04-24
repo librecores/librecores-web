@@ -3,6 +3,7 @@
 - include: nginx.yml
 - include: php.yml
 - include: rabbitmq.yml
+- include: frontend-js.yml
 - include: github-markup.yml
 - include: librecores-site.yml
 - include: repocrawler.yml
