@@ -15,6 +15,7 @@ php_extensions_packaged:
   - bcmath
   - mbstring
   - zip
+  - intl
 
 # Development extensions installed through OS packages
 # Like php_extensions_packaged, but only available during development
