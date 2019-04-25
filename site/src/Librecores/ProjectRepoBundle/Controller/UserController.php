@@ -17,7 +17,6 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class UserController extends AbstractController
 {
-
     /**
      * View a user's public profile
      *
@@ -31,6 +30,22 @@ class UserController extends AbstractController
         return $this->render(
             'LibrecoresProjectRepoBundle:User:view.html.twig',
             array('user' => $user)
+        );
+    }
+
+    /**
+     * View a dashboard after Login
+     *
+     * @param Request  $request
+     * @param User     $user
+     *
+     * @return Response
+     */
+    public function dashboardAction(Request $request)
+    {
+        return $this->render(
+            'LibrecoresProjectRepoBundle:User:dashboard.html.twig',
+            array('user' => $this->getUser())
         );
     }
 

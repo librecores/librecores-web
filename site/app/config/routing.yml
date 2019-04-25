@@ -33,6 +33,10 @@ librecores.user.settings.password:
     path: /user/settings/password
     defaults: { _controller: LibrecoresProjectRepoBundle:User:passwordSettings }
 
+librecores.user.dashboard:
+    path: /user/dashboard
+    defaults: { _controller: LibrecoresProjectRepoBundle:User:dashboard }
+
 # FOSUser
 fos_user_security:
     resource: "@FOSUserBundle/Resources/config/routing/security.xml"
