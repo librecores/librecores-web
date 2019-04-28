@@ -29,8 +29,9 @@ other information about your project automatically.</p>
     {{ form_errors(form.displayName) }}
 
     <div class="form-inline">
-      {{ form_widget(form.displayName, {'attr': {'placeholder': 'Johns awesome FIFO'}}) }}
+      {{ form_widget(form.displayName, {'attr': {'placeholder': 'Johns awesome FIFO', 'pattern': '.*', 'minlength': '5' }}) }}
     </div>
+    <span class="help-block">Use a meaningful and descriptive name between 5 to 100 characters</span>
   </div>
 
   <div class="form-group {{ form.name.vars.errors|length > 0 ? 'has-error' : '' }}">
@@ -43,8 +44,9 @@ other information about your project automatically.</p>
       {{ app.request.getSchemeAndHttpHost() }}/
       {{ form_label(form.parentName, null, {'label_attr': {'class': 'sr-only'}}) }}
       {{ form_widget(form.parentName) }} /
-      {{ form_widget(form.name, {'attr': {'placeholder': 'awesome-fifo'}}) }}
+      {{ form_widget(form.name, {'attr': {'placeholder': 'awesome-fifo', 'minlength': 4 }}) }}
     </div>
+    <span class="help-block">This value will be used in the URL. Must be between 4 to 30 characters</span>
   </div>
 
 
