@@ -7,6 +7,8 @@ use Librecores\ProjectRepoBundle\Doctrine\ProjectMetricsProvider;
 use Librecores\ProjectRepoBundle\Entity\SourceRepo;
 use Librecores\ProjectRepoBundle\Util\MarkupToHtmlConverter;
 use Librecores\ProjectRepoBundle\Util\ProcessCreator;
+use Librecores\ProjectRepoBundle\Repository\CommitRepository;
+use Librecores\ProjectRepoBundle\Repository\ContributorRepository;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
 
@@ -38,9 +40,9 @@ abstract class RepoCrawler
     protected $processCreator;
 
     /**
-     * @var ObjectManager
+     * @var CommitRepository
      */
-    protected $manager;
+    protected $commitRepository;
 
     /**
      * @var ProjectMetricsProvider
@@ -48,11 +50,23 @@ abstract class RepoCrawler
     protected $projectMetricsProvider;
 
     /**
+     * @var ObjectManager
+     */
+    protected $manager;
+
+    /**
+     * @var ContributorRepository
+     */
+    protected $contributorRepository;
+
+    /**
      * RepoCrawler constructor.
      *
      * @param SourceRepo             $repo
      * @param MarkupToHtmlConverter  $markupConverter
      * @param ProcessCreator         $processCreator
+     * @param CommitRepository       $commitRepository
+     * @param ContributorRepository  $contributorRepository
      * @param ObjectManager          $manager
      * @param LoggerInterface        $logger
      * @param ProjectMetricsProvider $projectMetricsProvider
@@ -61,6 +75,8 @@ abstract class RepoCrawler
         SourceRepo $repo,
         MarkupToHtmlConverter $markupConverter,
         ProcessCreator $processCreator,
+        CommitRepository $commitRepository,
+        ContributorRepository $contributorRepository,
         ObjectManager $manager,
         LoggerInterface $logger,
         ProjectMetricsProvider $projectMetricsProvider
@@ -69,8 +85,10 @@ abstract class RepoCrawler
         $this->markupConverter = $markupConverter;
         $this->logger = $logger;
         $this->processCreator = $processCreator;
-        $this->manager = $manager;
         $this->projectMetricsProvider = $projectMetricsProvider;
+        $this->commitRepository = $commitRepository;
+        $this->manager = $manager;
+        $this->contributorRepository = $contributorRepository;
 
         if (!$this->isValidRepoType()) {
             throw new RuntimeException("Repository type is not supported by this crawler.");

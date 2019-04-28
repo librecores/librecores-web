@@ -2,6 +2,9 @@
 
 namespace Librecores\ProjectRepoBundle\RepoCrawler;
 
+use Librecores\ProjectRepoBundle\Util\FileUtil;
+use Librecores\ProjectRepoBundle\Util\MarkupToHtmlConverter;
+use Librecores\ProjectRepoBundle\Util\ProcessCreator;
 use DateTime;
 use DateTimeZone;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -12,9 +15,8 @@ use Librecores\ProjectRepoBundle\Entity\GitSourceRepo;
 use Librecores\ProjectRepoBundle\Entity\LanguageStat;
 use Librecores\ProjectRepoBundle\Entity\ProjectRelease;
 use Librecores\ProjectRepoBundle\Entity\SourceRepo;
-use Librecores\ProjectRepoBundle\Util\FileUtil;
-use Librecores\ProjectRepoBundle\Util\MarkupToHtmlConverter;
-use Librecores\ProjectRepoBundle\Util\ProcessCreator;
+use Librecores\ProjectRepoBundle\Repository\CommitRepository;
+use Librecores\ProjectRepoBundle\Repository\ContributorRepository;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
 use Symfony\Component\Filesystem\Filesystem;
@@ -98,24 +100,28 @@ class GitRepoCrawler extends RepoCrawler
     private $repoClonePath = null;
 
     /**
-     * RepoCrawler constructor.
-     *
-     * @param SourceRepo             $repo
-     * @param MarkupToHtmlConverter  $markupConverter
-     * @param ProcessCreator         $processCreator
-     * @param ObjectManager          $manager
-     * @param LoggerInterface        $logger
-     * @param ProjectMetricsProvider $projectMetricsProvider
+     * @inheritDoc
      */
     public function __construct(
         SourceRepo $repo,
         MarkupToHtmlConverter $markupConverter,
         ProcessCreator $processCreator,
+        CommitRepository $commitRepository,
+        ContributorRepository $contributorRepository,
         ObjectManager $manager,
         LoggerInterface $logger,
         ProjectMetricsProvider $projectMetricsProvider
     ) {
-        parent::__construct($repo, $markupConverter, $processCreator, $manager, $logger, $projectMetricsProvider);
+        parent::__construct(
+            $repo,
+            $markupConverter,
+            $processCreator,
+            $commitRepository,
+            $contributorRepository,
+            $manager,
+            $logger,
+            $projectMetricsProvider
+        );
     }
 
     /**
@@ -143,6 +149,7 @@ class GitRepoCrawler extends RepoCrawler
 
     /**
      * {@inheritdoc}
+     * @throws Exception
      */
     public function updateSourceRepo()
     {
@@ -150,8 +157,7 @@ class GitRepoCrawler extends RepoCrawler
             'Fetching commits for the repository '.$this->repo->getId().' of project '.
             $this->repo->getProject()->getFqname()
         );
-        $commitRepository = $this->manager->getRepository(Commit::class);
-        $lastCommit = $commitRepository->getLatestCommit($this->repo);
+        $lastCommit = $this->commitRepository->getLatestCommit($this->repo);
 
         // determine if our latest commit exists and fetch new commits since
         // what we have on DB
@@ -161,7 +167,7 @@ class GitRepoCrawler extends RepoCrawler
             // there has been a history rewrite
             // we drop everything and persist all commits to the DB
             // XXX: Find a way to find the common ancestor and do partial rewrites
-            $commitRepository->removeAllCommits($this->repo);
+            $this->commitRepository->removeAllCommits($this->repo);
             $this->repo->getCommits()->clear();
             $commitCount = $this->updateCommits();
         }
@@ -201,9 +207,7 @@ class GitRepoCrawler extends RepoCrawler
         $this->updateReleases();
 
         /** @var Commit $latestCommit */
-        $latestCommit = $this->manager
-            ->getRepository('LibrecoresProjectRepoBundle:Commit')
-            ->getLatestCommit($this->repo);
+        $latestCommit = $this->commitRepository->getLatestCommit($this->repo);
 
         if ($latestCommit) {
             $project->setDateLastActivityOccurred($latestCommit->getDateCommitted());
@@ -287,6 +291,8 @@ class GitRepoCrawler extends RepoCrawler
      *                                   returned
      *
      * @return int Commits updated
+     *
+     * @throws Exception
      */
     protected function updateCommits(?string $sinceCommitId = null): int
     {
@@ -534,6 +540,8 @@ class GitRepoCrawler extends RepoCrawler
      * @param string $outputString raw output from git
      *
      * @return int
+     *
+     * @throws Exception
      */
     private function parseCommits(string $outputString): int
     {
@@ -550,7 +558,7 @@ class GitRepoCrawler extends RepoCrawler
             // followed by an optional line for modifications
             $commitMatches = [];
             if (preg_match('/^([\da-f]+)\|(.+)\|(.+@.+)\|(.+)$/', $output[$i], $commitMatches)) {
-                $contributor = $this->manager->getRepository('LibrecoresProjectRepoBundle:Contributor')
+                $contributor = $this->contributorRepository
                     ->getContributorForRepository(
                         $this->repo,
                         $commitMatches[3],

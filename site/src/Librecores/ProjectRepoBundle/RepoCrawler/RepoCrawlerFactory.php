@@ -7,6 +7,8 @@ use InvalidArgumentException;
 use Librecores\ProjectRepoBundle\Doctrine\ProjectMetricsProvider;
 use Librecores\ProjectRepoBundle\Entity\GitSourceRepo;
 use Librecores\ProjectRepoBundle\Entity\SourceRepo;
+use Librecores\ProjectRepoBundle\Repository\CommitRepository;
+use Librecores\ProjectRepoBundle\Repository\ContributorRepository;
 use Librecores\ProjectRepoBundle\Util\GithubApiService;
 use Librecores\ProjectRepoBundle\Util\MarkupToHtmlConverter;
 use Librecores\ProjectRepoBundle\Util\ProcessCreator;
@@ -45,10 +47,22 @@ class RepoCrawlerFactory
     private $projectMetricsProvider;
 
     /**
+     * @var CommitRepository
+     */
+    private $commitRepository;
+
+    /**
+     * @var ContributorRepository
+     */
+    private $contributorRepository;
+
+    /**
      * Constructor: create a new instance
      *
      * @param MarkupToHtmlConverter  $markupConverter
      * @param LoggerInterface        $logger
+     * @param CommitRepository       $commitRepository
+     * @param ContributorRepository  $contributorRepository
      * @param ObjectManager          $manager
      * @param ProcessCreator         $processCreator
      * @param GithubApiService       $ghApi
@@ -57,6 +71,8 @@ class RepoCrawlerFactory
     public function __construct(
         MarkupToHtmlConverter $markupConverter,
         LoggerInterface $logger,
+        CommitRepository $commitRepository,
+        ContributorRepository $contributorRepository,
         ObjectManager $manager,
         ProcessCreator $processCreator,
         GithubApiService $ghApi,
@@ -64,10 +80,12 @@ class RepoCrawlerFactory
     ) {
         $this->markupConverter = $markupConverter;
         $this->logger = $logger;
+        $this->commitRepository = $commitRepository;
         $this->manager = $manager;
         $this->processCreator = $processCreator;
         $this->ghApi = $ghApi;
         $this->projectMetricsProvider = $projectMetricsProvider;
+        $this->contributorRepository = $contributorRepository;
     }
 
     /**
@@ -89,6 +107,8 @@ class RepoCrawlerFactory
                     $repo,
                     $this->markupConverter,
                     $this->processCreator,
+                    $this->commitRepository,
+                    $this->contributorRepository,
                     $this->manager,
                     $this->logger,
                     $this->ghApi,
@@ -100,6 +120,8 @@ class RepoCrawlerFactory
                 $repo,
                 $this->markupConverter,
                 $this->processCreator,
+                $this->commitRepository,
+                $this->contributorRepository,
                 $this->manager,
                 $this->logger,
                 $this->projectMetricsProvider
