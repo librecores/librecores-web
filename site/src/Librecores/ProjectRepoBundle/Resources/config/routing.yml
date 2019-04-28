@@ -84,6 +84,11 @@ librecores_project_repo_project_update:
     defaults:
         _controller: 'LibrecoresProjectRepoBundle:Project:update'
 
+librecores_project_repo_project_status:
+    path: /{parentName}/{projectName}/crawl_status
+    defaults:
+      _controller: 'LibrecoresProjectRepoBundle:Project:crawlStatus'
+
 
 # Organization routes
 

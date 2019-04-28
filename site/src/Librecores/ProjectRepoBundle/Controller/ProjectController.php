@@ -25,6 +25,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -466,6 +467,29 @@ class ProjectController extends AbstractController
             200,
             ['Content-Type' => 'text/plain']
         );
+    }
+
+    /**
+     * @param string            $parentName
+     * @param string            $projectName
+     * @param ProjectRepository $repository
+     *
+     * @return JsonResponse
+     *
+     * @throws NonUniqueResultException
+     */
+    public function crawlStatusAction(
+        string $parentName,
+        string $projectName,
+        ProjectRepository $repository
+    ) {
+        $prj = $repository->findProjectWithParent($parentName, $projectName);
+
+        if (!$prj) {
+            throw $this->createNotFoundException('Project not found');
+        }
+
+        return new JsonResponse([ 'inProcessing' => $prj->isInProcessing() ]);
     }
 
     /**
