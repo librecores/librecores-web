@@ -22,7 +22,7 @@ class UserOrgNameValidatorTest extends TestCase
 
         $constraint = new UserOrgName();
 
-        $name = Generator::randomString(1, 3);
+        $name = Generator::randomString(2, 3);
         /** @var ExecutionContextInterface $mockExecutionContext */
         $mockExecutionContext = $this->createMockExecutionContext($constraint->messageTooShort);
 
@@ -70,15 +70,31 @@ class UserOrgNameValidatorTest extends TestCase
 
     public function testValidateRejectsAReservedName()
     {
+        /** @var Router $mockRouter */
         $mockRouter = $this->createMock(Router::class);
+
+        /** @var UserRepository $mockUserRepository */
         $mockUserRepository = $this->createMock(UserRepository::class);
+
+        /** @var OrganizationRepository $mockOrgRepository */
         $mockOrgRepository = $this->createMock(OrganizationRepository::class);
 
-        $validator = new UserOrgNameValidator($mockRouter, $mockUserRepository, $mockOrgRepository);
+        $validator = new UserOrgNameValidator(
+            $mockRouter,
+            $mockUserRepository,
+            $mockOrgRepository
+        );
 
         $constraint = new UserOrgName();
 
-        $choices = array_filter(UserOrgNameValidator::RESERVED_NAMES, function ($s) { return strlen($s) > 4; });
+        $choices = array_values(
+            array_filter(
+                UserOrgNameValidator::RESERVED_NAMES,
+                function ($s) {
+                    return strlen($s) > 4;
+                }
+            )
+        );
         $name = $choices[random_int(0, count($choices) - 1)];
 
         /** @var ExecutionContextInterface $mockExecutionContext */
