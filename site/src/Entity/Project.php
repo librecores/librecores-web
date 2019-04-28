@@ -100,7 +100,8 @@ class Project
      *
      * @var string
      *
-     * @Assert\Regex("/^[a-z][a-z0-9-]+$/")
+     * @Assert\Regex("/^[a-z][a-z0-9-]+$/",
+     *     message="Name may only consist of alphabets, numbers and hypens(-)")
      * @Assert\Length(min = 4, max = 30)
      *
      * @ORM\Column(name="name", type="string", length=255)
