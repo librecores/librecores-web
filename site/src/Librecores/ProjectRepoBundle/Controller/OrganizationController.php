@@ -275,15 +275,17 @@ class OrganizationController extends AbstractController
     /**
      * Delete an organization
      *
-     * @param string $organizationName
+     * @param string                 $organizationName
+     *
+     * @param OrganizationRepository $organizationRepository
      *
      * @return Response
+     *
+     * @throws NonUniqueResultException
      */
-    public function deleteAction($organizationName)
+    public function deleteAction($organizationName, OrganizationRepository $organizationRepository)
     {
-        $o = $this->getDoctrine()
-            ->getRepository('LibrecoresProjectRepoBundle:Organization')
-            ->findOneByName($organizationName);
+        $o = $organizationRepository->findOneByName($organizationName);
 
         if (!$o) {
             throw $this->createNotFoundException(

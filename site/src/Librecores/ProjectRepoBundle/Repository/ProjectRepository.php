@@ -4,7 +4,6 @@ namespace Librecores\ProjectRepoBundle\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
-use Librecores\ProjectRepoBundle\Entity\Organization;
 use Librecores\ProjectRepoBundle\Entity\Project;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -20,7 +19,7 @@ class ProjectRepository extends ServiceEntityRepository
      */
     public function __construct(RegistryInterface $registry)
     {
-        parent::__construct($registry, Organization::class);
+        parent::__construct($registry, Project::class);
     }
 
     /**

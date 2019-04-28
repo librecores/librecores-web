@@ -10,6 +10,8 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  * UserRepository
  *
  * @author Amitosh Swain Mahapatra <amitosh.swain@gmail.com>
+ *
+ * @method findOneByUsername(string $userOrOrganization)
  */
 class UserRepository extends ServiceEntityRepository
 {

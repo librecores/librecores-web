@@ -2,15 +2,17 @@
 
 namespace Librecores\ProjectRepoBundle\RepoCrawler;
 
+use Librecores\ProjectRepoBundle\Util\GithubApiService;
+use Librecores\ProjectRepoBundle\Util\MarkupToHtmlConverter;
+use Librecores\ProjectRepoBundle\Util\ProcessCreator;
 use DateTime;
 use Doctrine\Common\Persistence\ObjectManager;
 use Exception;
 use Github\Client;
 use Librecores\ProjectRepoBundle\Doctrine\ProjectMetricsProvider;
 use Librecores\ProjectRepoBundle\Entity\SourceRepo;
-use Librecores\ProjectRepoBundle\Util\GithubApiService;
-use Librecores\ProjectRepoBundle\Util\MarkupToHtmlConverter;
-use Librecores\ProjectRepoBundle\Util\ProcessCreator;
+use Librecores\ProjectRepoBundle\Repository\CommitRepository;
+use Librecores\ProjectRepoBundle\Repository\ContributorRepository;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -52,26 +54,29 @@ class GithubRepoCrawler extends GitRepoCrawler
     private $githubData;
 
     /**
-     * RepoCrawler constructor.
-     *
-     * @param SourceRepo             $repo
-     * @param MarkupToHtmlConverter  $markupConverter
-     * @param ProcessCreator         $processCreator
-     * @param ObjectManager          $manager
-     * @param LoggerInterface        $logger
-     * @param GithubApiService       $ghApi
-     * @param ProjectMetricsProvider $projectMetricsProvider
+     * @inheritDoc
      */
     public function __construct(
         SourceRepo $repo,
         MarkupToHtmlConverter $markupConverter,
         ProcessCreator $processCreator,
+        CommitRepository $commitRepository,
+        ContributorRepository $contributorRepository,
         ObjectManager $manager,
         LoggerInterface $logger,
         GithubApiService $ghApi,
         ProjectMetricsProvider $projectMetricsProvider
     ) {
-        parent::__construct($repo, $markupConverter, $processCreator, $manager, $logger, $projectMetricsProvider);
+        parent::__construct(
+            $repo,
+            $markupConverter,
+            $processCreator,
+            $commitRepository,
+            $contributorRepository,
+            $manager,
+            $logger,
+            $projectMetricsProvider
+        );
         $this->githubApi = $ghApi;
         preg_match(static::GH_REGEX, $this->repo->getUrl(), $matches);
         $this->githubUser = $matches[1];
@@ -189,7 +194,8 @@ QUERY;
         $res = $client->graphql()->execute($query, $variables);
 
         if (array_key_exists('errors', $res)) {
-            throw new CrawlerException($this->repo, $res['errors'][0]['message']);
+            $message = $res['errors'][0]['message'];
+            throw new CrawlerException($this->repo, $message);
         }
 
         $this->githubData = $res['data']['repository'];
