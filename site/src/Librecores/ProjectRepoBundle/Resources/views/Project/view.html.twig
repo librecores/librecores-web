@@ -17,10 +17,12 @@
 
 {% block content %}
 <div class="librecores-project-header">
+  {% if project.inProcessing %}
     <div class="project-in-processing alert alert-warning alert-dismissible">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         We are currently processing this project. Project information will be available in a while.
     </div>
+  {% endif %}
   <h1>
     {{ project.displayName }}
     <small> by <a href="{{ path('librecores_project_repo_user_org_view', {'userOrOrganization': project.parentName }) }}">{{ project.parentName }}</a></small>
@@ -369,6 +371,7 @@
   {% javascripts
     'assets/js/chartist.min.js'
     'assets/js/metrics.js'
+    'assets/js/project-auto-refresh.js'
   filter="?jsqueeze" %}
   <script src="{{ asset_url }}"></script>
   {% endjavascripts %}
