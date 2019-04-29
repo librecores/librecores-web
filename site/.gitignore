@@ -14,8 +14,11 @@
 !web/js/.gitkeep
 !web/css/.gitkeep
 /web/assetic
+/web/build
 
 /bin/*
 !bin/console
 !bin/symfony_requirements
 
+/yarn.lock
+/node_modules

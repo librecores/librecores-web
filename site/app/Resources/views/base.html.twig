@@ -11,17 +11,17 @@
   <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}" sizes="32x32">
 
   {% block stylesheets %}
-    {% stylesheets filter="scssphp,cssrewrite" output="css/app.css"
-        "assets/scss/librecores.scss"
-        "assets/scss/bootstrap-librecores.scss"
-        "assets/css/bootstrap-social.css"
-        "assets/css/font-awesome.min.css"
-        "assets/css/librecores.css"
-    %}
-        <link rel="stylesheet" href="{{ asset_url }}" />
-    {% endstylesheets %}
-  {% endblock %}
+    {# 'app' must match the first argument to addEntry() in webpack.config.js #}
+    {{ encore_entry_link_tags('app') }}
 
+    {% stylesheets filter="scssphp,cssrewrite" output="css/app.css"
+      "assets/scss/bootstrap-librecores.scss"
+    %}
+      <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+    <!-- Renders a link tag (if your module requires any CSS)
+         <link rel="stylesheet" href="/build/app.css"> -->
+  {% endblock %}
   <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!--[if lt IE 9]>
     {% javascripts filter="?jsqueeze" output="js/app_head.js" '@js_head'%}
@@ -154,6 +154,12 @@
     {% javascripts filter="?jsqueeze" output="js/app_body.js" '@js_body_end' %}
       <script src="{{ asset_url }}"></script>
     {% endjavascripts %}
+
+    {{ encore_entry_script_tags('app') }}
+
+    <!-- Renders app.js & a webpack runtime.js file -->
+    <script src="/build/runtime.js"></script>
+    <script src="/build/app.js"></script>
 
     <script type="text/javascript">
       {% block pagejs %}{% endblock %}

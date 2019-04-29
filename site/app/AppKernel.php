@@ -27,6 +27,7 @@ class AppKernel extends Kernel
             new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle(),
             new Http\HttplugBundle\HttplugBundle(),
             new Algolia\SearchBundle\AlgoliaSearchBundle(),
+            new \Symfony\WebpackEncoreBundle\WebpackEncoreBundle(),
         );
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {
