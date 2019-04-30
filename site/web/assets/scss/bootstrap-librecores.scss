@@ -2,16 +2,16 @@ $brand-primary:         #3fb0ac;
 $link-hover-color: 		#173e43;
 $font-family-sans-serif:  'Open Sans', sans-serif;
 $font-family-monospace:   "Source Code Pro", Menlo, monospace;
-$font-size-base:          0.9rem;
-$icon-font-path: "../fonts/";
+$font-size-base:          15px;
+$icon-font-path: "../../fonts/";
 $icon-font-name:          "glyphicons-halflings-regular";
 $icon-font-svg-id:        "glyphicons_halflingsregular";
 
-$screen-md:                  992rem;
+$screen-md:                  992px;
 $screen-md-min:              $screen-md;
 
 // Navbar collapse
 //** Point at which the navbar becomes uncollapsed.
 $grid-float-breakpoint:     $screen-md-min;// Import Bootstrap for Sass
 
-@import "~bootstrap/scss/bootstrap";
+@import "bootstrap";
