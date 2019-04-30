@@ -178,13 +178,6 @@
       "targets": [],
       "value": ""
     }, {
-      "id": "ecdc46aa-053b-449a-a806-ffbd4c01dcf4",
-      "comment": "",
-      "command": "setWindowSize",
-      "target": "1238x778",
-      "targets": [],
-      "value": ""
-    }, {
       "id": "091bf19e-492b-448b-bd9b-bce42d362247",
       "comment": "",
       "command": "click",
@@ -304,13 +297,6 @@
       "comment": "",
       "command": "open",
       "target": "/",
-      "targets": [],
-      "value": ""
-    }, {
-      "id": "3a1dbb6a-0322-4465-8cc1-a699787365f9",
-      "comment": "",
-      "command": "setWindowSize",
-      "target": "1238x778",
       "targets": [],
       "value": ""
     }, {
@@ -518,13 +504,6 @@
       "targets": [],
       "value": ""
     }, {
-      "id": "8c816e5e-9685-4b00-9ef3-b15e6731ff51",
-      "comment": "",
-      "command": "setWindowSize",
-      "target": "1238x781",
-      "targets": [],
-      "value": ""
-    }, {
       "id": "485577b5-e147-4843-be2b-3872c1a35e61",
       "comment": "",
       "command": "click",
@@ -699,13 +678,6 @@
       "targets": [],
       "value": ""
     }, {
-      "id": "4b3a1e58-7504-46a0-a044-31bd23ba52a9",
-      "comment": "",
-      "command": "setWindowSize",
-      "target": "1238x778",
-      "targets": [],
-      "value": ""
-    }, {
       "id": "8989e111-274b-4675-bec1-88d6a3dbca00",
       "comment": "",
       "command": "click",
@@ -739,13 +711,6 @@
       "comment": "",
       "command": "open",
       "target": "/",
-      "targets": [],
-      "value": ""
-    }, {
-      "id": "9bd06fc0-a55f-40a7-a834-117beebe0ca0",
-      "comment": "",
-      "command": "setWindowSize",
-      "target": "1238x778",
       "targets": [],
       "value": ""
     }, {
@@ -861,13 +826,6 @@
       "targets": [],
       "value": ""
     }, {
-      "id": "c80986e2-9d1b-45d2-b3c8-1a827a593242",
-      "comment": "",
-      "command": "setWindowSize",
-      "target": "1238x778",
-      "targets": [],
-      "value": ""
-    }, {
       "id": "cb523d59-22f2-4464-84c8-09c18c0eff6f",
       "comment": "",
       "command": "click",
@@ -954,13 +912,6 @@
       "targets": [],
       "value": ""
     }, {
-      "id": "d43340ce-7f78-437e-8003-efdec6430ee7",
-      "comment": "",
-      "command": "setWindowSize",
-      "target": "1238x778",
-      "targets": [],
-      "value": ""
-    }, {
       "id": "1fae8c03-27ed-4166-8b23-918f5d1095de",
       "comment": "",
       "command": "click",
@@ -1010,6 +961,87 @@
         ["css=#maincontent", "css:finder"],
         ["xpath=//div[@id='maincontent']", "xpath:attributes"],
         ["xpath=//div[5]", "xpath:position"]
+      ],
+      "value": ""
+    }]
+  }, {
+    "id": "c2e29049-5abb-468c-8c2f-8c1dfcfa069d",
+    "name": "Reset password page",
+    "commands": [{
+      "id": "c59fb1ed-3949-4929-94e8-395e57d6d270",
+      "comment": "",
+      "command": "open",
+      "target": "https://www.stage.librecores.org/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "a848fbef-354a-42c6-bc9b-2c300219888b",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Log in",
+      "targets": [
+        ["linkText=Log in", "linkText"],
+        ["css=.navbar-right > li:nth-child(2) > a", "css:finder"],
+        ["xpath=//a[contains(text(),'Log in')]", "xpath:link"],
+        ["xpath=//a[contains(@href, '/user/login')]", "xpath:href"],
+        ["xpath=//ul[2]/li[2]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Log in')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "34d68631-60b4-49b6-a2e2-af60d4dc52a9",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Reset Password",
+      "targets": [
+        ["linkText=Reset Password", "linkText"],
+        ["css=.text-center:nth-child(8) > a", "css:finder"],
+        ["xpath=//a[contains(text(),'Reset Password')]", "xpath:link"],
+        ["xpath=//div[@id='maincontent']/div/div/div[2]/div[3]/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '/user/resetting/request')]", "xpath:href"],
+        ["xpath=//div[3]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Reset Password')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "eae01dd3-65c4-479b-8f98-41b1380e156e",
+      "comment": "",
+      "command": "assertEditable",
+      "target": "id=username",
+      "targets": [
+        ["id=username", "id"],
+        ["name=username", "name"],
+        ["css=#username", "css:finder"],
+        ["xpath=//input[@id='username']", "xpath:attributes"],
+        ["xpath=//div[@id='maincontent']/div/div/div[2]/form/div/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "bb38c6d8-62b7-434f-bc28-22c50baebf17",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=label",
+      "targets": [
+        ["css=label", "css:finder"],
+        ["xpath=//div[@id='maincontent']/div/div/div[2]/form/div/label", "xpath:idRelative"],
+        ["xpath=//label", "xpath:position"],
+        ["xpath=//label[contains(.,'Email or Username:')]", "xpath:innerText"]
+      ],
+      "value": "Email or Username:"
+    }, {
+      "id": "11e5f5cc-b84c-4feb-9e97-e232f504e1ca",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "id=_submit",
+      "targets": [
+        ["id=_submit", "id"],
+        ["name=_submit", "name"],
+        ["css=#\\_submit", "css:finder"],
+        ["xpath=//button[@id='_submit']", "xpath:attributes"],
+        ["xpath=//div[@id='maincontent']/div/div/div[2]/form/button", "xpath:idRelative"],
+        ["xpath=//form/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Reset Password')]", "xpath:innerText"]
       ],
       "value": ""
     }]

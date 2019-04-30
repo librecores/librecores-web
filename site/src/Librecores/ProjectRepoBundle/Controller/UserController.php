@@ -194,7 +194,7 @@ class UserController extends AbstractController
      */
     public function resendConfirmationEmailAction(
         Request $request,
-        MailerInterface $mailer,
+        MailerInterface $userMailer,
         TokenGeneratorInterface $tokenGenerator
     ) {
 
@@ -211,7 +211,7 @@ class UserController extends AbstractController
                     $user->setConfirmationToken($tokenGenerator->generateToken());
                 }
 
-                $mailer->sendConfirmationEmailMessage($resendEmailRequest->getUser());
+                $userMailer->sendConfirmationEmailMessage($resendEmailRequest->getUser());
 
                 $request->getSession()->set('fos_user_send_confirmation_email/email', $user->getEmail());
 

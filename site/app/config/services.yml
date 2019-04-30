@@ -16,6 +16,8 @@ services:
         # thinks it can be translated -- but we don't have any translations available, therefore the autowire is set to
         # false
 
+    FOS\UserBundle\Mailer\MailerInterface: '@fos_user.mailer'
+
     Librecores\ProjectRepoBundle\Command\UpdateReposCommand:
         arguments:
             $producer: '@old_sound_rabbit_mq.update_project_info_producer'
