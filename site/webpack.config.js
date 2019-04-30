@@ -20,7 +20,8 @@ Encore
     .addEntry('app', ['./web/assets/scss/librecores.scss',
         './web/assets/css/bootstrap-social.css',
         './web/assets/css/font-awesome.min.css',
-        './web/assets/css/librecores.css',],
+        './web/assets/css/librecores.css',
+        './web/assets/scss/bootstrap-librecores.scss'],
         )
     //.addEntry('page1', './assets/js/page1.js')
     //.addEntry('page2', './assets/js/page2.js')
@@ -41,7 +42,7 @@ Encore
   .enableSassLoader()
 
 // uncomment if you're having problems with a jQuery plugin
-//.autoProvidejQuery()
+  .autoProvidejQuery()
 ;
 
 module.exports = Encore.getWebpackConfig();

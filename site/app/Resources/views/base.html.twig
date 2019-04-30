@@ -14,11 +14,6 @@
     {# 'app' must match the first argument to addEntry() in webpack.config.js #}
     {{ encore_entry_link_tags('app') }}
 
-    {% stylesheets filter="scssphp,cssrewrite" output="css/app.css"
-      "assets/scss/bootstrap-librecores.scss"
-    %}
-      <link rel="stylesheet" href="{{ asset_url }}"/>
-    {% endstylesheets %}
     <!-- Renders a link tag (if your module requires any CSS)
          <link rel="stylesheet" href="/build/app.css"> -->
   {% endblock %}
