@@ -17,11 +17,8 @@ Encore
      * Each entry will result in one JavaScript file (e.g. app.js)
      * and one CSS file (e.g. app.css) if you JavaScript imports CSS.
      */
-    .addEntry('app', ['./web/assets/scss/librecores.scss',
-        './web/assets/css/bootstrap-social.css',
-        './web/assets/css/font-awesome.min.css',
-        './web/assets/css/librecores.css',
-        './web/assets/scss/bootstrap-librecores.scss'],
+    .addEntry('app', ['./web/assets/css/app.css',
+        './web/assets/scss/app.scss'],
         )
     //.addEntry('page1', './assets/js/page1.js')
     //.addEntry('page2', './assets/js/page2.js')
@@ -38,7 +35,6 @@ Encore
 // uncomment if you use TypeScript
 //.enableTypeScriptLoader()
 
-// uncomment if you use Sass/SCSS files
   .enableSassLoader()
 
 // uncomment if you're having problems with a jQuery plugin
