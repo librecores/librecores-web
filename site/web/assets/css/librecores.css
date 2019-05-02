@@ -870,3 +870,12 @@ a.classifiation-tag:hover {
 .project-in-processing {
     margin-top: 2rem;
 }
+
+.mt-offset {
+  margin-top: 56px;
+}
+
+.img-main {
+  width: 256px;
+  margin: 56px auto;
+}
