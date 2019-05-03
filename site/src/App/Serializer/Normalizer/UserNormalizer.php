@@ -1,6 +1,6 @@
 <?php
 
-namespace Librecores\ProjectRepoBundle\Serializer\Normalizer;
+namespace App\Serializer\Normalizer;
 
 use App\Entity\User;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
