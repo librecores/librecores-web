@@ -1,6 +1,6 @@
 <?php
 
-namespace Librecores\ProjectRepoBundle\Validator\Constraints;
+namespace App\Validator\Constraints;
 
 use App\Repository\OrganizationRepository;
 use App\Repository\UserRepository;

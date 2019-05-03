@@ -24,7 +24,7 @@
                     <value>Profile</value>
                 </option>
             </constraint>
-            <constraint name="Librecores\ProjectRepoBundle\Validator\Constraints\UserOrgName">
+            <constraint name="App\Validator\Constraints\UserOrgName">
                 <option name="groups">
                     <value>Registration</value>
                     <value>Profile</value>

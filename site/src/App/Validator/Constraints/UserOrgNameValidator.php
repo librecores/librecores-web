@@ -1,6 +1,6 @@
 <?php
 
-namespace Librecores\ProjectRepoBundle\Validator\Constraints;
+namespace App\Validator\Constraints;
 
 use Doctrine\ORM\NonUniqueResultException;
 use App\Repository\OrganizationRepository;
