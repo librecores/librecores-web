@@ -3,7 +3,7 @@
 namespace App\RepoCrawler;
 
 use Doctrine\Common\Persistence\ObjectManager;
-use Librecores\ProjectRepoBundle\Doctrine\ProjectMetricsProvider;
+use App\Service\ProjectMetricsProvider;
 use App\Entity\SourceRepo;
 use App\Util\MarkupToHtmlConverter;
 use App\Util\ProcessCreator;

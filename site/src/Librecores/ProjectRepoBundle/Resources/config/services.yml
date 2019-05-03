@@ -32,12 +32,12 @@ services:
             - '@logger'
             - '@exercise_html_purifier.default'
 
-    Librecores\ProjectRepoBundle\Service\GitHub\GitHubApiService:
+    App\Service\GitHub\GitHubApiService:
         arguments:
             - '@app.cache.githubapi'
             - '@router'
 
-    Librecores\ProjectRepoBundle\Service\QueueDispatcherService:
+    App\Service\QueueDispatcherService:
         calls:
             - [setContainer, ['@service_container']]
 

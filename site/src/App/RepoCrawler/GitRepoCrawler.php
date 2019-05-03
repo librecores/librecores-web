@@ -9,7 +9,7 @@ use DateTime;
 use DateTimeZone;
 use Doctrine\Common\Persistence\ObjectManager;
 use Exception;
-use Librecores\ProjectRepoBundle\Doctrine\ProjectMetricsProvider;
+use App\Service\ProjectMetricsProvider;
 use App\Entity\Commit;
 use App\Entity\GitSourceRepo;
 use App\Entity\LanguageStat;

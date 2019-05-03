@@ -1,6 +1,6 @@
 <?php
 
-namespace Librecores\ProjectRepoBundle\Service\GitHub;
+namespace App\Service\GitHub;
 
 use Github;
 use Github\Client;
