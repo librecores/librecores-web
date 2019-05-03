@@ -17,9 +17,9 @@ services:
 
     # controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class
-    #    App\Controller\:
-    #        resource: '../../src/App/Controller'
-    #        tags: ['controller.service_arguments']
+    App\Controller\:
+        resource: '../../src/App/Controller'
+        tags: ['controller.service_arguments']
 
     # Twig date extension - http://twig-extensions.readthedocs.io/en/latest/date.html
     Twig\Extensions\DateExtension:

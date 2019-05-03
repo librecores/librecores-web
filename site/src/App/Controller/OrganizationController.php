@@ -1,6 +1,6 @@
 <?php
 
-namespace Librecores\ProjectRepoBundle\Controller;
+namespace App\Controller;
 
 use App\Entity\Organization;
 use App\Entity\OrganizationMember;

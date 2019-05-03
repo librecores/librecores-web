@@ -1,11 +1,12 @@
 <?php
 
-namespace Librecores\ProjectRepoBundle\Controller;
+namespace App\Controller;
 
 use App\Entity\Organization;
 use App\Entity\User;
 use App\Repository\OrganizationRepository;
 use App\Repository\UserRepository;
+use App\Util\Controllers;
 use Doctrine\ORM\NonUniqueResultException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -47,13 +48,13 @@ class DefaultController extends AbstractController
 
         if ($uoo instanceof User) {
             return $this->forward(
-                'LibrecoresProjectRepoBundle:User:view',
+                Controllers::get(UserController::class, 'viewAction'),
                 array('user' => $uoo)
             );
         }
         if ($uoo instanceof Organization) {
             return $this->forward(
-                'LibrecoresProjectRepoBundle:Organization:view',
+                Controllers::get(OrganizationController::class, 'viewAction'),
                 array('organization' => $uoo)
             );
         }
@@ -91,14 +92,14 @@ class DefaultController extends AbstractController
             }
 
             return $this->forward(
-                'LibrecoresProjectRepoBundle:User:profileSettings',
+                Controllers::get(UserController::class, 'profileSettingsAction'),
                 array('user' => $userOrOrganization)
             );
         }
 
         if ($uoo instanceof Organization) {
             return $this->forward(
-                'LibrecoresProjectRepoBundle:Organization:settings',
+                Controllers::get(OrganizationController::class, 'settingsAction'),
                 array('organization' => $uoo)
             );
         }

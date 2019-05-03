@@ -29,43 +29,41 @@
 # Project repository homepage
 librecores_project_repo_homepage:
     path:     /
-    defaults: { _controller: LibrecoresSiteBundle:Default:home }
+    controller: App\Controller\IndexController::homeAction
 
 # Unified search: users, organizations and projects
 librecores_project_repo_project_search:
     path:     /search
-    defaults: { _controller: LibrecoresProjectRepoBundle:Default:search }
-
-
+    controller: App\Controller\DefaultController::searchAction
 
 # Project/Organization management pages
 librecores_project_repo_project_new:
     path:     /project/new
-    defaults: { _controller: LibrecoresProjectRepoBundle:Project:new }
+    controller: App\Controller\ProjectController::newAction
 
 librecores_project_repo_project_list:
     path:     /project/list
-    defaults: { _controller: LibrecoresProjectRepoBundle:Project:list }
+    controller: App\Controller\ProjectController::listAction
 
 #  management pages
 librecores_project_repo_organization_new:
     path:     /org/new
-    defaults: { _controller: LibrecoresProjectRepoBundle:Organization:new }
+    controller: App\Controller\OrganizationController::newAction
 
 librecores_project_repo_organization_list:
     path:     /org/list
-    defaults: { _controller: LibrecoresProjectRepoBundle:Organization:list }
+    controller: App\Controller\OrganizationController::listAction
 
 
 
 # User/Organization view routes
 librecores_project_repo_user_org_view:
     path:     /{userOrOrganization}
-    defaults: { _controller: LibrecoresProjectRepoBundle:Default:userOrgView }
+    controller: App\Controller\DefaultController::userOrgViewAction
 
 librecores_project_repo_user_org_settings:
     path:     /{userOrOrganization}/settings
-    defaults: { _controller: LibrecoresProjectRepoBundle:Default:userOrgSettings }
+    controller: App\Controller\DefaultController::userOrgSettingsAction
 
 
 
@@ -73,56 +71,54 @@ librecores_project_repo_user_org_settings:
 
 librecores_project_repo_project_view:
     path:     /{parentName}/{projectName}
-    defaults: { _controller: LibrecoresProjectRepoBundle:Project:view }
+    controller: App\Controller\ProjectController::viewAction
 
 librecores_project_repo_project_settings:
     path:     /{parentName}/{projectName}/settings
-    defaults: { _controller: LibrecoresProjectRepoBundle:Project:settings }
+    controller: App\Controller\ProjectController::settingsAction
 
 librecores_project_repo_project_update:
     path: /{parentName}/{projectName}/update
-    defaults:
-        _controller: 'LibrecoresProjectRepoBundle:Project:update'
+    controller: App\Controller\ProjectController::updateAction
 
 librecores_project_repo_project_status:
     path: /{parentName}/{projectName}/crawl_status
-    defaults:
-      _controller: 'LibrecoresProjectRepoBundle:Project:crawlStatus'
+    controller: App\Controller\ProjectController::crawlStatusAction
 
 
 # Organization routes
 
 librecores_project_repo_organization_view:
     path:     /{organizationName}
-    defaults: { _controller: LibrecoresProjectRepoBundle:Organization:view }
+    controller: App\Controller\OrganizationController::viewAction
 
 librecores_project_repo_organization_settings:
     path:     /{organizationName}/settings
-    defaults: { _controller: LibrecoresProjectRepoBundle:Organization:settings }
+    controller: App\Controller\OrganizationController::settingsAction
 
 librecores_project_repo_organization_settings_delete:
     path:     /{organizationName}/settings/delete
-    defaults: { _controller: LibrecoresProjectRepoBundle:Organization:delete }
+    controller: App\Controller\OrganizationController::deleteAction
 
 librecores_project_repo_organization_settings_join:
     path:     /{organizationName}/settings/join
-    defaults: { _controller: LibrecoresProjectRepoBundle:Organization:join }
+    controller: App\Controller\OrganizationController::joinAction
 
 librecores_project_repo_organization_settings_leave:
     path:     /{organizationName}/settings/leave
-    defaults: { _controller: LibrecoresProjectRepoBundle:Organization:leave }
+    controller: App\Controller\OrganizationController::leaveAction
 
 librecores_project_repo_organization_settings_approve:
     path:     /{organizationName}/settings/approve/{userName}
-    defaults: { _controller: LibrecoresProjectRepoBundle:Organization:approve }
+    controller: App\Controller\OrganizationController::approveAction
 
 librecores_project_repo_organization_settings_deny:
     path:     /{organizationName}/settings/deny/{userName}
-    defaults: { _controller: LibrecoresProjectRepoBundle:Organization:deny }
+    controller: App\Controller\OrganizationController::denyAction
 
 librecores_project_repo_organization_settings_remove:
     path:     /{organizationName}/settings/remove/{userName}
-    defaults: { _controller: LibrecoresProjectRepoBundle:Organization:remove }
+    controller: App\Controller\OrganizationController::removeAction
 
 
 
@@ -136,7 +132,7 @@ librecores_project_repo_organization_settings_remove:
 # http://symfony.com/doc/current/routing/redirect_trailing_slash.html
 librecores_project_repo_remove_trailing_slash:
     path:     /{url}
-    defaults: { _controller: LibrecoresProjectRepoBundle:Default:removeTrailingSlash }
+    controller: App\Controller\DefaultController::removeTrailingSlashAction
     requirements:
         url:  .*/$
     methods:  [GET]

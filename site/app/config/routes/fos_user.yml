@@ -18,7 +18,7 @@ fos_user_resetting:
 #
 fos_user_profile_show: # = librecores.user.settings.profile
     path: /user/settings/profile
-    defaults: { _controller: LibrecoresProjectRepoBundle:User:profileSettings }
+    controller: App\Controller\UserController::profileSettingsAction
 
 # Handled by the 'librecores.user.settings.profile' route
 #

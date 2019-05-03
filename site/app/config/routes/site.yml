@@ -1,4 +1,0 @@
-librecores_site:
-    resource: '@LibrecoresSiteBundle/Controller/'
-    type: annotation
-
