@@ -500,7 +500,7 @@
       "id": "8d6fb343-a9e0-4183-87c1-b7ce29772b43",
       "comment": "",
       "command": "open",
-      "target": "https://www.stage.librecores.org/",
+      "target": "/",
       "targets": [],
       "value": ""
     }, {
