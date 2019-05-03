@@ -1,6 +1,6 @@
 <?php
 
-namespace Librecores\ProjectRepoBundle\Consumer;
+namespace App\Consumer;
 
 use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\EntityManagerInterface;
