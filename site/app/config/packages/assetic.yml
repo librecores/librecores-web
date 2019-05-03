@@ -1,9 +1,6 @@
 assetic:
     debug:          "%kernel.debug%"
     use_controller: false
-    bundles:
-        - LibrecoresProjectRepoBundle
-        - LibrecoresSiteBundle
     filters:
         scssphp:
             formatter: 'Leafo\ScssPhp\Formatter\Compressed'

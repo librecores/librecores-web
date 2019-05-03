@@ -1,6 +1,6 @@
 <?php
 
-namespace LibreCores\TestUtils\Mocks;
+namespace TestUtils\Mocks;
 
 use OldSound\RabbitMqBundle\RabbitMq\ProducerInterface;
 

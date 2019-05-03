@@ -1,6 +1,6 @@
 <?php
 
-namespace LibreCores\TestUtils;
+namespace TestUtils;
 
 class Generator
 {

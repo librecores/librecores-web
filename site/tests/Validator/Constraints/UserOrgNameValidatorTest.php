@@ -4,7 +4,7 @@ namespace App\Validator\Constraints;
 
 use App\Repository\OrganizationRepository;
 use App\Repository\UserRepository;
-use LibreCores\TestUtils\Generator;
+use TestUtils\Generator;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
