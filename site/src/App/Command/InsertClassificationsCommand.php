@@ -1,6 +1,6 @@
 <?php
 
-namespace Librecores\ProjectRepoBundle\Command;
+namespace App\Command;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use App\Entity\ClassificationHierarchy;
