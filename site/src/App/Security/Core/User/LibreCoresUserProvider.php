@@ -1,13 +1,13 @@
 <?php
 
-namespace Librecores\ProjectRepoBundle\Security\Core\User;
+namespace App\Security\Core\User;
 
 use FOS\UserBundle\Model\UserManagerInterface;
 use HWI\Bundle\OAuthBundle\Connect\AccountConnectorInterface;
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthAwareUserProviderInterface;
 use App\Entity\User;
-use Librecores\ProjectRepoBundle\Security\Core\Exception\OAuthUserLinkingException;
+use App\Security\Core\Exception\OAuthUserLinkingException;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;

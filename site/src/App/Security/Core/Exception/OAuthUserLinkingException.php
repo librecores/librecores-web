@@ -1,6 +1,6 @@
 <?php
 
-namespace Librecores\ProjectRepoBundle\Security\Core\Exception;
+namespace App\Security\Core\Exception;
 
 use HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException;
 

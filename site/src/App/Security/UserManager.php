@@ -1,6 +1,6 @@
 <?php
 
-namespace Librecores\ProjectRepoBundle\Doctrine;
+namespace App\Security;
 
 use FOS\UserBundle\Doctrine\UserManager as BaseUserManager;
 
