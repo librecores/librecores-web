@@ -41,29 +41,6 @@ services:
         calls:
             - [setContainer, ['@service_container']]
 
-    # Forms
-    Librecores\ProjectRepoBundle\Form\Type\ProjectType:
-        tags:
-            - { name: form.type, alias: project }
-
-    Librecores\ProjectRepoBundle\Form\Type\OrganizationType:
-        tags:
-            - { name: form.type, alias: organization }
-
-    Librecores\ProjectRepoBundle\Form\Extension\ButtonTypeIconExtension:
-        tags:
-            - { name: form.type_extension, extended_type: Symfony\Component\Form\Extension\Core\Type\ButtonType }
-
-    Librecores\ProjectRepoBundle\Form\Type\PurifiedTextareaType:
-        arguments:
-            - '@librecores.form.transformer.html_purifier'
-        tags:
-            - { name: form.type, alias: purified_textarea }
-
-    Exercise\HTMLPurifierBundle\Form\HTMLPurifierTransformer:
-        arguments:
-            - '@exercise_html_purifier.default'
-
     # User/auth management
     Librecores\ProjectRepoBundle\Doctrine\UserManager:
         arguments:

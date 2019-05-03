@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Librecores\ProjectRepoBundle\Form\DataTransformer;
+namespace App\Form\DataTransformer;
 
 use FOS\UserBundle\Model\UserInterface;
 use FOS\UserBundle\Model\UserManagerInterface;

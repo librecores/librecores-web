@@ -1,8 +1,8 @@
 <?php
 
-namespace Librecores\ProjectRepoBundle\Form\Type;
+namespace App\Form\Type;
 
-use Librecores\ProjectRepoBundle\Form\Model\SearchQuery;
+use App\Form\Model\SearchQuery;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SearchType;
