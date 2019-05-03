@@ -1,14 +1,17 @@
 <?php
 
-namespace Librecores\ProjectRepoBundle\EventListener;
+namespace App\EventListener;
 
+use App\Entity\User;
 use FOS\UserBundle\Event\FormEvent;
 use FOS\UserBundle\Event\GetResponseUserEvent;
 use FOS\UserBundle\FOSUserEvents;
 use FOS\UserBundle\Model\UserManagerInterface;
+use Librecores\ProjectRepoBundle\Security\Core\Exception\OAuthUserLinkingException;
 use Librecores\ProjectRepoBundle\Security\Core\User\LibreCoresUserProvider;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Security\Core\Security;
 
@@ -43,7 +46,7 @@ class OAuthRegistrationListener implements EventSubscriberInterface
     public function __construct(
         UserManagerInterface $userManager,
         LibreCoresUserProvider $userProvider,
-        Session $session
+        SessionInterface $session
     ) {
         $this->userManager = $userManager;
         $this->userProvider = $userProvider;
@@ -101,7 +104,7 @@ class OAuthRegistrationListener implements EventSubscriberInterface
             return null;
         }
 
-        /** @var $user \App\Entity\User */
+        /** @var $user User */
         $user = $event->getForm()->getData();
 
         // Connect the OAuth account to the LibreCores user
@@ -149,7 +152,7 @@ class OAuthRegistrationListener implements EventSubscriberInterface
         // exception from the OAuth auto-registration process
         if ($this->session->has(Security::AUTHENTICATION_ERROR)) {
             $error = $this->session->get(Security::AUTHENTICATION_ERROR);
-            if (!$error instanceof \Librecores\ProjectRepoBundle\Security\Core\Exception\OAuthUserLinkingException) {
+            if (!$error instanceof OAuthUserLinkingException) {
                 return;
             }
             $data = $error->getOAuthData();
