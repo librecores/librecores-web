@@ -1,7 +1,7 @@
 services:
     update_project_info_service: '@App\Consumer\UpdateProjectInformation'
-    librecores.util.githubapiservice: '@Librecores\ProjectRepoBundle\Service\GitHub\GitHubApiService'
-    librecores.util.queuedispatcherservice: '@Librecores\ProjectRepoBundle\Service\QueueDispatcherService'
+    librecores.util.githubapiservice: '@App\Service\GitHub\GitHubApiService'
+    librecores.util.queuedispatcherservice: '@App\Service\QueueDispatcherService'
     librecores.util.markuptohtmlconverter:  '@App\Util\MarkupToHtmlConverter'
     app.form.type.project: '@App\Form\Type\ProjectType'
     app.form.type.organization: '@App\Form\Type\OrganizationType'

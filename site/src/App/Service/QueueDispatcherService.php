@@ -1,6 +1,6 @@
 <?php
 
-namespace Librecores\ProjectRepoBundle\Service;
+namespace App\Service;
 
 use App\Entity\Project;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;

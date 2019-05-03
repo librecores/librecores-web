@@ -1,6 +1,6 @@
 <?php
 
-namespace Librecores\ProjectRepoBundle\Doctrine;
+namespace App\Service;
 
 use App\Entity\Commit;
 use App\Entity\Contributor;

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Librecores\ProjectRepoBundle\Service\GitHub;
+namespace App\Service\GitHub;
 
 
 use Github\Exception\ErrorException;
