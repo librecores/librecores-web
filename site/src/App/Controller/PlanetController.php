@@ -1,10 +1,10 @@
 <?php
 
-namespace Librecores\PlanetBundle\Controller;
+namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-class DefaultController extends Controller
+class PlanetController extends Controller
 {
     private $blogposts = array();
     private $feedLastUpdate = null;

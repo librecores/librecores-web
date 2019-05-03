@@ -1,6 +1,6 @@
 {# overrides HWIOAuthBundle/views/Connect/connect_success.html.twig #}
 
 {{ render(controller(
-  'LibrecoresProjectRepoBundle:User:connectionSuccess',
+  'App\\Controller\\UserController::connectionSuccessAction',
   {'serviceName' : service}
 )) }}

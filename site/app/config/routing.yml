@@ -1,23 +1,19 @@
 # HWIOAuthBundle
+annotation:
+    resource: 'routes/annotation.yml'
+
 hwi_oauth_routing:
     resource: 'routes/hwi_oauth.yml'
 
 fos_user_routing:
     resource: 'routes/fos_user.yml'
 
-librecores_site:
-    resource: "routes/site.yml"
-    prefix:   /static
-
-# Planet routes
 librecores_planet:
     resource: "routes/planet.yml"
-    prefix:   /planet
 
 # Project Repository Routes
 librecores_project_repo:
     resource: 'routes/project_repo.yml'
-
 
 github_login:
     path: /user/connect/check-github
@@ -27,20 +23,20 @@ google_login:
 
 librecores.user.settings.oauth-disconnect:
     path: /user/disconnect/{serviceName}
-    defaults: { _controller: LibrecoresProjectRepoBundle:User:disconnectFromOAuthService }
+    controller: App\Controller\UserController::disconnectFromOAuthServiceAction
 
 librecores.user.settings.profile:
     path: /user/settings/profile
-    defaults: { _controller: LibrecoresProjectRepoBundle:User:profileSettings }
+    controller: App\Controller\UserController::profileSettingsAction
 
 librecores.user.settings.connections:
     path: /user/settings/connected-services
-    defaults: { _controller: LibrecoresProjectRepoBundle:User:connectionsSettings }
+    controller: App\Controller\UserController::connectionsSettingsAction
 
 librecores.user.settings.password:
     path: /user/settings/password
-    defaults: { _controller: LibrecoresProjectRepoBundle:User:passwordSettings }
+    controller: App\Controller\UserController::passwordSettingsAction
 
 librecores_user_resend_confirmation:
     path: /user/resend-confirmation
-    defaults: { _controller: LibrecoresProjectRepoBundle:User:resendConfirmationEmail }
+    controller: App\Controller\UserController::resendConfirmationEmailAction

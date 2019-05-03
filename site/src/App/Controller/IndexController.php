@@ -1,6 +1,6 @@
 <?php
 
-namespace Librecores\SiteBundle\Controller;
+namespace App\Controller;
 
 use App\Form\Model\SearchQuery;
 use App\Form\Type\SearchQueryType;
@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class DefaultController extends Controller
+class IndexController extends Controller
 {
     /**
      * Render the home page
@@ -49,7 +49,7 @@ class DefaultController extends Controller
      *
      * Route requirements: allow / inside path
      *
-     * @Route("/{page}", name = "librecores_site_page", requirements = {"page" = ".+"})
+     * @Route("/static/{page}", name = "librecores_site_page", requirements = {"page" = ".+"})
      *
      * @param string $page
      *
