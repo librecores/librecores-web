@@ -1,5 +1,5 @@
 services:
-    update_project_info_service: '@Librecores\ProjectRepoBundle\Consumer\UpdateProjectInformation'
+    update_project_info_service: '@App\Consumer\UpdateProjectInformation'
     librecores.util.githubapiservice: '@Librecores\ProjectRepoBundle\Service\GitHub\GitHubApiService'
     librecores.util.queuedispatcherservice: '@Librecores\ProjectRepoBundle\Service\QueueDispatcherService'
     librecores.util.markuptohtmlconverter:  '@App\Util\MarkupToHtmlConverter'
