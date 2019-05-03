@@ -19,7 +19,7 @@ use Doctrine\ORM\NonUniqueResultException;
 use Exception;
 use FOS\UserBundle\Model\UserManagerInterface;
 use Librecores\ProjectRepoBundle\Doctrine\ProjectMetricsProvider;
-use Librecores\ProjectRepoBundle\Form\Type\ProjectType;
+use App\Form\Type\ProjectType;
 use Librecores\ProjectRepoBundle\Service\GitHub\AuthenticationRequiredException;
 use Librecores\ProjectRepoBundle\Service\GitHub\GitHubApiService;
 use Librecores\ProjectRepoBundle\Service\QueueDispatcherService;

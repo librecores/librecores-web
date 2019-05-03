@@ -2,8 +2,8 @@
 
 namespace Librecores\SiteBundle\Controller;
 
-use Librecores\ProjectRepoBundle\Form\Model\SearchQuery;
-use Librecores\ProjectRepoBundle\Form\Type\SearchQueryType;
+use App\Form\Model\SearchQuery;
+use App\Form\Type\SearchQueryType;
 use SimplePie;
 use Spatie\YamlFrontMatter\YamlFrontMatter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;

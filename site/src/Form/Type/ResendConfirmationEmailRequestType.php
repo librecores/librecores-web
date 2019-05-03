@@ -1,10 +1,10 @@
 <?php
 
 
-namespace Librecores\ProjectRepoBundle\Form\Type;
+namespace App\Form\Type;
 
-use Librecores\ProjectRepoBundle\Form\DataTransformer\UserToEmailTransformer;
-use Librecores\ProjectRepoBundle\Form\Model\ResendConfirmationEmailRequest;
+use App\Form\DataTransformer\UserToEmailTransformer;
+use App\Form\Model\ResendConfirmationEmailRequest;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\FormBuilderInterface;

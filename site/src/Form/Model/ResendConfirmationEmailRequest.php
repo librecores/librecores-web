@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Librecores\ProjectRepoBundle\Form\Model;
+namespace App\Form\Model;
 
 use FOS\UserBundle\Model\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;

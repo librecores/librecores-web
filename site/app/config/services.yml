@@ -51,3 +51,25 @@ services:
 
     App\Util\ProcessCreator: ~
 
+    # Forms
+    App\Form\Type\ProjectType:
+        tags:
+            - { name: form.type, alias: project }
+
+    App\Form\Type\OrganizationType:
+        tags:
+            - { name: form.type, alias: organization }
+
+    App\Form\Extension\ButtonTypeIconExtension:
+        tags:
+            - { name: form.type_extension, extended_type: Symfony\Component\Form\Extension\Core\Type\ButtonType }
+
+    App\Form\Type\PurifiedTextareaType:
+        arguments:
+            - '@librecores.form.transformer.html_purifier'
+        tags:
+            - { name: form.type, alias: purified_textarea }
+
+    Exercise\HTMLPurifierBundle\Form\HTMLPurifierTransformer:
+        arguments:
+            - '@exercise_html_purifier.default'
