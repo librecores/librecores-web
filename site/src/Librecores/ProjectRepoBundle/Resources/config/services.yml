@@ -55,14 +55,6 @@ services:
             - '@validator'
             - '@session'
 
-    Librecores\ProjectRepoBundle\EventListener\OAuthRegistrationListener:
-        arguments:
-            - '@fos_user.user_manager'
-            - '@librecores_user_provider'
-            - '@session'
-        tags:
-            - { name: kernel.event_subscriber }
-
     # Security
     Librecores\ProjectRepoBundle\Security\ProjectVoter:
         tags:

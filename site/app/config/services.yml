@@ -73,3 +73,11 @@ services:
     Exercise\HTMLPurifierBundle\Form\HTMLPurifierTransformer:
         arguments:
             - '@exercise_html_purifier.default'
+
+    App\EventListener\OAuthRegistrationListener:
+        arguments:
+            - '@fos_user.user_manager'
+            - '@librecores_user_provider'
+            - '@session'
+        tags:
+            - { name: kernel.event_subscriber }
