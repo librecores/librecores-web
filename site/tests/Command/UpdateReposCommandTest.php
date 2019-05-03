@@ -6,7 +6,7 @@ namespace App\Command;
 use App\Entity\GitSourceRepo;
 use App\Entity\Project;
 use App\Repository\ProjectRepository;
-use LibreCores\TestUtils\Mocks\MockProducer;
+use TestUtils\Mocks\MockProducer;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;

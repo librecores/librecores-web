@@ -1,7 +1,5 @@
-# Learn more about services, parameters and containers at
-# http://symfony.com/doc/current/book/service_container.html
-parameters:
-#    parameter_name: value
+imports:
+    - { resource: legacy_aliases.yml }
 
 services:
     _defaults:
@@ -52,21 +50,13 @@ services:
     App\Util\ProcessCreator: ~
 
     # Forms
-    App\Form\Type\ProjectType:
-        tags:
-            - { name: form.type, alias: project }
-
-    App\Form\Type\OrganizationType:
-        tags:
-            - { name: form.type, alias: organization }
-
     App\Form\Extension\ButtonTypeIconExtension:
         tags:
             - { name: form.type_extension, extended_type: Symfony\Component\Form\Extension\Core\Type\ButtonType }
 
     App\Form\Type\PurifiedTextareaType:
         arguments:
-            - '@librecores.form.transformer.html_purifier'
+            - '@Exercise\HTMLPurifierBundle\Form\HTMLPurifierTransformer'
         tags:
             - { name: form.type, alias: purified_textarea }
 
@@ -76,14 +66,11 @@ services:
 
     App\EventListener\OAuthRegistrationListener:
         arguments:
-            - '@fos_user.user_manager'
-            - '@librecores_user_provider'
-            - '@session'
-        tags:
-            - { name: kernel.event_subscriber }
+            $userManager: '@fos_user.user_manager'
 
     # User/auth management
     App\Security\UserManager:
+        public: true
         arguments:
             - '@fos_user.util.password_updater'
             - '@fos_user.util.canonical_fields_updater'
