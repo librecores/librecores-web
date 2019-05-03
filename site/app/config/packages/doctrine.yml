@@ -28,4 +28,4 @@ doctrine:
                 MONTH: 'DoctrineExtensions\Query\Mysql\Month'
                 YEAR: 'DoctrineExtensions\Query\Mysql\Year'
         hydrators:
-            group: 'Librecores\ProjectRepoBundle\Doctrine\Hydrators\GroupHydrator'
+            group: 'App\Doctrine\Hydrators\GroupHydrator'
