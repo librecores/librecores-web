@@ -30,7 +30,7 @@ services:
 
     FOS\UserBundle\Mailer\MailerInterface: '@fos_user.mailer'
 
-    Librecores\ProjectRepoBundle\Command\UpdateReposCommand:
+    App\Command\UpdateReposCommand:
         arguments:
             $producer: '@old_sound_rabbit_mq.update_project_info_producer'
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Librecores\ProjectRepoBundle\Command;
+namespace App\Command;
 
 
 use App\Entity\GitSourceRepo;
