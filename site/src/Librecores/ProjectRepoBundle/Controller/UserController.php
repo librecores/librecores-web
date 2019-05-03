@@ -3,16 +3,15 @@
 namespace Librecores\ProjectRepoBundle\Controller;
 
 use App\Entity\User;
+use App\Form\Model\ResendConfirmationEmailRequest;
+use App\Form\Type\ResendConfirmationEmailRequestType;
+use App\Form\Type\UserProfileType;
+use App\Security\Core\User\LibreCoresUserProvider;
 use FOS\UserBundle\Form\Type\ChangePasswordFormType;
 use FOS\UserBundle\Mailer\MailerInterface;
 use FOS\UserBundle\Model\UserInterface;
 use FOS\UserBundle\Model\UserManagerInterface;
 use FOS\UserBundle\Util\TokenGeneratorInterface;
-use HWI\Bundle\OAuthBundle\Connect\AccountConnectorInterface;
-use App\Form\Type\UserProfileType;
-use App\Form\Model\ResendConfirmationEmailRequest;
-use App\Form\Type\ResendConfirmationEmailRequestType;
-use Librecores\ProjectRepoBundle\Security\Core\User\LibreCoresUserProvider;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\RedirectResponse;

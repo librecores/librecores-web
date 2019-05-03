@@ -1,6 +1,6 @@
 <?php
 
-namespace Librecores\ProjectRepoBundle\Security;
+namespace App\Security;
 
 use App\Entity\OrganizationMember;
 use App\Entity\Project;
@@ -8,6 +8,7 @@ use App\Entity\User;
 use LogicException;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
+use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 
 /**
  * Authorization voter to determine access to a given Project object

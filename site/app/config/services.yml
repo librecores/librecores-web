@@ -17,9 +17,9 @@ services:
 
     # controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class
-#    App\Controller\:
-#        resource: '../../src/App/Controller'
-#        tags: ['controller.service_arguments']
+    #    App\Controller\:
+    #        resource: '../../src/App/Controller'
+    #        tags: ['controller.service_arguments']
 
     # Twig date extension - http://twig-extensions.readthedocs.io/en/latest/date.html
     Twig\Extensions\DateExtension:
@@ -81,3 +81,23 @@ services:
             - '@session'
         tags:
             - { name: kernel.event_subscriber }
+
+    # User/auth management
+    App\Security\UserManager:
+        arguments:
+            - '@fos_user.util.password_updater'
+            - '@fos_user.util.canonical_fields_updater'
+            - '@fos_user.object_manager'
+            - '%fos_user.model.user.class%'
+
+    App\Security\Core\User\LibreCoresUserProvider:
+        arguments:
+            - '@fos_user.user_manager'
+            - '@validator'
+            - '@session'
+
+    # Security
+    App\Security\ProjectVoter:
+        tags:
+            - { name: security.voter }
+        public: false
