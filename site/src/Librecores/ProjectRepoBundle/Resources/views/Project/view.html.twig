@@ -33,6 +33,8 @@
     {{ project.tagline }}
   </div>
   {% endif %}
+  {#
+  Metrics are not displayed until we can make them more actionable. (#281)
   <div class="row">
     <div class="project-info col-md-8 col-sm-12">
       <div class="project-quality">
@@ -64,6 +66,7 @@
       </div>
     </div>
   </div>
+  #}
   <div class="classification-container">
     {% if classifications %}
       {% for classification in classifications %}
