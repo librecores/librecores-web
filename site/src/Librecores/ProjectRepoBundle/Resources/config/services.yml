@@ -22,14 +22,6 @@ services:
         resource: '../../../ProjectRepoBundle/Controller'
         tags: ['controller.service_arguments']
 
-
-    # Consumer Services (called through RabbitMQ)
-    Librecores\ProjectRepoBundle\Consumer\UpdateProjectInformation:
-        arguments:
-            - '@librecores.repocrawlerfactory'
-            - '@logger'
-            - '@doctrine'
-
     # Utilities
     Librecores\ProjectRepoBundle\Util\MarkupToHtmlConverter:
         arguments:
@@ -98,11 +90,3 @@ services:
         public: false
 
     Librecores\ProjectRepoBundle\Util\ProcessCreator: ~
-
-    Librecores\ProjectRepoBundle\RepoCrawler\RepoCrawlerFactory:
-        arguments:
-            - '@librecores.util.markuptohtmlconverter'
-            - '@logger'
-            - '@doctrine.orm.default_entity_manager'
-            - '@librecores.process_creator'
-            - '@librecores.util.githubapiservice'
