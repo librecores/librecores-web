@@ -1,7 +1,8 @@
 <?php
 
-namespace App\RepoCrawler;
+namespace App\Tests\RepoCrawler;
 
+use App\RepoCrawler\GitRepoCrawler;
 use App\Entity\Contributor;
 use App\Entity\GitSourceRepo;
 use App\Entity\LanguageStat;

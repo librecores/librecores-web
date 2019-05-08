@@ -429,7 +429,7 @@ class CommitRepository extends ServiceEntityRepository
             ->getResult('group');
 
         foreach ($result as $key => $value) {
-            $result[$key] = (int)$value[0];
+            $result[$key] = (int) $value[0];
         }
 
         return $this->zeroFillMissingYears($result, $start, $end);
@@ -474,7 +474,7 @@ class CommitRepository extends ServiceEntityRepository
             ->getResult('group');
 
         foreach ($result as $key => $value) {
-            $result[$key] = (int)$value[0];
+            $result[$key] = (int) $value[0];
         }
 
         return $this->zeroFillMissingYears($result, $start, $end);

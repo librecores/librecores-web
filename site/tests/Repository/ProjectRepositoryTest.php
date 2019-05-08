@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Repository;
-
+namespace App\Tests\Repository;
 
 use App\Entity\Project;
+use App\Repository\ProjectRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use PHPUnit\Framework\TestCase;
