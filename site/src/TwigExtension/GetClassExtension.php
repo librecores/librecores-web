@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Librecores\ProjectRepoBundle\TwigExtension;
+namespace App\TwigExtension;
 
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
