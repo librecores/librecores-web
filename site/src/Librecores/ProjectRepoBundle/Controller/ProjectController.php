@@ -5,6 +5,7 @@ namespace Librecores\ProjectRepoBundle\Controller;
 use Doctrine\ORM\NonUniqueResultException;
 use Exception;
 use FOS\UserBundle\Model\UserManagerInterface;
+use Github\HttpClient\Message\ResponseMediator;
 use Librecores\ProjectRepoBundle\Doctrine\ProjectMetricsProvider;
 use Librecores\ProjectRepoBundle\Entity\ClassificationHierarchy;
 use Librecores\ProjectRepoBundle\Entity\GitSourceRepo;
@@ -67,7 +68,7 @@ class ProjectController extends AbstractController
         $githubSourceRepoChoices = [];
         foreach ($this->getGithubRepos($githubApiService) as $repo) {
             $githubUsername = $repo['owner']['login'];
-            $fullName = $repo['full_name'];
+            $fullName = $repo['fullName'];
             $githubSourceRepoChoices[$githubUsername][$fullName] = $fullName;
         }
 
@@ -508,24 +509,47 @@ class ProjectController extends AbstractController
             return [];
         }
 
-        // As of today, the API does not provide a wrapper for this call using
-        // the visibility/affiliation fields. We therefore manually issue the
-        // request (c.f. Github\Api\AbstractApi::get() and
-        // \Github\Api\CurrentUser)
-        $path = '/user/repos';
-        $parameters = array(
-            'visibility' => 'all',
-            'affiliation' => 'owner,collaborator,organization_member',
-            'sort' => 'updated',
-            'per_page' => 100,
-        );
-        if (count($parameters) > 0) {
-            $path .= '?'.http_build_query($parameters);
+        $query = <<<'QUERY'
+query getRepositories($next: String){
+    viewer {
+        repositories(
+            privacy: PUBLIC,
+            first: 100,
+            affiliations: [OWNER, COLLABORATOR, ORGANIZATION_MEMBER],
+                orderBy: {
+                    field: UPDATED_AT,
+                    direction: DESC
+                },
+            after: $next
+        ) {
+            pageInfo {
+                hasNextPage
+                endCursor
+                startCursor
+            }
+            nodes {
+                fullName: nameWithOwner
+                owner {
+                    login
+                }
+            }
+        }
+    }
+}
+QUERY;
+        $repositories = [];
+        $hasNext = true;
+        $next = null;
+
+        while ($hasNext) {
+            $response = $githubClient->graphql()->execute($query, [ 'next' => $next ]);
+
+            $hasNext = $response['data']['viewer']['repositories']['pageInfo']['hasNextPage'];
+            $next = $response['data']['viewer']['repositories']['pageInfo']['endCursor'];
+            $repositories = array_merge($repositories, $response['data']['viewer']['repositories']['nodes']);
         }
 
-        $response = $githubClient->getHttpClient()->get($path);
-
-        return \Github\HttpClient\Message\ResponseMediator::getContent($response);
+        return $repositories;
     }
 
     /**
