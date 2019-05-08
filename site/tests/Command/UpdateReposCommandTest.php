@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Command;
+namespace App\Tests\Command;
 
-
+use App\Command\UpdateReposCommand;
 use App\Entity\GitSourceRepo;
 use App\Entity\Project;
 use App\Repository\ProjectRepository;
-use TestUtils\Mocks\MockProducer;
+use App\Tests\TestUtils\Mocks\MockProducer;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -41,7 +41,9 @@ class UpdateReposCommandTest extends TestCase
         $this->assertEquals(0, $exitCode);
 
         $publishedIds = array_map(
-            function ($x) { return unserialize($x); },
+            function ($x) {
+                return unserialize($x);
+            },
             array_column($producer->getPublishedMessages(), 'body')
         );
         $this->assertEquals([1, 2, 3], $publishedIds);
@@ -75,7 +77,9 @@ class UpdateReposCommandTest extends TestCase
         $this->assertEquals(0, $exitCode);
 
         $publishedIds = array_map(
-            function ($x) { return unserialize($x); },
+            function ($x) {
+                return unserialize($x);
+            },
             array_column($producer->getPublishedMessages(), 'body')
         );
         $this->assertEquals([1, 3], $publishedIds);
@@ -89,5 +93,4 @@ class UpdateReposCommandTest extends TestCase
 
         return $mockProject;
     }
-
 }

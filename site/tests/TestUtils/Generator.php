@@ -1,6 +1,6 @@
 <?php
 
-namespace TestUtils;
+namespace App\Tests\TestUtils;
 
 class Generator
 {

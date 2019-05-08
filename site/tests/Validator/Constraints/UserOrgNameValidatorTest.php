@@ -1,10 +1,12 @@
 <?php
 
-namespace App\Validator\Constraints;
+namespace App\Tests\Validator\Constraints;
 
 use App\Repository\OrganizationRepository;
 use App\Repository\UserRepository;
-use TestUtils\Generator;
+use App\Validator\Constraints\UserOrgName;
+use App\Validator\Constraints\UserOrgNameValidator;
+use App\Tests\TestUtils\Generator;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;

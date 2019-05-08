@@ -1,19 +1,16 @@
 <?php
 
-namespace App\Util;
+namespace App\Tests\Util;
 
-use App\Util\ProcessCreator;
 use App\Util\ExecutorInterface;
+use App\Util\ProcessCreator;
 use PHPUnit\Framework\TestCase;
-use Psr\Log\LoggerInterface;
-use Symfony\Component\Process\Exception\ProcessFailedException;
-use Symfony\Component\Process\Process;
 
 /**
  * Tests for DefaultExecutor
  * @author Amitosh Swain Mahapatra <amitosh.swain@gmail.com>
  *
- * @see ProcessCreator
+ * @see    ProcessCreator
  */
 class ProcessCreatorTest extends TestCase
 {

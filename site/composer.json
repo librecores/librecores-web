@@ -5,7 +5,8 @@
 	"description" : "LibreCores Web Site",
 	"autoload" : {
 		"psr-4" : {
-			"App\\" : "src/"
+			"App\\" : "src/",
+            "App\\Tests\\": "tests/"
 		},
 		"files" : [
 			"app/AppKernel.php"
