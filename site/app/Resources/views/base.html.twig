@@ -71,7 +71,8 @@
           {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-              {{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }}
+              <i class="fa fa-plus"></i>
+              <span class="sr-only">Add to LibreCores</span>
               <span class="caret"></span>
             </a>
             <ul class="dropdown-menu">
@@ -85,7 +86,14 @@
                   New Organization
                 </a>
               </li>
-              <li role="separator" class="divider"></li>
+            </ul>
+          </li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+              {{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }}
+              <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
               <li>
                 <a href="{{ path('librecores_project_repo_user_org_view',
                                  {'userOrOrganization': app.user.username}) }}">
