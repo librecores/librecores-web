@@ -3,9 +3,9 @@
 'use strict';
 
 import $ from 'jquery';
-import moment from 'moment';
+global.$ = global.jQuery = $;
 import 'bootstrap';
-global.$ = $;
+import moment from 'moment';
 
 (function (plugin) {
   if (typeof define === 'function' && define.amd) {

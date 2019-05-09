@@ -148,10 +148,10 @@
       </div>
     </nav>
   </footer>
-
+  <script src="{{ asset('build/app-js.js') }}"></script>
+  <script src="{{ asset('build/runtime.js') }}"></script>
   {% block javascripts %}
-    <script src="{{ asset('build/app-js.js') }}"></script>
-    <script type="text/javascript">
+   <script type="text/javascript">
       {% block pagejs %}{% endblock %}
     </script>
 
