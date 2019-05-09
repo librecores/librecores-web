@@ -11,7 +11,7 @@
   <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}" sizes="32x32">
 
   {% block stylesheets %}
-    <link rel="stylesheet" href="{{ asset('./build/app.css') }}">
+    <link rel="stylesheet" href="{{ asset('build/app-css.css') }}">
   {% endblock %}
 
   <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -150,10 +150,7 @@
   </footer>
 
   {% block javascripts %}
-    {% javascripts filter="?jsqueeze" output="js/app_body.js" '@js_body_end' %}
-      <script src="{{ asset_url }}"></script>
-    {% endjavascripts %}
-
+    <script src="{{ asset('build/app-js.js') }}"></script>
     <script type="text/javascript">
       {% block pagejs %}{% endblock %}
     </script>

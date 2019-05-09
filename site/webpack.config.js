@@ -17,11 +17,12 @@ Encore
      * Each entry will result in one JavaScript file (e.g. app.js)
      * and one CSS file (e.g. app.css) if you JavaScript imports CSS.
      */
-    .addStyleEntry('app', ['./web/assets/scss/librecores.scss',
+    .addStyleEntry('app-css', ['./web/assets/scss/librecores.scss',
     './web/assets/scss/bootstrap-librecores.scss',
     './web/assets/css/bootstrap-social.css',
     './web/assets/css/font-awesome.min.css',
     './web/assets/css/librecores.css'])
+    .addEntry('app-js','./web/assets/js/livestamp.js')
     //.addEntry('page1', './assets/js/page1.js')
     //.addEntry('page2', './assets/js/page2.js')
 
@@ -41,7 +42,7 @@ Encore
     .enableSassLoader()
 
 // uncomment if you're having problems with a jQuery plugin
-//.autoProvidejQuery()
+    .autoProvidejQuery()
 ;
 
 const config = Encore.getWebpackConfig();

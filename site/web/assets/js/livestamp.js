@@ -1,5 +1,12 @@
 // Livestamp.js / v2.0.0 / (c) 2015 Matt Bradley / MIT License
 // Modified from upstream revision 7572242 to use moment.parseZone
+'use strict';
+
+import $ from 'jquery';
+import moment from 'moment';
+import 'bootstrap';
+global.$ = $;
+
 (function (plugin) {
   if (typeof define === 'function' && define.amd) {
     // AMD. Register as an anonymous module.
@@ -8,7 +15,7 @@
     // Browser globals
     plugin(jQuery, moment);
   }
-}(function($, moment) {
+}(function() {
   var updateInterval = 1e3,
       paused = false,
       $livestamps = $([]),
