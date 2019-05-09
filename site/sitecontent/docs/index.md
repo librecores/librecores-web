@@ -3,7 +3,7 @@ title: Documentation
 ---
 # LibreCores Documentation
 
-<img src="/img/freepik/clipboard-sketch.png" align="right" hspace="25" vspace="10" />
+<img src="/static/img/freepik/clipboard-sketch.png" align="right" hspace="25" vspace="10" />
 
 If you are a developer of a LibreCore you are probably a good
 developer of HDL designs. You are planning this very cool small
@@ -32,7 +32,7 @@ platforms, just to name a few benefits.
 
 ### Where to host your code?
 
-<img src="/img/freepik/upload-to-internet-cloud-sketch.png" align="right" hspace="25" vspace="10" />
+<img src="/static/img/freepik/upload-to-internet-cloud-sketch.png" align="right" hspace="25" vspace="10" />
 
 While LibreCores.org will be the community hub to publish your work or
 find cores, we will not be a hosting site. There are free services
@@ -50,7 +50,7 @@ platforms. Just to give you an idea about what you do there:
 
 * Create a Wiki with usage instructions and documentation of your core
 
-* User can fork your core and can create pull requeusts (PR) with
+* User can fork your core and can create pull requests (PR) with
   their changes. You can discuss those requests and make collaborative
   changes. Finally you can merge it into your master codebase with one
   click.
@@ -60,7 +60,7 @@ platforms. Just to give you an idea about what you do there:
 * You can even create a static website that is published on a short
   URL
 
-<img src="/img/freepik/rocket-sketch.png" align="right" hspace="25" vspace="10" />
+<img src="/static/img/freepik/rocket-sketch.png" align="right" hspace="25" vspace="10" />
 
 You may now think: "So why should I ever come back to LibreCores.org?"
 Fair question as we are still in the process of building the core of
@@ -85,7 +85,7 @@ think people may actually pick it up and build a chip from it. Of
 course they should carefully test it, but you should highlight the
 state of your core honestly.
 
-<img src="/img/freepik/halloween-october-31-calendar-page-sketch.png" align="right" hspace="25" vspace="10" />
+<img src="/static/img/freepik/halloween-october-31-calendar-page-sketch.png" align="right" hspace="25" vspace="10" />
 
 In our opinion it is good to start with publishing your code early. It
 gives the community the chance to learn about your code and contribute
@@ -108,7 +108,7 @@ you involving the community from early on.
 Another important aspect is to add a license to your code. The license
 defines how people can use your code and what obligations they have.
 
-<img src="/img/freepik/certificate-of-education-hand-drawn.png" align="right" hspace="25" vspace="10" />
+<img src="/static/img/freepik/certificate-of-education-hand-drawn.png" align="right" hspace="25" vspace="10" />
 
 The first question is how your code can be used. That answer is
 actually simple: By downloading it. There are no further restrictions,

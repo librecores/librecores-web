@@ -20,7 +20,6 @@
 		"symfony/process" : "~3.4.0",
 		"symfony/http-kernel" : "~3.4.0",
 		"symfony/cache" : "~3.4.0",
-		"symfony/assetic-bundle" : "~2.8.1",
 		"symfony/swiftmailer-bundle" : "~3.0",
 		"symfony/monolog-bundle" : "~3.1.0",
 		"doctrine/orm" : "^2.6",
@@ -49,14 +48,14 @@
 		"php-http/httplug-bundle" : "^1.10",
 		"algolia/search-bundle": "^3.1",
 		"spatie/yaml-front-matter": "^2.0",
-        "ext-json": "*"
+        "ext-json": "*",
+		"symfony/webpack-encore-bundle": "^1.6"
     },
 	"scripts" : {
 		"post-install-cmd" : [
 			"Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
 			"Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
 			"Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
-			"Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
 			"Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
 			"Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::removeSymfonyStandardFiles"
 		],
@@ -64,7 +63,6 @@
 			"Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
 			"Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
 			"Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
-			"Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
 			"Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
 			"Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::removeSymfonyStandardFiles"
 		]
@@ -75,7 +73,6 @@
 		"symfony-var-dir" : "var",
 		"symfony-bin-dir" : "bin",
 		"symfony-tests-dir" : "tests",
-		"symfony-assets-install" : "relative",
 		"incenteev-parameters" : {
 			"file" : "app/config/parameters.yml"
 		},

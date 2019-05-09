@@ -7,27 +7,12 @@
 
   <title>{% block title %}{% endblock %}</title>
 
-  <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
-  <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}" sizes="32x32">
+  <link rel="icon" type="image/x-icon" href="{{ asset('build/images/favicon.ico') }}" />
+  <link rel="icon" type="image/png" href="{{ asset('build/images/favicon.png') }}" sizes="32x32">
 
   {% block stylesheets %}
-    {% stylesheets filter="scssphp,cssrewrite" output="css/app.css"
-        "assets/scss/librecores.scss"
-        "assets/scss/bootstrap-librecores.scss"
-        "assets/css/bootstrap-social.css"
-        "assets/css/font-awesome.min.css"
-        "assets/css/librecores.css"
-    %}
-        <link rel="stylesheet" href="{{ asset_url }}" />
-    {% endstylesheets %}
+    {{ encore_entry_link_tags('app') }}
   {% endblock %}
-
-  <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-  <!--[if lt IE 9]>
-    {% javascripts filter="?jsqueeze" output="js/app_head.js" '@js_head'%}
-      <script src="{{ asset_url }}"></script>
-    {% endjavascripts %}
-  <![endif]-->
 
   <link href='//fonts.googleapis.com/css?family=Open+Sans:400,600' rel='stylesheet' type='text/css'>
   <link href="//fonts.googleapis.com/css?family=Source+Code+Pro:400,500,600,700" rel="stylesheet" type="text/css">
@@ -157,15 +142,8 @@
       </div>
     </nav>
   </footer>
-
   {% block javascripts %}
-    {% javascripts filter="?jsqueeze" output="js/app_body.js" '@js_body_end' %}
-      <script src="{{ asset_url }}"></script>
-    {% endjavascripts %}
-
-    <script type="text/javascript">
-      {% block pagejs %}{% endblock %}
-    </script>
+    {{ encore_entry_script_tags('app') }}
 
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -176,27 +154,6 @@
       ga('create', 'UA-85345883-1', 'auto');
       ga('send', 'pageview');
 
-    </script>
-
-    <link rel="stylesheet" type="text/css"
-      href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.css" />
-    <script
-      src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.js"></script>
-    <script>
-      window.addEventListener("load", function(){
-      window.cookieconsent.initialise({
-        "palette": {
-          "popup": {
-            "background": "#173e43",
-            "text": "#dddfd4"
-          },
-          "button": {
-            "background": "transparent",
-            "border": "#fae596",
-            "text": "#fae596"
-          }
-        }
-      })});
     </script>
   {% endblock %}
 </body>

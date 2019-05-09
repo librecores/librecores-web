@@ -19,3 +19,6 @@
 !bin/console
 !bin/symfony_requirements
 
+/node_modules/*
+/web/build/*
+/yarn-error.log

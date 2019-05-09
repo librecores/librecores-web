@@ -2,7 +2,7 @@ root        /var/www/lc/site/web;
 
 rewrite     ^/(app|app_dev)\.php/?(.*)$ /$1 permanent;
 
-{% if symfony_config.SYMFONY_ENV == 'dev' %}
+{% if env.SYMFONY_ENV == 'dev' %}
 location / {
     index       app_dev.php;
     try_files   $uri @rewriteapp;

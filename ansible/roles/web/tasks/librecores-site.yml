@@ -65,6 +65,12 @@
 - name: Create symfony configuration (part II, move to destination)
   command: mv /tmp/parameters.yml /var/www/lc/site/app/config/parameters.yml
 
+- name: Create frontend configuration (part I, populate template in temp folder)
+  template: src=frontend-config.json.j2 dest=/tmp/frontend-config.json
+
+- name: Create frontend configuration (part II, move to destination)
+  command: mv /tmp/frontend-config.json /var/www/lc/site/assets/js/frontend-config.json
+
 - name: "Create composer configuration directory for user {{ web_user }}"
   file:
     path: "{{ web_user_home }}/.config/composer"
@@ -79,32 +85,51 @@
     owner: "{{ web_user }}"
     mode: 0644
 
-- name: Install dependencies through composer (development)
+- name: Install PHP dependencies through composer (development)
   command: composer install
   args:
     chdir: /var/www/lc/site
-  when: symfony_config.SYMFONY_ENV == 'dev'
+  when: env.SYMFONY_ENV == 'dev'
 
-- name: Install dependencies through composer (production)
+- name: Install PHP dependencies through composer (production)
   command: composer install --no-dev --optimize-autoloader
-  environment: "{{ symfony_config }}"
+  environment: "{{ env }}"
   args:
     chdir: /var/www/lc/site
-  when: symfony_config.SYMFONY_ENV == 'prod'
+  when: env.SYMFONY_ENV == 'prod'
+
+- name: Install frontend dependencies through yarn (can take multiple minutes)
+  become: true
+  become_user: "{{ web_user }}"
+  command: yarn install --frozen-lockfile
+  environment: "{{ env }}"
+  args:
+    chdir: /var/www/lc/site
+
+- name: Build frontend code through webpack (production)
+  become: true
+  become_user: "{{ web_user }}"
+  command: yarn build
+  environment: "{{ env }}"
+  args:
+    chdir: /var/www/lc/site
+  when: env.NODE_ENV == 'production'
+
+- name: Build frontend code through webpack (development)
+  become: true
+  become_user: "{{ web_user }}"
+  command: yarn dev
+  environment: "{{ env }}"
+  args:
+    chdir: /var/www/lc/site
+  when: env.NODE_ENV != 'production'
 
 - name: Clear symfony cache (production)
   command: php bin/console cache:clear
-  environment: "{{ symfony_config }}"
+  environment: "{{ env }}"
   args:
     chdir: /var/www/lc/site
-  when: symfony_config.SYMFONY_ENV == 'prod'
-
-- name: Dump assetic assets (production)
-  command: php bin/console assetic:dump
-  environment: "{{ symfony_config }}"
-  args:
-    chdir: /var/www/lc/site
-  when: symfony_config.SYMFONY_ENV == 'prod'
+  when: env.SYMFONY_ENV == 'prod'
 
 - name: Add systemd service for RabbitMQ
   template:
@@ -176,14 +201,14 @@
   become: true
   become_user: "{{ web_user }}"
   command: php bin/console doctrine:migrations:migrate -n
-  environment: "{{ symfony_config }}"
+  environment: "{{ env }}"
   args:
     chdir: /var/www/lc/site
 
-- name: Insert classifications from YAML configuration file
+- name: Insert classifications into DB from YAML configuration file
   become: true
   become_user: "{{ web_user }}"
   command: php bin/console librecores:insert-classifications
-  environment: "{{ symfony_config }}"
+  environment: "{{ env }}"
   args:
     chdir: /var/www/lc/site

@@ -8,11 +8,7 @@ Add your project to LibreCores
 
 {% block stylesheets %}
   {{ parent() }}
-  {% stylesheets filter="cssrewrite"
-    "assets/css/bootstrap-select.css"
-  %}
-  <link rel="stylesheet" href="{{ asset_url }}" />
-  {% endstylesheets %}
+  {{ encore_entry_link_tags('project_new') }}
 {% endblock %}
 
 {% block content %}
@@ -134,21 +130,5 @@ other information about your project automatically.</p>
 
 {% block javascripts %}
   {{ parent() }}
-  {% javascripts filter="?jsqueeze"
-    "assets/js/bootstrap-select.js"
-  %}
-    <script src="{{ asset_url }}"></script>
-  {% endjavascripts %}
-{% endblock %}
-
-{% block pagejs %}
-// propose a name from the displayName
-// The name does not follow all validation rules for simplicity, i.e. it's
-// possible for a proposed name to fail validation.
-$('#{{ form.displayName.vars.id|e('js') }}')
-  .keyup(function() {
-    var nodeName = $('#{{ form.name.vars.id|e('js') }}')
-    var proposedName = $(this).val().replace(/[\s_]/g, '-').replace(/[^a-z0-9-]/ig, '').toLowerCase();
-    nodeName.val(proposedName);
-  });
+  {{ encore_entry_script_tags('project_new') }}
 {% endblock %}

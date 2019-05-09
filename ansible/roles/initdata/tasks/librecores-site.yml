@@ -5,7 +5,7 @@
   become: true
   become_user: "{{ web_user }}"
   command: php bin/console doctrine:fixtures:load -n
-  environment: "{{ symfony_config }}"
+  environment: "{{ env }}"
   args:
     chdir: /var/www/lc/site
 
@@ -13,7 +13,7 @@
   become: true
   become_user: "{{ web_user }}"
   command: php bin/console librecores:insert-classifications
-  environment: "{{ symfony_config }}"
+  environment: "{{ env }}"
   args:
     chdir: /var/www/lc/site
 
@@ -21,7 +21,7 @@
   become: true
   become_user: "{{ web_user }}"
   command: php bin/console librecores:update-repos
-  environment: "{{ symfony_config }}"
+  environment: "{{ env }}"
   args:
     chdir: /var/www/lc/site
 

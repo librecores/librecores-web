@@ -8,11 +8,7 @@
 
 {% block stylesheets %}
   {{ parent() }}
-  {% stylesheets filter="cssrewrite"
-    "assets/css/chartist.min.css"
-  %}
-  <link rel="stylesheet" href="{{ asset_url }}" />
-  {% endstylesheets %}
+  {{ encore_entry_link_tags('project_view') }}
 {% endblock %}
 
 {% block content %}
@@ -372,11 +368,5 @@
 
 {% block javascripts %}
   {{ parent() }}
-  {% javascripts
-    'assets/js/chartist.min.js'
-    'assets/js/metrics.js'
-    'assets/js/project-auto-refresh.js'
-  filter="?jsqueeze" %}
-  <script src="{{ asset_url }}"></script>
-  {% endjavascripts %}
+  {{ encore_entry_script_tags('project_view') }}
 {% endblock %}

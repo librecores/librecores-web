@@ -13,7 +13,6 @@ class AppKernel extends Kernel
             new Symfony\Bundle\TwigBundle\TwigBundle(),
             new Symfony\Bundle\MonologBundle\MonologBundle(),
             new Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle(),
-            new Symfony\Bundle\AsseticBundle\AsseticBundle(),
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new Knp\Bundle\MarkdownBundle\KnpMarkdownBundle(),
@@ -24,6 +23,7 @@ class AppKernel extends Kernel
             new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle(),
             new Http\HttplugBundle\HttplugBundle(),
             new Algolia\SearchBundle\AlgoliaSearchBundle(),
+            new \Symfony\WebpackEncoreBundle\WebpackEncoreBundle(),
         );
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {

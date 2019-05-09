@@ -2,8 +2,8 @@ imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
     - { resource: services.yml }
+    - { resource: packages/webpack_encore.yml }
     - { resource: packages/algolia_search.yml }
-    - { resource: packages/assetic.yml }
     - { resource: packages/doctrine_migrations.yml }
     - { resource: packages/doctrine.yml }
     - { resource: packages/fos_user.yml }

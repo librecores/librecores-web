@@ -5,9 +5,10 @@ mysql_host: "localhost"
 web_user: "{{ ansible_ssh_user }}"
 use_https: false
 
-symfony_config:
+env:
   SYMFONY_ENV: dev
   SYMFONY_DEBUG: 1
+  NODE_ENV: dev
 
 # all secrets have dummy values for the local development setup
 rabbitmq_admin_password: "password"

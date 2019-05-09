@@ -5,6 +5,11 @@
   <link rel="alternate" href="/planet/atom.xml" title="Planet LibreCores" type="application/atom+xml"/>
 {% endblock %}
 
+{% block stylesheets %}
+  {{ parent() }}
+  {{ encore_entry_link_tags('planet') }}
+{% endblock %}
+
 {% block title %}Planet Librecores{% endblock %}
 
 {% block content %}
@@ -68,9 +73,7 @@
   </div>
 {% endblock %}
 
-{% block pagejs %}
-  // bootstrap tooltips need to be explicitly initialized
-  $(function () {
-    $('[data-toggle="tooltip"]').tooltip()
-  })
+{% block javascripts %}
+  {{ parent() }}
+  {{ encore_entry_script_tags('planet') }}
 {% endblock %}

@@ -8,14 +8,11 @@
 
 {% block stylesheets %}
   {{ parent() }}
-  {% stylesheets filter="cssrewrite"
-  "assets/css/instantsearch.min.css" %}
-  <link rel="stylesheet" href="{{ asset_url }}"/>
-  {% endstylesheets %}
+  {{ encore_entry_link_tags('search') }}
 {% endblock %}
 
 {% block content %}
-  <form name="search-form" method="get" action="{{ path('librecores_project_repo_project_search') }}">
+  <form class="search-form" method="get" action="{{ path('librecores_project_repo_project_search') }}">
     <div class="librecores-search">
       <div class="row">
         <div class="col-sm-3">
@@ -115,31 +112,11 @@
       <hr/>
     {% endverbatim %}
   </script>
-  {% endblock %}
-
-  {% block javascripts %}
-  {{ parent() }}
-  {% javascripts
-  'assets/js/instantsearch.js'
-  'assets/js/search.js'
-  filter="?jsqueeze" %}
-  <script src="{{ asset_url }}"></script>
-  {% endjavascripts %}
+  {# passing algolia credentials to search.js #}
+  <div class="hidden" id="search-data" data-search='{ "indexName": "{{ searchType }}" }'></div>
 {% endblock %}
 
-{% block pagejs %}
-  $(function() {
-  searchFunctions();
-  options =  {
-    appId: '{{ algolia_app_id }}',
-    apiKey: '{{ algolia_search_key }}',
-    indexName: '{{ searchType }}',
-    searchPrefix: '{{ algolia_search_prefix }}',
-    searchParameters: {
-      hitsPerPage: 10,
-    },
-  }
-  // Algolia instantsearch configuration
-  algoliaInstantSearch(options, '{{ searchType }}');
-  });
+{% block javascripts %}
+  {{ parent() }}
+  {{ encore_entry_script_tags('search') }}
 {% endblock %}

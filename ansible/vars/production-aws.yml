@@ -14,9 +14,10 @@ web_user: "www-data"
 mysql_host: "localhost"
 use_https: true
 
-symfony_config:
+env:
   SYMFONY_ENV: prod
   SYMFONY_DEBUG: 0
+  NODE_ENV: production
 
 # sentry configuration
 site_sentry_env: production

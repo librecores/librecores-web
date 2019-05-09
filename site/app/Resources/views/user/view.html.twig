@@ -8,68 +8,78 @@ page path: /USERNAME
 {{ user.getName() ? user.getName() : user.getUsername() }} @ LibreCores
 {% endblock %}
 
+{% block stylesheets %}
+  {{ parent() }}
+  {{ encore_entry_link_tags('user_view') }}
+{% endblock %}
+
 {% block content %}
-<div class="librecores-user-page-header">
-{% if user.getName() %}
-<h1>{{ user.getName() }} <small>{{ user.getUsername() }}</small></h1>
-{% else %}
-<h1>{{ user.getUsername() }}</h1>
-{% endif %}
-</div>
-
-{% if is_granted("IS_AUTHENTICATED_REMEMBERED") and user.getId() == app.user.getId() %}
-<ul class="nav nav-tabs librecores-tabs-topnav">
-  <li role="presentation" class="active">
-    <a href="{{ path('librecores_project_repo_user_org_view', {'userOrOrganization': user.getUsernameCanonical()}) }}" aria-controls="settings" role="tab">
-      Public Profile
-    </a>
-  </li>
-
-  <li role="presentation">
-    <a href="{{ path('librecores.user.settings.profile') }}" aria-controls="settings" role="tab">
-      <i class="fa fa-cogs fa-fw" aria-hidden="true"></i>
-      Settings
-    </a>
-  </li>
-</ul>
-{% endif %}
-
-{{ user.getUsername() }} joined LibreCores
-<time datetime="{{ user.getCreatedAt()|date("c", "UTC") }}"
-      data-livestamp="{{ user.getCreatedAt()|date("c", "UTC") }}">
-  on {{ user.getCreatedAt()|date("d F Y H:i", "UTC") }} UTC
-</time>.
-
-<h2>Projects</h2>
-{% for project in user.getProjects() %}
-  <a href="{{ path('librecores_project_repo_project_view', {'parentName':
-          project.getParentName(), 'projectName': project.getName()}) }}">{{ project.getName() }}</a>
-  {% if project.getTagline() is not null %} - {{ project.getTagline() }}{% endif %}<br/>
-{% else %}
-  {% if is_granted("IS_AUTHENTICATED_REMEMBERED") and (user.getUsername() == app.user.username) %}
-  <p>You have not yet created a project.</p>
-  <p><a href="{{ path('librecores_project_repo_project_new') }}">
-    Add project
-  </a></p>
+  <div class="librecores-user-page-header">
+  {% if user.getName() %}
+  <h1>{{ user.getName() }} <small>{{ user.getUsername() }}</small></h1>
   {% else %}
-  {{ user.getUsername() }} has not yet created a project.
+  <h1>{{ user.getUsername() }}</h1>
+  {% endif %}
+  </div>
+
+  {% if is_granted("IS_AUTHENTICATED_REMEMBERED") and user.getId() == app.user.getId() %}
+  <ul class="nav nav-tabs librecores-tabs-topnav">
+    <li role="presentation" class="active">
+      <a href="{{ path('librecores_project_repo_user_org_view', {'userOrOrganization': user.getUsernameCanonical()}) }}" aria-controls="settings" role="tab">
+        Public Profile
+      </a>
+    </li>
+
+    <li role="presentation">
+      <a href="{{ path('librecores.user.settings.profile') }}" aria-controls="settings" role="tab">
+        <i class="fa fa-cogs fa-fw" aria-hidden="true"></i>
+        Settings
+      </a>
+    </li>
+  </ul>
   {% endif %}
 
-{% endfor %}
+  {{ user.getUsername() }} joined LibreCores
+  <time datetime="{{ user.getCreatedAt()|date("c", "UTC") }}"
+        data-livestamp="{{ user.getCreatedAt()|date("c", "UTC") }}">
+    on {{ user.getCreatedAt()|date("d F Y H:i", "UTC") }} UTC
+  </time>.
 
-<h2>Organizations</h2>
-{% for membership in user.getOrganizationMemberships() %}
-    <a href="{{ path('librecores_project_repo_user_org_view', {'userOrOrganization':
-        membership.getOrganization.getName()}) }}">{{ membership.getOrganization.getDisplayName() }}</a>
-    {% if membership.getPermission == 'MEMBER' %} (Member) {% endif %}
-    {% if membership.getPermission == 'ADMIN' %} (Admin) {% endif %}
-    {% if user == app.user %}
-        {% if membership.getPermission == 'REQUEST' %} (Join request in progress) {% endif %}
-        {% if membership.getPermission == 'DENY' %} (Denied your request to join) {% endif %}
+  <h2>Projects</h2>
+  {% for project in user.getProjects() %}
+    <a href="{{ path('librecores_project_repo_project_view', {'parentName':
+            project.getParentName(), 'projectName': project.getName()}) }}">{{ project.getName() }}</a>
+    {% if project.getTagline() is not null %} - {{ project.getTagline() }}{% endif %}<br/>
+  {% else %}
+    {% if is_granted("IS_AUTHENTICATED_REMEMBERED") and (user.getUsername() == app.user.username) %}
+    <p>You have not yet created a project.</p>
+    <p><a href="{{ path('librecores_project_repo_project_new') }}">
+      Add project
+    </a></p>
+    {% else %}
+    {{ user.getUsername() }} has not yet created a project.
     {% endif %}
-    {% if membership.getOrganization.getDescription() is not null %}
-     - {{ membership.getOrganization.getDescription() }}{% endif %}<br/>
-{% else %}
-    {{ user.getUsername() }} has not yet joined an organization.
-{% endfor %}
+
+  {% endfor %}
+
+  <h2>Organizations</h2>
+  {% for membership in user.getOrganizationMemberships() %}
+      <a href="{{ path('librecores_project_repo_user_org_view', {'userOrOrganization':
+          membership.getOrganization.getName()}) }}">{{ membership.getOrganization.getDisplayName() }}</a>
+      {% if membership.getPermission == 'MEMBER' %} (Member) {% endif %}
+      {% if membership.getPermission == 'ADMIN' %} (Admin) {% endif %}
+      {% if user == app.user %}
+          {% if membership.getPermission == 'REQUEST' %} (Join request in progress) {% endif %}
+          {% if membership.getPermission == 'DENY' %} (Denied your request to join) {% endif %}
+      {% endif %}
+      {% if membership.getOrganization.getDescription() is not null %}
+      - {{ membership.getOrganization.getDescription() }}{% endif %}<br/>
+  {% else %}
+      {{ user.getUsername() }} has not yet joined an organization.
+  {% endfor %}
+{% endblock %}
+
+{% block javascripts %}
+  {{ parent() }}
+  {{ encore_entry_script_tags('user_view') }}
 {% endblock %}

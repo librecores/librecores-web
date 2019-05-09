@@ -1,58 +1,8 @@
 3rd-party libraries and helpers
 -------------------------------
 
-Bootstrap
-  URL: http://getbootstrap.com
-  License: MIT
-  Files:
-    web/assets/js/bootstrap.min.js
-    web/assets/css/bootstrap.min.css
-    web/assets/css/bootstrap-theme.min.css
-
-Social Buttons for Bootstrap
-  Description: CSS to display buttons "Sign in with XXX"
-  URL: http://lipis.github.io/bootstrap-social
-  License: MIT
-  Files:
-    web/assets/css/bootstrap-social.css
-
-html5shiv
-  URL: https://raw.githubusercontent.com/aFarkas/html5shiv/master/dist/html5shiv.min.js
-  License: dual MIT/GPLv2
-  Files:
-    web/assets/js/html5shiv.min.js
-
-respond.js
-  URL: https://raw.githubusercontent.com/scottjehl/Respond/master/dest/respond.min.js
-  License: MIT
-  Files:
-    web/assets/js/respond.min.js
-
-FontAwesome
-  URL: http://fontawesome.io/
-  License: SIL OFL 1.1 and MIT
-
-moment.js
-  URL: http://momentjs.com/
-  License: MIT
-  Files:
-    web/assets/js/moment.min.js
-
-Livestamp.js (modified)
-  URL: http://mattbradley.github.io/livestampjs/
-  License: MIT
-  Files:
-    web/assets/js/livestamp.js (modified from upstream)
-
-Chartist.js
-  URL: http://gionkunz.github.io/chartist-js/
-  License: MIT or WTFPL
-  Files:
-    web/assets/css/chartist.css
-    web/assets/css/chartist.min.css
-    web/assets/js/chartist.js
-    web/assets/js/chartist.min.js
-    web/assets/js/chartist.min.js.map
+Note: Most third-party code is included through yarn. These dependencies are
+not listed in this file.
 
 Salted
     URL: https://github.com/rodriguezcommaj/salted

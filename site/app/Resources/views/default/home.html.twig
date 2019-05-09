@@ -2,6 +2,11 @@
 
 {% block title %}LibreCores &middot; Free and Open Source Digital Hardware{% endblock %}
 
+{% block stylesheets %}
+  {{ parent() }}
+  {{ encore_entry_link_tags('home') }}
+{% endblock %}
+
 {% block body %}
 
 <div class="librecores-home-startpane">
@@ -28,7 +33,7 @@
     <div class="container hidden-xs">
       <div class="col-sm-1 "></div>
       <div class="col-sm-2 position-inherit">
-        <img src="/img/home-cat-1.svg" alt="engage" />
+        <img src="{{ asset('build/images/home-cat-1.svg') }}" alt="engage" />
         <div class="librecores-home-showcase-keyword">engage</div>
         <div class="librecores-home-showcase-desc">
           You're not alone.
@@ -42,7 +47,7 @@
         </div>
       </div>
       <div class="col-sm-2 position-inherit">
-        <img src="{{ asset('img/home-cat-2.svg') }}" alt="code"/>
+        <img src="{{ asset('build/images/home-cat-2.svg') }}" alt="code"/>
         <div class="librecores-home-showcase-keyword">code</div>
         <div class="librecores-home-showcase-desc">
           Express your ideas in code.
@@ -56,7 +61,7 @@
         </div>
       </div>
       <div class="col-sm-2 position-inherit">
-        <img src="{{ asset('img/home-cat-3.svg') }}" alt="share"/>
+        <img src="{{ asset('build/images/home-cat-3.svg') }}" alt="share"/>
         <div class="librecores-home-showcase-desc">
           <div class="librecores-home-showcase-desc-middle-claim">LibreCores is sharing</div>
           Share IP cores.
@@ -65,7 +70,7 @@
         </div>
       </div>
       <div class="col-sm-2 position-inherit">
-        <img src="{{ asset('img/home-cat-4.svg') }}" alt="reuse"/>
+        <img src="{{ asset('build/images/home-cat-4.svg') }}" alt="reuse"/>
         <div class="librecores-home-showcase-keyword">reuse</div>
         <div class="librecores-home-showcase-desc">
           Implement your ideas faster: build on a great stack of existing work!
@@ -78,7 +83,7 @@
         </div>
       </div>
       <div class="col-sm-2 position-inherit">
-      <img src="{{ asset('img/home-cat-5.svg') }}" alt="learn"/>
+      <img src="{{ asset('build/images/home-cat-5.svg') }}" alt="learn"/>
         <div class="librecores-home-showcase-keyword">learn</div>
         <div class="librecores-home-showcase-desc">
           Get started with VHDL, Verilog and other languages.
@@ -226,24 +231,5 @@
 
 {% block javascripts %}
   {{ parent() }}
-  {% javascripts filter="?jsqueeze"
-    "assets/js/algoliasearch.min.js"
-    "assets/js/autocomplete.min.js"
-    "assets/js/search.js"
-  %}
-    <script src="{{ asset_url }}"></script>
-  {% endjavascripts %}
-{% endblock %}
-
-{% block pagejs %}
-{# do not use autofocus attribute to work around FF bug 712130 (FOUC) #}
-$(function() {
-  algoliaConfig = {
-    applicationId: '{{ algolia_app_id }}',
-    searchKey: '{{ algolia_search_key }}',
-    searchPrefix: '{{ algolia_search_prefix }}'
-  }
-  $("#search-form-input").focus();
-  algoliaAutocomplete(algoliaConfig);
-});
+  {{ encore_entry_script_tags('home') }}
 {% endblock %}

@@ -8,6 +8,10 @@
 .project
 .settings
 
+# VS Code project files
+/.vscode
+/*.code-workspace
+
 /ansible/*.retry
 
 # secrets of all kinds
