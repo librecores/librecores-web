@@ -34,7 +34,7 @@ framework:
     cache:
         pools:
             # Cache pool for all GitHub API requests done through
-            # GithubApiService
+            # GitHubApiService
             app.cache.githubapi:
                 adapter: cache.app
     serializer: { enabled: true }

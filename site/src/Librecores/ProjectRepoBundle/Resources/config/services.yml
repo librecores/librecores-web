@@ -28,9 +28,8 @@ services:
             - '@logger'
             - '@exercise_html_purifier.default'
 
-    Librecores\ProjectRepoBundle\Util\GithubApiService:
+    Librecores\ProjectRepoBundle\Service\GitHub\GitHubApiService:
         arguments:
-            - '@security.token_storage'
             - '@app.cache.githubapi'
             - '@router'
 

@@ -9,7 +9,7 @@ use Librecores\ProjectRepoBundle\Entity\GitSourceRepo;
 use Librecores\ProjectRepoBundle\Entity\SourceRepo;
 use Librecores\ProjectRepoBundle\Repository\CommitRepository;
 use Librecores\ProjectRepoBundle\Repository\ContributorRepository;
-use Librecores\ProjectRepoBundle\Util\GithubApiService;
+use Librecores\ProjectRepoBundle\Service\GitHub\GitHubApiService;
 use Librecores\ProjectRepoBundle\Util\MarkupToHtmlConverter;
 use Librecores\ProjectRepoBundle\Util\ProcessCreator;
 use Psr\Log\LoggerInterface;
@@ -40,7 +40,7 @@ class RepoCrawlerFactory
     private $processCreator;
 
     /**
-     * @var GithubApiService
+     * @var GitHubApiService
      */
     private $ghApi;
 
@@ -65,7 +65,7 @@ class RepoCrawlerFactory
      * @param ContributorRepository  $contributorRepository
      * @param ObjectManager          $manager
      * @param ProcessCreator         $processCreator
-     * @param GithubApiService       $ghApi
+     * @param GitHubApiService       $ghApi
      * @param ProjectMetricsProvider $projectMetricsProvider
      */
     public function __construct(
@@ -75,7 +75,7 @@ class RepoCrawlerFactory
         ContributorRepository $contributorRepository,
         ObjectManager $manager,
         ProcessCreator $processCreator,
-        GithubApiService $ghApi,
+        GitHubApiService $ghApi,
         ProjectMetricsProvider $projectMetricsProvider
     ) {
         $this->markupConverter = $markupConverter;
