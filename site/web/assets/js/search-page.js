@@ -1,6 +1,7 @@
 const $ = require('jquery');
 const instantsearch = require('instantsearch.js').default;
 import algoliasearch from 'algoliasearch'
+import {searchBox} from "instantsearch.js/es/widgets";
 
 function algoliaAutocomplete(algoliaConfig) {
     var client = algoliasearch(algoliaConfig.applicationId, algoliaConfig.searchKey)
@@ -94,7 +95,7 @@ function algoliaInstantSearch(options, searchType) {
 
     // Search Box Configuration
     search.addWidget(
-        instantsearch.widgets.searchBox({
+        searchBox({
             container: '#search-input',
             placeholder: 'Search ...',
         })
