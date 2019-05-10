@@ -1,1 +1,4 @@
+---
+title: Licenses
+---
 # Licensing

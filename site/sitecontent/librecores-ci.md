@@ -1,3 +1,6 @@
+---
+title: LibreCores CI
+---
 # LibreCores CI
 
 [LibreCores CI](https://ci.librecores.org/) is a service, 

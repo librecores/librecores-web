@@ -1,3 +1,6 @@
+---
+title: Community Hub
+---
 # LibreCores Community Hub
 
 What's going on in the Free and Open Silicon community? Where can I ask questions? How do I get involved?

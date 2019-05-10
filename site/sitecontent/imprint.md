@@ -1,3 +1,6 @@
+---
+title: Imprint
+---
 # Imprint
 
 LibreCores is a project of the [Free and Open Source Silicon Foundation](https://www.fossi-foundation.org).

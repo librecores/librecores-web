@@ -1,3 +1,6 @@
+---
+title: Documentation
+---
 # LibreCores Documentation
 
 <img src="/img/freepik/clipboard-sketch.png" align="right" hspace="25" vspace="10" />
