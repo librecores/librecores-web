@@ -2,7 +2,7 @@
 
 namespace Librecores\ProjectRepoBundle\RepoCrawler;
 
-use Librecores\ProjectRepoBundle\Util\GithubApiService;
+use Librecores\ProjectRepoBundle\Service\GitHub\GitHubApiService;
 use Librecores\ProjectRepoBundle\Util\MarkupToHtmlConverter;
 use Librecores\ProjectRepoBundle\Util\ProcessCreator;
 use DateTime;
@@ -38,7 +38,7 @@ class GithubRepoCrawler extends GitRepoCrawler
     private $githubClient;
 
     /**
-     * @var GithubApiService
+     * @var GitHubApiService
      */
     private $githubApi;
 
@@ -64,7 +64,7 @@ class GithubRepoCrawler extends GitRepoCrawler
         ContributorRepository $contributorRepository,
         ObjectManager $manager,
         LoggerInterface $logger,
-        GithubApiService $ghApi,
+        GitHubApiService $ghApi,
         ProjectMetricsProvider $projectMetricsProvider
     ) {
         parent::__construct(

@@ -5,7 +5,6 @@ namespace Librecores\ProjectRepoBundle\Controller;
 use Doctrine\ORM\NonUniqueResultException;
 use Exception;
 use FOS\UserBundle\Model\UserManagerInterface;
-use Github\HttpClient\Message\ResponseMediator;
 use Librecores\ProjectRepoBundle\Doctrine\ProjectMetricsProvider;
 use Librecores\ProjectRepoBundle\Entity\ClassificationHierarchy;
 use Librecores\ProjectRepoBundle\Entity\GitSourceRepo;
@@ -18,8 +17,9 @@ use Librecores\ProjectRepoBundle\Form\Type\ProjectType;
 use Librecores\ProjectRepoBundle\RepoCrawler\GithubRepoCrawler;
 use Librecores\ProjectRepoBundle\Repository\OrganizationRepository;
 use Librecores\ProjectRepoBundle\Repository\ProjectRepository;
+use Librecores\ProjectRepoBundle\Service\GitHub\AuthenticationRequiredException;
 use Librecores\ProjectRepoBundle\Util\Dates;
-use Librecores\ProjectRepoBundle\Util\GithubApiService;
+use Librecores\ProjectRepoBundle\Service\GitHub\GitHubApiService;
 use Librecores\ProjectRepoBundle\Util\QueueDispatcherService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -42,7 +42,7 @@ class ProjectController extends AbstractController
      *
      * @param Request                $request
      *
-     * @param GithubApiService       $githubApiService
+     * @param GitHubApiService       $githubApiService
      * @param QueueDispatcherService $queueDispatcherService
      *
      * @param OrganizationRepository $organizationRepository
@@ -56,7 +56,7 @@ class ProjectController extends AbstractController
      */
     public function newAction(
         Request $request,
-        GithubApiService $githubApiService,
+        GitHubApiService $githubApiService,
         QueueDispatcherService $queueDispatcherService,
         OrganizationRepository $organizationRepository,
         UserManagerInterface $userManager
@@ -65,11 +65,17 @@ class ProjectController extends AbstractController
         $p->setParentUser($this->getUser());
 
         // construct choices for GitHub repository list
+        $isGithubConnected = $this->getUser()->isConnectedToOAuthService('github');
         $githubSourceRepoChoices = [];
-        foreach ($this->getGithubRepos($githubApiService) as $repo) {
-            $githubUsername = $repo['owner']['login'];
-            $fullName = $repo['fullName'];
-            $githubSourceRepoChoices[$githubUsername][$fullName] = $fullName;
+
+        try {
+            foreach ($this->getGithubRepos($githubApiService) as $repo) {
+                $githubUsername = $repo['owner']['login'];
+                $fullName = $repo['fullName'];
+                $githubSourceRepoChoices[$githubUsername][$fullName] = $fullName;
+            }
+        } catch (AuthenticationRequiredException $ignored) {
+            $isGithubConnected = false;
         }
 
         // construct choices for the owner
@@ -123,7 +129,6 @@ class ProjectController extends AbstractController
 
         // only add GitHub repository selection if the user can actually select
         // something
-        $isGithubConnected = $this->getUser()->isConnectedToOAuthService('github');
         $noGithubRepos = empty($githubSourceRepoChoices);
         if ($isGithubConnected && !$noGithubRepos) {
             $formBuilder
@@ -496,21 +501,20 @@ class ProjectController extends AbstractController
     /**
      * Get all GitHub repositories accessible by the current user
      *
-     * @param GithubApiService $githubApiService
+     * @param GitHubApiService $githubApiService
      *
      * @return array
      *
-     * @throws \Http\Client\Exception
      */
-    private function getGithubRepos(GithubApiService $githubApiService)
+    private function getGithubRepos(GitHubApiService $githubApiService)
     {
-        $githubClient = $githubApiService->getAuthenticatedClient();
+        $githubClient = $githubApiService->getAuthenticatedClientForUser($this->getUser());
         if (!$githubClient) {
             return [];
         }
 
         $query = <<<'QUERY'
-query getRepositories($next: String){
+query($next: String){
     viewer {
         repositories(
             privacy: PUBLIC,
@@ -562,16 +566,17 @@ QUERY;
      *
      * @param Project                $p
      * @param FormInterface          $form
-     * @param GithubApiService       $githubApiService
+     * @param GitHubApiService       $githubApiService
      * @param OrganizationRepository $organizationRepository
      * @param UserManagerInterface   $userManager
      *
      * @throws NonUniqueResultException
+     * @throws \Github\Exception\MissingArgumentException
      */
     private function populateProjectFromForm(
         Project $p,
         FormInterface $form,
-        GithubApiService $githubApiService,
+        GitHubApiService $githubApiService,
         OrganizationRepository $organizationRepository,
         UserManagerInterface $userManager
     ) {
@@ -596,12 +601,13 @@ QUERY;
         // Repository is imported from GitHub
         if ($sourceType === 'github') {
             $githubSourceRepoName = $form->get('githubSourceRepo')->getData();
+            $user = $this->getUser();
             if (!empty($githubSourceRepoName)) {
                 [$owner, $name] = explode('/', $githubSourceRepoName);
                 // populate the project with some data from GitHub
-                $githubApiService->populateProject($p, $owner, $name);
+                $githubApiService->populateProject($p, $owner, $name, $user);
                 // and install a webhook to notify us of all pushes to the repo
-                $githubApiService->installHook($p, $owner, $name);
+                $githubApiService->installHook($p, $owner, $name, $user);
             }
         }
 

@@ -12,6 +12,7 @@ use Librecores\ProjectRepoBundle\Entity\User;
 use Librecores\ProjectRepoBundle\Form\Model\ResendConfirmationEmailRequest;
 use Librecores\ProjectRepoBundle\Form\Type\ResendConfirmationEmailRequestType;
 use Librecores\ProjectRepoBundle\Form\Type\UserProfileType;
+use Librecores\ProjectRepoBundle\Security\Core\User\LibreCoresUserProvider;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -107,22 +108,22 @@ class UserController extends AbstractController
             .ucfirst($serviceName)."."
         );
 
-        return $this->connectionsSettingsAction($request);
+        return $this->redirectToRoute('librecores.user.settings.connections');
     }
 
     /**
      * Disconnect the user account from an OAuth service
      *
-     * @param Request                   $request
-     * @param string                    $serviceName
-     * @param AccountConnectorInterface $accountConnector
+     * @param Request                $request
+     * @param string                 $serviceName
+     * @param LibreCoresUserProvider $accountConnector
      *
      * @return Response
      */
     public function disconnectFromOAuthServiceAction(
         Request $request,
         $serviceName,
-        AccountConnectorInterface $accountConnector
+        LibreCoresUserProvider $accountConnector
     ) {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 

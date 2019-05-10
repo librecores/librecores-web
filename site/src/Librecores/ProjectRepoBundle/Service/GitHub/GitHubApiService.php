@@ -1,14 +1,15 @@
 <?php
 
-namespace Librecores\ProjectRepoBundle\Util;
+namespace Librecores\ProjectRepoBundle\Service\GitHub;
 
 use Github;
+use Github\Client;
+use Github\HttpClient\Builder;
 use Librecores\ProjectRepoBundle\Entity\GitSourceRepo;
 use Librecores\ProjectRepoBundle\Entity\Project;
 use Librecores\ProjectRepoBundle\Entity\User;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\Routing\RouterInterface;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 /**
  * Wrap the KnpLabs/php-github-api GitHub API as Symfony service
@@ -21,7 +22,7 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
  *
  * All requests are cached if a cache pool is given.
  */
-class GithubApiService
+class GitHubApiService
 {
     /**
      * @var User
@@ -41,7 +42,7 @@ class GithubApiService
     /**
      * GitHub client API wrapper
      *
-     * @var Github\Client
+     * @var Client
      */
     private $client = null;
 
@@ -63,96 +64,36 @@ class GithubApiService
      *
      * All requests are cached in the given cache pool.
      *
-     * @param TokenStorageInterface $tokenStorage token storage service
-     * @param AdapterInterface      $cachePool    the cache pool to use for all requests
-     * @param RouterInterface       $router
+     * @param AdapterInterface $cachePool the cache pool to use for all requests
+     * @param RouterInterface  $router
      */
     public function __construct(
-        TokenStorageInterface $tokenStorage,
         AdapterInterface $cachePool,
         RouterInterface $router
     ) {
-        $token = $tokenStorage->getToken();
-        if (null !== $token) {
-            $this->user = $token->getUser();
-        }
-
         $this->cachePool = $cachePool;
         $this->router = $router;
     }
 
     /**
-     * Get a (possibly unauthenticated) GitHub API client object
+     * Get a GitHub API client object
      *
      * If a valid user is available, an authenticated client object is returned.
      * See getAuthenticatedClient() for details what this means. Otherwise
      * an unauthenticated client is returned, allowing the application to make
      * anonymous API calls.
      *
-     * @return Github\Client a GitHub client
+     * @return Client a GitHub client
      */
     public function getClient()
     {
         if (!$this->client) {
-            $this->initClient();
+            $this->client = $this->createClient();
+            $this->client->addCache($this->cachePool);
         }
 
         return $this->client;
     }
-
-    /**
-     * Get an authenticated GitHub API client which acts on behalf
-     * of the current user
-     *
-     * @return Github\Client|NULL an authenticated GitHub client, or NULL
-     */
-    public function getAuthenticatedClient()
-    {
-        if (!$this->client) {
-            $this->initClient();
-        }
-
-        if ($this->clientIsAuthenticated) {
-            return $this->client;
-        }
-
-        return null;
-    }
-
-    /**
-     * Get an authenticated GitHub API client for a user
-     *
-     * The client acts on behalf of the user, and has permissions to
-     * all resources the user has, limited by the granted scope.
-     * The default requested scope is configured in config.yml.
-     * If no authenticated client can be returned (e.g. because no user
-     * information is available, or the user has not connected their GitHub
-     * account), NULL is returned.
-     *
-     * @param User $user
-     *
-     * @return Github\Client|NULL an authenticated GitHub client, or NULL
-     */
-    public function getAuthenticatedClientForUser(User $user)
-    {
-        $client = new Github\Client();
-        $client->addCache($this->cachePool);
-
-        // try to authenticate as user with its access token
-        if (null !== $user && $user->isConnectedToOAuthService('github')) {
-            $oauthAccessToken = $user->getGithubOAuthAccessToken();
-            $client->authenticate(
-                $oauthAccessToken,
-                null,
-                Github\Client::AUTH_URL_TOKEN
-            );
-
-            return $client;
-        }
-
-        return null;
-    }
-
 
     /**
      * Populate a Project with data obtained from the GitHub API
@@ -160,13 +101,16 @@ class GithubApiService
      * @param Project $project
      * @param string  $owner
      * @param string  $repo
+     * @param User    $user
      */
     public function populateProject(
         Project $project,
         string $owner,
-        string $repo
+        string $repo,
+        User $user
     ) {
-        $repo = $this->getClient()->repo()->show($owner, $repo);
+        $repo = $this->getAuthenticatedClientForUser($user)
+            ->repo()->show($owner, $repo);
 
         if ($repo['has_issues']) {
             // the web URL for issues it not part of the API response
@@ -187,13 +131,50 @@ class GithubApiService
     }
 
     /**
+     * Get an authenticated GitHub API client for a user
+     *
+     * The client acts on behalf of the user, and has permissions to
+     * all resources the user has, limited by the granted scope.
+     * The default requested scope is configured in config.yml.
+     * If no authenticated client can be returned (e.g. because no user
+     * information is available, or the user has not connected their GitHub
+     * account), NULL is returned.
+     *
+     * @param User $user
+     *
+     * @return Client|NULL an authenticated GitHub client, or NULL
+     */
+    public function getAuthenticatedClientForUser(User $user)
+    {
+        $client = $this->createClient();
+        $client->addCache($this->cachePool);
+
+        // try to authenticate as user with its access token
+        if (null !== $user && $user->isConnectedToOAuthService('github')) {
+            $oauthAccessToken = $user->getGithubOAuthAccessToken();
+            $client->authenticate(
+                $oauthAccessToken,
+                null,
+                Client::AUTH_URL_TOKEN
+            );
+
+            return $client;
+        }
+
+        return null;
+    }
+
+    /**
      * Install a webhook on a GitHub repository for a given project
      *
      * @param Project $project
      * @param string  $owner
      * @param string  $repo
+     * @param User    $user
+     *
+     * @throws Github\Exception\MissingArgumentException
      */
-    public function installHook(Project $project, string $owner, string $repo)
+    public function installHook(Project $project, string $owner, string $repo, User $user)
     {
         $webhookUrl = $this->router->generate(
             'librecores_project_repo_project_update',
@@ -213,27 +194,12 @@ class GithubApiService
             'events' => ['push'],
         ];
 
-        $this->getAuthenticatedClient()->repo()
+        $this->getAuthenticatedClientForUser($user)->repo()
             ->hooks()->create($owner, $repo, $params);
     }
 
-    /**
-     * Initialize the client
-     *
-     * @return boolean
-     */
-    protected function initClient()
+    private function createClient(): Client
     {
-        $this->client = $this->getAuthenticatedClientForUser($this->user);
-
-        if (null !== $this->client) {
-            $this->clientIsAuthenticated = true;
-        } else {
-            $this->client = new Github\Client();
-            $this->client->addCache($this->cachePool);
-            $this->clientIsAuthenticated = false;
-        }
-
-        return true;
+        return new GithubClient();
     }
 }
