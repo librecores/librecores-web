@@ -1,7 +1,7 @@
 const $ = require('jquery');
-const instantsearch = require('instantsearch.js').default;
-import algoliasearch from 'algoliasearch'
-import {searchBox} from "instantsearch.js/es/widgets";
+import instantsearch from 'instantsearch.js'
+import algoliasearch from 'algoliasearch/lite';
+import {searchBox, hits, pagination, hierarchicalMenu, stats} from "instantsearch.js/es/widgets";
 
 function algoliaAutocomplete(algoliaConfig) {
     var client = algoliasearch(algoliaConfig.applicationId, algoliaConfig.searchKey)
@@ -96,15 +96,15 @@ function algoliaInstantSearch(options, searchType) {
     // Search Box Configuration
     search.addWidget(
         searchBox({
-            container: '#search-input',
+            container: "#search-input",
             placeholder: 'Search ...',
         })
     );
 
     // Search Result Configuration
     search.addWidget(
-        instantsearch.widgets.hits({
-            container: '#hits',
+        hits({
+            container: "#hits",
             templates: {
                 item: getTemplate(searchType),
                 empty: '<h2>Nothing found :-( Maybe try another search keyword?</h2>',
@@ -126,15 +126,15 @@ function algoliaInstantSearch(options, searchType) {
 
     // Pagination
     search.addWidget(
-        instantsearch.widgets.pagination({
+        pagination({
             container: '#pagination',
             scrollTo: '#search-input',
         })
     );
 
     search.addWidget(
-        instantsearch.widgets.stats({
-            container: '#stats',
+        stats({
+            container: "#stats",
             transform: {
 
             },
@@ -143,8 +143,8 @@ function algoliaInstantSearch(options, searchType) {
 
     if(searchType === 'projects') {
         search.addWidget(
-            instantsearch.widgets.hierarchicalMenu({
-                container: '#hierarchical-categories',
+            hierarchicalMenu({
+                container: "#hierarchical-categories",
                 attributes: [
                     'hierarchicalCategories.lvl0',
                     'hierarchicalCategories.lvl1',

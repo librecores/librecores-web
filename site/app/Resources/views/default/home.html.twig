@@ -226,24 +226,8 @@
 
 {% block javascripts %}
   {{ parent() }}
-  {% javascripts filter="?jsqueeze"
-    "assets/js/algoliasearch.min.js"
-    "assets/js/autocomplete.min.js"
-    "assets/js/search.js"
-  %}
-    <script src="{{ asset_url }}"></script>
-  {% endjavascripts %}
+  <script src="{{ asset('build/search-page.js') }}"></script>
 {% endblock %}
 
 {% block pagejs %}
-{# do not use autofocus attribute to work around FF bug 712130 (FOUC) #}
-$(function() {
-  algoliaConfig = {
-    applicationId: '{{ algolia_app_id }}',
-    searchKey: '{{ algolia_search_key }}',
-    searchPrefix: '{{ algolia_search_prefix }}'
-  }
-  $("#search-form-input").focus();
-  algoliaAutocomplete(algoliaConfig);
-});
 {% endblock %}

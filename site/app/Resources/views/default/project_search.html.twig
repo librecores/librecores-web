@@ -8,10 +8,6 @@
 
 {% block stylesheets %}
   {{ parent() }}
-  {% stylesheets filter="cssrewrite"
-  "assets/css/instantsearch.min.css" %}
-  <link rel="stylesheet" href="{{ asset_url }}"/>
-  {% endstylesheets %}
 {% endblock %}
 
 {% block content %}
@@ -23,7 +19,7 @@
         </div>
         <div class="col-sm-9">
           <div class="input-group" style="width:100%">
-            <input type="search" id="search-input" placeholder="Search for ..." class="form-control">
+            <div id="search-input" placeholder="Search for ..." class="form-control"></div>
             <span class="input-group-btn">
               <button class="btn btn-default search-query" type="submit">
                 <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
