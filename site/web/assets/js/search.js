@@ -1,7 +1,3 @@
-const $ = require('jquery');
-const instantsearch = require('instantsearch.js').default;
-import algoliasearch from 'algoliasearch'
-
 function algoliaAutocomplete(algoliaConfig) {
   var client = algoliasearch(algoliaConfig.applicationId, algoliaConfig.searchKey)
   var projects = client.initIndex(algoliaConfig.searchPrefix + 'projects');
@@ -17,8 +13,8 @@ function algoliaAutocomplete(algoliaConfig) {
         header: '<div class="aa-suggestions-category">Projects</div>',
         suggestion: function(suggestion) {
           return '<span>' +
-            suggestion._highlightResult.name.value + '</span><span>'
-            + suggestion._highlightResult.displayName.value + '</span>';
+              suggestion._highlightResult.name.value + '</span><span>'
+              + suggestion._highlightResult.displayName.value + '</span>';
         }
       }
     },
@@ -29,8 +25,8 @@ function algoliaAutocomplete(algoliaConfig) {
         header: '<div class="aa-suggestions-category">Organizations</div>',
         suggestion: function(suggestion) {
           return '<span>' +
-            suggestion._highlightResult.name.value + '</span>  <span>'
-            + suggestion._highlightResult.displayName.value + '</span>';
+              suggestion._highlightResult.name.value + '</span>  <span>'
+              + suggestion._highlightResult.displayName.value + '</span>';
         }
       }
     },
@@ -41,10 +37,10 @@ function algoliaAutocomplete(algoliaConfig) {
         header: '<div class="aa-suggestions-category">Users</div>',
         suggestion: function(suggestion) {
           var name = suggestion._highlightResult.name ?
-            suggestion._highlightResult.username.value : suggestion._highlightResult.name.value;
+              suggestion._highlightResult.username.value : suggestion._highlightResult.name.value;
           return '<span>' +
-             name + '</span>  <span>'
-            + suggestion._highlightResult.username.value + '</span>';
+              name + '</span>  <span>'
+              + suggestion._highlightResult.username.value + '</span>';
         }
       }
     }
@@ -70,20 +66,19 @@ function searchFunctions() {
     $('#type').val($(this).attr('id'));
     $('#q').val($('.ais-search-box--input').val());
     $('form').submit();
-  });
+  })
+
   $('.search-query').on('click',function(event){
     event.preventDefault();
     $('#q').val($('.ais-search-box--input').val());
     $('form').submit();
-  });
+  })
 }
 // Algolia instantsearch configuration
 function algoliaInstantSearch(options, searchType) {
   var search = instantsearch({
-    searchClient: algoliasearch(
-        options.appId,
-        options.apiKey,
-    ),
+    appId: options.appId,
+    apiKey: options.apiKey,
     indexName: options.searchPrefix + options.indexName,
     routing: true,
     searchParameters: {
@@ -94,68 +89,68 @@ function algoliaInstantSearch(options, searchType) {
 
   // Search Box Configuration
   search.addWidget(
-    instantsearch.widgets.searchBox({
-      container: '#search-input',
-      placeholder: 'Search ...',
-    })
+      instantsearch.widgets.searchBox({
+        container: '#search-input',
+        placeholder: 'Search ...',
+      })
   );
 
   // Search Result Configuration
   search.addWidget(
-    instantsearch.widgets.hits({
-      container: '#hits',
-      templates: {
-        item: getTemplate(searchType),
-        empty: '<h2>Nothing found :-( Maybe try another search keyword?</h2>',
-      },
-      transformData: {
-        item : function item(item) {
-          if(searchType === 'projects') {
-            item.activityDetails = getTimeDiff(item);
-            item.creationDetails = getFormattedDate(item.dateAdded.date);
-          }
-          if(searchType === 'user') {
-            item.createdAt.date = getFormattedDate(item.createdAt.date)
-          }
-          return item;
+      instantsearch.widgets.hits({
+        container: '#hits',
+        templates: {
+          item: getTemplate(searchType),
+          empty: '<h2>Nothing found :-( Maybe try another search keyword?</h2>',
         },
-      },
-    })
+        transformData: {
+          item : function item(item) {
+            if(searchType === 'projects') {
+              item.activityDetails = getTimeDiff(item);
+              item.creationDetails = getFormattedDate(item.dateAdded.date);
+            }
+            if(searchType === 'user') {
+              item.createdAt.date = getFormattedDate(item.createdAt.date)
+            }
+            return item;
+          },
+        },
+      })
   );
 
   // Pagination
   search.addWidget(
-    instantsearch.widgets.pagination({
-      container: '#pagination',
-      scrollTo: '#search-input',
-    })
+      instantsearch.widgets.pagination({
+        container: '#pagination',
+        scrollTo: '#search-input',
+      })
   );
 
   search.addWidget(
-    instantsearch.widgets.stats({
-      container: '#stats',
-      transform: {
+      instantsearch.widgets.stats({
+        container: '#stats',
+        transform: {
 
-      },
-    })
+        },
+      })
   );
 
   if(searchType === 'projects') {
     search.addWidget(
-      instantsearch.widgets.hierarchicalMenu({
-        container: '#hierarchical-categories',
-        attributes: [
-          'hierarchicalCategories.lvl0',
-          'hierarchicalCategories.lvl1',
-          'hierarchicalCategories.lvl2',
-          'hierarchicalCategories.lvl3'
-        ],
-        separator: '::',
-        templates: {
-          header: '<h3>Classifications</h3>',
-          item:  '<a href="{{url}}" class="facet-item {{#isRefined}}active{{/isRefined}}"><span class="facet-name"> {{label}}</span class="facet-name"><span class="ais-hierarchical-menu--count">{{count}}</span></a>'
-        },
-      })
+        instantsearch.widgets.hierarchicalMenu({
+          container: '#hierarchical-categories',
+          attributes: [
+            'hierarchicalCategories.lvl0',
+            'hierarchicalCategories.lvl1',
+            'hierarchicalCategories.lvl2',
+            'hierarchicalCategories.lvl3'
+          ],
+          separator: '::',
+          templates: {
+            header: '<h3>Classifications</h3>',
+            item:  '<a href="{{url}}" class="facet-item {{#isRefined}}active{{/isRefined}}"><span class="facet-name"> {{label}}</span class="facet-name"><span class="ais-hierarchical-menu--count">{{count}}</span></a>'
+          },
+        })
     );
   }
 
@@ -199,18 +194,3 @@ function getFormattedDate(item){
   var formattedDate = date.getFullYear() + '-' + (date.getMonth()+1) + '-' + date.getDate();
   return formattedDate;
 }
-
-$(function() {
-  searchFunctions();
-  let options =  {
-    appId: 'M6YHTVYGD9',
-    apiKey: '4eaa4016f4a3a3147a116ba139c9919e',
-    indexName: 'projects',
-    searchPrefix: 'dev_',
-    searchParameters: {
-      hitsPerPage: 10,
-    },
-  };
-  // Algolia instantsearch configuration
-  algoliaInstantSearch(options, options.indexName);
-});
