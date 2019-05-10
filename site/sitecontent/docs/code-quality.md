@@ -1,3 +1,6 @@
+---
+title: Code Quality
+---
 # How do we calculate the project quality?
 
 The quality score you see on every project page is calculated from

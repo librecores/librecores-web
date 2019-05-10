@@ -1,3 +1,6 @@
+---
+title: About LibreCores
+---
 # About LibreCores
 
 LibreCores is your gateway to free and open source digital designs and other components that you can use and re-use in your digital designs.

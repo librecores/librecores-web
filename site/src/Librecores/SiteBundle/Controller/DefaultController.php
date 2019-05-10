@@ -5,6 +5,7 @@ namespace Librecores\SiteBundle\Controller;
 use Librecores\ProjectRepoBundle\Form\Model\SearchQuery;
 use Librecores\ProjectRepoBundle\Form\Type\SearchQueryType;
 use SimplePie;
+use Spatie\YamlFrontMatter\YamlFrontMatter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -72,14 +73,20 @@ class DefaultController extends Controller
             $page .= '/index';
         }
 
-        if (!file_exists("$siteContentRoot/$page.md")) {
+        $file = "$siteContentRoot/$page.md";
+        if (!file_exists($file)) {
             throw $this->createNotFoundException('Page not found.');
         }
+
+        $document = YamlFrontMatter::parseFile($file);
 
         // show the page
         return $this->render(
             'LibrecoresSiteBundle:Default:contentwrapper.html.twig',
-            array('page' => "@site_content/$page.md")
+            [
+                'title' => $document->matter('title', 'LibreCores'),
+                'content' => $document->body(),
+            ]
         );
     }
 

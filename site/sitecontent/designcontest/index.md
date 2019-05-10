@@ -1,3 +1,6 @@
+---
+title: Student Design Contest
+---
 # LibreCores Student Design Contest
 
 The LibreCores Student Design Contest is an annual contest among high-school and college-level students which awards work advancing the Free and Open Source Silicon ecosystem.
