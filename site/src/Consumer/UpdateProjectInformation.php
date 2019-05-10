@@ -101,7 +101,7 @@ class UpdateProjectInformation implements ConsumerInterface
             $project->setInProcessing(false);
 
             // persist all changes made to to DB
-            $this->orm->getManager()->flush();
+            $this->entityManager->flush();
         } catch (DBALException $e) {
             // We assume we got a database exception. Most likely the connection to
             // the DB server died for some reason (probably due to a timeout).
