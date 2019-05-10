@@ -22,7 +22,8 @@ Encore
     './web/assets/css/bootstrap-social.css',
     './web/assets/css/font-awesome.min.css',
     './web/assets/css/librecores.css'])
-    .addEntry('app-js','./web/assets/js/livestamp.js')
+    .addEntry('app-js',['./web/assets/js/livestamp.js'])
+    .addEntry('search', ['./web/assets/js/search.js'])
     //.addEntry('page1', './assets/js/page1.js')
     //.addEntry('page2', './assets/js/page2.js')
 

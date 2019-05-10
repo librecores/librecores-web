@@ -8,5 +8,8 @@
     "popper.js": "^1.15.0",
     "sass-loader": "^7.1.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "algoliasearch": "^3.33.0",
+    "instantsearch.js": "^3.4.0"
+  }
 }

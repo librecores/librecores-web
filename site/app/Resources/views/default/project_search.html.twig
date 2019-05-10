@@ -119,27 +119,8 @@
 
   {% block javascripts %}
   {{ parent() }}
-  {% javascripts
-  'assets/js/instantsearch.js'
-  'assets/js/search.js'
-  filter="?jsqueeze" %}
-  <script src="{{ asset_url }}"></script>
-  {% endjavascripts %}
+  <script src="{{ asset('build/search.js') }}"></script>
 {% endblock %}
 
 {% block pagejs %}
-  $(function() {
-  searchFunctions();
-  options =  {
-    appId: '{{ algolia_app_id }}',
-    apiKey: '{{ algolia_search_key }}',
-    indexName: '{{ searchType }}',
-    searchPrefix: '{{ algolia_search_prefix }}',
-    searchParameters: {
-      hitsPerPage: 10,
-    },
-  }
-  // Algolia instantsearch configuration
-  algoliaInstantSearch(options, '{{ searchType }}');
-  });
 {% endblock %}

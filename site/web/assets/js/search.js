@@ -1,3 +1,7 @@
+const $ = require('jquery');
+const instantsearch = require('instantsearch.js').default;
+import algoliasearch from 'algoliasearch'
+
 function algoliaAutocomplete(algoliaConfig) {
   var client = algoliasearch(algoliaConfig.applicationId, algoliaConfig.searchKey)
   var projects = client.initIndex(algoliaConfig.searchPrefix + 'projects');
@@ -66,19 +70,20 @@ function searchFunctions() {
     $('#type').val($(this).attr('id'));
     $('#q').val($('.ais-search-box--input').val());
     $('form').submit();
-  })
-
+  });
   $('.search-query').on('click',function(event){
     event.preventDefault();
     $('#q').val($('.ais-search-box--input').val());
     $('form').submit();
-  })
+  });
 }
 // Algolia instantsearch configuration
 function algoliaInstantSearch(options, searchType) {
   var search = instantsearch({
-    appId: options.appId,
-    apiKey: options.apiKey,
+    searchClient: algoliasearch(
+        options.appId,
+        options.apiKey,
+    ),
     indexName: options.searchPrefix + options.indexName,
     routing: true,
     searchParameters: {
@@ -194,3 +199,18 @@ function getFormattedDate(item){
   var formattedDate = date.getFullYear() + '-' + (date.getMonth()+1) + '-' + date.getDate();
   return formattedDate;
 }
+
+$(function() {
+  searchFunctions();
+  let options =  {
+    appId: 'M6YHTVYGD9',
+    apiKey: '4eaa4016f4a3a3147a116ba139c9919e',
+    indexName: 'projects',
+    searchPrefix: 'dev_',
+    searchParameters: {
+      hitsPerPage: 10,
+    },
+  };
+  // Algolia instantsearch configuration
+  algoliaInstantSearch(options, options.indexName);
+});
