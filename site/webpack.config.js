@@ -24,6 +24,9 @@ Encore
     './web/assets/css/librecores.css'])
     .addEntry('app-js',['./web/assets/js/livestamp.js'])
     .addEntry('search', ['./web/assets/js/search-page.js'])
+    .addEntry('project-view', ['./web/assets/js/metrics.js',
+    './web/assets/js/project-auto-refresh.js',
+    './web/assets/css/chartist.css'])
     //.addEntry('page1', './assets/js/page1.js')
     //.addEntry('page2', './assets/js/page2.js')
 

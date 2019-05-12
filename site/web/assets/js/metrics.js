@@ -1,3 +1,6 @@
+const $ = require('jquery');
+import Chartist from 'chartist';
+
 $(function () {
   $('[data-toggle="tooltip"]').tooltip();
   var graphRendered;
