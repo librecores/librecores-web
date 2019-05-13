@@ -201,6 +201,8 @@ function getFormattedDate(item){
     return formattedDate;
 }
 
+
+// Search-page specific javascript
 $(function() {
     searchFunctions();
     let options =  {
