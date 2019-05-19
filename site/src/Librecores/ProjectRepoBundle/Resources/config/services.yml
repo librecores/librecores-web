@@ -33,7 +33,7 @@ services:
             - '@app.cache.githubapi'
             - '@router'
 
-    Librecores\ProjectRepoBundle\Util\QueueDispatcherService:
+    Librecores\ProjectRepoBundle\Service\QueueDispatcherService:
         calls:
             - [setContainer, ['@service_container']]
 

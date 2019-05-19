@@ -20,7 +20,7 @@ use Librecores\ProjectRepoBundle\Repository\ProjectRepository;
 use Librecores\ProjectRepoBundle\Service\GitHub\AuthenticationRequiredException;
 use Librecores\ProjectRepoBundle\Util\Dates;
 use Librecores\ProjectRepoBundle\Service\GitHub\GitHubApiService;
-use Librecores\ProjectRepoBundle\Util\QueueDispatcherService;
+use Librecores\ProjectRepoBundle\Service\QueueDispatcherService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
