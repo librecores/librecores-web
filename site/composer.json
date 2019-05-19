@@ -46,8 +46,9 @@
 		"sentry/sentry-symfony" : "^2.0",
 		"php-http/httplug-bundle" : "^1.10",
 		"algolia/search-bundle": "^3.1",
-		"spatie/yaml-front-matter": "^2.0"
-	},
+		"spatie/yaml-front-matter": "^2.0",
+        "ext-json": "*"
+    },
 	"scripts" : {
 		"post-install-cmd" : [
 			"Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
