@@ -44,54 +44,62 @@
         wait: true
 
     - name: "Staging: Provision EC2 instance"
-      ec2:
-         instance_type: t2.micro
+      ec2_instance:
+         name: staging
+         instance_type: t3.micro
+         # don't automatically buy new CPU credits if boost pool is depleted
+         cpu_credit_specification: standard
          region: "{{ aws_region }}"
-         image: "{{ ami_id }}"
+         image_id: "{{ ami_id }}"
          key_name: librecores-staging
-         group: librecores-staging-web
+         ebs_optimized: yes
+         security_group: librecores-staging-web
          wait: true
-         exact_count: 1
-         count_tag:
-            group: librecores-staging
-         instance_tags:
+         filters:
+           tag:group: librecores-staging
+           instance-state-name: "running"
+         tags:
             group: librecores-staging
       register: instance_staging_ec2_web
 
     - name: "Staging: Create and attach EBS volume to instance"
       ec2_vol:
-        instance: "{{ instance_staging_ec2_web.tagged_instances[0].id }}"
+        name: librecores-staging-data
+        instance: "{{ instance_staging_ec2_web.instances[0].instance_id }}"
         region: "{{ aws_region }}"
+        # The device name is actually not used on Linux with Nitro-based EC2
+        # instances, like t3 instances. They are called /dev/nvm* instead.
         device_name: /dev/sdf
-        volume_size: 40 # GB
+        volume_size: "40" # GiB
         volume_type: gp2 # general-purpose SSD
         encrypted: no
         delete_on_termination: no
+      register: vol_staging_ec2_web
 
     - name: "Staging: Assign Elastic IP (public)"
       ec2_eip:
         region: "{{ aws_region }}"
-        public_ip: "{{ ip_public }}"
+        public_ip: "{{ instance_staging_ec2_web.instances[0].public_ip_address }}"
         reuse_existing_ip_allowed: yes
         state: present
-        device_id: "{{ instance_staging_ec2_web.tagged_instances[0].id }}"
+        device_id: "{{ instance_staging_ec2_web.instances[0].instance_id }}"
         in_vpc: yes
+      register: ip_staging_ec2_web
 
     - name: Delete any existing SSH key for that host
-      shell: ssh-keygen -R {{ ip_public }}
+      shell: ssh-keygen -R {{ ip_staging_ec2_web.public_ip }}
+
+    - name: Write the new ec2 instance host key to known hosts
+      connection: local
+      shell: "ssh-keyscan -H {{ ip_staging_ec2_web.public_ip }} >> ~/.ssh/known_hosts"
 
     - name: Wait for SSH
       wait_for:
-        host: "{{ ip_public }}"
+        host: "{{ ip_staging_ec2_web.public_ip }}"
         port: 22
         delay: 10
         timeout: 320
         state: started
-
-    - name: Refresh the ec2.py cache
-      # XXX: Find a way to make this work when not calling ansible from the
-      # top source directory.
-      shell: ./ansible/ec2.py --refresh-cache
 
     - name: Refresh inventory
       meta: refresh_inventory
@@ -116,11 +124,11 @@
   become: true
   tasks:
     - name: Format disk
-      filesystem: fstype=ext4 dev=/dev/xvdf
+      filesystem: fstype=ext4 dev=/dev/nvme1n1
     - name: Mount volume
       mount:
         name: /data
-        src: /dev/xvdf
+        src: /dev/nvme1n1
         opts: noatime
         fstype: ext4
         state: mounted

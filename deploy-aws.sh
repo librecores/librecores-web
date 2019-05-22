@@ -120,6 +120,8 @@ fi
 # Disable host key checking in Ansible's SSH
 export ANSIBLE_HOST_KEY_CHECKING=False
 
+export ANSIBLE_CFG=$SCRIPT_DIR/ansible/ansible.cfg
+
 environment=$1
 action=$2
 
@@ -135,12 +137,19 @@ case $environment in
 esac
 
 case $action in
+  show-inventory)
+    ensure_aws_creds
+    ansible-inventory \
+      -i $SCRIPT_DIR/ansible/aws_ec2.yml \
+      --playbook-dir $SCRIPT_DIR/ansible \
+      --list
+    ;;
   provision)
     ensure_aws_creds
     ensure_ssh_keys $environment
     ansible-playbook \
       --private-key $HOME/.ssh/librecores-$environment \
-      -i $SCRIPT_DIR/ansible/ec2.py \
+      -i $SCRIPT_DIR/ansible/aws_ec2.yml \
       $ANSIBLE_EXTRA_ARGS \
       ansible/$environment-aws-provision.yml
     ;;

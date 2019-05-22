@@ -1,0 +1,9 @@
+plugin: aws_ec2
+regions:
+  # an optimization to make the inventory listing faster; can be omitted
+  - eu-west-1
+
+keyed_groups:
+  # Add hosts to tag_Name_Value groups for each Name/Value tag pair
+  - prefix: tag
+    key: tags

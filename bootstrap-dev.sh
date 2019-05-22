@@ -45,7 +45,7 @@ DLDIR=$(mktemp -d)
 echo Installing dependencies. You may be prompted for a password by sudo.
 case $(lsb_release -is) in
   Ubuntu)
-    sudo apt-get install virtualbox nfs-kernel-server curl python3-sphinx-rtd-theme python3-sphinx
+    sudo apt-get install virtualbox nfs-kernel-server curl python3-sphinx-rtd-theme python3-sphinx python3-boto3 python3-boto
 
     if [ $INSTALL_VAGRANT = 1 ]; then
       curl -L https://releases.hashicorp.com/vagrant/${VAGRANT_VERSION}/vagrant_${VAGRANT_VERSION}_$(uname -m).deb > "$DLDIR/vagrant.deb"
@@ -62,7 +62,7 @@ case $(lsb_release -is) in
     fi
     ;;
   *SUSE*)
-    sudo zypper install -y virtualbox nfs-kernel-server curl python3-sphinx_rtd_theme python3-Sphinx
+    sudo zypper install -y virtualbox nfs-kernel-server curl python3-sphinx_rtd_theme python3-Sphinx python3-boto3 python3-boto
 
     if [ $INSTALL_VAGRANT = 1 ]; then
       curl -L https://releases.hashicorp.com/vagrant/${VAGRANT_VERSION}/vagrant_${VAGRANT_VERSION}_$(uname -m).rpm > "$DLDIR/vagrant.rpm"
