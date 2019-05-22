@@ -44,7 +44,7 @@ Available ACTIONs:
     instances and firewall settings.
 
   deploy
-    Deploy current code to stage.librecores.org
+    Deploy current code
 
   resetdata
     DANGEROUS: Resets all data in the database.
