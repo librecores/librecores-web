@@ -1,3 +1,7 @@
+import $ from 'jquery'
+import 'bootstrap'
+import trumbowyg from 'trumbowyg'
+
 var insertClassification = function (classificationDetails) {
   var count = 1;
   for (var i = 0; i < classificationDetails.length; i++) {
@@ -136,3 +140,41 @@ var insertClassification = function (classificationDetails) {
     removeClassification()
   })
 }
+
+// trumbowyg
+$(document).ready(function(){
+  $.trumbowyg.svgPath = '/img/trumbowyg-icons.svg';
+  var trumbowyg_config = {
+    btns: [
+      ['formatting'],
+      'btnGrp-semantic',
+      ['link'],
+      ['insertImage'],
+      'btnGrp-lists',
+      ['horizontalRule'],
+      ['removeformat'],
+      ['viewHTML'],
+      ['fullscreen']
+    ]
+  };
+
+  $('#project_descriptionText').trumbowyg(trumbowyg_config);
+  $('#project_licenseText').trumbowyg(trumbowyg_config);
+
+  /* toggle text boxes in respect to the auto update settings */
+  $('#project_descriptionTextAutoUpdate').on('change', function() {
+    var au = $('input[name="project[descriptionTextAutoUpdate]"]:checked').val() == '1';
+    var el = $('#descriptionText_div');
+    au ? el.hide() : el.show();
+  });
+  $('#project_licenseTextAutoUpdate').on('change', function() {
+    var au = $('input[name="project[licenseTextAutoUpdate]"]:checked').val() == '1';
+    var el = $('#licenseText_div');
+    au ? el.hide() : el.show();
+  });
+
+  // insert classification
+  // classification hierarchy data
+  // var classificationDetails = {{ classificationHierarchy|json_encode|raw }}
+  // insertClassification(classificationDetails);
+});

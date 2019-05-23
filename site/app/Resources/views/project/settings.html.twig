@@ -2,22 +2,13 @@
 
 {# include trumbowyg CSS/JS #}
 {% block stylesheets %}
-  {% stylesheets filter="scssphp,cssrewrite"
-      "assets/scss/trumbowyg.scss"
-  %}
-    <link rel="stylesheet" href="{{ asset_url }}" />
-  {% endstylesheets %}
+  <link  rel="stylesheet" href="{{ asset('build/trumbowyg.css') }}">
   {{ parent() }}
 {% endblock %}
 
 {% block javascripts %}
   {{ parent() }}
-  {% javascripts filter="?jsqueeze"
-    "assets/js/trumbowyg.min.js"
-    "assets/js/classification.js"
-  %}
-    <script src="{{ asset_url }}"></script>
-  {% endjavascripts %}
+  <script src="{{ asset('build/project_settings.js') }}"></script>
 {% endblock %}
 
 
@@ -174,42 +165,4 @@
 {% endblock %}
 
 {% block pagejs %}
-
-$(document).ready(function(){
-  $.trumbowyg.svgPath = '/img/trumbowyg-icons.svg';
-
-  var trumbowyg_config = {
-    btns: [
-      ['formatting'],
-      'btnGrp-semantic',
-      ['link'],
-      ['insertImage'],
-      'btnGrp-lists',
-      ['horizontalRule'],
-      ['removeformat'],
-      ['viewHTML'],
-      ['fullscreen']
-    ]
-  };
-
-  $('#{{ form.descriptionText.vars.id }}').trumbowyg(trumbowyg_config);
-  $('#{{ form.licenseText.vars.id }}').trumbowyg(trumbowyg_config);
-
-  /* toggle text boxes in respect to the auto update settings */
-  $('#{{ form.descriptionTextAutoUpdate.vars.id }}').on('change', function() {
-    var au = $('input[name="{{ form.descriptionTextAutoUpdate.vars.full_name }}"]:checked').val() == '1';
-    var el = $('#descriptionText_div');
-    au ? el.hide() : el.show();
-  });
-  $('#{{ form.licenseTextAutoUpdate.vars.id }}').on('change', function() {
-    var au = $('input[name="{{ form.licenseTextAutoUpdate.vars.full_name }}"]:checked').val() == '1';
-    var el = $('#licenseText_div');
-    au ? el.hide() : el.show();
-  });
-
-  // insert classification
-  // classification hierarchy data
-  var classificationDetails = {{ classificationHierarchy|json_encode|raw }}
-  insertClassification(classificationDetails);
-});
 {% endblock %}

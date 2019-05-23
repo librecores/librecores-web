@@ -17,18 +17,27 @@ Encore
      * Each entry will result in one JavaScript file (e.g. app.js)
      * and one CSS file (e.g. app.css) if you JavaScript imports CSS.
      */
+    //css entries
     .addStyleEntry('app-css', ['./web/assets/scss/librecores.scss',
-    './web/assets/scss/bootstrap-librecores.scss',
-    './web/assets/css/bootstrap-social.css',
-    './web/assets/css/font-awesome.min.css',
-    './web/assets/css/librecores.css'])
+        './web/assets/scss/bootstrap-librecores.scss',
+        './web/assets/css/bootstrap-social.css',
+        './web/assets/css/font-awesome.min.css',
+        './web/assets/css/librecores.css'])
+    .addStyleEntry('trumbowyg', ['./web/assets/scss/trumbowyg.scss'])
+    .addStyleEntry('project_new_css','./web/assets/css/bootstrap-select.css')
+
+    //js entries
     .addEntry('app-js',['./web/assets/js/livestamp.js'])
+
+    //page specific js
     .addEntry('search', ['./web/assets/js/search-page.js'])
     .addEntry('project-view', ['./web/assets/js/metrics.js',
-    './web/assets/js/project-auto-refresh.js',
-    './web/assets/css/chartist.css'])
-    //.addEntry('page1', './assets/js/page1.js')
-    //.addEntry('page2', './assets/js/page2.js')
+        './web/assets/js/project-auto-refresh.js',
+        './web/assets/css/chartist.css'])
+    .addEntry('project_settings', './web/assets/js/classification.js')
+    .addEntry('project_new', ['./web/assets/js/bootstrap-select.js',
+        './web/assets/js/project_new.js'])
+
 
     // will require an extra script tag for runtime.js
     // but, you probably want this, unless you're building a single-page app
