@@ -11,7 +11,7 @@
 {% endblock %}
 
 {% block content %}
-  <form name="search-form" method="get" action="{{ path('librecores_project_repo_project_search') }}">
+  <form class="search-form" method="get" action="{{ path('librecores_project_repo_project_search') }}">
     <div class="librecores-search">
       <div class="row">
         <div class="col-sm-3">
@@ -111,7 +111,9 @@
       <hr/>
     {% endverbatim %}
   </script>
-  {% endblock %}
+  {# passing algolia credentials to search.js #}
+  <div class="hidden" id="search-data" data-search='{ "appId": "{{ algolia_app_id }}", "apiKey": "{{ algolia_search_key }}", "searchPrefix": "{{ algolia_search_prefix }}", "indexName": "{{ searchType }}" }'></div>
+{% endblock %}
 
   {% block javascripts %}
   {{ parent() }}

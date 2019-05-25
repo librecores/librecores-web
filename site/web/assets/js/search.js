@@ -69,13 +69,13 @@ function searchFunctions() {
     $('.search-type').on('click',function(event){
         event.preventDefault();
         $('#type').val($(this).attr('id'));
-        $('#q').val($('.ais-search-box--input').val());
-        $('form').submit();
+        $('#q').val($(".ais-SearchBox-input").val());
+        $('.search-form').submit();
     });
     $('.search-query').on('click',function(event){
         event.preventDefault();
-        $('#q').val($('.ais-search-box--input').val());
-        $('form').submit();
+        $('#q').val($(".ais-SearchBox-input").val());
+        $('.search-form').submit();
     });
 }
 // Algolia instantsearch configuration
@@ -206,10 +206,10 @@ function getFormattedDate(item){
 $(function() {
     searchFunctions();
     let options =  {
-        appId: 'M6YHTVYGD9',
-        apiKey: '4eaa4016f4a3a3147a116ba139c9919e',
-        indexName: 'projects',
-        searchPrefix: 'dev_',
+        appId: $("#search-data").data("search").appId,
+        apiKey: $("#search-data").data("search").apiKey,
+        indexName: $("#search-data").data("search").indexName,
+        searchPrefix: $("#search-data").data("search").searchPrefix,
         searchParameters: {
             hitsPerPage: 10,
         },

@@ -768,6 +768,22 @@ a.classifiation-tag:hover {
   color: #999;
 }
 
+.ais-SearchBox-submit {
+  display: none;
+}
+
+.ais-SearchBox-input {
+  width: 100%;
+}
+
+.ais-SearchBox-reset {
+  display: none;
+}
+
+.ais-SearchBox-loadingIndicator{
+  display: none;
+}
+
 .input-group .ais-search-box {
   max-width: none;
 }

@@ -30,7 +30,7 @@ Encore
     .addEntry('app-js',['./web/assets/js/livestamp.js'])
 
     //page specific js
-    .addEntry('search', ['./web/assets/js/search-page.js'])
+    .addEntry('search', ['./web/assets/js/search.js'])
     .addEntry('project-view', ['./web/assets/js/metrics.js',
         './web/assets/js/project-auto-refresh.js',
         './web/assets/css/chartist.css'])

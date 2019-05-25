@@ -2,7 +2,7 @@ import $ from 'jquery'
 import 'bootstrap'
 import trumbowyg from 'trumbowyg'
 
-var insertClassification = function (classificationDetails) {
+function insertClassification(classificationDetails) {
   var count = 1;
   for (var i = 0; i < classificationDetails.length; i++) {
     if (classificationDetails[i]['parentId'] === null) {
@@ -173,8 +173,5 @@ $(document).ready(function(){
     au ? el.hide() : el.show();
   });
 
-  // insert classification
-  // classification hierarchy data
-  // var classificationDetails = {{ classificationHierarchy|json_encode|raw }}
-  // insertClassification(classificationDetails);
+  insertClassification($("#classification-data").data("classification"))
 });
