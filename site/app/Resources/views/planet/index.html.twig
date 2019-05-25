@@ -68,9 +68,8 @@
   </div>
 {% endblock %}
 
+{% block additional_js %}
+    <script src="{{ asset('build/planet.js') }}"></script>
+{% endblock %}
 {% block pagejs %}
-  // bootstrap tooltips need to be explicitly initialized
-  $(function () {
-    $('[data-toggle="tooltip"]').tooltip()
-  })
 {% endblock %}

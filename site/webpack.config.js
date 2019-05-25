@@ -37,6 +37,8 @@ Encore
     .addEntry('project_settings', './web/assets/js/classification.js')
     .addEntry('project_new', ['./web/assets/js/bootstrap-select.js',
         './web/assets/js/project_new.js'])
+    .addEntry('planet', './web/assets/js/planet.js')
+    .addEntry('organisation', './web/assets/js/organisation.js')
 
 
     // will require an extra script tag for runtime.js
