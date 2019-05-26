@@ -39,6 +39,8 @@ use Symfony\Component\Validator\Constraints\Url;
  */
 class ProjectController extends AbstractController
 {
+    private const GH_REGEX =
+        '/^https:\/\/github\.com\/([^\/]+)\/([^\/]+?)(?:\.git)?$/';
     /**
      * Render the "New Project" page
      *
@@ -273,7 +275,7 @@ class ProjectController extends AbstractController
             'contributorsGraph' => $this->makeGraph(
                 $projectMetricsProvider->getContributorHistogram($p, Dates::INTERVAL_YEAR)
             ),
-            'isHostedOnGithub' => GithubRepoCrawler::isGithubRepoUrl($p->getSourceRepo()->getUrl()),
+            'isHostedOnGithub' => preg_match_all(self::GH_REGEX,$p->getSourceRepo()->getUrl()),
         ];
 
         // Retrieve the project classifications for a project

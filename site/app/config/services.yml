@@ -6,6 +6,8 @@ services:
         autowire: true
         autoconfigure: true
         public: false
+        bind:
+            $updateProjectInfoProducer: '@old_sound_rabbit_mq.update_project_info_producer'
 
     # makes classes in src/Librecores/ProjectRepoBundle available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
@@ -19,6 +21,16 @@ services:
         resource: '../../src/Controller'
         tags: ['controller.service_arguments']
 
+    # Conflict resolution for auto-wired interface types
+    FOS\UserBundle\Mailer\MailerInterface: '@fos_user.mailer'
+
+    # Required legacy-style aliases
+    update_project_info_consumer: '@App\Consumer\UpdateProjectInformation'
+    update_github_metadata_consumer: '@App\Consumer\UpdateGitHubMetadataConsumer'
+
+    # Explicit configurations
+    # TODO: Investigate and deprecate these in favor of auto-wiring
+
     # Twig date extension - http://twig-extensions.readthedocs.io/en/latest/date.html
     Twig\Extensions\DateExtension:
         autowire: false
@@ -26,26 +38,10 @@ services:
         # thinks it can be translated -- but we don't have any translations available, therefore the autowire is set to
         # false
 
-    FOS\UserBundle\Mailer\MailerInterface: '@fos_user.mailer'
-
-    App\Command\UpdateReposCommand:
-        arguments:
-            $producer: '@old_sound_rabbit_mq.update_project_info_producer'
-
     App\Util\MarkupToHtmlConverter:
         arguments:
             - '@logger'
             - '@exercise_html_purifier.default'
-
-    App\Util\GithubApiService:
-        arguments:
-            - '@security.token_storage'
-            - '@app.cache.githubapi'
-            - '@router'
-
-    App\Util\QueueDispatcherService:
-        calls:
-            - [setContainer, ['@service_container']]
 
     App\Util\ProcessCreator: ~
 
@@ -88,3 +84,13 @@ services:
         tags:
             - { name: security.voter }
         public: false
+
+    # Automatically inject all configured repo crawlers
+    # https://symfony.com/doc/current/service_container/tags.html#reference-tagged-services
+    App\RepoCrawler\RepoCrawlerRegistry:
+        arguments:
+            $repoCrawlers: !tagged app.repo_crawler
+
+    App\RepoCrawler\GitRepoCrawler:
+        tags:
+            - 'app.repo_crawler'

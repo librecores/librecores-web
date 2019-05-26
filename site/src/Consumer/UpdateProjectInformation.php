@@ -6,7 +6,7 @@ use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\ProjectRepository;
 use App\Entity\Project;
-use App\RepoCrawler\RepoCrawlerFactory;
+use App\RepoCrawler\RepoCrawlerRegistry;
 use OldSound\RabbitMqBundle\RabbitMq\ConsumerInterface;
 use PhpAmqpLib\Message\AMQPMessage;
 use Psr\Log\LoggerInterface;
@@ -27,9 +27,9 @@ class UpdateProjectInformation implements ConsumerInterface
     private $logger;
 
     /**
-     * @var RepoCrawlerFactory
+     * @var RepoCrawlerRegistry
      */
-    private $repoCrawlerFactory;
+    private $repoCrawlerRegistry;
 
     /**
      * @var ProjectRepository
@@ -41,13 +41,21 @@ class UpdateProjectInformation implements ConsumerInterface
      */
     private $entityManager;
 
+    /**
+     * UpdateProjectInformation constructor.
+     *
+     * @param RepoCrawlerRegistry    $repoCrawlerFactory
+     * @param LoggerInterface        $logger
+     * @param ProjectRepository      $projectRepository
+     * @param EntityManagerInterface $entityManager
+     */
     public function __construct(
-        RepoCrawlerFactory $repoCrawlerFactory,
+        RepoCrawlerRegistry $repoCrawlerFactory,
         LoggerInterface $logger,
         ProjectRepository $projectRepository,
         EntityManagerInterface $entityManager
     ) {
-        $this->repoCrawlerFactory = $repoCrawlerFactory;
+        $this->repoCrawlerRegistry = $repoCrawlerFactory;
         $this->logger = $logger;
         $this->projectRepository = $projectRepository;
         $this->entityManager = $entityManager;
@@ -89,13 +97,12 @@ class UpdateProjectInformation implements ConsumerInterface
 
                 return true; // don't requeue
             }
-            $sourceRepo = $project->getSourceRepo();
 
             // do the actual work: extract data from the repository
-            $crawler = $this->repoCrawlerFactory->getCrawlerForSourceRepo($sourceRepo);
-            $crawler->updateSourceRepo();
-            $crawler->updateProject();
-
+            $this->logger->info('Updating project '.$project->getFqname());
+            $crawler = $this->repoCrawlerRegistry->getCrawlerForProject($project);
+            $crawler->update($project);
+            $this->logger->info('Successfully updated '.$project->getFqname());
             // mark project as "done processing"
             // we don't use markInProcessing() to avoid the double DB flush
             $project->setInProcessing(false);
@@ -108,11 +115,11 @@ class UpdateProjectInformation implements ConsumerInterface
             // Log it and end this script. It will be re-spawned by systemd and
             // a fresh DB connection will be created. The processing request stays
             // in the queue and will be processed once this service returns.
-            $this->logger->info(
+            $this->logger->critical(
                 "Processing of repository resulted in an ".get_class($e)
                 .' with message '.$e->getMessage()
             );
-            $this->logger->info(
+            $this->logger->emergency(
                 "Exiting this script and waiting for it to be re-spawned by "
                 ."systemd."
             );

@@ -3,7 +3,6 @@
 
 namespace App\Service\GitHub;
 
-
 use Github\Client;
 use Http\Client\Common\Plugin\HeaderDefaultsPlugin;
 
@@ -21,5 +20,4 @@ class GithubClient extends Client
             new HeaderDefaultsPlugin(['User-Agent' => static::USER_AGENT])
         );
     }
-
 }

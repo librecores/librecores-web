@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Entity\Project;
+use OldSound\RabbitMqBundle\RabbitMq\ProducerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
@@ -12,9 +13,19 @@ use Symfony\Component\DependencyInjection\ContainerAwareTrait;
  * This class contains convenience wrappers for publishing requests to the
  * queues used in LibreCores for asynchronous processing.
  */
-class QueueDispatcherService implements ContainerAwareInterface
+class QueueDispatcherService
 {
-    use ContainerAwareTrait;
+
+    /**
+     * @var ProducerInterface
+     */
+    private $producer;
+
+    public function __construct(ProducerInterface $updateProjectInfoProducer)
+    {
+
+        $this->producer = $updateProjectInfoProducer;
+    }
 
     /**
      * Update a project's information
@@ -25,8 +36,6 @@ class QueueDispatcherService implements ContainerAwareInterface
      */
     public function updateProjectInfo(Project $project)
     {
-        $this->container
-            ->get('old_sound_rabbit_mq.update_project_info_producer')
-            ->publish(serialize($project->getId()));
+        $this->producer->publish(serialize($project->getId()));
     }
 }
