@@ -146,105 +146,105 @@ class GitRepoCrawlerTest extends TestCase
 
         $commits = $repo->getCommits();
 
-        $this->assertEquals($commits[0]->getCommitId(), 'e0889c6');
-        $this->assertEquals($commits[1]->getCommitId(), '22b8123');
-        $this->assertEquals($commits[2]->getCommitId(), '9e7dd1e');
-        $this->assertEquals($commits[3]->getCommitId(), 'b611a9c');
-        $this->assertEquals($commits[4]->getCommitId(), 'a4ecaae');
-        $this->assertEquals($commits[5]->getCommitId(), '46f2311');
-        $this->assertEquals($commits[6]->getCommitId(), '26f16e1');
+        $this->assertEquals('e0889c6', $commits[0]->getCommitId());
+        $this->assertEquals('22b8123', $commits[1]->getCommitId());
+        $this->assertEquals('9e7dd1e', $commits[2]->getCommitId());
+        $this->assertEquals('b611a9c', $commits[3]->getCommitId());
+        $this->assertEquals('a4ecaae', $commits[4]->getCommitId());
+        $this->assertEquals('46f2311', $commits[5]->getCommitId());
+        $this->assertEquals('26f16e1', $commits[6]->getCommitId());
 
-        $this->assertEquals($commits[0]->getDateCommitted(), new DateTime('Fri, 26 May 2017 18:32:10 +0530'));
-        $this->assertEquals($commits[1]->getDateCommitted(), new DateTime('Fri, 26 May 2017 20:08:57 +0530'));
-        $this->assertEquals($commits[2]->getDateCommitted(), new DateTime('Sat, 27 May 2017 16:13:23 +0200'));
-        $this->assertEquals($commits[3]->getDateCommitted(), new DateTime('Tue, 30 May 2017 00:33:18 +0300'));
-        $this->assertEquals($commits[4]->getDateCommitted(), new DateTime('Thu, 08 Jun 2017 01:04:02 +0530'));
-        $this->assertEquals($commits[5]->getDateCommitted(), new DateTime('Sun, 11 Jun 2017 14:04:03 +0200'));
-        $this->assertEquals($commits[6]->getDateCommitted(), new DateTime('Mon, 12 Jun 2017 16:24:21 +0200'));
+        $this->assertEquals(new DateTime('Fri, 26 May 2017 18:32:10 +0530'), $commits[0]->getDateCommitted());
+        $this->assertEquals(new DateTime('Fri, 26 May 2017 20:08:57 +0530'), $commits[1]->getDateCommitted());
+        $this->assertEquals(new DateTime('Sat, 27 May 2017 16:13:23 +0200'), $commits[2]->getDateCommitted());
+        $this->assertEquals(new DateTime('Tue, 30 May 2017 00:33:18 +0300'), $commits[3]->getDateCommitted());
+        $this->assertEquals(new DateTime('Thu, 08 Jun 2017 01:04:02 +0530'), $commits[4]->getDateCommitted());
+        $this->assertEquals(new DateTime('Sun, 11 Jun 2017 14:04:03 +0200'), $commits[5]->getDateCommitted());
+        $this->assertEquals(new DateTime('Mon, 12 Jun 2017 16:24:21 +0200'), $commits[6]->getDateCommitted());
 
-        $this->assertEquals($commits[0]->getContributor()->getEmail(), 'johndoe@example.com');
-        $this->assertEquals($commits[1]->getContributor()->getEmail(), 'johndoe@example.com');
-        $this->assertEquals($commits[2]->getContributor()->getEmail(), 'johndoe@example.com');
-        $this->assertEquals($commits[3]->getContributor()->getEmail(), 'janedoe@example.com');
-        $this->assertEquals($commits[4]->getContributor()->getEmail(), 'janedoe@example.com');
-        $this->assertEquals($commits[5]->getContributor()->getEmail(), 'johndoe@example.com');
-        $this->assertEquals($commits[6]->getContributor()->getEmail(), 'janedoe@example.com');
+        $this->assertEquals('johndoe@example.com', $commits[0]->getContributor()->getEmail());
+        $this->assertEquals('johndoe@example.com', $commits[1]->getContributor()->getEmail());
+        $this->assertEquals('johndoe@example.com', $commits[2]->getContributor()->getEmail());
+        $this->assertEquals('janedoe@example.com', $commits[3]->getContributor()->getEmail());
+        $this->assertEquals('janedoe@example.com', $commits[4]->getContributor()->getEmail());
+        $this->assertEquals('johndoe@example.com', $commits[5]->getContributor()->getEmail());
+        $this->assertEquals('janedoe@example.com', $commits[6]->getContributor()->getEmail());
 
-        $this->assertEquals($commits[0]->getFilesModified(), 0);
-        $this->assertEquals($commits[1]->getFilesModified(), 1);
-        $this->assertEquals($commits[2]->getFilesModified(), 1);
-        $this->assertEquals($commits[3]->getFilesModified(), 7);
-        $this->assertEquals($commits[4]->getFilesModified(), 4);
-        $this->assertEquals($commits[5]->getFilesModified(), 1);
-        $this->assertEquals($commits[6]->getFilesModified(), 4);
+        $this->assertEquals(0, $commits[0]->getFilesModified());
+        $this->assertEquals(1, $commits[1]->getFilesModified());
+        $this->assertEquals(1, $commits[2]->getFilesModified());
+        $this->assertEquals(7, $commits[3]->getFilesModified());
+        $this->assertEquals(4, $commits[4]->getFilesModified());
+        $this->assertEquals(1, $commits[5]->getFilesModified());
+        $this->assertEquals(4, $commits[6]->getFilesModified());
 
-        $this->assertEquals($commits[0]->getLinesAdded(), 0);
-        $this->assertEquals($commits[1]->getLinesAdded(), 4);
-        $this->assertEquals($commits[2]->getLinesAdded(), 5);
-        $this->assertEquals($commits[3]->getLinesAdded(), 183);
-        $this->assertEquals($commits[4]->getLinesAdded(), 37);
-        $this->assertEquals($commits[5]->getLinesAdded(), 3);
-        $this->assertEquals($commits[6]->getLinesAdded(), 0);
+        $this->assertEquals(0, $commits[0]->getLinesAdded());
+        $this->assertEquals(4, $commits[1]->getLinesAdded());
+        $this->assertEquals(5, $commits[2]->getLinesAdded());
+        $this->assertEquals(183, $commits[3]->getLinesAdded());
+        $this->assertEquals(37, $commits[4]->getLinesAdded());
+        $this->assertEquals(3, $commits[5]->getLinesAdded());
+        $this->assertEquals(0, $commits[6]->getLinesAdded());
 
-        $this->assertEquals($commits[0]->getLinesRemoved(), 0);
-        $this->assertEquals($commits[1]->getLinesRemoved(), 0);
-        $this->assertEquals($commits[2]->getLinesRemoved(), 0);
-        $this->assertEquals($commits[3]->getLinesRemoved(), 3);
-        $this->assertEquals($commits[4]->getLinesRemoved(), 0);
-        $this->assertEquals($commits[5]->getLinesRemoved(), 0);
-        $this->assertEquals($commits[6]->getLinesRemoved(), 8);
+        $this->assertEquals(0, $commits[0]->getLinesRemoved());
+        $this->assertEquals(0, $commits[1]->getLinesRemoved());
+        $this->assertEquals(0, $commits[2]->getLinesRemoved());
+        $this->assertEquals(3, $commits[3]->getLinesRemoved());
+        $this->assertEquals(0, $commits[4]->getLinesRemoved());
+        $this->assertEquals(0, $commits[5]->getLinesRemoved());
+        $this->assertEquals(8, $commits[6]->getLinesRemoved());
 
         $stats = $repo->getSourceStats();
         // conditions
-        $this->assertEquals($stats->getTotalFiles(), 102);
-        $this->assertEquals($stats->getTotalLinesOfCode(), 5995);
-        $this->assertEquals($stats->getTotalLinesOfComments(), 3590);
-        $this->assertEquals($stats->getTotalBlankLines(), 1378);
+        $this->assertEquals(102, $stats->getTotalFiles());
+        $this->assertEquals(5995, $stats->getTotalLinesOfCode());
+        $this->assertEquals(3590, $stats->getTotalLinesOfComments());
+        $this->assertEquals(1378, $stats->getTotalBlankLines());
 
         foreach ($stats->getLanguageStats() as $languageStat) {
             /** @var LanguageStat $languageStat */
             switch ($languageStat->getLanguage()) {
                 case 'PHP':
-                    $this->assertEquals($languageStat->getFileCount(), 68);
+                    $this->assertEquals(68, $languageStat->getFileCount());
                     $this->assertEquals(
-                        $languageStat->getBlankLineCount(),
-                        1089
+                        1089,
+                        $languageStat->getBlankLineCount()
                     );
                     $this->assertEquals(
-                        $languageStat->getCommentLineCount(),
-                        3498
+                        3498,
+                        $languageStat->getCommentLineCount()
                     );
-                    $this->assertEquals($languageStat->getLinesOfCode(), 4295);
+                    $this->assertEquals(4295, $languageStat->getLinesOfCode());
                     break;
                 case 'Twig':
-                    $this->assertEquals($languageStat->getFileCount(), 27);
+                    $this->assertEquals(27, $languageStat->getFileCount());
                     $this->assertEquals(
-                        $languageStat->getBlankLineCount(),
-                        216
+                        216,
+                        $languageStat->getBlankLineCount()
                     );
                     $this->assertEquals(
-                        $languageStat->getCommentLineCount(),
-                        48
+                        48,
+                        $languageStat->getCommentLineCount()
                     );
-                    $this->assertEquals($languageStat->getLinesOfCode(), 1335);
+                    $this->assertEquals(1335, $languageStat->getLinesOfCode());
                     break;
                 case 'YAML':
-                    $this->assertEquals($languageStat->getFileCount(), 6);
-                    $this->assertEquals($languageStat->getBlankLineCount(), 61);
+                    $this->assertEquals(6, $languageStat->getFileCount());
+                    $this->assertEquals(61, $languageStat->getBlankLineCount());
                     $this->assertEquals(
-                        $languageStat->getCommentLineCount(),
-                        43
+                        43,
+                        $languageStat->getCommentLineCount()
                     );
-                    $this->assertEquals($languageStat->getLinesOfCode(), 184);
+                    $this->assertEquals(184, $languageStat->getLinesOfCode());
                     break;
                 case 'XML':
-                    $this->assertEquals($languageStat->getFileCount(), 1);
-                    $this->assertEquals($languageStat->getBlankLineCount(), 12);
+                    $this->assertEquals(1, $languageStat->getFileCount());
+                    $this->assertEquals(12, $languageStat->getBlankLineCount());
                     $this->assertEquals(
-                        $languageStat->getCommentLineCount(),
-                        1
+                        1,
+                        $languageStat->getCommentLineCount()
                     );
-                    $this->assertEquals($languageStat->getLinesOfCode(), 181);
+                    $this->assertEquals(181, $languageStat->getLinesOfCode());
                     break;
                 default:
                     $this->fail('Unknown language encountered');
@@ -257,74 +257,74 @@ class GitRepoCrawlerTest extends TestCase
         // there are 10 valid release objects
         $this->assertEquals(count($releases), 10);
 
-        $this->assertEquals($releases[0]->getName(), 'v1.1.7');
-        $this->assertEquals($releases[0]->getCommitID(), 'b645cc95');
+        $this->assertEquals('v1.1.7', $releases[0]->getName());
+        $this->assertEquals('b645cc95', $releases[0]->getCommitID());
         $this->assertEquals(
-            $releases[0]->getPublishedAt(),
-            new DateTime('Fri Sep 23 02:02:24 2016 +0530')
+            new DateTime('Fri Sep 23 02:02:24 2016 +0530'),
+            $releases[0]->getPublishedAt()
         );
 
-        $this->assertEquals($releases[1]->getName(), 'v1.1');
-        $this->assertEquals($releases[1]->getCommitID(), 'e5b62acb');
+        $this->assertEquals('v1.1', $releases[1]->getName());
+        $this->assertEquals('e5b62acb', $releases[1]->getCommitID());
         $this->assertEquals(
-            $releases[1]->getPublishedAt(),
-            new DateTime('Tue Sep 6 15:29:04 2016 +0530')
+            new DateTime('Tue Sep 6 15:29:04 2016 +0530'),
+            $releases[1]->getPublishedAt()
         );
 
-        $this->assertEquals($releases[2]->getName(), '1.1.6');
-        $this->assertEquals($releases[2]->getCommitID(), 'e5b62acb');
+        $this->assertEquals('1.1.6', $releases[2]->getName());
+        $this->assertEquals('e5b62acb', $releases[2]->getCommitID());
         $this->assertEquals(
-            $releases[2]->getPublishedAt(),
-            new DateTime('Tue Sep 6 15:29:04 2016 +0530')
+            new DateTime('Tue Sep 6 15:29:04 2016 +0530'),
+            $releases[2]->getPublishedAt()
         );
 
-        $this->assertEquals($releases[3]->getName(), '1.1');
-        $this->assertEquals($releases[3]->getCommitID(), 'df02e241');
+        $this->assertEquals('1.1', $releases[3]->getName());
+        $this->assertEquals('df02e241', $releases[3]->getCommitID());
         $this->assertEquals(
-            $releases[3]->getPublishedAt(),
-            new DateTime('Mon Sep 5 03:25:52 2016 +0530')
+            new DateTime('Mon Sep 5 03:25:52 2016 +0530'),
+            $releases[3]->getPublishedAt()
         );
 
-        $this->assertEquals($releases[4]->getName(), 'v4.1.5-android');
-        $this->assertEquals($releases[4]->getCommitID(), 'df02e241');
+        $this->assertEquals('v4.1.5-android', $releases[4]->getName());
+        $this->assertEquals('df02e241', $releases[4]->getCommitID());
         $this->assertEquals(
-            $releases[4]->getPublishedAt(),
-            new DateTime('Mon Sep 5 03:25:52 2016 +0530')
+            new DateTime('Mon Sep 5 03:25:52 2016 +0530'),
+            $releases[4]->getPublishedAt()
         );
 
-        $this->assertEquals($releases[5]->getName(), 'v4.2.10-RC-2');
-        $this->assertEquals($releases[5]->getCommitID(), '6d5b3930');
+        $this->assertEquals('v4.2.10-RC-2', $releases[5]->getName());
+        $this->assertEquals('6d5b3930', $releases[5]->getCommitID());
         $this->assertEquals(
-            $releases[5]->getPublishedAt(),
-            new DateTime('Thu Sep 1 11:45:17 2016 +0530')
+            new DateTime('Thu Sep 1 11:45:17 2016 +0530'),
+            $releases[5]->getPublishedAt()
         );
 
-        $this->assertEquals($releases[6]->getName(), 'v1.1.4-alpha24');
-        $this->assertEquals($releases[6]->getCommitID(), '6d5b3930');
+        $this->assertEquals('v1.1.4-alpha24', $releases[6]->getName());
+        $this->assertEquals('6d5b3930', $releases[6]->getCommitID());
         $this->assertEquals(
-            $releases[6]->getPublishedAt(),
-            new DateTime('Thu Sep 1 11:45:17 2016 +0530')
+            new DateTime('Thu Sep 1 11:45:17 2016 +0530'),
+            $releases[6]->getPublishedAt()
         );
 
-        $this->assertEquals($releases[7]->getName(), 'android-v1.1.4-beta24');
-        $this->assertEquals($releases[7]->getCommitID(), '5452c021');
+        $this->assertEquals('android-v1.1.4-beta24', $releases[7]->getName());
+        $this->assertEquals('5452c021', $releases[7]->getCommitID());
         $this->assertEquals(
-            $releases[7]->getPublishedAt(),
-            new DateTime('Thu Sep 1 11:30:05 2016 +0530')
+            new DateTime('Thu Sep 1 11:30:05 2016 +0530'),
+            $releases[7]->getPublishedAt()
         );
 
-        $this->assertEquals($releases[8]->getName(), 'android-1.1.3');
-        $this->assertEquals($releases[8]->getCommitID(), '4ef6195b');
+        $this->assertEquals('android-1.1.3', $releases[8]->getName());
+        $this->assertEquals('4ef6195b', $releases[8]->getCommitID());
         $this->assertEquals(
-            $releases[8]->getPublishedAt(),
-            new DateTime('Wed Aug 31 00:50:37 2016 +0530')
+            new DateTime('Wed Aug 31 00:50:37 2016 +0530'),
+            $releases[8]->getPublishedAt()
         );
 
-        $this->assertEquals($releases[9]->getName(), 'v1.1.1');
-        $this->assertEquals($releases[9]->getCommitID(), '9daa1');
+        $this->assertEquals('v1.1.1', $releases[9]->getName());
+        $this->assertEquals('9daa1', $releases[9]->getCommitID());
         $this->assertEquals(
-            $releases[9]->getPublishedAt(),
-            new DateTime('Tue Aug 23 04:11:11 2016 +0530')
+            new DateTime('Tue Aug 23 04:11:11 2016 +0530'),
+            $releases[9]->getPublishedAt()
         );
 
         // notavalidrelease|f17341b4|Sun Aug 28 11:39:38 2016 +0530
