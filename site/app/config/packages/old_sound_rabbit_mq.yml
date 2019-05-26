@@ -18,10 +18,15 @@ old_sound_rabbit_mq:
     producers:
         update_project_info:
             connection:       default
-            exchange_options: {name: 'update-project-info', type: direct}
+            exchange_options: {name: 'update-project-info', type: fanout}
     consumers:
         update_project_info:
             connection:       default
-            exchange_options: {name: 'update-project-info', type: direct}
+            exchange_options: {name: 'update-project-info', type: fanout}
             queue_options:    {name: 'update-project-info'}
-            callback:         update_project_info_service
+            callback:         update_project_info_consumer
+        update_github_metadata:
+            connection:       default
+            exchange_options: {name: 'update-project-info', type: fanout}
+            queue_options:    {name: 'update-github-metadata'}
+            callback:         update_github_metadata_consumer

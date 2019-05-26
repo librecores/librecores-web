@@ -17,6 +17,7 @@ use App\Repository\CommitRepository;
 use App\Repository\ContributorRepository;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\Process;
 
 /**
@@ -122,23 +123,26 @@ class GitRepoCrawlerTest extends TestCase
 
         $mockProjectMetricsProvider->method('getCodeQualityScore')->willReturn(4.5);
 
+        $mockFilesystem = $this->createMock(Filesystem::class);
+        $mockFilesystem->method('tempnam')->willReturn('/tmp/directory');
+
         $repo = new GitSourceRepo();
         $repo->setProject($project);
 
         $project->setSourceRepo($repo);
 
         $crawler = new GitRepoCrawler(
-            $repo,
             $mockMarkupConverter,
             $processCreator,
             $mockCommitRepository,
             $mockContributorRepository,
             $mockManager,
             $mockLogger,
-            $mockProjectMetricsProvider
+            $mockProjectMetricsProvider,
+            /** @var Filesystem $mockFilesystem */
+            $mockFilesystem
         );
-        $crawler->updateSourceRepo();
-        $crawler->updateProject();
+        $crawler->update($project);
 
         $commits = $repo->getCommits();
 

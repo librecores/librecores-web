@@ -1,5 +1,4 @@
 services:
-    update_project_info_service: '@App\Consumer\UpdateProjectInformation'
     librecores.util.githubapiservice: '@App\Service\GitHub\GitHubApiService'
     librecores.util.queuedispatcherservice: '@App\Service\QueueDispatcherService'
     librecores.util.markuptohtmlconverter:  '@App\Util\MarkupToHtmlConverter'
@@ -14,4 +13,3 @@ services:
     librecores.user.registration_event_listener: '@App\EventListener\OAuthRegistrationListener'
     librecores_project_voter: '@App\Security\ProjectVoter'
     librecores.process_creator: '@App\Util\ProcessCreator'
-    librecores.repocrawlerfactory: '@App\RepoCrawler\RepoCrawlerFactory'

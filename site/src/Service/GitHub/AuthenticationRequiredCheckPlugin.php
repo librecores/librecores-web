@@ -3,7 +3,6 @@
 
 namespace App\Service\GitHub;
 
-
 use Http\Client\Common\Plugin;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;

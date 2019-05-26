@@ -3,7 +3,6 @@
 
 namespace App\Service\GitHub;
 
-
 use Github\Exception\ErrorException;
 
 class AuthenticationRequiredException extends ErrorException

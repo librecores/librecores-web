@@ -32,11 +32,11 @@ class UpdateReposCommand extends Command
 
     public function __construct(
         ProjectRepository $projectRepository,
-        ProducerInterface $producer
+        ProducerInterface $updateProjectInfoProducer
     ) {
         parent::__construct(self::COMMAND_NAME);
         $this->projectRepository = $projectRepository;
-        $this->producer = $producer;
+        $this->producer = $updateProjectInfoProducer;
     }
 
     protected function configure()
