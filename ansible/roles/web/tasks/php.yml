@@ -19,7 +19,10 @@
 # OS packaged PHP extensions
 - name: Install packaged PHP extensions
   become: true
-  apt:  package=php{{php_version}}-{{ item }} state=present
+  apt:
+    package:
+        - php{{php_version}}-{{ item }}
+    state: present
   with_items: "{{ php_extensions_packaged }}"
 
 - name: Enable packaged PHP extensions for all SAPIs
@@ -31,7 +34,10 @@
 
 - name: Install packaged PHP extensions for development
   become: true
-  apt:  package=php{{php_version}}-{{ item }} state=present
+  apt:
+    package:
+        - php{{php_version}}-{{ item }}
+    state: present
   with_items: "{{ php_devel_extensions_packaged }}"
 
 - name: Enable packaged PHP extensions for development for all SAPIs
