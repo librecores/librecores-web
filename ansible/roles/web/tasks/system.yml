@@ -1,6 +1,7 @@
 ---
 - name: Install extra packages
-  apt:  pkg={{ item }} state=present
-  with_items:
-    - mcrypt
-    - letsencrypt
+  apt:
+    state: present
+    pkg:
+      - mcrypt
+      - letsencrypt

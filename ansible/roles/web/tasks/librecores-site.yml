@@ -140,9 +140,10 @@
 
 # Install librecores planet generator
 - name: Install extra packages for librecores-planet
-  apt:  pkg={{ item }} state=present
-  with_items:
-    - python-libxslt1
+  apt:
+    state: present
+    pkg:
+      - python-libxslt1
 
 - name: Update planet every 30 minutes through cronjob
   cron:
