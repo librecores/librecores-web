@@ -2,13 +2,11 @@
 
 namespace App\Consumer;
 
-use Doctrine\DBAL\DBALException;
-use Doctrine\ORM\EntityManagerInterface;
-use App\Repository\ProjectRepository;
 use App\Entity\Project;
 use App\RepoCrawler\RepoCrawlerRegistry;
-use OldSound\RabbitMqBundle\RabbitMq\ConsumerInterface;
-use PhpAmqpLib\Message\AMQPMessage;
+use App\Repository\ProjectRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -19,22 +17,13 @@ use Psr\Log\LoggerInterface;
  *
  * @author Philipp Wagner <mail@philipp-wagner.com>
  */
-class UpdateProjectInformation implements ConsumerInterface
+class UpdateProjectInformation extends AbstractProjectUpdateConsumer
 {
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
 
     /**
      * @var RepoCrawlerRegistry
      */
     private $repoCrawlerRegistry;
-
-    /**
-     * @var ProjectRepository
-     */
-    private $projectRepository;
 
     /**
      * @var EntityManagerInterface
@@ -55,42 +44,24 @@ class UpdateProjectInformation implements ConsumerInterface
         ProjectRepository $projectRepository,
         EntityManagerInterface $entityManager
     ) {
+        parent::__construct($projectRepository, $logger);
         $this->repoCrawlerRegistry = $repoCrawlerFactory;
-        $this->logger = $logger;
-        $this->projectRepository = $projectRepository;
         $this->entityManager = $entityManager;
     }
 
     /**
-     * Process a newly received message
+     * @inheritDoc
      *
-     * {@inheritDoc}
-     * @see \OldSound\RabbitMqBundle\RabbitMq\ConsumerInterface::execute()
+     * @throws Exception
      */
-    public function execute(AMQPMessage $msg)
+    protected function processProject(Project $project)
     {
-        // We need to be very careful not to fail due to a PHP error or an
-        // unhandled exception within a consumer, as this essentially kills our
-        // RabbitMQ consumer daemon and ends all processing tasks.
         try {
-            $projectId = (int) unserialize($msg->body);
-
-            /** @var Project $project */
-            $project = $this->projectRepository->find($projectId);
-            if (!$project) {
-                $this->logger->error(
-                    "Unable to update project with ID $projectId: project does "
-                    ."not exist."
-                );
-
-                return true; // don't requeue
-            }
-
             // check if this project is associated with a source repository
             if ($project->getSourceRepo() === null) {
                 $this->logger->error(
-                    "Unable to update project with ID "
-                    ."$projectId: no valid source repository associated."
+                    "Unable to update project with ID {$project->getFqname()}"
+                    .": no valid source repository associated."
                 );
 
                 $this->markInProcessing($project, false);
@@ -109,41 +80,18 @@ class UpdateProjectInformation implements ConsumerInterface
 
             // persist all changes made to to DB
             $this->entityManager->flush();
-        } catch (DBALException $e) {
-            // We assume we got a database exception. Most likely the connection to
-            // the DB server died for some reason (probably due to a timeout).
-            // Log it and end this script. It will be re-spawned by systemd and
-            // a fresh DB connection will be created. The processing request stays
-            // in the queue and will be processed once this service returns.
-            $this->logger->critical(
-                "Processing of repository resulted in an ".get_class($e)
-                .' with message '.$e->getMessage()
-            );
-            $this->logger->emergency(
-                "Exiting this script and waiting for it to be re-spawned by "
-                ."systemd."
-            );
-            exit(0);
-        } catch (\Exception $e) {
-            // We got an unexpected Exception. We assume this is a one-off event
-            // and just log it, but otherwise keep the consumer running for the
-            // next requests.
-            $this->logger->error(
-                "Processing of repository resulted in an ".get_class($e)
-            );
-            $this->logger->error('Message: '.$e->getMessage());
-            $this->logger->error('Trace: '.$e->getTraceAsString());
-
-            // Try to mark this project as not in progress any more to let people
-            // edit it online. The next crawling update will possibly get the
-            // changes.
+        } catch (Exception $e) {
+            // Try to mark this project as not in progress any more to let
+            // people edit it online. The next crawling update will possibly
+            //get the changes.
             try {
                 $this->markInProcessing($project, false);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 // Ignore -- we're already in the error handling path.
                 // The project will most likely remain in the "in processing"
                 // state.
             }
+            throw $e;
         }
 
         // remove element from queue

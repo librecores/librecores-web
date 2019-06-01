@@ -9,20 +9,20 @@ use App\Entity\OrganizationMember;
 use App\Entity\Project;
 use App\Entity\ProjectClassification;
 use App\Entity\User;
+use App\Form\Type\ProjectType;
 use App\RepoCrawler\GithubRepoCrawler;
 use App\Repository\OrganizationRepository;
 use App\Repository\ProjectRepository;
+use App\Service\GitHub\AuthenticationRequiredException;
+use App\Service\GitHub\GitHubApiService;
+use App\Service\ProjectMetricsProvider;
+use App\Service\QueueDispatcherService;
 use App\Util\Dates;
 use DateInterval;
 use DateTimeImmutable;
 use Doctrine\ORM\NonUniqueResultException;
 use Exception;
 use FOS\UserBundle\Model\UserManagerInterface;
-use App\Service\ProjectMetricsProvider;
-use App\Form\Type\ProjectType;
-use App\Service\GitHub\AuthenticationRequiredException;
-use App\Service\GitHub\GitHubApiService;
-use App\Service\QueueDispatcherService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -39,8 +39,6 @@ use Symfony\Component\Validator\Constraints\Url;
  */
 class ProjectController extends AbstractController
 {
-    private const GH_REGEX =
-        '/^https:\/\/github\.com\/([^\/]+)\/([^\/]+?)(?:\.git)?$/';
     /**
      * Render the "New Project" page
      *
@@ -275,7 +273,7 @@ class ProjectController extends AbstractController
             'contributorsGraph' => $this->makeGraph(
                 $projectMetricsProvider->getContributorHistogram($p, Dates::INTERVAL_YEAR)
             ),
-            'isHostedOnGithub' => preg_match_all(self::GH_REGEX,$p->getSourceRepo()->getUrl()),
+            'isHostedOnGithub' => GitHubApiService::isGitHubRepoUrl($p->getSourceRepo()->getUrl()),
         ];
 
         // Retrieve the project classifications for a project

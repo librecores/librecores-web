@@ -11,8 +11,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Github\Client;
 use Github\Exception\ErrorException;
-use OldSound\RabbitMqBundle\RabbitMq\ConsumerInterface;
-use PhpAmqpLib\Message\AMQPMessage;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -22,16 +20,8 @@ use Psr\Log\LoggerInterface;
  *
  * @author Amitosh Swain Mahapatra <amitosh.swain@gmail.com>
  */
-class UpdateGitHubMetadataConsumer implements ConsumerInterface
+class UpdateGitHubMetadataConsumer extends AbstractProjectUpdateConsumer
 {
-
-    private const GH_REGEX =
-        '/^https:\/\/github\.com\/([^\/]+)\/([^\/]+?)(?:\.git)?$/';
-
-    /**
-     * @var ProjectRepository
-     */
-    private $repository;
 
     /**
      * @var GitHubApiService
@@ -42,11 +32,6 @@ class UpdateGitHubMetadataConsumer implements ConsumerInterface
      * @var EntityManagerInterface
      */
     private $entityManager;
-
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
 
     /**
      * UpdateGithubMetadataConsumer constructor.
@@ -62,52 +47,9 @@ class UpdateGitHubMetadataConsumer implements ConsumerInterface
         EntityManagerInterface $entityManager,
         LoggerInterface $logger
     ) {
-
-        $this->repository = $repository;
+        parent::__construct($repository, $logger);
         $this->githubApiService = $githubApiService;
         $this->entityManager = $entityManager;
-        $this->logger = $logger;
-    }
-
-    /**
-     * @param AMQPMessage $msg The message
-     *
-     * @return mixed false to reject and requeue, any other value to acknowledge
-     */
-    public function execute(AMQPMessage $msg)
-    {
-        try {
-            $projectId = (int) unserialize($msg->body);
-            /** @var Project $project */
-            $project = $this->repository->find($projectId);
-
-            if (!$project) {
-                // this should not happen in production
-                // but happens in dev if for some reason we clear the projects
-                // table
-                $this->logger->error(
-                    "Unable to update project with ID $projectId: project does "
-                    ."not exist."
-                );
-
-                return true; // don't requeue
-            }
-
-            $this->updateGithubMetadata($project);
-
-            return true;
-        } catch (Exception $e) {
-            // We got an unexpected Exception. We assume this is a one-off event
-            // and just log it, but otherwise keep the consumer running for the
-            // next requests.
-            $this->logger->error(
-                "Processing of repository resulted in an ".get_class($e)
-            );
-            $this->logger->error('Message: '.$e->getMessage());
-            $this->logger->error('Trace: '.$e->getTraceAsString());
-
-            return false;
-        }
     }
 
     /**
@@ -115,7 +57,7 @@ class UpdateGitHubMetadataConsumer implements ConsumerInterface
      *
      * @param Project $project
      */
-    private function updateGithubMetadata(Project $project)
+    protected function processProject(Project $project)
     {
         try {
             $this->logger->info("Enriching project: {$project->getFqname()} with GitHub metadata");
@@ -123,7 +65,7 @@ class UpdateGitHubMetadataConsumer implements ConsumerInterface
 
             $repoUrl = $project->getSourceRepo()->getUrl();
 
-            $isGithubRepo = preg_match(static::GH_REGEX, $repoUrl, $matches);
+            $isGithubRepo = GitHubApiService::isGitHubRepoUrl($repoUrl);
 
             if (!$isGithubRepo) {
                 // skip processing
@@ -135,7 +77,9 @@ class UpdateGitHubMetadataConsumer implements ConsumerInterface
                 return;
             }
 
-            list($user, $repo) = array_slice($matches, 1);
+            $repoInfo = GitHubApiService::parseGitHubRepoUrl($repoUrl);
+            $user = $repoInfo['user'];
+            $repo = $repoInfo['repository'];
             $data = $this->fetchGithubMetadata($client, $user, $repo);
 
             $project->setForks($data['forks']['totalCount']);

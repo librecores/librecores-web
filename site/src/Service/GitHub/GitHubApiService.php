@@ -2,12 +2,10 @@
 
 namespace App\Service\GitHub;
 
-use Github;
-use Github\Client;
-use Github\HttpClient\Builder;
 use App\Entity\GitSourceRepo;
 use App\Entity\Project;
 use App\Entity\User;
+use Github\Client;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\Routing\RouterInterface;
 
@@ -24,6 +22,9 @@ use Symfony\Component\Routing\RouterInterface;
  */
 class GitHubApiService
 {
+    private const GH_REGEX =
+        '/^https:\/\/github\.com\/([^\/]+)\/([^\/]+?)(?:\.git)?$/';
+
     /**
      * @var User
      */
@@ -73,6 +74,36 @@ class GitHubApiService
     ) {
         $this->cachePool = $cachePool;
         $this->router = $router;
+    }
+
+    /**
+     * Checks whether the supplied repository URL is a GitHub URL
+     *
+     * @param string $url
+     *
+     * @return bool
+     */
+    public static function isGitHubRepoUrl(string $url): bool
+    {
+        return preg_match(self::GH_REGEX, $url);
+    }
+
+    /**
+     * Parse a GitHub URL into username and repository name
+     *
+     * @param string $url
+     *
+     * @return string[]
+     */
+    public static function parseGitHubRepoUrl(string $url): array
+    {
+        $matches = [];
+        if (preg_match(self::GH_REGEX, $url, $matches)) {
+            return [
+                'user' => $matches[1],
+                'repository' => $matches[2],
+            ];
+        }
     }
 
     /**
