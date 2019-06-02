@@ -10,7 +10,6 @@ use App\Entity\Project;
 use App\Entity\ProjectClassification;
 use App\Entity\User;
 use App\Form\Type\ProjectType;
-use App\RepoCrawler\GithubRepoCrawler;
 use App\Repository\OrganizationRepository;
 use App\Repository\ProjectRepository;
 use App\Service\GitHub\AuthenticationRequiredException;
@@ -23,6 +22,7 @@ use DateTimeImmutable;
 use Doctrine\ORM\NonUniqueResultException;
 use Exception;
 use FOS\UserBundle\Model\UserManagerInterface;
+use Github\Exception\ErrorException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -162,13 +162,20 @@ class ProjectController extends AbstractController
         // save project and redirect to project page
         if ($form->isSubmitted() && $form->isValid()) {
             // populate Project with data from "special"/not mapped form fields
-            $this->populateProjectFromForm(
-                $p,
-                $form,
-                $githubApiService,
-                $organizationRepository,
-                $userManager
-            );
+            try {
+                $this->populateProjectFromForm(
+                    $p,
+                    $form,
+                    $githubApiService,
+                    $organizationRepository,
+                    $userManager
+                );
+            } catch(AuthenticationRequiredException $e) {
+                $this->addFlash('warning', 'project.add.webhooks.auth_required');
+            }
+            catch (ErrorException $e) {
+                $this->addFlash('warning', 'project.add.webhooks.generic_error');
+            }
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($p);
