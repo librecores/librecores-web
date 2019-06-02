@@ -85,6 +85,10 @@ librecores_project_repo_project_status:
     path: /{parentName}/{projectName}/crawl_status
     controller: App\Controller\ProjectController::crawlStatusAction
 
+librecores_project_repo_project_dismiss_alert:
+    path: /{parentName}/{projectName}/dismiss_alert
+    controller: App\Controller\ProjectController::dismissAlertAction
+
 
 # Organization routes
 

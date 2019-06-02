@@ -9,9 +9,11 @@ use App\Entity\OrganizationMember;
 use App\Entity\Project;
 use App\Entity\ProjectClassification;
 use App\Entity\User;
+use App\Form\Type\DismissAlertForm;
 use App\Form\Type\ProjectType;
 use App\Repository\OrganizationRepository;
 use App\Repository\ProjectRepository;
+use App\Service\ProjectIssueFinder\ProjectIssueFinder;
 use App\Service\GitHub\AuthenticationRequiredException;
 use App\Service\GitHub\GitHubApiService;
 use App\Service\ProjectMetricsProvider;
@@ -220,7 +222,6 @@ class ProjectController extends AbstractController
     /**
      * Display the project
      *
-     * @param Request                $request
      * @param string                 $parentName             URL component: name of
      *                                                       the parent (user or
      *                                                       organization)
@@ -229,65 +230,34 @@ class ProjectController extends AbstractController
      * @param ProjectRepository      $projectRepository
      * @param ProjectMetricsProvider $projectMetricsProvider
      *
+     * @param ProjectIssueFinder     $projectIssueFinder
+     *
      * @return Response
      *
      * @throws NonUniqueResultException
      */
     public function viewAction(
-        Request $request,
         $parentName,
         $projectName,
         ProjectRepository $projectRepository,
-        ProjectMetricsProvider $projectMetricsProvider
+        ProjectMetricsProvider $projectMetricsProvider,
+        ProjectIssueFinder $projectIssueFinder
     ) {
         $p = $this->getProject($parentName, $projectName, $projectRepository);
 
-        // fetch project metadata
-        $current = new DateTimeImmutable();
-
-        $qualityScore = $projectMetricsProvider->getCodeQualityScore($p);
-        $twoTimesQualityScore = (int) ($qualityScore * 2);
-        $metadata = [
-            'qualityScore' => [
-                'fullStars' => (int) ($twoTimesQualityScore / 2),
-                'halfStars' => $twoTimesQualityScore % 2,
-                'value' => $qualityScore,
-            ],
-            'latestCommit' => $projectMetricsProvider->getLatestCommit($p),
-            'firstCommit' => $projectMetricsProvider->getFirstCommit($p),
-            'contributorCount' => $projectMetricsProvider->getContributorsCount($p),
-            'commitCount' => $projectMetricsProvider->getCommitCount($p),
-            'topContributors' => $projectMetricsProvider->getTopContributors($p),
-            'activityGraph' => $this->makeActivityGraph(
-                $projectMetricsProvider->getCommitHistogram(
-                    $p,
-                    Dates::INTERVAL_WEEK,
-                    $current->sub(
-                        DateInterval::createFromDateString('1 year')
-                    ),
-                    $current
-                )
-            ),
-            'commitGraph' => $this->makeGraph(
-                $projectMetricsProvider->getCommitHistogram(
-                    $p,
-                    Dates::INTERVAL_YEAR
-                )
-            ),
-            'languageGraph' => $this->makeGraph(
-                $projectMetricsProvider->getMostUsedLanguages($p),
-                false
-            ),
-            'contributorsGraph' => $this->makeGraph(
-                $projectMetricsProvider->getContributorHistogram($p, Dates::INTERVAL_YEAR)
-            ),
-            'isHostedOnGithub' => GitHubApiService::isGitHubRepoUrl($p->getSourceRepo()->getUrl()),
-        ];
+        $metadata = $this->getProjectMetadata($p, $projectMetricsProvider);
 
         // Retrieve the project classifications for a project
         $classifications = $this->getDoctrine()->getManager()
             ->getRepository(ProjectClassification::class)
             ->findByProject($p);
+
+        $issues = $projectIssueFinder->findProjectIssues($p);
+
+        $dismissLicenseAlertForm = $this->createDismissAlertForm($parentName, $projectName, DismissAlertForm::ALERT_LICENSE);
+        $dismissIssueTrackerAlertForm = $this->createDismissAlertForm($parentName, $projectName, DismissAlertForm::ALERT_ISSUE_TRACKER);
+        $dismissHomePageAlertForm = $this->createDismissAlertForm($parentName, $projectName, DismissAlertForm::ALERT_HOME_PAGE);
+        $dismissReadmeAlertForm = $this->createDismissAlertForm($parentName, $projectName, DismissAlertForm::ALERT_README);
 
         // the actual project page
         return $this->render(
@@ -296,6 +266,11 @@ class ProjectController extends AbstractController
                 'project' => $p,
                 'metadata' => $metadata,
                 'classifications' => $classifications,
+                'issues' => $issues,
+                'dismissLicenseAlertForm' => $dismissLicenseAlertForm->createView(),
+                'dismissHomePageAlertForm' => $dismissHomePageAlertForm->createView(),
+                'dismissReadmeAlertForm' => $dismissReadmeAlertForm->createView(),
+                'dismissIssueTrackerAlertForm' => $dismissIssueTrackerAlertForm->createView(),
             ]
         );
     }
@@ -336,7 +311,7 @@ class ProjectController extends AbstractController
             // Insert classifications
             if (isset($projClassification)) {
                 foreach ($projClassification as $classification) {
-                    if ($this->classificationValidation($classification)) {
+                    if ($this->validateProjectClassification($classification)) {
                         $projectClassification = new ProjectClassification();
                         $projectClassification->setProject($p);
                         $projectClassification->setClassification($classification);
@@ -515,6 +490,45 @@ class ProjectController extends AbstractController
         }
 
         return new JsonResponse(['inProcessing' => $prj->isInProcessing()]);
+    }
+
+    public function dismissAlertAction(
+        Request $request,
+        string $parentName,
+        string $projectName,
+        ProjectRepository $repository
+    ) {
+        $project = $repository->findProjectWithParent($parentName, $projectName);
+        $preferences = $project->getPreferences();
+
+        $form = $this->createForm(DismissAlertForm::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            switch ($form->getData()['alert']) {
+                case DismissAlertForm::ALERT_LICENSE:
+                    $preferences->setAlertForMissingLicenseVisible(false);
+                    break;
+                case DismissAlertForm::ALERT_HOME_PAGE:
+                    $preferences->setAlertForMissingHomePageVisible(false);
+                    break;
+                case DismissAlertForm::ALERT_ISSUE_TRACKER:
+                    $preferences->setAlertForMissingIssueTrackerVisible(false);
+                    break;
+                case DismissAlertForm::ALERT_README:
+                    $preferences->setAlertForMissingReadmeVisible(false);
+                    break;
+            }
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($preferences);
+        $em->flush();
+
+        return $this->redirectToRoute('librecores_project_repo_project_view', [
+            'parentName' => $parentName,
+            'projectName' => $projectName,
+        ]);
     }
 
     /**
@@ -780,7 +794,7 @@ QUERY;
      *
      * @return bool
      */
-    private function classificationValidation($classification)
+    private function validateProjectClassification($classification)
     {
         $em = $this->getDoctrine()->getManager()
             ->getRepository(ClassificationHierarchy::class);
@@ -791,8 +805,6 @@ QUERY;
             $classifications[$classHyc->getName()] = $classHyc;
         }
         $categories = explode('::', $classification);
-        $i = 0;
-        $count = count($categories);
         foreach ($categories as $category) {
             if (!array_key_exists($category, $classifications)) {
                 return false;
@@ -805,5 +817,70 @@ QUERY;
         }
 
         return true;
+    }
+
+    private function getProjectMetadata(Project $p, ProjectMetricsProvider $projectMetricsProvider)
+    {
+        // fetch project metadata
+        $current = new DateTimeImmutable();
+
+        $qualityScore = $projectMetricsProvider->getCodeQualityScore($p);
+        $twoTimesQualityScore = (int) ($qualityScore * 2);
+        $metadata = [
+            'qualityScore' => [
+                'fullStars' => (int) ($twoTimesQualityScore / 2),
+                'halfStars' => $twoTimesQualityScore % 2,
+                'value' => $qualityScore,
+            ],
+            'latestCommit' => $projectMetricsProvider->getLatestCommit($p),
+            'firstCommit' => $projectMetricsProvider->getFirstCommit($p),
+            'contributorCount' => $projectMetricsProvider->getContributorsCount($p),
+            'commitCount' => $projectMetricsProvider->getCommitCount($p),
+            'topContributors' => $projectMetricsProvider->getTopContributors($p),
+            'activityGraph' => $this->makeActivityGraph(
+                $projectMetricsProvider->getCommitHistogram(
+                    $p,
+                    Dates::INTERVAL_WEEK,
+                    $current->sub(
+                        DateInterval::createFromDateString('1 year')
+                    ),
+                    $current
+                )
+            ),
+            'commitGraph' => $this->makeGraph(
+                $projectMetricsProvider->getCommitHistogram(
+                    $p,
+                    Dates::INTERVAL_YEAR
+                )
+            ),
+            'languageGraph' => $this->makeGraph(
+                $projectMetricsProvider->getMostUsedLanguages($p),
+                false
+            ),
+            'contributorsGraph' => $this->makeGraph(
+                $projectMetricsProvider->getContributorHistogram($p, Dates::INTERVAL_YEAR)
+            ),
+            'isHostedOnGithub' => GitHubApiService::isGitHubRepoUrl($p->getSourceRepo()->getUrl()),
+        ];
+
+        return $metadata;
+    }
+
+    private function createDismissAlertForm(
+        string $parentName,
+        string $projectName,
+        string $alertType
+    ): FormInterface {
+        return $this->createForm(
+            DismissAlertForm::class,
+            [ 'alert' => $alertType ],
+            [ 'action' => $this->generateUrl(
+                'librecores_project_repo_project_dismiss_alert',
+                [
+                    'projectName' => $projectName,
+                    'parentName' => $parentName,
+                ]
+            ), ]
+        );
     }
 }

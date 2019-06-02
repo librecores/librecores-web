@@ -1,4 +1,16 @@
 {% extends 'layout.html.twig' %}
+{% import _self as self %}
+
+{% macro render_alert_disclaimer(project) %}
+  <div class="project-alerts-disclaimer text-muted">
+    <small><i class="fa fa-exclamation-circle"></i></small>
+    {% if project.parentUser %}
+      <small>These alerts are only visible to you</small>
+    {% else %}
+      <small>These alerts are only visible to users with edit permission for this project</small>
+    {% endif %}
+  </div>
+{% endmacro %}
 
 {% block title %}
 {{ project.displayName }} @ LibreCores: {% if project.tagline %}{{ project.tagline }}{% endif %}
@@ -15,7 +27,9 @@
 <div class="librecores-project-header">
   {% if project.inProcessing %}
     <div class="project-in-processing alert alert-warning alert-dismissible">
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <button type="button" class="close"  aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
       <p>We are currently updating this project. Project information will be available in few minutes.</p>
       <p>This page should automatically reload when processing is complete. If not, then <a href="{{ app.request.uri }}">click here</a> to reload.</p>
     </div>
@@ -27,6 +41,101 @@
   {% if project.tagline %}
   <div class="tagline">
     {{ project.tagline }}
+  </div>
+  {% endif %}
+  {% if issues.issues and not project.inProcessing %}
+  <div class="project-alerts">
+    {% if is_granted('edit', project) %}
+      {% if issues.licenseMissing and project.preferences.alertForMissingLicenseVisible %}
+        <div class="alert alert-warning alert-dismissable">
+          {{ form_start(dismissLicenseAlertForm) }}
+            <button type="submit" class="close" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          {{ form_end(dismissLicenseAlertForm) }}
+          <p>
+            <strong>Set a license for this project</strong>
+          </p>
+          <p>
+            We could not find a license associated with this project.
+            Users will be reluctant to use a project without clear licensing terms.
+          </p>
+          <p>
+            <a href="{{ path('librecores_project_repo_project_settings', {'parentName': project.parentName, 'projectName': project.name}) }}#license" class="btn btn-info">
+              Choose license
+            </a>
+          </p>
+        </div>
+        {{ self.render_alert_disclaimer(project) }}
+      {% elseif issues.readmeMissing and project.preferences.alertForMissingReadmeVisible %}
+        <div class="alert alert-warning alert-dismissable">
+          {{ form_start(dismissReadmeAlertForm) }}
+            <button type="submit" class="close" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          {{ form_end(dismissReadmeAlertForm) }}
+          <p>
+            <strong>Set a description for this project</strong>
+          </p>
+          <p>
+            We could not find a README associated with this project.
+            Users will be reluctant to use a project without document.
+          </p>
+          <p>
+            <a href="{{ path('librecores_project_repo_project_settings', {'parentName': project.parentName, 'projectName': project.name}) }}#info" class="btn btn-info">
+              Configure README
+            </a>
+          </p>
+        </div>
+        {{ self.render_alert_disclaimer(project) }}
+      {% elseif issues.issueTrackerMissing and project.preferences.alertForMissingIssueTrackerVisible %}
+        <div class="alert alert-info alert-dismissable">
+          {{ form_start(dismissIssueTrackerAlertForm) }}
+            <button type="submit" class="close" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          {{ form_end(dismissIssueTrackerAlertForm) }}
+          <p>
+            <strong>Set an issue tracker for this project</strong>
+          </p>
+          <p>
+            Issue trackers (such as BugZilla, JIRA) help users to submit bugs,
+            enhancements and feature requests easily. If your project is hosted
+            on GitHub or GitLab, you already have an issue tracker for your
+            repository.
+          </p>
+          <p>
+            <a href="{{ path('librecores_project_repo_project_settings', {'parentName': project.parentName, 'projectName': project.name}) }}#resources" class="btn btn-info">
+              Configure issue tracker
+            </a>
+          </p>
+        </div>
+        {{ self.render_alert_disclaimer(project) }}
+      {% elseif issues.homePageMissing and project.preferences.alertForMissingHomePageVisible %}
+        <div class="alert alert-info alert-dismissable">
+          {{ form_start(dismissHomePageAlertForm) }}
+          <button type="submit" class="close" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          {{ form_end(dismissHomePageAlertForm) }}
+          <p>
+            <strong>Set a home page for this project</strong>
+          </p>
+          <p>
+            A home page would give visibility about where and how to fetch the
+            source code, documentation and project artifacts. It does not need
+            to be a web page, it can also be a link to your project's GitHub or
+            GitLab page.
+          </p>
+          <p>
+            <a href="{{ path('librecores_project_repo_project_settings', {'parentName': project.parentName, 'projectName': project.name}) }}#resources" class="btn btn-info">
+              Configure project home page
+            </a>
+          </p>
+        </div>
+        {{ self.render_alert_disclaimer(project) }}
+      {% endif %}
+    {% endif %}
   </div>
   {% endif %}
   {#
