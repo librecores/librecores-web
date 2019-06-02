@@ -1,0 +1,5 @@
+project:
+    add:
+        webhooks:
+            generic_error: 'Unable to install webhook to GitHub repository. Project information will not be updated automatically.'
+            auth_required: 'Unable to install webhook to GitHub repository. Could not authenticate with GitHub.'
