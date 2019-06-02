@@ -2,13 +2,13 @@
 
 {# include trumbowyg CSS/JS #}
 {% block stylesheets %}
-  <link  rel="stylesheet" href="{{ asset('build/trumbowyg.css') }}">
+  <link  rel="stylesheet" href="{{ asset('build/librecores_project_settings_css.css') }}">
   {{ parent() }}
 {% endblock %}
 
 {% block javascripts %}
   {{ parent() }}
-  <script src="{{ asset('build/project_settings.js') }}"></script>
+  <script src="{{ asset('build/librecores_project_settings_js.js') }}"></script>
 {% endblock %}
 
 
@@ -161,11 +161,6 @@
       </div>
     {{ form_end(form) }}
   </div>
-  {# Passing classification data to classification.js #}
-  <div class="hidden" id="classification-data" data-classification="{{ classificationHierarchy|json_encode }}"></div>
 </div>
 {% endblock %}
 
-{% block pagejs %}
-
-{% endblock %}

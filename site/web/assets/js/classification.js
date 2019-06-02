@@ -1,6 +1,7 @@
 import $ from 'jquery'
 import 'bootstrap'
 import trumbowyg from 'trumbowyg'
+import classicationData from '../../../app/Resources/classifications.yml';
 
 function insertClassification(classificationDetails) {
   var count = 1;
@@ -173,5 +174,50 @@ $(document).ready(function(){
     au ? el.hide() : el.show();
   });
 
-  insertClassification($("#classification-data").data("classification"))
+
+  // insert classifications from static yaml file
+  // object manipulation from the yaml file which is loaded
+  // from js-yaml-loader
+  let arr = [];
+  let parentId = 0;
+  let id = 0;
+
+  //map function
+  const mapOver = (config, arr, parentId) => {
+    Object.keys(config).map(key => {
+      if(config[key]) {
+        if(Array.isArray(config[key])) {
+          id+=1;
+          arr.push({id, parentId, name: key})
+          let newId = id;
+          config[key].forEach(item => {
+            id+=1;
+            arr.push({id, parentId: newId, name: item})
+          })
+        } else {
+          id+=1;
+          arr.push({id, parentId, name: key})
+          mapOver(config[key], arr, id)
+        }
+      }
+      else {
+        id+=1;
+        arr.push({id, parentId, name: key})
+        return;
+      }
+    });
+    return arr;
+  };
+
+  // calls mapOver function to map over all the data keys
+  let configArray = mapOver(classicationData, arr, parentId);
+  configArray = configArray.map(data => {
+    if(data.parentId === 0) {
+      return {...data, parentId: null}
+    }
+    return {...data}
+  });
+
+  // Insert Classifications into the Project
+  insertClassification(configArray);
 });

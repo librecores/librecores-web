@@ -1,5 +1,5 @@
 $brand-primary:           #3fb0ac;
-$link-hover-color: 		  #173e43;
+$link-hover-color:        #173e43;
 $font-family-sans-serif:  'Open Sans', sans-serif;
 $font-family-monospace:   "Source Code Pro", Menlo, monospace;
 $font-size-base:          15px;
@@ -11,7 +11,9 @@ $screen-md:               992px;
 $screen-md-min:           $screen-md;
 
 // Navbar collapse
-//** Point at which the navbar becomes uncollapsed.
+//** Point at which the navbar becomes uncollapsed
 $grid-float-breakpoint:   $screen-md-min;// Import Bootstrap for Sass
 
 @import "bootstrap";
+@import "~bootstrap-social/bootstrap-social.css";
+@import "~font-awesome";

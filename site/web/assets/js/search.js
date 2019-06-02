@@ -188,7 +188,7 @@ function getTimeDiff(item) {
     }
 
     if(days > 0) {
-        return days === 1 ? days + ' day ago' : days + ' day ago';
+        return days === 1 ? days + ' day ago' : days + ' days ago';
     }
 
     return 0 + ' day ago'

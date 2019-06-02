@@ -768,14 +768,13 @@ a.classifiation-tag:hover {
   color: #999;
 }
 
+/*Styling algolia widgets*/
 .ais-SearchBox-submit {
   display: none;
 }
-
 .ais-SearchBox-input {
   width: 100%;
 }
-
 .ais-SearchBox-reset {
   display: none;
 }

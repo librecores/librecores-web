@@ -2,13 +2,12 @@
 # Install RabbitMQ
 # see http://www.rabbitmq.com/install-debian.html
 
-- name: Add RabbitMQ and Erlang key
+- name: Add RabbitMQ bintray repository key
   become: true
   apt_key:
     url: "{{item}}"
   with_items:
-    - 'https://packagecloud.io/rabbitmq/rabbitmq-server/gpgkey'
-    - 'https://packages.erlang-solutions.com/ubuntu/erlang_solutions.asc'
+    - 'https://github.com/rabbitmq/signing-keys/releases/download/2.0/rabbitmq-release-signing-key.asc'
 
 - name: Add RabbitMQ and Erlang repositories (maintained by RabbitMQ)
   become: true
@@ -17,9 +16,16 @@
     state: present
     update_cache: yes
   with_items:
-    - 'deb http://packages.erlang-solutions.com/ubuntu xenial contrib'
-    - 'deb https://packagecloud.io/rabbitmq/rabbitmq-server/ubuntu/ xenial main'
+    - 'deb https://dl.bintray.com/rabbitmq-erlang/debian xenial erlang-21.x'
+    - 'deb https://dl.bintray.com/rabbitmq/debian xenial main'
 
+- name: Use Erlang packages from RabbitMQ, not from Ubuntu
+  copy:
+    dest: /etc/apt/preferences.d/erlang
+    content: |
+      Package: erlang*
+      Pin: release o=Bintray
+      Pin-Priority: 1000
 - name: Install RabbitMQ
   become: true
   apt:  pkg=rabbitmq-server state=present
