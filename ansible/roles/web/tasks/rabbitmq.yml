@@ -26,6 +26,7 @@
       Package: erlang*
       Pin: release o=Bintray
       Pin-Priority: 1000
+
 - name: Install RabbitMQ
   become: true
   apt:  pkg=rabbitmq-server state=present

@@ -1,5 +1,6 @@
 const $ = require('jquery');
 import Chartist from 'chartist';
+import livestamp from 'kuende-livestamp';
 
 $(function () {
   $('[data-toggle="tooltip"]').tooltip();

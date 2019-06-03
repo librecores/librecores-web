@@ -112,7 +112,7 @@
     {% endverbatim %}
   </script>
   {# passing algolia credentials to search.js #}
-  <div class="hidden" id="search-data" data-search='{ "appId": "{{ algolia_app_id }}", "apiKey": "{{ algolia_search_key }}", "searchPrefix": "{{ algolia_search_prefix }}", "indexName": "{{ searchType }}" }'></div>
+  <div class="hidden" id="search-data" data-search='{ "indexName": "{{ searchType }}" }'></div>
 {% endblock %}
 
   {% block javascripts %}

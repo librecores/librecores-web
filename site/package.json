@@ -1,5 +1,10 @@
 {
-  "devDependencies": {
+  "dependencies": {
+    "algoliasearch": "^3.33.0",
+    "instantsearch.js": "^3.4.0",
+    "js-yaml-loader": "^1.2.0",
+    "kuende-livestamp": "^1.1.2",
+    "trumbowyg": "^2.18.0",
     "@symfony/webpack-encore": "^0.27.0",
     "bootstrap": "^4.3.1",
     "bootstrap-social": "^5.1.1",
@@ -12,10 +17,10 @@
     "popper.js": "^1.15.0",
     "sass-loader": "^7.1.0"
   },
-  "dependencies": {
-    "algoliasearch": "^3.33.0",
-    "instantsearch.js": "^3.4.0",
-    "js-yaml-loader": "^1.2.0",
-    "trumbowyg": "^2.18.0"
+  "scripts": {
+    "dev-server": "encore dev-server",
+    "dev": "encore dev",
+    "watch": "encore dev --watch",
+    "build": "encore production"
   }
 }

@@ -27,6 +27,9 @@ Encore
         './web/assets/scss/bootstrap-librecores.scss',
         './web/assets/css/librecores.css'
     ])
+    .addStyleEntry('librecores_project_view_css', [
+        './web/assets/css/chartist.css'
+    ])
     .addStyleEntry('librecores_project_settings_css', [
         './web/assets/scss/trumbowyg.scss'
     ])
@@ -35,13 +38,17 @@ Encore
     ])
 
     // JS entries
-    .addEntry('librecores_base_js',[
-        './web/assets/js/livestamp.js'
-    ])
+    // createSharedEntry for base template js files to reduce
+    // module sizes in production
+    .createSharedEntry('librecores_base_js',
+        './web/assets/js/base.js')
 
     // Page specific JS entries
     .addEntry('librecores_search_js', [
         './web/assets/js/search.js'
+    ])
+    .addEntry('librecores_user_view_js', [
+        './web/assets/js/user-view.js'
     ])
     .addEntry('librecores_project_view_js', [
         './web/assets/js/metrics.js',
@@ -53,7 +60,7 @@ Encore
     ])
     .addEntry('librecores_project_new_js', [
         './web/assets/js/bootstrap-select.js',
-        './web/assets/js/project_new.js'
+        './web/assets/js/project-new.js'
     ])
     .addEntry('librecores_planet_js', [
         './web/assets/js/planet.js'

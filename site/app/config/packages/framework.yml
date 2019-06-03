@@ -25,7 +25,10 @@ framework:
         gc_probability: 0
     fragments:       ~
     http_method_override: true
-    assets: ~
+    # Configure assets to parse manifest.json which source-maps the actual files
+    # with webpack dev/production builds
+    assets:
+        json_manifest_path: '%kernel.project_dir%/web/build/manifest.json'
     cache:
         pools:
             # Cache pool for all GitHub API requests done through

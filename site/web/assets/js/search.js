@@ -2,6 +2,7 @@ const $ = require('jquery');
 import instantsearch from 'instantsearch.js'
 import algoliasearch from 'algoliasearch/lite';
 import {searchBox, hits, pagination, hierarchicalMenu, stats} from "instantsearch.js/es/widgets";
+import algolia_credentials from '../../../app/Resources/algolia-credentials'
 
 function algoliaAutocomplete(algoliaConfig) {
     var client = algoliasearch(algoliaConfig.applicationId, algoliaConfig.searchKey)
@@ -206,10 +207,11 @@ function getFormattedDate(item){
 $(function() {
     searchFunctions();
     let options =  {
-        appId: $("#search-data").data("search").appId,
-        apiKey: $("#search-data").data("search").apiKey,
+        appId: algolia_credentials.algolia_app_id,
+        apiKey: algolia_credentials.algolia_api_key,
+        // indexName is subject to change on form-input
         indexName: $("#search-data").data("search").indexName,
-        searchPrefix: $("#search-data").data("search").searchPrefix,
+        searchPrefix: algolia_credentials.algolia_search_prefix,
         searchParameters: {
             hitsPerPage: 10,
         },
