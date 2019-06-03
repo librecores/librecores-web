@@ -45,7 +45,7 @@ abstract class AbstractProjectUpdateConsumer implements ConsumerInterface
     /**
      * @param AMQPMessage $msg The message
      *
-     * @return mixed false to reject and requeue, any other value to acknowledge
+     * @return bool false to reject and requeue, any other value to acknowledge
      */
     public function execute(AMQPMessage $msg)
     {
@@ -89,7 +89,7 @@ abstract class AbstractProjectUpdateConsumer implements ConsumerInterface
      *
      * @param Project $project
      *
-     * @return mixed
+     * @return bool true when successfully processed and false to retry
      */
-    abstract protected function processProject(Project $project);
+    abstract protected function processProject(Project $project): bool;
 }

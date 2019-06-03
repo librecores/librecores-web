@@ -56,8 +56,10 @@ class UpdateGitHubMetadataConsumer extends AbstractProjectUpdateConsumer
      * Extract and update Github specific metrics
      *
      * @param Project $project
+     *
+     * @return bool
      */
-    protected function processProject(Project $project)
+    protected function processProject(Project $project) : bool
     {
         try {
             $this->logger->info("Enriching project: {$project->getFqname()} with GitHub metadata");
@@ -74,7 +76,7 @@ class UpdateGitHubMetadataConsumer extends AbstractProjectUpdateConsumer
                     ."as it is not a GitHub repo"
                 );
 
-                return;
+                return true;
             }
 
             $repoInfo = GitHubApiService::parseGitHubRepoUrl($repoUrl);
@@ -99,11 +101,14 @@ class UpdateGitHubMetadataConsumer extends AbstractProjectUpdateConsumer
             $this->entityManager->flush();
             $this->logger->info('Fetched GitHub metrics successfully');
         } catch (Exception $ex) {
+            // Report this error and do not requeue
             $this->logger->error(
                 'Unable to fetch data from Github: '
                 .$ex->getMessage()
             );
         }
+
+        return true;
     }
 
     /**

@@ -54,7 +54,7 @@ class UpdateProjectInformation extends AbstractProjectUpdateConsumer
      *
      * @throws Exception
      */
-    protected function processProject(Project $project)
+    protected function processProject(Project $project) : bool
     {
         try {
             // check if this project is associated with a source repository
