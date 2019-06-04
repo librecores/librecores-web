@@ -59,7 +59,6 @@ Encore
         './web/assets/js/classification.js'
     ])
     .addEntry('librecores_project_new_js', [
-        './web/assets/js/bootstrap-select.js',
         './web/assets/js/project-new.js'
     ])
     .addEntry('librecores_planet_js', [
