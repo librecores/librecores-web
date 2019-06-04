@@ -148,7 +148,7 @@ function algoliaInstantSearch(options, searchType) {
         separator: '::',
         templates: {
           header: '<h3>Classifications</h3>',
-          item:  '<a href="{{url}}" class="facet-item {{#isRefined}}active{{/isRefined}}"><span class="facet-name"> {{label}}</span class="facet-name"><span class="ais-hierarchical-menu--count">{{count}}</span></a>'
+          item:  '<div class="facet-item col-sm-12"><a href="{{url}}" class="facet-item {{#isRefined}}active{{/isRefined}}"><span class="facet-name"> {{label}}</span><span class="ais-hierarchical-menu--count">{{count}}</span></a></div>'
         },
       })
     );

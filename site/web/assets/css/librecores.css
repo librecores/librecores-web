@@ -694,6 +694,22 @@ a.classifiation-tag:hover {
   background-color: #def;
 }
 
+div.facet-item {
+  margin: 0 0.5em 0.5em 0;
+  padding: 0.3em;
+  background-color: #f1f8ff;
+  text-decoration: none;
+  border-radius: 3px;
+  }
+
+  div.facet-item:hover {
+    margin: 0 0.5em 0.5em 0;
+    padding: 0.3em;
+    background-color: #def;
+    text-decoration: none;
+    border-radius: 3px;
+    }
+
 .search-type {
   text-align: left;
 }
