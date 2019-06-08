@@ -9,3 +9,4 @@ Don't worry, it's done quickly.
 
    quickstart.rst
    tipsandtricks.rst
+   frontend.rst
