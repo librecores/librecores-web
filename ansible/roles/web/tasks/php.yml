@@ -70,3 +70,4 @@
   shell: curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer
   args:
     creates: /usr/bin/composer
+    warn: false
