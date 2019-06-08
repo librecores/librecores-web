@@ -1,8 +1,11 @@
 framework:
     #esi:             ~
     default_locale:  "%locale%"
-    #translator:      { fallback: en }
-    translator:      { fallbacks: ["%locale%"] }
+    translator:
+        fallbacks: ["%locale%"]
+        # Do not output "Translation not found." log messages into the symfony
+        # console, making it harder to see real warnings.
+        logging:   false
     secret:          "%secret%"
     router:
         resource: "%kernel.root_dir%/config/routing.yml"
