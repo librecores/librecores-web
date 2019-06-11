@@ -12,6 +12,8 @@ doctrine:
             collate: utf8mb4_unicode_520_ci
 
     orm:
+        resolve_target_entities:
+            Mgilet\NotificationBundle\Entity\Notification: App\Entity\AppNotification
         auto_generate_proxy_classes: "%kernel.debug%"
         auto_mapping: true
         mappings:

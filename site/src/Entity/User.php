@@ -7,6 +7,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\User as BaseUser;
+use Mgilet\NotificationBundle\Annotation\Notifiable;
+use Mgilet\NotificationBundle\NotifiableInterface;
 
 /**
  * A user
@@ -15,9 +17,10 @@ use FOS\UserBundle\Model\User as BaseUser;
  *
  * @ORM\Table("User")
  * @ORM\Entity
+ * @Notifiable(name="user")
  * @ORM\HasLifecycleCallbacks
  */
-class User extends BaseUser
+class User extends BaseUser implements NotifiableInterface
 {
     /**
      * @var int
