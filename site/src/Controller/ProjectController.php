@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\AppNotification;
 use App\Entity\ClassificationHierarchy;
 use App\Entity\GitSourceRepo;
 use App\Entity\LanguageStat;
@@ -16,6 +17,7 @@ use App\Service\GitHub\AuthenticationRequiredException;
 use App\Service\GitHub\GitHubApiService;
 use App\Service\ProjectMetricsProvider;
 use App\Service\QueueDispatcherService;
+use App\Service\NotificationProducerService;
 use App\Util\Dates;
 use DateInterval;
 use DateTimeImmutable;
@@ -55,13 +57,15 @@ class ProjectController extends AbstractController
      *
      * @throws NonUniqueResultException
      * @throws \Http\Client\Exception
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function newAction(
         Request $request,
         GitHubApiService $githubApiService,
         QueueDispatcherService $queueDispatcherService,
         OrganizationRepository $organizationRepository,
-        UserManagerInterface $userManager
+        UserManagerInterface $userManager,
+        NotificationProducerService $notificationProducerService
     ) {
         $p = new Project();
         $p->setParentUser($this->getUser());
@@ -181,7 +185,15 @@ class ProjectController extends AbstractController
             $em->persist($p);
             $em->flush();
 
-            // queue data collection from repository
+            //create a Notification for Project Creation
+            $notif = new AppNotification();
+            $notif->setSubject('Project Creation');
+            $notif->setMessage('Your project '.$p->getDisplayName().' was created!');
+            $notif->setType('web_notification');
+            $notif->setUserIdentifier($this->getUser()->getId());
+            $notificationProducerService->publishNotification($notif);
+
+            //queue data collection from repository
             $queueDispatcherService->updateProjectInfo($p);
 
             // redirect user to "view project" page

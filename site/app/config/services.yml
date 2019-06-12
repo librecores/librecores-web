@@ -8,6 +8,7 @@ services:
         public: false
         bind:
             $updateProjectInfoProducer: '@old_sound_rabbit_mq.update_project_info_producer'
+            $notificationProducer: '@old_sound_rabbit_mq.send_notification_producer'
 
     # makes classes in src/Librecores/ProjectRepoBundle available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
@@ -27,6 +28,9 @@ services:
     # Required legacy-style aliases
     update_project_info_consumer: '@App\Consumer\UpdateProjectInformation'
     update_github_metadata_consumer: '@App\Consumer\UpdateGitHubMetadataConsumer'
+    web_notification_consumer: '@App\Consumer\WebNotificationConsumer'
+    email_notification_consumer: '@App\Consumer\EmailNotificationConsumer'
+
 
     # Explicit configurations
     # TODO: Investigate and deprecate these in favor of auto-wiring
@@ -94,3 +98,5 @@ services:
     App\RepoCrawler\GitRepoCrawler:
         tags:
             - 'app.repo_crawler'
+
+    Mgilet\NotificationBundle\Manager\NotificationManager: '@mgilet.notification'

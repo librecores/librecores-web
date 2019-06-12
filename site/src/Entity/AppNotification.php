@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Mgilet\NotificationBundle\Entity\NotificationInterface;
 use Mgilet\NotificationBundle\Model\Notification as NotificationModel;
+use phpDocumentor\Reflection\Types\Integer;
 
 /**
  * Class AppNotification
@@ -12,12 +13,35 @@ use Mgilet\NotificationBundle\Model\Notification as NotificationModel;
  *
  * @package Acme\Entity
  */
-class AppNotification extends NotificationModel implements NotificationInterface
+class AppNotification extends NotificationModel implements NotificationInterface, \JsonSerializable
 {
     /**
      * @ORM\Column(name="notification_type", type="string", length=255, nullable=false)
      */
-    protected  $type;
+    protected $type;
+
+    /**
+     * User Identifier to find user(s) in the Consumer Phase
+     *
+     * @ORM\Column(name="userIdentifier", type="integer", nullable=false)
+     */
+    protected $userIdentifier;
+
+    /**
+     * @return Integer
+     */
+    public function getUserIdentifier()
+    {
+        return $this->userIdentifier;
+    }
+
+    /**
+     * @param integer $userIdentifier
+     */
+    public function setUserIdentifier($userIdentifier)
+    {
+        $this->userIdentifier = $userIdentifier;
+    }
 
     /**
      * @return string
@@ -35,6 +59,8 @@ class AppNotification extends NotificationModel implements NotificationInterface
         $this->type = $type;
         return $this;
     }
+
+
 }
 
 ?>
