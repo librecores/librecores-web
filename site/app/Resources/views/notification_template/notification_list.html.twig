@@ -1,0 +1,43 @@
+{% block head %}
+    <style>
+        .seen-form, .remove-form{
+            display: inline-block;
+        }
+        .notification-date{
+            font-size: 10px;
+        }
+        .notification-message, .notification-date{
+            list-style:none;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    {% if mgilet_notification_count(app.user) != 0 %}
+        {% for notification in notificationList %}
+            <li class="notification-item">
+                {# Buttons to mark a notification as seen and also remove them #}
+                <div class="notification-action">
+                    <form class="seen-form"
+                          method="post">
+                        <button type="submit"><i class="fa fa-times" aria-hidden="true"></i></button>
+                    </form>
+                    <form class="remove-form"
+                          method="post">
+                        <button type="submit"><i class="fa fa-check" aria-hidden="true"></i></button>
+                    </form>
+                </div>
+                <div class="notification-body">
+                    <ul>
+                        {#<li class="notification-subject">{{ notification.notification.subject }}</li>#}
+                        <li class="notification-message">{{ notification.notification.message }}</li>
+                        <li class="notification-date">{{ notification.notification.date|date }}</li>
+                    </ul>
+                </div>
+            </li>
+            <hr>
+        {% endfor %}
+    {% else %}
+        <li>No Notifications for you!</li>
+    {% endif %}
+{% endblock %}
