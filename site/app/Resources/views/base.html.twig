@@ -61,9 +61,8 @@
               <span class="sr-only"></span>
               <span class="caret"></span>
             </a>
-            <ul class="dropdown-menu" style="text-align: center">
-              <a href="" style="background-color:#69878f; color:white">Notification Settings</a>
-              <div style="overflow: scroll; height: 200px; padding:10px">
+            <ul class="dropdown-menu">
+              <div style="overflow: scroll; height: 200px">
                 {{ mgilet_notification_render(app.user, { 'template': './notification_template/notification_list.html.twig', 'order': 'DESC'}) }}
               </div>
             </ul>
@@ -102,6 +101,9 @@
               <li>
                 <a href="{{ path('librecores_project_repo_organization_list') }}">
                   Your Organizations
+                </a>
+                <a href="">
+                  Notification Settings
                 </a>
               </li>
               {#<li>

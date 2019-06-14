@@ -13,7 +13,7 @@ class NotificationProducerService
     /**
      * @var ProducerInterface
      */
-    private  $notificationProducer;
+    private $notificationProducer;
 
     /**
      * NotificationService constructor.
@@ -25,6 +25,7 @@ class NotificationProducerService
     }
 
     /**
+     * Publish a Notification to the Queue
      * @param AppNotification $notification
      */
     public function publishNotification(AppNotification $notification)
