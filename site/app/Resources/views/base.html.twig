@@ -57,11 +57,15 @@
           <li>
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
               <i class="fa fa-bell" aria-hidden="true"></i>
+              {{ mgilet_notification_unseen_count(app.user) }}
               <span class="sr-only"></span>
               <span class="caret"></span>
             </a>
-            <ul class="dropdown-menu" style="overflow: scroll; max-height: 600px">
-              {{ mgilet_notification_render(app.user, { 'template': './notification_template/notification_list.html.twig', 'order': 'DESC'}) }}
+            <ul class="dropdown-menu" style="text-align: center">
+              <a href="" style="background-color:#69878f; color:white">Notification Settings</a>
+              <div style="overflow: scroll; height: 200px; padding:10px">
+                {{ mgilet_notification_render(app.user, { 'template': './notification_template/notification_list.html.twig', 'order': 'DESC'}) }}
+              </div>
             </ul>
           </li>
           <li class="dropdown">

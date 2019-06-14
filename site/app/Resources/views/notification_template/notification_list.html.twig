@@ -6,8 +6,20 @@
         .notification-date{
             font-size: 10px;
         }
-        .notification-message, .notification-date{
+        .notification-message{
+            font-size:12px;
+            color: black;
+        }
+        .notification-message, .notification-date, .notification-action{
             list-style:none;
+            text-align: left;
+        }
+        .form-buttons{
+            font-size: 10px;
+            background:none;
+            color:inherit;
+            border:none;
+            padding:0!important;
         }
     </style>
 {% endblock %}
@@ -16,28 +28,23 @@
     {% if mgilet_notification_count(app.user) != 0 %}
         {% for notification in notificationList %}
             <li class="notification-item">
+                <li class="notification-date">{{ notification.notification.date|date }}</li>
+                <li class="notification-message">{{ notification.notification.message }}</li>
                 {# Buttons to mark a notification as seen and also remove them #}
                 <div class="notification-action">
                     <form class="seen-form"
                           method="post">
-                        <button type="submit"><i class="fa fa-times" aria-hidden="true"></i></button>
+                        <button class="form-buttons" type="submit"><u>Mark as Seen</u></button>
                     </form>
                     <form class="remove-form"
                           method="post">
-                        <button type="submit"><i class="fa fa-check" aria-hidden="true"></i></button>
+                        <button class="form-buttons" type="submit"><u>Remove</u></button>
                     </form>
                 </div>
-                <div class="notification-body">
-                    <ul>
-                        {#<li class="notification-subject">{{ notification.notification.subject }}</li>#}
-                        <li class="notification-message">{{ notification.notification.message }}</li>
-                        <li class="notification-date">{{ notification.notification.date|date }}</li>
-                    </ul>
-                </div>
-            </li>
             <hr>
+            </li>
         {% endfor %}
     {% else %}
-        <li>No Notifications for you!</li>
+        <li>Welcome to Librecores website!</li>
     {% endif %}
 {% endblock %}
