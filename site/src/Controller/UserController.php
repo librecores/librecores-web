@@ -13,6 +13,8 @@ use FOS\UserBundle\Model\UserInterface;
 use FOS\UserBundle\Model\UserManagerInterface;
 use FOS\UserBundle\Util\TokenGeneratorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -222,5 +224,98 @@ class UserController extends AbstractController
         }
 
         return $this->render('user/resend_confirmation_email.html.twig', [ 'form' => $form->createView() ]);
+    }
+
+    /**
+     * User Notification Settings
+     *
+     * @Route("/user/settings/notification-settings", name="librecores.user.settings.notification")
+     *
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function notificationSettingsAction(Request $request)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        $user = $this->getUser();
+
+        return $this->render(
+            'user/settings_notification.html.twig',
+            array('user' => $user)
+        );
+    }
+
+    /**
+     * Change Email Notification Settings
+     *
+     * @Route("/user/settings/notification-settings/email/{status}", name="librecores.user.settings.notification.email")
+     *
+     * @Method("POST")
+     *
+     * @param Request $request
+     * @param string  $status
+     *
+     * @return Response
+     */
+    public function emailNotificationAction(Request $request, $status)
+    {
+        dump($status);
+
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        $user = $this->getUser();
+
+        if ($status === "IS_SUBSCRIBED") {
+            $em = $this->getDoctrine()->getManager();
+            $user->setSubscribedToEmailNotifs(0);
+            $em->persist($user);
+            $em->flush();
+        }
+        else{
+            $em = $this->getDoctrine()->getManager();
+            $user->setSubscribedToEmailNotifs(1);
+            $em->persist($user);
+            $em->flush();
+        }
+
+        return $this->redirectToRoute('librecores.user.settings.notification', array('user' => $user));
+    }
+
+    /**
+     * Change Push Notification Settings
+     *
+     * @Route("/user/settings/notification-settings/push/{status}", name="librecores.user.settings.notification.push")
+     *
+     * @Method("POST")
+     *
+     * @param Request $request
+     * @param string  $status
+     *
+     * @return Response
+     */
+    public function pushNotificationAction(Request $request, $status)
+    {
+        dump($status);
+
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        $user = $this->getUser();
+
+        if ($status === "IS_SUBSCRIBED") {
+            $em = $this->getDoctrine()->getManager();
+            $user->setSubscribedToPushNotifs(0);
+            $em->persist($user);
+            $em->flush();
+        }
+        else{
+            $em = $this->getDoctrine()->getManager();
+            $user->setSubscribedToPushNotifs(1);
+            $em->persist($user);
+            $em->flush();
+        }
+
+        return $this->redirectToRoute('librecores.user.settings.notification', array('user' => $user));
     }
 }

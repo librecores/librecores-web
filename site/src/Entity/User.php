@@ -133,7 +133,29 @@ class User extends BaseUser implements NotifiableInterface
      */
     protected $updatedAt;
 
+    /**
+     * If the user subscribed to email
+     * Notifications
+     *
+     * @var boolean $subscribedToEmailNotifs
+     *
+     * @ORM\Column(type="boolean", options={"default" : true})
+     */
+    protected $subscribedToEmailNotifs = true;
 
+    /**
+     * If the user subscribed to email
+     * Notifications
+     *
+     * @var boolean $subscribedToPushNotifs
+     *
+     * @ORM\Column(type="boolean", options={"default" : true})
+     */
+    protected $subscribedToPushNotifs = true;
+
+    /**
+     * User constructor
+     */
     public function __construct()
     {
         parent::__construct();
@@ -505,6 +527,42 @@ class User extends BaseUser implements NotifiableInterface
         $this->googleOAuthAccessToken = $googleOAuthAccessToken;
 
         return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSubscribedToEmailNotifs(): bool
+    {
+        return $this->subscribedToEmailNotifs;
+    }
+
+    /**
+     * Alter user subscription to Email Notifications
+     *
+     * @return bool
+     */
+    public function setSubscribedToEmailNotifs(bool $subscribedToEmailNotifs): void
+    {
+        $this->subscribedToEmailNotifs = $subscribedToEmailNotifs;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSubscribedToPushNotifs(): bool
+    {
+        return $this->subscribedToPushNotifs;
+    }
+
+    /**
+     * Alter user subscription to Push Notifications
+     *
+     * @return bool
+     */
+    public function setSubscribedToPushNotifs(bool $subscribedToPushNotifs): void
+    {
+        $this->subscribedToPushNotifs = $subscribedToPushNotifs;
     }
 
     /**

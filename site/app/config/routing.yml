@@ -40,8 +40,3 @@ librecores.user.settings.password:
 librecores_user_resend_confirmation:
     path: /user/resend-confirmation
     controller: App\Controller\UserController::resendConfirmationEmailAction
-
-# Notification route to enable Mgillet Notification Controller
-#mgilet_notification:
-#    resource: "@MgiletNotificationBundle/Controller/"
-#    prefix: /notifications
