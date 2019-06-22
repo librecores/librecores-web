@@ -13,15 +13,15 @@ page path: /user/settings/notification-settings
         on the website as well as email notifications in their registered email. The settings for each of these notifications
         is down to personal preferences and can be edited in the panel down below</p>
     <p>Push Notifications</p>
-    {% set pnStatus = user.subscribedToPushNotifs ? "IS_SUBSCRIBED" : "IS_NOT_SUBSCRIBED" %}
+    {% set wnStatus = user.subscribedToWebNotifs ? "IS_SUBSCRIBED" : "IS_NOT_SUBSCRIBED" %}
     <ul>
         <li>Customize if you would like to enable push notifications on the website</li>
-        {% if pnStatus == "IS_SUBSCRIBED" %}
-            <form method="post" action="{{ path('librecores.user.settings.notification.push', {status: pnStatus}) }}">
+        {% if wnStatus == "IS_SUBSCRIBED" %}
+            <form method="post" action="{{ path('librecores.user.settings.notification.web', {status: wnStatus}) }}">
                 <button class="btn btn-danger" type="submit">Turn Off</button>
             </form>
         {% else %}
-            <form method="post" action="{{ path('librecores.user.settings.notification.push', {status: pnStatus}) }}">
+            <form method="post" action="{{ path('librecores.user.settings.notification.web', {status: wnStatus}) }}">
                 <button class="btn btn-success" type="submit">Turn On</button>
             </form>
         {% endif %}
@@ -40,8 +40,4 @@ page path: /user/settings/notification-settings
             </form>
         {% endif %}
     </ul>
-{% endblock %}
-
-{% block javascripts %}
-    {{ encore_entry_script_tags('notification_settings') }}
 {% endblock %}

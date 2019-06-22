@@ -147,11 +147,11 @@ class User extends BaseUser implements NotifiableInterface
      * If the user subscribed to email
      * Notifications
      *
-     * @var boolean $subscribedToPushNotifs
+     * @var boolean $subscribedToWebNotifs
      *
      * @ORM\Column(type="boolean", options={"default" : true})
      */
-    protected $subscribedToPushNotifs = true;
+    protected $subscribedToWebNotifs = true;
 
     /**
      * User constructor
@@ -550,9 +550,9 @@ class User extends BaseUser implements NotifiableInterface
     /**
      * @return bool
      */
-    public function isSubscribedToPushNotifs(): bool
+    public function isSubscribedToWebNotifs(): bool
     {
-        return $this->subscribedToPushNotifs;
+        return $this->subscribedToWebNotifs;
     }
 
     /**
@@ -560,9 +560,9 @@ class User extends BaseUser implements NotifiableInterface
      *
      * @return bool
      */
-    public function setSubscribedToPushNotifs(bool $subscribedToPushNotifs): void
+    public function setSubscribedToWebNotifs(bool $subscribedToWebNotifs): void
     {
-        $this->subscribedToPushNotifs = $subscribedToPushNotifs;
+        $this->subscribedToWebNotifs = $subscribedToWebNotifs;
     }
 
     /**

@@ -284,9 +284,9 @@ class UserController extends AbstractController
     }
 
     /**
-     * Change Push Notification Settings
+     * Change Web Notification Settings
      *
-     * @Route("/user/settings/notification-settings/push/{status}", name="librecores.user.settings.notification.push")
+     * @Route("/user/settings/notification-settings/web/{status}", name="librecores.user.settings.notification.web")
      *
      * @Method("POST")
      *
@@ -295,7 +295,7 @@ class UserController extends AbstractController
      *
      * @return Response
      */
-    public function pushNotificationAction(Request $request, $status)
+    public function webNotificationAction(Request $request, $status)
     {
         dump($status);
 
@@ -305,13 +305,13 @@ class UserController extends AbstractController
 
         if ($status === "IS_SUBSCRIBED") {
             $em = $this->getDoctrine()->getManager();
-            $user->setSubscribedToPushNotifs(0);
+            $user->setSubscribedToWebNotifs(false);
             $em->persist($user);
             $em->flush();
         }
         else{
             $em = $this->getDoctrine()->getManager();
-            $user->setSubscribedToPushNotifs(1);
+            $user->setSubscribedToWebNotifs(true);
             $em->persist($user);
             $em->flush();
         }

@@ -73,13 +73,18 @@ class WebNotificationConsumer implements ConsumerInterface
     }
 
     /**
+     * This method handles whether a notification from the Queue
+     * is to be handled as Web Notification, based on its type
+     * and User Notification Settings
+     *
      * @param AppNotification $notification
      *
      * @return bool
      */
     public function shouldBeHandledAsWebNotification(AppNotification $notification)
     {
-        if ($notification->getType() === 'web_notification') {
+        $user = $this->userManager->findUserBy(array('id' => $this->notification->getUserIdentifier()));
+        if ($notification->getType() === 'web_notification' && $user->isSubscribedToWebNotifs()) {
             return true;
         } else {
             return false;
