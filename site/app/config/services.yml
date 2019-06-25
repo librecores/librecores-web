@@ -27,6 +27,8 @@ services:
     # Required legacy-style aliases
     update_project_info_consumer: '@App\Consumer\UpdateProjectInformation'
     update_github_metadata_consumer: '@App\Consumer\UpdateGitHubMetadataConsumer'
+    web_notification_consumer: '@App\Consumer\WebNotificationConsumer'
+    email_notification_consumer: '@App\Consumer\EmailNotificationConsumer'
 
     # Explicit configurations
     # TODO: Investigate and deprecate these in favor of auto-wiring
