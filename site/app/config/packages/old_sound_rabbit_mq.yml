@@ -19,6 +19,9 @@ old_sound_rabbit_mq:
         update_project_info:
             connection:       default
             exchange_options: {name: 'update-project-info', type: fanout}
+        notification:
+            connection:       default
+            exchange_options: {name: 'notification', type: fanout}
     consumers:
         update_project_info:
             connection:       default
@@ -30,3 +33,14 @@ old_sound_rabbit_mq:
             exchange_options: {name: 'update-project-info', type: fanout}
             queue_options:    {name: 'update-github-metadata'}
             callback:         update_github_metadata_consumer
+    multiple_consumers:
+        notification:
+            connection:       default
+            exchange_options: {name: 'notification', type: fanout}
+            queues:
+                web_notification:
+                    name:     'web-notification'
+                    callback: web_notification_consumer
+                email_notification:
+                    name:     'email-notification'
+                    callback:  email_notification_consumer
