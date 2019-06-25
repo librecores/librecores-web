@@ -189,7 +189,7 @@ class ProjectController extends AbstractController
             $notif = new AppNotification();
             $notif->setSubject('Project Creation');
             $notif->setMessage('Your project '.$p->getDisplayName().' was created!');
-            $notif->setType('web_notification');
+            $notif->setType('email_notification');
             $notif->setUserIdentifier($this->getUser()->getId());
             $notificationProducerService->publishNotification($notif);
 
