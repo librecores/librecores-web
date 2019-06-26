@@ -1,0 +1,5 @@
+# Ansible 2.8 has a bug in the ec2_eip module which we cannot
+# work around
+# https://github.com/ansible/ansible/pull/55194
+ansible!=2.8
+boto

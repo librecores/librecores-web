@@ -8,19 +8,8 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 # Install dependencies required to run this script
 function install_deps
 {
-  echo Installing dependencies. You may be prompted for a password by sudo.
-  case $(lsb_release -is) in
-  Ubuntu)
-    sudo apt-get install -y ansible python-boto
-    ;;
-  *SUSE*)
-    sudo zypper install -y ansible python-boto
-    ;;
-  *)
-    echo Unknown distribution. Please extend this script! >&2
-    exit 1
-    ;;
-  esac
+  echo Installing Python dependencies
+  pip3 install --user -r $SCRIPT_DIR/ansible/requirements.txt
 }
 
 function usage
