@@ -1,14 +1,10 @@
 {
-  "devDependencies": {
-    "autoprefixer": "^9.6.0",
-    "js-yaml-loader": "^1.2.0",
-    "postcss-loader": "^3.0.0",
-    "sass-loader": "^7.1.0"
-  },
+  "devDependencies": {},
   "dependencies": {
     "@symfony/webpack-encore": "^0.27.0",
     "algoliasearch": "3.29.0",
     "autocomplete.js": "0.28.1",
+    "autoprefixer": "^9.6.0",
     "bootstrap-sass": "3.4.1",
     "bootstrap-select": "1.12.4",
     "bootstrap-social": "^5.1.1",
@@ -17,11 +13,14 @@
     "font-awesome": "^4.7.0",
     "instantsearch.js": "2.8.0",
     "jquery": "^3.4.1",
+    "js-yaml-loader": "^1.2.0",
     "kuende-livestamp": "^1.1.2",
     "moment": "^2.24.0",
     "node-sass": "^4.12.0",
     "path": "^0.12.7",
     "popper.js": "^1.15.0",
+    "postcss-loader": "^3.0.0",
+    "sass-loader": "^7.1.0",
     "trumbowyg": "^2.18.0"
   },
   "scripts": {
