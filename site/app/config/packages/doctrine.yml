@@ -29,3 +29,5 @@ doctrine:
                 YEAR: 'DoctrineExtensions\Query\Mysql\Year'
         hydrators:
             group: 'App\Doctrine\Hydrators\GroupHydrator'
+        resolve_target_entities:
+            Mgilet\NotificationBundle\Entity\Notification: App\Entity\Notification
