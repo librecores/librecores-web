@@ -49,7 +49,8 @@
 		"algolia/search-bundle": "^3.1",
 		"spatie/yaml-front-matter": "^2.0",
         "ext-json": "*",
-		"symfony/webpack-encore-bundle": "^1.6"
+		"symfony/webpack-encore-bundle": "^1.6",
+		"mgilet/notification-bundle": "^3.1"
     },
 	"scripts" : {
 		"post-install-cmd" : [

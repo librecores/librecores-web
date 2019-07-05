@@ -24,6 +24,7 @@ class AppKernel extends Kernel
             new Http\HttplugBundle\HttplugBundle(),
             new Algolia\SearchBundle\AlgoliaSearchBundle(),
             new \Symfony\WebpackEncoreBundle\WebpackEncoreBundle(),
+            new Mgilet\NotificationBundle\MgiletNotificationBundle(),
         );
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {
