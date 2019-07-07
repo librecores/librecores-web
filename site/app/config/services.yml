@@ -96,3 +96,6 @@ services:
     App\RepoCrawler\GitRepoCrawler:
         tags:
             - 'app.repo_crawler'
+
+    # Add/remove/edit Notifications through Mgilet Notification Manager
+    Mgilet\NotificationBundle\Manager\NotificationManager: '@mgilet.notification'
