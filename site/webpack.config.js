@@ -64,6 +64,9 @@ Encore
     .addEntry('planet', [
         './assets/js/planet.js'
     ])
+    .addEntry('notification_list', [
+        './assets/js/notification_list.js'
+    ])
 
     // will require an extra script tag for runtime.js
     // but, you probably want this, unless you're building a single-page app

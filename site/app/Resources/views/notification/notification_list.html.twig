@@ -1,0 +1,29 @@
+{# Render notifications #}
+{% if mgilet_notification_unseen_count(app.user) != 0 %}
+  {% for notification in notificationList|filter(notification => notification.seen == false) -%}
+    {#Render a unseen notification #}
+    {% if (notification.seen == false) %}
+      <div class="unseen-notifications" id="notification-{{ notification.notification.id }}">
+        <p class="notification-subject">{{ notification.notification.subject }}
+          <span class="pull-right">
+            <button class="notification-markasseen"
+                    data-notification="{{ notification.notification.id }}">
+              <i class="fa fa-times markasseen-icon"></i>
+            </button>
+          </span>
+        </p>
+        <p class="notification-message">{{ notification.notification.message }}</p>
+        <p class="notification-date" data-livestamp="{{ notification.notification.date|date("c") }}">
+        </p>
+      </div>
+      <hr/>
+    {% endif %}
+  {% endfor %}
+{% else %}
+  <ul>
+    <li>You have seen all notifications!</li>
+  </ul>
+{% endif %}
+{% block javascripts %}
+  {{ encore_entry_script_tags('notification_list') }}
+{% endblock %}

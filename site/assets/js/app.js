@@ -24,3 +24,16 @@ window.addEventListener("load", function(){
       }
     }
   })});
+
+// To stop Notification dropdown from disappearing when
+// anything inside it is clicked
+$(function() {
+  $('.notification-list').on('click', function(event) {
+    event.stopPropagation();
+  });
+
+  $(window).on('click', function() {
+    $('.notification-list').slideUp();
+  });
+
+});

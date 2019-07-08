@@ -54,6 +54,26 @@
 
         <ul class="nav navbar-nav navbar-right">
           {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                 aria-haspopup="true" aria-expanded="false">
+                <i class="fa fa-bell"></i>
+                <span class="notification-count">{{ mgilet_notification_unseen_count(app.user) }}</span>
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu list-group notification-list" role="menu">
+                <li class="list-group-item notification-list-title">
+                  <span class="item-left">Notifications</span>
+                  <span class="pull-right"><a href="#"><i class="fa fa-cog"></i></a></span>
+                </li>
+                <li class="divider"></li>
+                <li class="list-group-item notification-list-content">
+                  {{ mgilet_notification_render(app.user, { 'template': './notification/notification_list.html.twig', 'order': 'DESC'}) }}
+                </li>
+                <li class="divider"></li>
+                <li class="list-group-item notification-list-footer"><a class="text-center" href="">show all notifications</a></li>
+              </ul>
+            </li>
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
               <i class="fa fa-plus"></i>
