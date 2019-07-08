@@ -1,7 +1,10 @@
 import $ from 'jquery';
 
 import instantsearch from 'instantsearch.js'
-import 'instantsearch.js/dist/instantsearch.css'
+// Workaround for
+// https://github.com/librecores/librecores-web/issues/386
+//import 'instantsearch.js/dist/instantsearch.css'
+import '../scss/instantsearch.scss'
 import {searchBox, hits, pagination, hierarchicalMenu, stats} from "instantsearch.js/es/widgets";
 
 import algoliasearch from 'algoliasearch/lite';
