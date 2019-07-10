@@ -12,8 +12,12 @@ use FOS\UserBundle\Mailer\MailerInterface;
 use FOS\UserBundle\Model\UserInterface;
 use FOS\UserBundle\Model\UserManagerInterface;
 use FOS\UserBundle\Util\TokenGeneratorInterface;
+use Mgilet\NotificationBundle\Manager\NotificationManager;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,7 +25,6 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class UserController extends AbstractController
 {
-
     /**
      * View a user's public profile
      *
@@ -222,5 +225,42 @@ class UserController extends AbstractController
         }
 
         return $this->render('user/resend_confirmation_email.html.twig', [ 'form' => $form->createView() ]);
+    }
+
+    /**
+     * Mark a Notification as seen
+     *
+     * @Route("/user/notification/seen", name="notification_mark_seen")
+     *
+     * @Method("POST")
+     *
+     * @param Request             $request
+     * @param NotificationManager $notificationManager
+     *
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws \Doctrine\ORM\EntityNotFoundException
+     * @throws \Exception
+     *
+     * @return JsonResponse
+     */
+    public function markAsSeenAction(Request $request, NotificationManager $notificationManager)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        $user = $this->getUser();
+
+
+        $notification = $request->get('notification');
+        $notifiableEntity = $notificationManager->getNotifiableEntity($user);
+        $notifiable = $notificationManager->getNotifiableInterface($notificationManager->getNotifiableEntityById($notifiableEntity));
+
+        $notificationManager->markAsSeen(
+            $notifiable,
+            $notificationManager->getNotification($notification),
+            true
+        );
+        $count = $notificationManager->getUnseenNotificationCount($notifiable);
+
+        return new JsonResponse($count);
     }
 }
