@@ -1,0 +1,55 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}
+  Notification Inbox
+{% endblock %}
+
+{% block pagepath %}Home &raquo; Notification Inbox{% endblock %}
+
+{% block stylesheets %}
+  {{ parent() }}
+  {{ encore_entry_link_tags('notification_inbox') }}
+{% endblock %}
+
+{% block content %}
+  <h1>Your notifications ({{ mgilet_notification_unseen_count(app.user) }})</h1>
+  <div class="inbox-header row">
+    <div class="text-right">
+      {# TODO: Update the URL to Notification Settings #}
+      <a class="inbox-settings" href="#">Notification Settings</a>
+    </div>
+  </div>
+  {# Render all notifications #}
+  <div class="all-notifications row">
+    {% for notification in notificationList %}
+      {# Single notification #}
+      <div class="inbox-notification">
+        <a href="{{ path('inbox_mark_seen', {notification: notification.id}) }}">
+          <ul class="list-group inbox-content">
+            <li class="list-group-item {{ (notification.seen) ? "inbox-seen" : "inbox-unseen" }}">
+              <span class="inbox-subject">
+                {{ notification.notification.subject }}
+              </span>
+              <form class="badge notification-remove"
+                  action="{{ path('remove_notification', {notification: notification.id}) }}">
+                <button class="btn btn-default btn-xs remove-button">
+                  <i class="fa fa-fw fa-trash"></i>
+                </button>
+              </form>
+              <p class="inbox-message">
+                {{ notification.notification.message|nl2br }}
+              </p>
+              <p class="inbox-notification-date" data-livestamp="{{ notification.notification.date|date("c") }}">
+              </p>
+            </li>
+          </ul>
+        </a>
+      </div>
+    {% endfor %}
+  </div>
+{% endblock %}
+
+{% block javascripts %}
+  {{ parent() }}
+  {{ encore_entry_script_tags('notification_inbox') }}
+{% endblock %}
