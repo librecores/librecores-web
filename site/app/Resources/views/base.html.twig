@@ -71,7 +71,11 @@
                   {{ mgilet_notification_render(app.user, { 'template': './notification/notification_list.html.twig', 'order': 'DESC'}) }}
                 </li>
                 <li class="divider"></li>
-                <li class="list-group-item notification-list-footer"><a class="text-center" href="">show all notifications</a></li>
+                <li class="list-group-item notification-list-footer">
+                  <a class="text-center" href="{{ path('notification_inbox') }}">
+                    show all notifications
+                  </a>
+                </li>
               </ul>
             </li>
           <li class="dropdown">

@@ -1,0 +1,53 @@
+// Notification Inbox
+.inbox-header {
+  border-bottom: 2px solid #e2e2e2;
+}
+.inbox-header .inbox-title {
+  font-weight: bold;
+  font-size: 16px;
+  padding-bottom: 10px;
+}
+.inbox-header a.inbox-settings {
+  text-decoration:none;
+  color: #3eb0ac;
+  font-weight: bold;
+}
+.inbox-header .inbox-settings:hover, .inbox-header a.inbox-settings:focus {
+  color: #3eb0ac;
+  font-weight: bold;
+}
+.all-notifications {
+  list-style: none;
+}
+.inbox-notification {
+  display: block;
+}
+.inbox-notification > a {
+  text-decoration: none;
+  color: black;
+}
+.all-notifications span.inbox-subject {
+  font-weight: bold;
+  padding-bottom: 5px;
+}
+.all-notifications .inbox-unseen, .all-notifications .inbox-seen {
+  padding: 0;
+}
+.all-notifications .inbox-unseen {
+  background-color: #eeeeee;
+}
+.all-notifications p.inbox-notification-date {
+  font-size: 10px;
+  display: inline-block;
+  color: #B5B6B4;
+}
+span.inbox-subject, p.inbox-message, p.inbox-notification-date {
+  padding-left: 5px;
+}
+ul.list-group.inbox-content {
+  margin-bottom: 0;
+}
+.notification-remove {
+  background-color: transparent;
+  border: 0;
+}

@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Entity\Notification;
 use App\Form\Model\ResendConfirmationEmailRequest;
 use App\Form\Type\ResendConfirmationEmailRequestType;
 use App\Form\Type\UserProfileType;
@@ -13,6 +14,7 @@ use FOS\UserBundle\Model\UserInterface;
 use FOS\UserBundle\Model\UserManagerInterface;
 use FOS\UserBundle\Util\TokenGeneratorInterface;
 use Mgilet\NotificationBundle\Manager\NotificationManager;
+use Mgilet\NotificationBundle\NotifiableInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -228,7 +230,7 @@ class UserController extends AbstractController
     }
 
     /**
-     * Mark a Notification as seen
+     * Mark notifications "seen" in the notification list
      *
      * @Route("/user/notification/seen", name="notification_mark_seen")
      *
@@ -262,5 +264,110 @@ class UserController extends AbstractController
         $count = $notificationManager->getUnseenNotificationCount($notifiable);
 
         return new JsonResponse($count);
+    }
+
+    /**
+     * View all notifications in the user's inbox
+     *
+     * @Route("/user/notification/inbox", name="notification_inbox")
+     *
+     * @param NotificationManager $notificationManager
+     *
+     * @return string
+     */
+    public function inboxAction(NotificationManager $notificationManager)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $user = $this->getUser();
+        $notifications = $notificationManager->getNotifications($user);
+
+        return $this->render(
+            'user/notification_inbox.html.twig',
+            [
+                'notificationList' => $notifications,
+            ]
+        );
+    }
+
+    /**
+     * Mark a notification as seen in the notification inbox
+     *
+     * @Route("/user/notification/seen/{notification}", name="inbox_mark_seen")
+     *
+     * @param Notification        $notification
+     * @param NotificationManager $notificationManager
+     *
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws \Doctrine\ORM\EntityNotFoundException
+     * @throws \Exception
+     *
+     * @return Response
+     */
+    public function inboxMarkSeenAction($notification, NotificationManager $notificationManager)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        $user = $this->getUser();
+
+        $notifiableEntity = $notificationManager->getNotifiableEntity($user);
+        $notifiable = $notificationManager->getNotifiableInterface($notificationManager->getNotifiableEntityById($notifiableEntity));
+
+        $notificationManager->markAsSeen(
+            $notifiable,
+            $notificationManager->getNotification($notification),
+            true
+        );
+        $notificationList = $notificationManager->getNotifications(
+            $notifiable
+        );
+
+        return $this->redirectToRoute(
+            'notification_inbox',
+            ['notificationList' => $notificationList]
+        );
+    }
+
+    /**
+     * Remove a Notification
+     *
+     * @Route("/user/notification/remove/{notification}", name="remove_notification")
+     *
+     * @param Notification        $notification
+     * @param NotificationManager $notificationManager
+     *
+     * @throws \Doctrine\ORM\OptimisticLockException
+     *
+     * @return Response
+     */
+    public function removeAction($notification, NotificationManager $notificationManager)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        $user = $this->getUser();
+
+        $notifiableUser = $notificationManager->getNotifiableEntity($user);
+        $notifiableEntity = $notificationManager->getNotifiableEntityById($notifiableUser);
+        $notifiable = $notificationManager->getNotifiableInterface($notifiableEntity);
+
+
+        // Deletes the link between notification and notifiable
+        $notificationManager->removeNotification(
+            [$notifiable],
+            $notificationManager->getNotification($notification),
+            true
+        );
+
+        // Remove the Notification from the database
+        // TODO: Let foreign constraints take care of removing notifications, see #400
+        $notificationManager->deleteNotification($notificationManager->getNotification($notification), true);
+
+        $notificationList = $notificationManager->getNotifications(
+            $notifiable
+        );
+
+        return $this->redirectToRoute(
+            'notification_inbox',
+            ['notificationList' => $notificationList]
+        );
     }
 }
