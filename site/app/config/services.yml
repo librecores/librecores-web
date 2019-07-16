@@ -8,6 +8,7 @@ services:
         public: false
         bind:
             $updateProjectInfoProducer: '@old_sound_rabbit_mq.update_project_info_producer'
+            $notificationProducer: '@old_sound_rabbit_mq.notification_producer'
 
     # makes classes in src/Librecores/ProjectRepoBundle available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
