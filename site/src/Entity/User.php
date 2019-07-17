@@ -134,6 +134,14 @@ class User extends BaseUser implements NotifiableInterface
      */
     protected $updatedAt;
 
+    /**
+     * Has the user subscribed to email notifications?
+     *
+     * @var $subscribedToEmailNotifications
+     *
+     * @ORM\Column(type="boolean", options={"default" : true})
+     */
+    protected $subscribedToEmailNotifications = true;
 
     public function __construct()
     {
@@ -530,5 +538,29 @@ class User extends BaseUser implements NotifiableInterface
     public function removeOrganizationsCreated(Organization $organizationsCreated)
     {
         $this->organizationsCreated->removeElement($organizationsCreated);
+    }
+
+    /**
+     * Has the user subscribed to email notifications?
+     *
+     * @return bool
+     */
+    public function isSubscribedToEmailNotifications(): bool
+    {
+        return $this->subscribedToEmailNotifications;
+    }
+
+    /**
+     * Set email subscription for a given user
+     *
+     * @param bool $subscribedToEmailNotifications
+     *
+     * @return $this
+     */
+    public function setSubscribedToEmailNotifications(bool $subscribedToEmailNotifications)
+    {
+        $this->subscribedToEmailNotifications = $subscribedToEmailNotifications;
+
+        return $this;
     }
 }
