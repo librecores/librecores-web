@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Entity\Notification;
 use App\Form\Model\ResendConfirmationEmailRequest;
 use App\Form\Type\ResendConfirmationEmailRequestType;
+use App\Form\Type\NotificationSubscriptionType;
 use App\Form\Type\UserProfileType;
 use App\Security\Core\User\LibreCoresUserProvider;
 use FOS\UserBundle\Form\Type\ChangePasswordFormType;
@@ -14,7 +15,6 @@ use FOS\UserBundle\Model\UserInterface;
 use FOS\UserBundle\Model\UserManagerInterface;
 use FOS\UserBundle\Util\TokenGeneratorInterface;
 use Mgilet\NotificationBundle\Manager\NotificationManager;
-use Mgilet\NotificationBundle\NotifiableInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -227,6 +227,28 @@ class UserController extends AbstractController
         }
 
         return $this->render('user/resend_confirmation_email.html.twig', [ 'form' => $form->createView() ]);
+    }
+
+    /**
+     * User Notification Settings
+     *
+     * @Route("/user/settings/notifications", name="librecores.user.settings.notification")
+     *
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function notificationSettingsAction(Request $request)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $user = $this->getUser();
+
+        $form = $this->createForm(NotificationSubscriptionType::class, $user);
+
+        return $this->render(
+            'user/settings_notification.html.twig',
+            ['user' => $user, 'form' => $form->createView()]
+        );
     }
 
     /**
