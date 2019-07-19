@@ -2,7 +2,7 @@ LibreCores Web Site
 ===================
 
 [![Build Status](https://travis-ci.org/librecores/librecores-web.svg?branch=master)](https://travis-ci.org/librecores/librecores-web)
-[![Gitter](https://badges.gitter.im/librecores/Lobby.svg)](https://gitter.im/librecores/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+[![Gitter](https://badges.gitter.im/librecores/Lobby.svg)](https://gitter.im/librecores/Lobby?utm_source=badge)
 
 This is the code running on https://www.librecores.org.
 
