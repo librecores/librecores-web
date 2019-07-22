@@ -1,0 +1,9 @@
+[Unit]
+Description=Manage all RabbitMQ consumers for LibreCores
+
+{% for consumer in rabbitmq_consumers %}
+Wants=lc-rmqc-{{ consumer.name }}.service
+{% endfor %}
+
+[Install]
+WantedBy=multi-user.target

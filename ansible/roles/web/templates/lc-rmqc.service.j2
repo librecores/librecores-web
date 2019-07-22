@@ -1,5 +1,7 @@
 [Unit]
-Description=LibreCores RabbitMQ
+Description=LibreCores RabbitMQ consumer {{ item.name }}
+PartOf=lc-rmqc.target
+
 Requires=rabbitmq-server.service
 After=rabbitmq-server.service
 
@@ -20,9 +22,15 @@ PartOf=nfs-client.target
 
 [Service]
 EnvironmentFile=/var/www/lc/site/app/config/symfony-env.sh
-ExecStart=/usr/bin/php /var/www/lc/site/bin/console rabbitmq:consumer -vv -w -l 256 -m 250 update_project_info
+
+{% if item.type == 'single' %}
+ExecStart=/usr/bin/php /var/www/lc/site/bin/console rabbitmq:consumer -w {{ rabbitmq_consumer_options }} {{ item.name }}
+{% elif item.type == 'multiple' %}
+ExecStart=/usr/bin/php /var/www/lc/site/bin/console rabbitmq:multiple-consumer -w {{ rabbitmq_consumer_options }} {{ item.name }}
+{% endif %}
+
 Restart=always
 User={{ web_user }}
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=lc-rmqc.target

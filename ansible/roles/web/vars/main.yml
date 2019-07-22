@@ -30,3 +30,18 @@ php_fpm_sock: "/var/run/php/php{{ php_version }}-fpm.sock"
 
 # Major version of nodejs to be used
 nodejs_major_version: 10
+
+# RabbitMQ consumers started as service (through the Symfony rabbitmq bundle)
+# Uses the rabbitmq:consumer/rabbitmq:multiple-consumer console commands.
+rabbitmq_consumers:
+  - name: update_project_info
+    type: single
+# TODO: Fix consumer, currently broken (unable to start)
+#  - name: update_github_metadata
+#    type: single
+  - name: notification
+    type: multiple
+
+# Options passed to the RabbitMQ consumer services
+# Consume 250 messages per run, allow up to 256 MB of memory for this process
+rabbitmq_consumer_options: -vv --memory-limit 256 --messages 250

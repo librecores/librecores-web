@@ -125,20 +125,30 @@
     chdir: /var/www/lc/site
   when: env.SYMFONY_ENV == 'prod'
 
-- name: Add systemd service for RabbitMQ
+- name: Remove old systemd service
+  file:
+    path: /etc/systemd/system/librecores-rabbitmq.service
+    state: absent
+
+- name: Add systemd services for individual RabbitMQ consumers
   template:
-    src: librecores-rabbitmq.service.j2
-    dest: /etc/systemd/system/librecores-rabbitmq.service
+    src: lc-rmqc.service.j2
+    dest: /etc/systemd/system/lc-rmqc-{{ item.name }}.service
     owner: root
     group: root
     mode: 0644
-  notify: restart librecores-rabbitmq
+  with_items: "{{ rabbitmq_consumers }}"
 
-- name: reload systemd to pick up changes in Unit files
+- name: Add systemd target for all RabbitMQ consumers
+  template:
+    src: lc-rmqc.target.j2
+    dest: /etc/systemd/system/lc-rmqc.target
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Reload systemd to pick up changes in unit files
   command: systemctl daemon-reload
-
-- name: ensure librecores-rabbitmq is running (and enable it at boot)
-  service: name=librecores-rabbitmq state=started enabled=yes
 
 # run this last to ensure all deployment-created directories are covered
 - name: Ensure directory permissions of Symfony log and cache directories
@@ -153,9 +163,11 @@
 
 # The services need to pick up the code changes by being restarted.
 # Thanks to RabbitMQ we don't loose any messages in this case.
-- name: Restart RabbitMQ message handlers
-  command: /bin/true
-  notify: restart librecores-rabbitmq
+- name: Ensure RabbitMQ consumer services are restarted and enabled at boot
+  service:
+    name: lc-rmqc.target
+    state: restarted
+    enabled: yes
 
 # Install librecores planet generator
 - name: Install extra packages for librecores-planet
