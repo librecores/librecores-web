@@ -8,5 +8,5 @@
 - name: restart rabbitmq
   service: name=rabbitmq-server enabled=yes state=restarted
 
-- name: restart librecores-rabbitmq
-  service: name=librecores-rabbitmq enabled=yes state=restarted
+- name: restart librecores-rabbitmq.target
+  service: name=librecores-rabbitmq.target enabled=yes state=restarted
