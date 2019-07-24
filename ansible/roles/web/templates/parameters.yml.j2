@@ -58,3 +58,7 @@ parameters:
 
     app.librecores_domain: '{{ librecores_domain }}'
     app.librecores_url: '{{ 'https' if use_https else 'http' }}://www.{{ librecores_domain }}'
+
+    # Notification mailer
+    app.notification_from_address: '{{ notification_from_address }}'
+    app.notification_from_name: '{{ notification_from_name }}'

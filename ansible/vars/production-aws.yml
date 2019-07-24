@@ -26,3 +26,7 @@ site_user_email_confirmation_enabled: true
 
 # Algolia
 site_algolia_search_prefix: 'production_'
+
+# Notification mailer
+notification_from_address: "notifications@librecores.org"
+notification_from_name: "LibreCores Notifications"
