@@ -267,6 +267,38 @@ class UserController extends AbstractController
     }
 
     /**
+     * Marks all notifications "seen" in notification list
+     *
+     * @Route("/user/notification/markallseen", name="notification_mark_all_seen")
+     *
+     * @Method("POST")
+     *
+     * @param NotificationManager $notificationManager
+     *
+     * @throws \Exception
+     *
+     * @return JsonResponse
+     */
+    public function markAllAsSeenAction(NotificationManager $notificationManager)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        $user = $this->getUser();
+
+        $notifiableUser = $notificationManager->getNotifiableEntity($user);
+        $notifiableEntity = $notificationManager->getNotifiableEntityById($notifiableUser);
+        $notifiable = $notificationManager->getNotifiableInterface($notifiableEntity);
+
+        $notificationManager->markAllAsSeen(
+            $notifiable,
+            true
+        );
+        $count = $notificationManager->getUnseenNotificationCount($notifiable);
+
+        return new JsonResponse($count);
+    }
+
+    /**
      * View all notifications in the user's inbox
      *
      * @Route("/user/notification/inbox", name="notification_inbox")
