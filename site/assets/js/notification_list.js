@@ -23,4 +23,22 @@ $(document).ready(() => {
       }
     })
   });
+
+  $(".notification-markallseen").on('click', function (e) {
+    e.preventDefault();
+
+    $.ajax({
+      url: "/user/notification/markallseen",
+      method: 'post',
+      success: function(response) {
+        $(".unseen-notifications").empty();
+        $(".notification-count").html(response);
+      },
+      error: function(xhr) {
+        console.log('Could not process that request');
+        console.log(xhr.responseText);
+      }
+    })
+  });
+
 });
