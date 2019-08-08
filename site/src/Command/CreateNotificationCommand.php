@@ -3,8 +3,8 @@
 namespace App\Command;
 
 use App\Util\Notification;
+use App\Service\NotificationCreatorService;
 use FOS\UserBundle\Model\UserManagerInterface;
-use OldSound\RabbitMqBundle\RabbitMq\ProducerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -21,9 +21,9 @@ class CreateNotificationCommand extends Command
     protected static $defaultName = 'librecores:send-notification';
 
     /**
-     * @var ProducerInterface
+     * @var NotificationCreatorService
      */
-    private $producer;
+    private $notificationCreator;
 
     /**
      * @var UserManagerInterface
@@ -33,13 +33,13 @@ class CreateNotificationCommand extends Command
     /**
      * CreateNotificationCommand constructor.
      *
-     * @param ProducerInterface    $notificationProducer
-     * @param UserManagerInterface $userManager
+     * @param NotificationCreatorService $notificationCreator
+     * @param UserManagerInterface       $userManager
      */
-    public function __construct(ProducerInterface $notificationProducer, UserManagerInterface $userManager)
+    public function __construct(NotificationCreatorService $notificationCreator, UserManagerInterface $userManager)
     {
         parent::__construct();
-        $this->producer = $notificationProducer;
+        $this->notificationCreator = $notificationCreator;
         $this->userManager = $userManager;
     }
 
@@ -72,7 +72,7 @@ class CreateNotificationCommand extends Command
         $notification->setType($input->getArgument('type'));
         $notification->setRecipient($user);
 
-        $this->producer->publish(serialize($notification));
+        $this->notificationCreator->createNotification($notification);
     }
 }
 
