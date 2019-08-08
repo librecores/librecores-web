@@ -245,6 +245,14 @@ class UserController extends AbstractController
 
         $form = $this->createForm(NotificationSubscriptionType::class, $user);
 
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($user);
+            $em->flush();
+        }
+
         return $this->render(
             'user/settings_notification.html.twig',
             ['user' => $user, 'form' => $form->createView()]
