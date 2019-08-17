@@ -64,7 +64,7 @@ class WebNotificationConsumer extends AbstractNotificationConsumer
      *
      * @throws OptimisticLockException
      */
-    protected function handle(): bool
+    public function handle(): bool
     {
         echo "\nWeb Notification Consumer\n";
 

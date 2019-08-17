@@ -46,7 +46,8 @@ abstract class AbstractNotificationConsumer implements ConsumerInterface
      */
     public function execute(AMQPMessage $msg)
     {
-        $this->notification = unserialize($msg->body);
+        $notification = unserialize($msg->body);
+        $this->setNotification($notification);
         try {
             if ($this->shouldHandle()) {
                 return $this->handle();
@@ -66,6 +67,11 @@ abstract class AbstractNotificationConsumer implements ConsumerInterface
         }
     }
 
+    public function setNotification(Notification $notification)
+    {
+        $this->notification = $notification;
+    }
+
     /**
      * Should a Notification be handled by a the Consumer?
      *
@@ -81,7 +87,7 @@ abstract class AbstractNotificationConsumer implements ConsumerInterface
      *
      * @return mixed
      */
-    abstract protected function handle():bool;
+    abstract public function handle():bool;
 }
 
 ?>

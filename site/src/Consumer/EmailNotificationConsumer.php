@@ -27,7 +27,7 @@ class EmailNotificationConsumer extends AbstractNotificationConsumer
      *
      * @return bool
      */
-    protected function handle(): bool
+    public function handle(): bool
     {
         // TODO: Process the Notification($this->notification)
         echo "Email Notification Consumer";
