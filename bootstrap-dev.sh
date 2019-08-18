@@ -9,7 +9,7 @@
 set -e
 
 # Version of vagrant we depend on
-VAGRANT_VERSION=2.2.4
+VAGRANT_VERSION=2.2.5
 
 
 # make sure we're in the top-level dir
@@ -105,7 +105,7 @@ if [ ! -e ansible/secrets/dev-vagrant.secrets.yml ]; then
     echo "ansible/secrets.dist/dev-vagrant.secrets.yml and modify it to your needs."
     echo "Note: You do not need to enter the OAuth API tokens if you do not plan to"
     echo "test the OAuth login (e.g. GitHub or Google)."
-    
+
     exit 1
 fi
 
@@ -134,4 +134,3 @@ case $yn in
 esac
 
 echo Done!
-
