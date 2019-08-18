@@ -251,6 +251,9 @@ class ProjectMetricsProvider
             return [];
         }
         $langStats = $project->getSourceRepo()->getSourceStats()->getLanguageStats();
+        if (!is_array($langStats) || !isset($langStats[0])) {
+            return [];
+        }
 
         usort(
             $langStats,
