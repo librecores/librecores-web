@@ -1,7 +1,7 @@
 ---
 # get current AMI ID from http://cloud-images.ubuntu.com/locator/ec2/
 # search for xenial amd64 hvm:ebs eu-west-1
-ami_id: "ami-844e0bf7"
+ami_id: "ami-0b0a4b944b489441c"
 aws_region: "eu-west-1"
 
 # Public IPs (EC2 Elastic IPs)
