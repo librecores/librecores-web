@@ -46,7 +46,7 @@ class GitRepoCrawler extends AbstractRepoCrawler
      *
      * @var int
      */
-    private const TIMEOUT_GIT_LOG = 60;
+    private const TIMEOUT_GIT_LOG = 5 * 60;
 
     /**
      * Case-insensitive basenames without file extensions of files used for the
