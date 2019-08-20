@@ -76,9 +76,6 @@
 		"symfony-tests-dir" : "tests",
 		"incenteev-parameters" : {
 			"file" : "app/config/parameters.yml"
-		},
-		"branch-alias" : {
-			"dev-master" : "2.8-dev"
 		}
 	},
 	"require-dev" : {
