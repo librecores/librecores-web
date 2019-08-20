@@ -55,3 +55,6 @@ parameters:
     # Enable Symfony 4-like autowire behavior
     # TODO: Remove this parameter after upgrading to Symfony 4
     container.autowiring.strict_mode: true
+
+    app.librecores_domain: '{{ librecores_domain }}'
+    app.librecores_url: '{{ 'https' if use_https else 'http' }}://www.{{ librecores_domain }}'
