@@ -8,7 +8,7 @@ which provides Continuous Integration of projects being hosted on LibreCores.
 The objective of the service is to improve the contributor experience and to increase trust to projects by providing automated testing and health metrics of the projects.
 Currently the service is **under development**.
 
-<img src="/img/ci-overview.svg" class="img-responsive" style="float: right; margin: 20px"/>
+<img src="./img/ci-overview.svg" class="img-responsive" style="float: right; margin: 20px"/>
 
 With LibreCores CI you will be able to...
 
