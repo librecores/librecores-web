@@ -59,16 +59,20 @@ class EmailNotificationConsumer extends AbstractNotificationConsumer
 
     protected function shouldHandle()
     {
-        $user = $this->userManager->findUserByUsername($this->notification->getRecipient()->getUsername());
-
-        $emailSubscription = $user->isSubscribedToEmailNotifications();
+        $emailSubscription = $this->notification->getRecipient()->isSubscribedToEmailNotifications();
 
         if (!$emailSubscription) {
-            $this->logger->info($user->getUsername().' has unsubscribed to email notifications');
+            $this->logger->info(
+                $this->notification->getRecipient()->getUsername()
+                .' has unsubscribed to email notifications'
+            );
 
             return false;
         }
-        $this->logger->info($user->getUsername().' has subscribed to email notifications, sending an email');
+        $this->logger->info(
+            $this->notification->getRecipient()->getUsername()
+            .' has subscribed to email notifications, sending an email'
+        );
 
         return true;
     }
@@ -82,9 +86,7 @@ class EmailNotificationConsumer extends AbstractNotificationConsumer
      */
     public function handle(): bool
     {
-        echo "Email Notification Consumer";
-
-        $userEmail = $this->userManager->findUserByUsername($this->notification->getRecipient()->getUsername());
+        $userEmail = $this->notification->getRecipient()->getEmail();
 
         // Get necessary parameters from the container
         $settingsUrl = $this->container->getParameter('app.librecores_url')."/user/settings/notifications";
