@@ -50,6 +50,10 @@ class WebNotificationConsumer extends AbstractNotificationConsumer
                 $this->logger->info('Processing the Notification...');
 
                 return true;
+            case "organisation_join_request":
+                $this->logger->info('Processing the Notification...');
+
+                return true;
             default:
                 $this->logger->info('Something went wrong. Check the Notification type');
 

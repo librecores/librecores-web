@@ -5,10 +5,13 @@ namespace App\Controller;
 use App\Entity\Organization;
 use App\Entity\OrganizationMember;
 use App\Repository\OrganizationRepository;
+use App\Service\NotificationCreatorService;
+use App\Util\Notification;
 use Doctrine\ORM\NonUniqueResultException;
 use FOS\UserBundle\Model\UserManagerInterface;
 use App\Form\Type\OrganizationType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -189,16 +192,21 @@ class OrganizationController extends AbstractController
     /**
      * Request to join an organization
      *
-     * @param string                 $organizationName
-     *
+     * @param string $organizationName
      * @param OrganizationRepository $repository
+     * @param NotificationCreatorService $notificationCreatorService
+     * @param ContainerInterface $container
      *
      * @return Response
      *
      * @throws NonUniqueResultException
      */
-    public function joinAction($organizationName, OrganizationRepository $repository)
-    {
+    public function joinAction(
+        $organizationName,
+        OrganizationRepository $repository,
+        NotificationCreatorService $notificationCreatorService,
+        ContainerInterface   $container
+    ) {
         $o = $repository->findOneByName($organizationName);
 
         if (!$o) {
@@ -215,6 +223,24 @@ class OrganizationController extends AbstractController
         $member->setUser($user);
         $member->setPermission(OrganizationMember::PERMISSION_REQUEST);
         $em = $this->getDoctrine()->getManager();
+        // Find Organisation admins
+        foreach ($o->getMembers() as $m) {
+            if ($m->getPermission() === OrganizationMember::PERMISSION_ADMIN) {
+                // Queue notifications to the organisation admins
+                $notification = new Notification();
+                $configUrl = $container->getParameter('app.librecores_url');
+                $acceptLink = $configUrl . "/". $organizationName;
+                $notification->setType("organisation_join_request")
+                    ->setSubject("Organisation join request")
+                    ->setRecipient($m)
+                    ->setMessage(
+                        $member->getUser()->getUsername()." has requested to join ".
+                        $organizationName . ". Kindly go to ".$acceptLink.
+                        " on the Librecores website to accept/reject the request."
+                    );
+                $notificationCreatorService->createNotification($notification);
+            }
+        }
         $em->persist($member);
         $em->flush();
 
