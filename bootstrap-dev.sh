@@ -62,7 +62,7 @@ case $(lsb_release -is) in
     fi
     ;;
   *SUSE*)
-    sudo zypper install -y virtualbox nfs-kernel-server curl python3-sphinx_rtd_theme python3-Sphinx python3-boto3 python3-boto
+    sudo zypper install -y virtualbox nfs-kernel-server curl python3-sphinx_rtd_theme python3-Sphinx python3-boto3 python3-boto || true
 
     if [ $INSTALL_VAGRANT = 1 ]; then
       curl -L https://releases.hashicorp.com/vagrant/${VAGRANT_VERSION}/vagrant_${VAGRANT_VERSION}_$(uname -m).rpm > "$DLDIR/vagrant.rpm"
