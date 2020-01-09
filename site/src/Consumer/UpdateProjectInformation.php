@@ -5,6 +5,9 @@ namespace App\Consumer;
 use App\Entity\Project;
 use App\RepoCrawler\RepoCrawlerRegistry;
 use App\Repository\ProjectRepository;
+use App\Service\NotificationCreatorService;
+use App\Util\Notification;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Psr\Log\LoggerInterface;
@@ -31,22 +34,30 @@ class UpdateProjectInformation extends AbstractProjectUpdateConsumer
     private $entityManager;
 
     /**
+     * @var NotificationCreatorService
+     */
+    private $notificationCreator;
+
+    /**
      * UpdateProjectInformation constructor.
      *
-     * @param RepoCrawlerRegistry    $repoCrawlerFactory
-     * @param LoggerInterface        $logger
-     * @param ProjectRepository      $projectRepository
-     * @param EntityManagerInterface $entityManager
+     * @param RepoCrawlerRegistry        $repoCrawlerFactory
+     * @param LoggerInterface            $logger
+     * @param ProjectRepository          $projectRepository
+     * @param EntityManagerInterface     $entityManager
+     * @param NotificationCreatorService $notificationCreatorService
      */
     public function __construct(
         RepoCrawlerRegistry $repoCrawlerFactory,
         LoggerInterface $logger,
         ProjectRepository $projectRepository,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        NotificationCreatorService $notificationCreatorService
     ) {
         parent::__construct($projectRepository, $logger);
         $this->repoCrawlerRegistry = $repoCrawlerFactory;
         $this->entityManager = $entityManager;
+        $this->notificationCreator = $notificationCreatorService;
     }
 
     /**
@@ -80,6 +91,22 @@ class UpdateProjectInformation extends AbstractProjectUpdateConsumer
 
             // persist all changes made to to DB
             $this->entityManager->flush();
+
+            // Send a notification that the project is processed
+            $users = new ArrayCollection();
+            if ($project->getParentOrganization()) {
+                $users = $project->getParentOrganization()->getMemberUsers();
+            } else {
+                $users->add($project->getParentUser());
+            }
+            foreach ($users as $user) {
+                $notification = new Notification();
+                $notification->setSubject("Crawler Success")
+                    ->setMessage("Our RepoCrawler has fetched metrics for your project successfully")
+                    ->setType("crawler_success")
+                    ->setRecipient($user);
+                $this->notificationCreator->createNotification($notification);
+            }
         } catch (Exception $e) {
             // Try to mark this project as not in progress any more to let
             // people edit it online. The next crawling update will possibly
@@ -90,6 +117,21 @@ class UpdateProjectInformation extends AbstractProjectUpdateConsumer
                 // Ignore -- we're already in the error handling path.
                 // The project will most likely remain in the "in processing"
                 // state.
+                // Send a notification that the project cannot be processed
+                $users = new ArrayCollection();
+                if ($project->getParentOrganization()) {
+                    $users = $project->getParentOrganization()->getMemberUsers();
+                } else {
+                    $users->add($project->getParentUser());
+                }
+                foreach ($users as $user) {
+                    $notification = new Notification();
+                    $notification->setSubject("Crawler Failure")
+                        ->setMessage("Our RepoCrawler has failed to fetch metrics for your project")
+                        ->setType("crawler_failure")
+                        ->setRecipient($user);
+                    $this->notificationCreator->createNotification($notification);
+                }
             }
             throw $e;
         }
