@@ -1,7 +1,7 @@
 # Contributing to the LibreCores Site
 
 ## The code
-- All code lives the
+- All code lives in the
   [librecores-web](https://github.com/librecores/librecores-web)
   repository on GitHub.
 - In addition to the code, the repository also contains all necessary deployment
