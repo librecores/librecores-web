@@ -4,7 +4,7 @@ Vagrant.configure("2") do |config|
     # We explicitly set the box version as we've encountered bugs in at least
     # one older version (2.3.0). A fixed version should ensure a deterministic
     # developer experience.
-    config.vm.box_version = '201812.27.0'
+    config.vm.box_version = '202002.04.0'
 
     # Configure shared folders
     # uncomment either one of the two versions below. See README.md in the
