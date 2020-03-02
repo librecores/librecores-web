@@ -85,6 +85,14 @@
     owner: "{{ web_user }}"
     mode: 0644
 
+# We need to do that before running "composer up" to avoid potential errors
+# during that step.
+- name: Delete Symfony site cache (production)
+  file:
+    path: /var/www/lc/site/var/cache/prod
+    state: absent
+  when: env.SYMFONY_ENV == 'prod'
+
 - name: Install PHP dependencies through composer (development)
   command: composer install
   args:
