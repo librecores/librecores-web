@@ -15,6 +15,9 @@
 
 - set_fact: web_user_home="{{ web_user_home_raw.stdout }}"
 
+- name: Set unattended upgrade configuration
+  copy: src=50unattended-upgrades dest=/etc/apt/apt.conf.d/50unattended-upgrades
+
 - name: Update apt cache
   apt:  update_cache=yes
 
