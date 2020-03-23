@@ -23,7 +23,8 @@
 </head>
 <body>
   <!-- top navigation bar -->
-  <nav class="navbar navbar-expand-lg fixed-top navbar-light bg-light librecores-nav">
+  <nav class="nav navbar navbar-expand-lg fixed-top navbar-light librecores-nav">
+    <div class="container">
       <a class="navbar-brand" href="{{ path('librecores_site_home') }}">
         <span class="wordmark">LibreCores</span>
       </a>
@@ -34,7 +35,7 @@
       <div class="collapse navbar-collapse">
         <ul class="nav navbar-nav mr-auto">
           <li class="nav-item"><a class="nav-link" href="{{ path('librecores_project_repo_project_search') }}">Search</a></li>
-          <li><a class="nav-link" href="{{ path('librecores_site_page', {'page': 'docs'}) }}">Learn</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ path('librecores_site_page', {'page': 'docs'}) }}">Learn</a></li>
           <li class="nav-item dropdown">
             <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button"
             aria-haspopup="true" aria-expanded="false">Community <span class="caret"></span></a>
@@ -44,7 +45,7 @@
             </div>
           </li>
           <li class="nav-item"><a class="nav-link" href="{{ path('librecores_site_page', {'page': 'librecores-ci'}) }}">LibreCores CI</a></li>
-          <li><a class="nav-link" href="{{ path('librecores_site_page', {'page': 'about'}) }}">About</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ path('librecores_site_page', {'page': 'about'}) }}">About</a></li>
         </ul>
 
         <ul class="nav navbar-nav navbar-right">
@@ -122,6 +123,7 @@
           {% endif %}
         </ul>
       </div>
+    </div>
   </nav>
 
   {% block body %}{% endblock %}

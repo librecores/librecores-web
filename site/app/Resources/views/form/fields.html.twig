@@ -1,5 +1,5 @@
 {% block button_widget -%}
-    {% set attr = attr|merge({class: (attr.class|default('') ~ ' btn')|trim}) %}
+    {% set attr = attr|merge({class: (attr.class|default('btn-outline-secondary') ~ ' btn')|trim}) %}
     {% if label is empty -%}
         {%- if label_format is not empty -%}
             {% set label = label_format|replace({

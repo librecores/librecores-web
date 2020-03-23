@@ -13,63 +13,65 @@
 {% block title %}Planet Librecores{% endblock %}
 
 {% block content %}
+  <div class="row">
   <h1>Planet LibreCores</h1>
 
-  <div class="col-md-9">
-  {% for post in blogposts %}
-    <article class="librecores-planet-post">
-      <h3><a href="{{ post.url }}">{{ post.title }}</a></h3>
-      <address class="librecores-planet-author">
-        by {{ post.author }}
-        on <a href="{{ post.source_link }}">{{ post.source_title }}</a>
-        <time datetime="{{ post.date|date("c", "UTC") }}"
-              data-livestamp="{{ post.date|date("c", "UTC") }}"
+    <div class="col-md-9">
+    {% for post in blogposts %}
+      <article class="librecores-planet-post">
+        <h3><a href="{{ post.url }}">{{ post.title }}</a></h3>
+        <address class="librecores-planet-author">
+          by {{ post.author }}
+          on <a href="{{ post.source_link }}">{{ post.source_title }}</a>
+          <time datetime="{{ post.date|date("c", "UTC") }}"
+                data-livestamp="{{ post.date|date("c", "UTC") }}"
+                data-toggle="tooltip"
+                title="{{ post.date|date("d F Y H:i", "UTC") }} UTC">
+            {{ post.date|date("d F Y H:i", "UTC") }} UTC
+          </time>
+        </address>
+        <section class="librecores-planet-teaser">
+          {% if post.teaser_img_url %}
+            <a href="{{ post.url }}">
+            <img src="{{ post.teaser_img_url }}" alt="teaser image">
+            </a>
+          {% endif %}
+
+          {{ post.teaser }}
+          <div style="clear:left"></div>
+        </section>
+      </article>
+    {% endfor %}
+    </div>
+
+    <div class="col-md-3 librecores-planet-infocol">
+        <p>What's happing in the open silicon ecosystem around you? Planet
+        LibreCores helps you to get the latest news from all corners of the
+        community by aggregating blog posts.
+        </p>
+
+        <p>All content here is unfiltered and uncensored, and represents the views
+        of the post authors. Individual posts are owned by their authors; please
+        see the original source for licensing information.</p>
+
+        <strong>Subscribe to Planet LibreCores</strong>
+        <p>In addition to reading the posts here, you can subscribe to
+        Planet LibreCores in your favorite feed reader.<br/>
+
+        <p><a href="/planet/atom.xml"><i class="fa fa-rss"></i> Planet Librecores Atom feed</a></p>
+
+        <p>Or get the subscription list through
+        <a href="/planet/foafroll.xml">FOAF</a>
+        or
+        <a href="/planet/opml.xml ">OPML</a>.</p>
+
+        Last updated
+        <span data-livestamp="{{ feedLastUpdate|date("c", "UTC") }}"
               data-toggle="tooltip"
-              title="{{ post.date|date("d F Y H:i", "UTC") }} UTC">
-          {{ post.date|date("d F Y H:i", "UTC") }} UTC
-        </time>
-      </address>
-      <section class="librecores-planet-teaser">
-        {% if post.teaser_img_url %}
-          <a href="{{ post.url }}">
-          <img src="{{ post.teaser_img_url }}" alt="teaser image">
-          </a>
-        {% endif %}
-
-        {{ post.teaser }}
-        <div style="clear:left"></div>
-      </section>
-    </article>
-  {% endfor %}
-  </div>
-
-  <div class="col-md-3 librecores-planet-infocol">
-      <p>What's happing in the open silicon ecosystem around you? Planet
-      LibreCores helps you to get the latest news from all corners of the
-      community by aggregating blog posts.
-      </p>
-
-      <p>All content here is unfiltered and uncensored, and represents the views
-      of the post authors. Individual posts are owned by their authors; please
-      see the original source for licensing information.</p>
-
-      <strong>Subscribe to Planet LibreCores</strong>
-      <p>In addition to reading the posts here, you can subscribe to
-      Planet LibreCores in your favorite feed reader.<br/>
-
-      <p><a href="/planet/atom.xml"><i class="fa fa-rss"></i> Planet Librecores Atom feed</a></p>
-
-      <p>Or get the subscription list through
-      <a href="/planet/foafroll.xml">FOAF</a>
-      or
-      <a href="/planet/opml.xml ">OPML</a>.</p>
-
-      Last updated
-      <span data-livestamp="{{ feedLastUpdate|date("c", "UTC") }}"
-            data-toggle="tooltip"
-            title="{{ feedLastUpdate|date("d F Y H:i", "UTC") }} UTC">
-        {{ feedLastUpdate|date("d F Y H:i", "UTC") }} UTC
-      </span>
+              title="{{ feedLastUpdate|date("d F Y H:i", "UTC") }} UTC">
+          {{ feedLastUpdate|date("d F Y H:i", "UTC") }} UTC
+        </span>
+    </div>
   </div>
 {% endblock %}
 

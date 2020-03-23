@@ -24,14 +24,14 @@ page path: /USERNAME
 
   {% if is_granted("IS_AUTHENTICATED_REMEMBERED") and user.getId() == app.user.getId() %}
   <ul class="nav nav-tabs librecores-tabs-topnav">
-    <li role="presentation" class="active">
-      <a href="{{ path('librecores_project_repo_user_org_view', {'userOrOrganization': user.getUsernameCanonical()}) }}" aria-controls="settings" role="tab">
+    <li role="presentation" class="nav-item">
+      <a class="nav-link active" href="{{ path('librecores_project_repo_user_org_view', {'userOrOrganization': user.getUsernameCanonical()}) }}" aria-controls="settings" role="tab">
         Public Profile
       </a>
     </li>
 
-    <li role="presentation">
-      <a href="{{ path('librecores.user.settings.profile') }}" aria-controls="settings" role="tab">
+    <li role="presentation" class="nav-item">
+      <a class="nav-link" href="{{ path('librecores.user.settings.profile') }}" aria-controls="settings" role="tab">
         <i class="fa fa-cogs fa-fw" aria-hidden="true"></i>
         Settings
       </a>
@@ -44,7 +44,7 @@ page path: /USERNAME
         data-livestamp="{{ user.getCreatedAt()|date("c", "UTC") }}">
     on {{ user.getCreatedAt()|date("d F Y H:i", "UTC") }} UTC
   </time>.
-
+  <br><br>
   <h2>Projects</h2>
   {% for project in user.getProjects() %}
     <a href="{{ path('librecores_project_repo_project_view', {'parentName':
