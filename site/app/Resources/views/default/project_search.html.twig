@@ -29,7 +29,7 @@
             </span>
           </div>
           <div class="algolia-search-logo">
-            <img src="https://www.algolia.com/assets/pricing_new/algolia-powered-by-2ab4dcc4def7b9fe7dfc1fd8eef1da99.svg" alt="Algolia powered by">
+            <img src="{{ asset('build/images/powered-by-algolia.svg') }}" alt="powered by Algolia">
           </div>
         </div>
         <input type="hidden" id="q" name="query" value="{% if searchQuery %}{{ searchQuery }}{% endif %}">
