@@ -23,143 +23,131 @@
 </head>
 <body>
   <!-- top navigation bar -->
-  <nav class="navbar navbar-fixed-top librecores-nav">
-    <div class="container">
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" href="{{ path('librecores_site_home') }}">
-          <span class="wordmark">LibreCores</span>
-        </a>
-      </div>
-      <div class="navbar-collapse collapse">
-        <ul class="nav navbar-nav">
-          <li><a href="{{ path('librecores_project_repo_project_search') }}">Search</a></li>
-          <li><a href="{{ path('librecores_site_page', {'page': 'docs'}) }}">Learn</a></li>
-          <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+  <nav class="navbar navbar-expand-lg fixed-top navbar-light bg-light librecores-nav">
+      <a class="navbar-brand" href="{{ path('librecores_site_home') }}">
+        <span class="wordmark">LibreCores</span>
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse">
+        <ul class="nav navbar-nav mr-auto">
+          <li class="nav-item"><a class="nav-link" href="{{ path('librecores_project_repo_project_search') }}">Search</a></li>
+          <li><a class="nav-link" href="{{ path('librecores_site_page', {'page': 'docs'}) }}">Learn</a></li>
+          <li class="nav-item dropdown">
+            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button"
             aria-haspopup="true" aria-expanded="false">Community <span class="caret"></span></a>
-            <ul class="dropdown-menu">
-          <li><a href="{{ path('librecores_planet_homepage') }}">Planet LibreCores</a></li>
-              <li><a href="{{ path('librecores_site_page', {'page': 'community-hub'}) }}">Community Hub</a></li>
-            </ul>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" href="{{ path('librecores_planet_homepage') }}">Planet LibreCores</a>
+              <a class="dropdown-item" href="{{ path('librecores_site_page', {'page': 'community-hub'}) }}">Community Hub</a>
+            </div>
           </li>
-          <li><a href="{{ path('librecores_site_page', {'page': 'librecores-ci'}) }}">LibreCores CI</a></li>
-          <li><a href="{{ path('librecores_site_page', {'page': 'about'}) }}">About</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ path('librecores_site_page', {'page': 'librecores-ci'}) }}">LibreCores CI</a></li>
+          <li><a class="nav-link" href="{{ path('librecores_site_page', {'page': 'about'}) }}">About</a></li>
         </ul>
 
         <ul class="nav navbar-nav navbar-right">
           {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+            <li class="nav-item dropdown">
+              <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button"
                  aria-haspopup="true" aria-expanded="false">
                 <i class="fa fa-bell"></i>
                 <span class="notification-count">{{ mgilet_notification_unseen_count(app.user) }}</span>
                 <span class="caret"></span>
               </a>
-              <ul class="dropdown-menu list-group notification-list" role="menu">
-                <li class="list-group-item notification-list-title">
+              <ul class="dropdown-menu dropdown-menu-right notification-list" role="menu">
+                <li class="dropdown-item notification-list-title">
                   <span class="item-left">Notifications</span>
                   <span class="pull-right"><a href="{{ path('librecores.user.settings.notification') }}"><i class="fa fa-cog"></i></a></span>
                   <span class="pull-right"><button class="notification-markallseen">Mark all as seen</button></span>
                 </li>
-                <li class="divider"></li>
-                <li class="list-group-item notification-list-content">
+                <div class="dropdown-divider"></div>
+                <li href="#" class="dropdown-item notification-list-content">
                   {{ mgilet_notification_render(app.user, { 'template': './notification/notification_list.html.twig', 'order': 'DESC'}) }}
                 </li>
-                <li class="divider"></li>
-                <li class="list-group-item notification-list-footer">
-                  <a class="text-center" href="{{ path('notification_inbox') }}">
-                    show all notifications
-                  </a>
-                </li>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item notification-list-footer text-center" href="{{ path('notification_inbox') }}">
+                  show all notifications
+                </a>
               </ul>
             </li>
-          <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+          <li class="nav-item dropdown">
+            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
               <i class="fa fa-plus"></i>
               <span class="sr-only">Add to LibreCores</span>
               <span class="caret"></span>
             </a>
-            <ul class="dropdown-menu">
+            <ul class="dropdown-menu dropdown-menu-right">
               <li>
-                <a href="{{ path('librecores_project_repo_project_new') }}">
+                <a class="dropdown-item" href="{{ path('librecores_project_repo_project_new') }}">
                   New Project
                 </a>
               </li>
               <li>
-                <a href="{{ path('librecores_project_repo_organization_new') }}">
+                <a class="dropdown-item" href="{{ path('librecores_project_repo_organization_new') }}">
                   New Organization
                 </a>
               </li>
             </ul>
           </li>
-          <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+          <li class="nav-item dropdown">
+            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
               {{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }}
               <span class="caret"></span>
             </a>
-            <ul class="dropdown-menu">
-              <li>
-                <a href="{{ path('librecores_project_repo_user_org_view',
-                                 {'userOrOrganization': app.user.username}) }}">
-                  Your Profile
-                </a>
-              </li>
-              <li>
-                <a href="{{ path('librecores_project_repo_organization_list') }}">
-                  Your Organizations
-                </a>
-              </li>
-              {#<li>
-                <a href="{{ path('fos_user_profile_edit') }}">
+            <div class="dropdown-menu dropdown-menu-right">
+              <a class="dropdown-item" href="{{ path('librecores_project_repo_user_org_view',
+                               {'userOrOrganization': app.user.username}) }}">
+                Your Profile
+              </a>
+              <a class="dropdown-item" href="{{ path('librecores_project_repo_organization_list') }}">
+                Your Organizations
+              </a>
+              {#<a class="dropdown-item" href="{{ path('fos_user_profile_edit') }}">
                   Profile Settings
-                </a>
-              </li>#}
-              <li role="separator" class="divider"></li>
-              <li>
-                <a href="{{ path('fos_user_security_logout') }}">
-                  {{ 'layout.logout'|trans({}, 'FOSUserBundle') }}
-                </a>
-              </li>
-              </ul>
+                </a>#}
+              <div role="separator" class="dropdown-divider"></div>
+              <a class="dropdown-item" href="{{ path('fos_user_security_logout') }}">
+                {{ 'layout.logout'|trans({}, 'FOSUserBundle') }}
+              </a>
+            </div>
           {% else %}
-            <li>
-              <a href="{{ path('fos_user_registration_register') }}">{{ 'layout.register'|trans({}, 'FOSUserBundle') }}</a>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ path('fos_user_registration_register') }}">{{ 'layout.register'|trans({}, 'FOSUserBundle') }}</a>
             </li>
-            <li>
-              <a href="{{ path('fos_user_security_login') }}">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ path('fos_user_security_login') }}">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a>
             </li>
           {% endif %}
         </ul>
       </div>
-    </div>
   </nav>
 
   {% block body %}{% endblock %}
 
   <!-- footer -->
   <footer class="librecores-footer">
-    <nav class="container">
+    <nav class="container-lg">
       <div class="row">
-        <ul class="social col-xs-7 col-sm-4 col-md-2 pull-right">
+        <div class="col-4">
+          <div class="row">
+            <ul class="col-md-6">
+              <li><a href="{{ path('librecores_site_page', {'page': 'about'}) }}">About LibreCores</a></li>
+              <li><a href="https://medium.com/librecores">Blog</a></li>
+              <li><a href="{{ path('librecores_site_page', {'page': 'imprint'}) }}">Imprint</a></li>
+            </ul>
+            <ul class="col-md-6">
+              <li><a href="{{ path('librecores_project_repo_project_search') }}">Search an IP core</a></li>
+              <li><a href="{{ path('librecores_project_repo_project_new') }}">Add a project</a></li>
+              <li><a href="https://librecores-web.readthedocs.io/en/latest/contributing.html">Contribute to this site</a></li>
+            </ul>
+          </div>
+        </div>
+        <ul class="social col-8 float-right">
           <li><a href="https://github.com/librecores/librecores-web" title="Contribute to LibreCores on GitHub"><span class="fa fa-github"></span></a></li>
           <li><a href="https://twitter.com/librecores" title="Follow @librecores on Twitter"><span class="fa fa-twitter"></span></a></li>
           <li><a href="mailto:librecores@fossi-foundation.org" title="Contact us via email"><span class="fa fa-envelope"></span></a></li>
-        </ul>
-        <ul class="col-sm-2">
-          <li><a href="{{ path('librecores_site_page', {'page': 'about'}) }}">About LibreCores</a></li>
-          <li><a href="https://medium.com/librecores">Blog</a></li>
-          <li><a href="{{ path('librecores_site_page', {'page': 'imprint'}) }}">Imprint</a></li>
-        </ul>
-        <ul class="col-sm-2">
-          <li><a href="{{ path('librecores_project_repo_project_search') }}">Search an IP core</a></li>
-          <li><a href="{{ path('librecores_project_repo_project_new') }}">Add a project</a></li>
-          <li><a href="https://librecores-web.readthedocs.io/en/latest/contributing.html">Contribute to this site</a></li>
         </ul>
       </div>
       <div class="row">

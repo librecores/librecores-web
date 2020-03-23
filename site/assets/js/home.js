@@ -5,6 +5,20 @@ import autocomplete from 'autocomplete.js'
 
 import * as FRONTEND_CONFIG from './frontend-config.json';
 
+function newHitsSource(index, params) {
+  return function doSearch(query, cb) {
+    index
+      .search(query, params)
+      .then(function(res) {
+        cb(res.hits, res);
+      })
+      .catch(function(err) {
+        console.error(err);
+        cb([]);
+      });
+  };
+}
+
 function algoliaAutocomplete(algoliaConfig) {
   var client = algoliasearch(algoliaConfig.applicationId, algoliaConfig.searchKey)
   var projects = client.initIndex(algoliaConfig.searchPrefix + 'projects');
@@ -12,9 +26,11 @@ function algoliaAutocomplete(algoliaConfig) {
   var organization = client.initIndex(algoliaConfig.searchPrefix + 'organization');
   var user = client.initIndex('user');
 
+
+
   autocomplete('#search-form-input', {} ,[
       {
-          source: autocomplete.sources.hits(projects, { hitsPerPage: 5 }),
+          source: newHitsSource(projects, { hitsPerPage: 5 }),
           displayKey: 'name',
           templates: {
               header: '<div class="aa-suggestions-category">Projects</div>',
@@ -26,7 +42,7 @@ function algoliaAutocomplete(algoliaConfig) {
           }
       },
       {
-          source: autocomplete.sources.hits(organization, { hitsPerPage: 5 }),
+          source: newHitsSource(organization, { hitsPerPage: 5 }),
           displayKey: 'name',
           templates: {
               header: '<div class="aa-suggestions-category">Organizations</div>',
@@ -38,7 +54,7 @@ function algoliaAutocomplete(algoliaConfig) {
           }
       },
       {
-          source: autocomplete.sources.hits(user, { hitsPerPage: 5 }),
+          source: newHitsSource(user, { hitsPerPage: 5 }),
           displayKey: 'name',
           templates: {
               header: '<div class="aa-suggestions-category">Users</div>',
