@@ -1,0 +1,17 @@
+/*
+ * Social Buttons for Bootstrap
+ *
+ * Copyright 2013-2016 Panayiotis Lipiridis
+ * Licensed under the MIT License
+ *
+ * https://github.com/lipis/bootstrap-social
+ */
+
+// bootstrap
+@import 'node_modules/bootstrap/scss/_functions';
+@import 'node_modules/bootstrap/scss/_mixins';
+@import 'node_modules/bootstrap/scss/_variables';
+
+// bootstrap-social support for bootstrap 4.x
+// <https://github.com/lipis/bootstrap-social/issues/123>
+@import '_custom';

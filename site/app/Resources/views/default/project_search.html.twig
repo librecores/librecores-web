@@ -20,10 +20,12 @@
         </div>
         <div class="col-sm-9">
           <div class="input-group" style="width:100%">
-            <input type="search" id="search-input" placeholder="Search for ..." class="form-control">
+            <div style="flex: 1 1 0%; width:100%; -webkit-box-flex: 1;"> <!-- Simulates form-control -->
+              <input style="border-top-right-radius: 0; border-bottom-right-radius: 0;" type="search" id="search-input" placeholder="Search for ..." class="form-control">
+            </div>
             <span class="input-group-append">
-              <button class="btn btn-default search-query" type="submit">
-                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+              <button class="btn btn-outline-secondary search-query" type="submit">
+                <span class="fa fa-search" aria-hidden="true"></span>
                 Search
               </button>
             </span>

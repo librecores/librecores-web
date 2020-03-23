@@ -20,13 +20,13 @@
           <form name="search-form" method="get" action="{{ path('librecores_project_repo_project_search') }}">
             <div class="input-group mb-3">
               <div style="flex: 1 1 0%; width:100%; -webkit-box-flex: 1;"> <!-- Simulates form-control -->
-                <input type="text" class="form-control" style="border-top-right-radius: 0; border-bottom-right-radius: 0;" id="search-form-input" name="query" placeholder="What IP is missing in your project?">
+                <input type="text" class="form-control autocomplete-form-control" style="border-top-right-radius: 0; border-bottom-right-radius: 0;" id="search-form-input" name="query" placeholder="What IP is missing in your project?">
               </div>
               <input type="hidden" id="type" name="type" value="projects">
               <span class="input-group-append">
                 <button class="btn btn-danger" type="submit">
-                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-                <span class="d-none d-md-block">Find IP Project</span></button>
+                <span class="fa fa-search" aria-hidden="true"></span>
+                <span class="d-none d-md-inline">Find IP Project</span></button>
               </span>
             </div>
           </form>

@@ -76,27 +76,27 @@
 <div class="col-sm-8">
 
 <ul class="nav nav-tabs">
-  <li role="presentation" class="active">
-    <a href="#README" aria-controls="settings" role="tab" data-toggle="tab">
+  <li role="presentation" class="nav-item">
+    <a class="nav-link active" href="#README" aria-controls="settings" role="tab" data-toggle="tab">
       <i class="fa fa-book" aria-hidden="true"></i>
       README
     </a>
   </li>
-  <li role="presentation">
-    <a href="#LICENSE" aria-controls="settings" role="tab" data-toggle="tab">
+  <li role="presentation" class="nav-item">
+    <a class="nav-link" href="#LICENSE" aria-controls="settings" role="tab" data-toggle="tab">
       <i class="fa fa-copyright" aria-hidden="true"></i>
       LICENSE
     </a>
   </li>
-  <li role="presentation">
-    <a id="project-metrics-tab" href="#project-metrics" aria-controls="project-metrics" role="tab" data-toggle="tab">
+  <li role="presentation" class="nav-item">
+    <a class="nav-link" id="project-metrics-tab" href="#project-metrics" aria-controls="project-metrics" role="tab" data-toggle="tab">
       <i class="fa fa-bar-chart" aria-hidden="true"></i>
       Project metrics
     </a>
   </li>
   {% if is_granted("edit", project) %}
-  <li>
-    <a href="{{ path('librecores_project_repo_project_settings', {'parentName': project.parentName, 'projectName': project.name}) }}" aria-controls="settings" role="tab">
+  <li class="nav-item">
+    <a class="nav-link" href="{{ path('librecores_project_repo_project_settings', {'parentName': project.parentName, 'projectName': project.name}) }}" aria-controls="settings" role="tab">
       <i class="fa fa-cogs fa-fw" aria-hidden="true"></i>
       Settings
     </a>
@@ -114,11 +114,11 @@
   <div role="tabpanel" class="tab-pane librecores-project-metrics" id="project-metrics">
     <div class="row">
       <div class="col-sm-12 col-md-6">
-        <div class="panel panel-default project-meta">
-          <div class="panel-heading">
-            <h4 class="panel-title">Project Meta</h4>
+        <div class="card project-meta">
+          <div class="card-header">
+            <h4 class="card-title">Project Meta</h4>
           </div>
-          <div class="panel-body">
+          <div class="card-body">
             <ul class="fa-ul">
               <li>
                 <i class="fa-li fa fa-plus-circle" aria-hidden="true"></i>
@@ -141,11 +141,11 @@
             </ul>
           </div>
         </div>
-        <div class="panel panel-default project-meta project-commits">
-          <div class="panel-heading">
-            <h4 class="panel-title">Commits</h4>
+        <div class="card project-meta project-commits">
+          <div class="card-header">
+            <h4 class="card-title">Commits</h4>
           </div>
-          <div class="panel-body">
+          <div class="card-body">
             <div class="librecores-project-activity">
               {% if metadata.commitCount %}
                 <div class="commit-graph ct-perfect-fourth">
@@ -162,11 +162,11 @@
             </div>
           </div>
         </div>
-        <div class="panel panel-default project-meta project-contributors">
-          <div class="panel-heading">
-            <h4 class="panel-title">Contributors</h4>
+        <div class="card project-meta project-contributors">
+          <div class="card-header">
+            <h4 class="card-title">Contributors</h4>
           </div>
-          <div class="panel-body">
+          <div class="card-body">
             {% if project.sourceRepo.sourceStats.available %}
               <div class="contributors-graph ct-perfect-fourth">
                 {{  metadata.contributorsGraph | json_encode }}
@@ -179,11 +179,11 @@
         </div>
       </div>
       <div class="col-sm-12 col-md-6">
-        <div class="panel panel-default project-meta project-releases">
-          <div class="panel-heading">
-            <h4 class="panel-title">Releases</h4>
+        <div class="card project-meta project-releases">
+          <div class="card-header">
+            <h4 class="card-title">Releases</h4>
           </div>
-          <div class="panel-body">
+          <div class="card-body">
             {% if project.releases | length > 0 %}
             <div class="alert alert-info">
               <p><i class="fa fa-cube"></i> {{ project.releases[0].name }} is
@@ -217,11 +217,11 @@
             {% endif %}
           </div>
         </div>
-        <div class="panel panel-default project-meta ">
-          <div class="panel-heading">
-            <h4 class="panel-title">Languages</h4>
+        <div class="card project-meta">
+          <div class="card-header">
+            <h4 class="card-title">Languages</h4>
           </div>
-          <div class="panel-body">
+          <div class="card-body">
             {% if project.sourceRepo.sourceStats.available %}
             <div class="language-graph ct-perfect-fourth">{{ metadata.languageGraph | json_encode }}</div>
             <p class="graph-title">Share of languages used</p>

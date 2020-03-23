@@ -21,6 +21,7 @@ $grid-float-breakpoint:   $screen-md-min;
 // Bootstrap 4
 $icon-font-path: '~font-awesome/fonts/';
 @import "~bootstrap/scss/bootstrap.scss";
+@import "bootstrap-social.scss";
 
 //@import "~bootstrap-social/bootstrap-social.scss";
 @import "~font-awesome";
@@ -90,6 +91,11 @@ pre code {
   box-shadow: none;
 }
 
+label {
+  max-width: 100%;
+  font-weight: 700;
+}
+
 .anchor { padding-top: 60px; }
 
 h1 a:hover, h1 a:active {
@@ -151,8 +157,8 @@ h1 a:hover, h1 a:active {
   color: #777;
 }
 
-.librecores-nav .nav > li a:focus,
-.librecores-nav .nav > li a:hover {
+.librecores-nav .nav > li.nav-item > a:focus,
+.librecores-nav .nav > li.nav-item > a:hover {
   background-color: #fff;
   color: #3fb0ac;
 }
@@ -163,6 +169,7 @@ h1 a:hover, h1 a:active {
 .navbar-toggle .icon-bar {
   background-color: #AAAAAA;
 }
+
 
 .wordmark {
   color: #666666;
@@ -397,12 +404,13 @@ h1 a:hover, h1 a:active {
   text-shadow: none !important;
 }*/
 
-.panel-title {
+.card-title {
   text-shadow: none;
-  /*color: #3fb0ac;*/
+  color: #000;
   font-weight: bold;
   font-size: 1.2em;
   line-height: normal;
+  margin-bottom: 0em;
 }
 
 .librecores-search {
@@ -1005,6 +1013,11 @@ a.classifiation-tag:hover {
   background-color: #fff;
   color: #212529;
 }
+
+.dropdown-item:active {
+  background-color: #f8f9fa;
+}
+
 .notification-list-title > span {
   padding: 0 10px 0 10px;
 }

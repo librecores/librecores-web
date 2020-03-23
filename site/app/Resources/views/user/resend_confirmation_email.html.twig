@@ -3,12 +3,12 @@
 {% trans_default_domain 'FOSUserBundle' %}
 
 {% block fos_user_content %}
-  <div class="center-block librecores-user-signupin-panel">
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">Resend confirmation email</h3>
+  <div class="mx-auto librecores-user-signupin-panel">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Resend confirmation email</h3>
       </div>
-      <div class="panel-body">
+      <div class="card-body">
         {{ form_start(form) }}
           {{ form_row(form.user) }}
           <button class="btn btn-success btn-block" type="submit" id="_submit" name="_submit">Resend email</button>
