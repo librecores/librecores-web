@@ -1,6 +1,6 @@
 // import dependencies for the base template
 import $ from 'jquery';
-import 'bootstrap-sass';
+import 'bootstrap';
 
 import 'cookieconsent';
 import "cookieconsent/build/cookieconsent.min.css";

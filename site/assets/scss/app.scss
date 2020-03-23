@@ -1,9 +1,10 @@
 /* CONFIGURATION */
 $brand-primary:           #3fb0ac;
+$link-color:              #3fb0ac;
 $link-hover-color:        #173e43;
 $font-family-sans-serif:  'Open Sans', sans-serif;
 $font-family-monospace:   "Source Code Pro", Menlo, monospace;
-$font-size-base:          15px;
+$font-size-base:          0.9rem;
 
 $screen-md:               992px;
 $screen-md-min:           $screen-md;
@@ -17,11 +18,11 @@ $grid-float-breakpoint:   $screen-md-min;
 // Therefore, use *only* scss files if the import order is relevant (i.e. most
 // of the time.)
 
-// Bootstrap 3
-$icon-font-path: '~bootstrap-sass/assets/fonts/bootstrap/';
-@import "~bootstrap-sass/assets/stylesheets/bootstrap";
+// Bootstrap 4
+$icon-font-path: '~font-awesome/fonts/';
+@import "~bootstrap/scss/bootstrap.scss";
 
-@import "~bootstrap-social/bootstrap-social.scss";
+//@import "~bootstrap-social/bootstrap-social.scss";
 @import "~font-awesome";
 
 /* OUR OWN STYLES */
@@ -34,7 +35,7 @@ body {
   font-weight: 400;
   line-height: 24px;
 
-  /* move content below top navbar */
+/* move content below top navbar */
   padding-top: 60px;
 
   /* for sticky footer */
@@ -196,7 +197,7 @@ h1 a:hover, h1 a:active {
   text-align:center;
 }
 
-.librecores-home-banner > .container {
+.librecores-home-banner > .container-lg {
   padding-top: 40px;
   padding-bottom: 40px;
 }
@@ -236,12 +237,12 @@ h1 a:hover, h1 a:active {
   padding-bottom: 30px;
 }
 
-.librecores-home-showcase > div.container > div {
+.librecores-home-showcase > div.d-none > div > div {
   padding-left: 0;
   padding-right: 0;
 }
 
-.librecores-home-showcase > div.container > div > img {
+.librecores-home-showcase > div.d-none > div > div > img {
   width: 100%;
   display: block;
 }
@@ -907,6 +908,11 @@ a.classifiation-tag:hover {
   width: 90px;
 }
 
+// CSS hack to make algolia-autocomplete work with Bootstrap 4
+.algolia-autocomplete {
+  width: 100%;
+}
+
 .project-in-processing {
     margin-top: 2rem;
 }
@@ -987,11 +993,17 @@ a.classifiation-tag:hover {
 .notification-list {
   min-width: 330px;
   background-color: #fff;
-  max-height: 280px;
+  max-height: 295px;
 }
 .notification-list-content, .notification-list-title, .notification-list-footer {
   border: 0;
   padding: 0;
+}
+
+// Suppress Bootstrap effects on notification list
+.notification-list-content:hover, .notification-list-title:hover, .notification-list-content:active, .notification-list-title:active {
+  background-color: #fff;
+  color: #212529;
 }
 .notification-list-title > span {
   padding: 0 10px 0 10px;
