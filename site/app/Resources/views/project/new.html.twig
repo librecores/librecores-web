@@ -27,7 +27,7 @@ other information about your project automatically.</p>
     <div class="form-inline">
       {{ form_widget(form.displayName, {'attr': {'placeholder': 'Johns awesome FIFO', 'pattern': '.*', 'minlength': '5' }}) }}
     </div>
-    <span class="help-block">Use a meaningful and descriptive name between 5 to 100 characters</span>
+    <span class="form-text text-muted">Use a meaningful and descriptive name between 5 to 100 characters</span>
   </div>
 
   <div class="form-group {{ form.name.vars.errors|length > 0 ? 'has-error' : '' }}">
@@ -42,7 +42,7 @@ other information about your project automatically.</p>
       {{ form_widget(form.parentName) }} /
       {{ form_widget(form.name, {'attr': {'placeholder': 'awesome-fifo', 'minlength': 4 }}) }}
     </div>
-    <span class="help-block">This value will be used in the URL. Must be between 4 to 30 characters</span>
+    <span class="form-text text-muted">This value will be used in the URL. Must be between 4 to 30 characters</span>
   </div>
 
 
@@ -53,28 +53,32 @@ other information about your project automatically.</p>
     <p>LibreCores scans the source code of your project and extracts things
     like the README or the license out of it.</p>
 
-    <ul class="nav nav-tabs">
-      <li role="presentation" class="{{ activeSourcePanel == 'github' ? 'active'}}">
-        <a href="#github" aria-controls="settings" role="tab" data-toggle="tab">
+    <ul class="nav nav-tabs" role="tablist">
+      <li class="nav-item">
+        <a class="nav-link {{ activeSourcePanel == 'github' ? 'active'}}" href="#github" aria-controls="github"
+           aria-selected="{{ activeSourcePanel == 'github' ? 'true' : 'false'}}"
+           role="tab" data-toggle="tab">
           <i class="fa fa-github" aria-hidden="true"></i>
           GitHub
         </a>
       </li>
-      <li role="presentation" class="{{ activeSourcePanel == 'git_url' ? 'active'}}">
-        <a href="#git_url" aria-controls="settings" role="tab" data-toggle="tab">
+      <li class="nav-item">
+        <a class="nav-link {{ activeSourcePanel == 'git_url' ? 'active'}}" href="#git_url" aria-controls="git_url"
+           aria-selected="{{ activeSourcePanel == 'git_url' ? 'true' : 'false'}}"
+           role="tab" data-toggle="tab">
           <i class="fa fa-git" aria-hidden="true"></i>
           Other Git repository
         </a>
       </li>
-      <li role="presentation">
-        <a href="#other" aria-controls="settings" role="tab" data-toggle="tab">
+      <li class="nav-item">
+        <a class="nav-link" href="#other" aria-controls="other" role="tab" data-toggle="tab">
           Other
         </a>
       </li>
     </ul>
 
     <div class="tab-content">
-      <div role="tabpanel" class="tab-pane {{ activeSourcePanel == 'github' ? 'active'}}" id="github">
+      <div role="tabpanel" class="tab-pane {{ activeSourcePanel == 'github' ? 'show active'}}" id="github">
         {% if isGithubConnected %}
           {% if noGithubRepos %}
             <p>You don't have access to any repository on GitHub (or haven't granted us access).
@@ -82,7 +86,7 @@ other information about your project automatically.</p>
           {% else %}
             <div class="form-group">
               {{ form_label(form.githubSourceRepo,'Select a project from your GitHub account') }}
-              {{ form_widget(form.githubSourceRepo, {'attr': {'class': 'selectpicker','data-live-search':'true'}}) }}
+              {{ form_widget(form.githubSourceRepo, {'attr': {'class': 'selectpicker','data-live-search':'true', 'data-window-padding': '50'}}) }}
             </div>
             {{ form_row(form.saveGithubSourceRepo) }}
 
@@ -106,7 +110,7 @@ other information about your project automatically.</p>
       </div>
 
 
-      <div role="tabpanel" class="tab-pane {{ activeSourcePanel == 'git_url' ? 'active'}}" id="git_url">
+      <div role="tabpanel" class="tab-pane {{ activeSourcePanel == 'git_url' ? 'show active'}}" id="git_url">
         {{ form_row(form.gitSourceRepoUrl, {'label': 'Enter a Git repository URL', 'attr': {'style': 'width:500px', 'placeholder': 'URL, e.g. https://github.com/yourname/project'}}) }}
 
         {{ form_row(form.saveGitSourceRepoUrl) }}

@@ -1,10 +1,15 @@
 /* CONFIGURATION */
 $brand-primary:           #3fb0ac;
-$link-color:              #3fb0ac;
+$link-color:              $brand-primary;
 $link-hover-color:        #173e43;
 $font-family-sans-serif:  'Open Sans', sans-serif;
 $font-family-monospace:   "Source Code Pro", Menlo, monospace;
 $font-size-base:          0.9rem;
+$headings-color:          $brand-primary;
+$line-height-base:        1.7;
+$theme-colors: (
+  "primary": $brand-primary
+);
 
 $screen-md:               992px;
 $screen-md-min:           $screen-md;
@@ -31,10 +36,6 @@ html, body {
 }
 
 body {
-  background: none repeat scroll 0 0 #fff;
-  font-weight: 400;
-  line-height: 24px;
-
 /* move content below top navbar */
   padding-top: 60px;
 
@@ -49,26 +50,18 @@ body {
 }
 
 h1 {
-  color: #3fb0ac;
   font-weight: 600;
-  font-size: 40px;
-  padding-bottom: 20px;
+  margin-top: 20px;
 }
 h2 {
-  color: #3fb0ac;
   text-shadow: 0 1px 0 #FFFFFF;
-  font-size: 26px;
 }
 h3 {
-  color: #3fb0ac;
   font-weight: 400;
   text-shadow: 0 1px 0 #FFFFFF;
-  font-size: 24px;
 }
 h4 {
-  font-weight: 600;
   text-shadow: 0 1px 0 #FFFFFF;
-  font-size: 20px;
 }
 pre, code {
   border-radius: 3px 3px 3px 3px;
@@ -90,15 +83,10 @@ pre code {
   box-shadow: none;
 }
 
-label {
-  max-width: 100%;
-  font-weight: 700;
-}
-
 .anchor { padding-top: 60px; }
 
 h1 a:hover, h1 a:active {
-  color: #3fb0ac;
+  color: $brand-primary;
 }
 
 .list-group-item {
@@ -116,7 +104,7 @@ h1 a:hover, h1 a:active {
   /* ensure that padding-left + border-left == padding-left in the non-active
      case (see above) */
   padding-left: 15px;
-  border-left: 5px solid #3fb0ac;
+  border-left: 5px solid $brand-primary;
   text-shadow: none;
 }
 
@@ -159,7 +147,7 @@ h1 a:hover, h1 a:active {
 .librecores-nav .nav > li.nav-item > a:focus,
 .librecores-nav .nav > li.nav-item > a:hover {
   background-color: #fff;
-  color: #3fb0ac;
+  color: $brand-primary;
 }
 
 .navbar-toggle {
@@ -283,7 +271,7 @@ h1 a:hover, h1 a:active {
 .librecores-home-showcase-btn:hover,
 .librecores-home-showcase-btn:focus,
 .librecores-home-showcase-btn:visited {
-  color: #3fb0ac;
+  color: $brand-primary;
 }
 
 .librecores-home-showcase-desc-middle-claim {
@@ -399,7 +387,7 @@ h1 a:hover, h1 a:active {
   font-weight: 600;
   font-size: 20px;
   background-image: linear-gradient(to bottom,#173e43 0,#173e43 100%);
-  color: #3fb0ac;
+  color: $brand-primary;
   text-shadow: none !important;
 }*/
 
@@ -419,7 +407,7 @@ h1 a:hover, h1 a:active {
 .librecores-search h1 {
   font-weight: bold;
   font-size: 2em;
-  color: #3fb0ac;
+  color: $brand-primary;
   margin-top: 0;
 }
 
@@ -589,7 +577,7 @@ h1 a:hover, h1 a:active {
   font-weight: 500;
   font-size: 14px;
   border-radius: 2px;
-  background-color: #3fb0ac;
+  background-color: $brand-primary;
   color: #fff;
   display: inline-block;
   margin: 0 5px 5px 0;
@@ -764,8 +752,8 @@ a.classifiation-tag:hover {
 }
 #pagination li.ais-pagination--item__active a {
   color: white;
-  border-color: #3fb0ac;
-  background: #3fb0ac;
+  border-color: $brand-primary;
+  background: $brand-primary;
 }
 #pagination li.ais-pagination--item__active a:hover {
   cursor: default;
@@ -794,7 +782,7 @@ a.classifiation-tag:hover {
   outline: 0;
 }
 .ais-search-box--input input:focus {
-  border-color: #3fb0ac;
+  border-color: $brand-primary;
 }
 .ais-search-box--input input::-webkit-input-placeholder, #search-input input:-moz-placeholder, #search-input input:-moz-placeholder, #search-input input:-ms-input-placeholder {
   font-weight: 100;
@@ -832,7 +820,11 @@ a.classifiation-tag:hover {
 .ais-search-box {
 
 }
-#stats .ais-stats--time {
+.librecores-search #stats {
+  margin-bottom: 10px;
+}
+
+.librecores-search #stats .ais-stats--time {
   font-size: 0.8em;
   color: #999;
 }
