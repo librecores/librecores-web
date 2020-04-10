@@ -43,7 +43,7 @@
       - git
       - unzip
       # required for ansible
-      - python-mysqldb
+      - python3-mysqldb
     state: present
 
 # the data partition is on EBS in production/staging
