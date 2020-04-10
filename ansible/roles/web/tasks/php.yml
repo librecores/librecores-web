@@ -5,7 +5,9 @@
 
 - name: Install PHP FPM
   become: true
-  apt:  package=php{{ php_version }}-fpm state=present
+  package:
+    name: php{{ php_version }}-fpm
+    state: present
 
 - name: Setup support for PHP in nginx
   become: true
@@ -14,16 +16,21 @@
 
 - name: Install PHP CLI
   become: true
-  apt:  package=php{{ php_version }}-cli state=present
+  package:
+    name: php{{ php_version }}-cli
+    state: present
 
 # OS packaged PHP extensions
+- name: Produce a list of PHP extension package names
+  set_fact:
+    php_extensions_packaged_pkgnames: '{{ php_extensions_packaged_pkgnames|default([]) + ["php" + php_version + "-" + item ] }}'
+  loop: "{{ php_extensions_packaged }}"
+
 - name: Install packaged PHP extensions
   become: true
-  apt:
-    package:
-        - php{{php_version}}-{{ item }}
+  package:
+    name: "{{ php_extensions_packaged_pkgnames }}"
     state: present
-  with_items: "{{ php_extensions_packaged }}"
 
 - name: Enable packaged PHP extensions for all SAPIs
   become: true
@@ -32,13 +39,16 @@
   with_items: "{{ php_extensions_packaged }}"
   notify: restart php-fpm
 
+- name: Produce a list of PHP extension package names for development
+  set_fact:
+    php_devel_extensions_packaged_pkgnames: '{{ php_devel_extensions_packaged_pkgnames|default([]) + ["php" + php_version + "-" + item ] }}'
+  loop: "{{ php_devel_extensions_packaged }}"
+
 - name: Install packaged PHP extensions for development
   become: true
-  apt:
-    package:
-        - php{{php_version}}-{{ item }}
+  package:
+    name: "{{ php_devel_extensions_packaged_pkgnames }}"
     state: present
-  with_items: "{{ php_devel_extensions_packaged }}"
 
 - name: Enable packaged PHP extensions for development for all SAPIs
   become: true

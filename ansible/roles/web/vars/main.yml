@@ -1,8 +1,8 @@
 ---
 # PHP version to be used
 # Packages are expected to be named php<php_version>, e.g. php7.0, php7.0-xml,
-# etc. The same is true for the binaries.
-php_version: 7.4
+# etc. The same is true for the binaries. Use quotes to ensure it's a string!
+php_version: "7.4"
 
 # PHP extensions, installed from OS packages (preferred)
 # All packages are expected to be named "php{{ php_version }}-EXTENSION_NAME"

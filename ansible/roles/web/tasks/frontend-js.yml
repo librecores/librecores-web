@@ -20,8 +20,15 @@
 
 - name: Install frontend packages
   apt:
-    pkg:
+    name:
       - nodejs
       - yarn
+    state: present
+    update_cache: yes
+
+- name: Install frontend package compile dependencies
+  apt:
+    name:
+      - build-essential
     state: present
     update_cache: yes
