@@ -1,7 +1,11 @@
 ---
+- name: Enable certbot PPA
+  apt_repository:
+    repo: 'ppa:certbot/certbot'
+
 - name: Install extra packages
   apt:
     state: present
     pkg:
       - mcrypt
-      - letsencrypt
+      - certbot
