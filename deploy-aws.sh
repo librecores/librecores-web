@@ -109,7 +109,7 @@ fi
 # Disable host key checking in Ansible's SSH
 export ANSIBLE_HOST_KEY_CHECKING=False
 
-export ANSIBLE_CFG=$SCRIPT_DIR/ansible/ansible.cfg
+export ANSIBLE_CONFIG=$SCRIPT_DIR/ansible/ansible.cfg
 
 environment=$1
 action=$2
