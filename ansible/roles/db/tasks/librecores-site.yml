@@ -4,6 +4,8 @@
 
 - name: Add librecores@localhost user to MySQL
   mysql_user: name=librecores password={{ site_mysql_password }} priv=librecores.*:ALL host='localhost' state=present
+  no_log: True
 
 - name: Add librecores@% user to MySQL
   mysql_user: name=librecores password={{ site_mysql_password }} priv=librecores.*:ALL host='%' state=present
+  no_log: True
