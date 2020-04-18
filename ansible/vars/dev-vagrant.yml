@@ -1,6 +1,7 @@
 # All settings in this configuration can be overwritten in dev-vagrant.user.yml
 ---
 librecores_domain: "librecores.devel"
+librecores_tls_cert_admin_email: nobody@example.com
 mysql_host: "localhost"
 web_user: "{{ ansible_user }}"
 use_https: false

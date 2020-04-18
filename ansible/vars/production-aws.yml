@@ -10,6 +10,7 @@ aws_region: "eu-west-1"
 ip_public: "52.19.183.36"
 
 librecores_domain: "librecores.org"
+librecores_tls_cert_admin_email: philipp@fossi-foundation.org
 web_user: "www-data"
 mysql_host: "localhost"
 use_https: true

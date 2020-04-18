@@ -6,18 +6,54 @@
   when: use_https
 
 - name: Obtain initial SSL certificate from Let's Encrypt
-  command: letsencrypt certonly --pre-hook "service nginx stop" --non-interactive --standalone --standalone-supported-challenges http-01 --keep -m philipp@fossi-foundation.org --agree-tos -w /var/www/letsencrypt -d {{ librecores_domain }} -d www.{{ librecores_domain }}
+  command: |
+    certbot certonly \
+      --pre-hook "/bin/systemctl stop nginx.service" \
+      --non-interactive \
+      --standalone \
+      --preferred-challenges http \
+      --keep-until-expiring \
+      -m "{{ librecores_tls_cert_admin_email }}" \
+      --agree-tos \
+      --webroot-path "/var/www/letsencrypt" \
+      -d "{{ librecores_domain }}" \
+      -d "www.{{ librecores_domain }}"
   args:
     creates: /etc/letsencrypt/live/{{ librecores_domain }}/cert.pem
   when: use_https
 
-# Let's Encrypt cert renewal
-- name: Install Let's Encrypt Cert Renewal service
-  template: src=letsencrypt-renew.service dest=/etc/systemd/system/letsencrypt-renew.service
+# certbot doesn't recommend editing the renewal configuration, but doesn't
+# provide a way to do it through the command line yet either. Should be
+# reasonably safe, though.
+# https://github.com/certbot/certbot/issues/5828
+- name: Update letsencrypt renewal config for webroot plugin
+  ini_file:
+    path: /etc/letsencrypt/renewal/{{ librecores_domain }}.conf
+    section: renewalparams
+    option: "{{ item.option }}"
+    value: "{{ item.value }}"
+    state: "{{ item.state }}"
+  loop:
+    - { option: 'standalone_supported_challenges', value: '', state: 'absent' }
+    - { option: 'pre_hook', value: '', state: 'absent' }
+    - { option: 'preferred_challenges', value: 'http', state: 'present' }
+    - { option: 'authenticator', value: 'webroot', state: 'present' }
+    - { option: 'webroot_path', value: '/var/www/letsencrypt', state: 'present' }
   when: use_https
 
-- name: Install Let's Encrypt Cert Renewal timer
-  template: src=letsencrypt-renew.timer dest=/etc/systemd/system/letsencrypt-renew.timer
+- name: Add post-deployment hook to reload nginx for certbot (create hook dir)
+  file:
+    path: /etc/letsencrypt/renewal-hooks/deploy
+    state: directory
+  when: use_https
+
+- name: Add post-deployment hook to reload nginx for certbot (write hook)
+  copy:
+    dest: /etc/letsencrypt/renewal-hooks/deploy/01-reload-nginx.sh
+    mode: '0755'
+    content: |
+      #!/bin/sh
+      /bin/systemctl reload nginx.service
   when: use_https
 
 # nginx (web server)
@@ -204,8 +240,8 @@
 - name: ensure nginx is running (and enable it at boot)
   service: name=nginx state=started enabled=yes
 
-- name: ensure letsencrypt-renew.timer is running (and enable it at boot)
-  service: name=letsencrypt-renew.timer state=started enabled=yes
+- name: ensure certbot.timer is running (and enable it at boot)
+  service: name=certbot.timer state=started enabled=yes
   when: use_https
 
 - name: Restart all services (we need them from now on)
@@ -226,3 +262,6 @@
   environment: "{{ env }}"
   args:
     chdir: /var/www/lc/site
+
+- name: Test letsencrypt renewal
+  command: /usr/bin/certbot renew --dry-run

@@ -1,9 +1,0 @@
-[Unit]
-Description=Let's Encrypt renewal
-
-[Service]
-Type=oneshot
-ExecStart=/usr/bin/letsencrypt renew --webroot -w /var/www/letsencrypt --agree-tos
-
-# reload nginx with new certs
-ExecStartPost=/bin/systemctl reload nginx.service
