@@ -36,9 +36,8 @@ nodejs_major_version: 10
 rabbitmq_consumers:
   - name: update_project_info
     type: single
-# TODO: Fix consumer, currently broken (unable to start)
-#  - name: update_github_metadata
-#    type: single
+  - name: update_github_metadata
+    type: single
   - name: notification
     type: multiple
 
