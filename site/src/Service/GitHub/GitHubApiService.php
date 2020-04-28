@@ -8,15 +8,17 @@ use App\Entity\User;
 use Github\Client;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\Routing\RouterInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Wrap the KnpLabs/php-github-api GitHub API as Symfony service
  *
  * This service wrapper gives access to the GitHub API client as documented
  * at https://github.com/KnpLabs/php-github-api/tree/master/doc. Instead of
- * constructing the client manually, the getClient() and
- * getAuthenticatedClient() methods of this class initialize the object for our
- * use case, including authenticating with a user's GitHub OAuth access token.
+ * constructing the client manually, the getClientForUser() and
+ * getAuthenticatedClientForUser() methods of this class initialize the object
+ * for our use case, including authenticating with a user's GitHub OAuth access
+ * token.
  *
  * All requests are cached if a cache pool is given.
  */
@@ -41,18 +43,9 @@ class GitHubApiService
     protected $router;
 
     /**
-     * GitHub client API wrapper
-     *
-     * @var Client
+     * @var LoggerInterface
      */
-    private $client = null;
-
-    /**
-     * Is $client authenticated?
-     *
-     * @var bool
-     */
-    private $clientIsAuthenticated = false;
+    protected $logger;
 
 
     /**
@@ -67,13 +60,16 @@ class GitHubApiService
      *
      * @param AdapterInterface $cachePool the cache pool to use for all requests
      * @param RouterInterface  $router
+     * @param LoggerInterface  $logger
      */
     public function __construct(
         AdapterInterface $cachePool,
-        RouterInterface $router
+        RouterInterface $router,
+        LoggerInterface $logger
     ) {
         $this->cachePool = $cachePool;
         $this->router = $router;
+        $this->logger = $logger;
     }
 
     /**
@@ -104,26 +100,6 @@ class GitHubApiService
                 'repository' => $matches[2],
             ];
         }
-    }
-
-    /**
-     * Get a GitHub API client object
-     *
-     * If a valid user is available, an authenticated client object is returned.
-     * See getAuthenticatedClient() for details what this means. Otherwise
-     * an unauthenticated client is returned, allowing the application to make
-     * anonymous API calls.
-     *
-     * @return Client a GitHub client
-     */
-    public function getClient()
-    {
-        if (!$this->client) {
-            $this->client = $this->createClient();
-            $this->client->addCache($this->cachePool);
-        }
-
-        return $this->client;
     }
 
     /**
@@ -162,6 +138,36 @@ class GitHubApiService
     }
 
     /**
+     * Get a GitHub API client object
+     *
+     * If a valid user is available, an authenticated client object is returned.
+     * See getAuthenticatedClientForUser() for details what this means.
+     * Otherwise an unauthenticated client is returned, allowing the application
+     * to make anonymous API calls.
+     *
+     * @return Client a GitHub client
+     */
+    public function getClientForUser(User $user) : Client
+    {
+        $client = $this->createClient();
+        $client->addCache($this->cachePool);
+
+        // Try to authenticate as user, but ignore failures.
+        if (!$this->authenticateClientAsUser($user, $client)) {
+            $this->logger->debug("Unable to authenticate to GitHub API as user.");
+
+            if (!$this->authenticateClientAsApplication($client)) {
+                $this->logger->error("Unable to authenticate to GitHub API as application.");
+                // Failure isn't fatal, but only decreases our rate limit. But
+                // failing still indicates something is wrong with the OAuth
+                // tokens, which should be diagnosed and fixed.
+            }
+        }
+
+        return $client;
+    }
+
+    /**
      * Get an authenticated GitHub API client for a user
      *
      * The client acts on behalf of the user, and has permissions to
@@ -175,20 +181,13 @@ class GitHubApiService
      *
      * @return Client|NULL an authenticated GitHub client, or NULL
      */
-    public function getAuthenticatedClientForUser(User $user)
+    public function getAuthenticatedClientForUser(User $user) : ?Client
     {
+        $this->logger->debug("Trying to get authenticated GitHub client for ".
+                             "user \"{$user->getUsername()}\".");
         $client = $this->createClient();
         $client->addCache($this->cachePool);
-
-        // try to authenticate as user with its access token
-        if (null !== $user && $user->isConnectedToOAuthService('github')) {
-            $oauthAccessToken = $user->getGithubOAuthAccessToken();
-            $client->authenticate(
-                $oauthAccessToken,
-                null,
-                Client::AUTH_URL_TOKEN
-            );
-
+        if ($this->authenticateClientAsUser($user, $client)) {
             return $client;
         }
 
@@ -232,5 +231,46 @@ class GitHubApiService
     private function createClient(): Client
     {
         return new GithubClient();
+    }
+
+    /**
+     * Try to authenticate as user with its access token
+     *
+     * @return bool success?
+     */
+    private function authenticateClientAsUser(User $user, Client $client) : bool
+    {
+        if ($user === null || !$user->isConnectedToOAuthService('github')) {
+            return false;
+        }
+
+        $oauthAccessToken = $user->getGithubOAuthAccessToken();
+        $client->authenticate(
+            $oauthAccessToken,
+            null,
+            Client::AUTH_HTTP_TOKEN
+        );
+
+        return true;
+    }
+
+    /**
+     * Authenticate to GitHub as application
+     *
+     * This authentication doesn't make the GitHub client "authenticated", but
+     * increases the rate limit.
+     *
+     * See https://developer.github.com/v3/#increasing-the-unauthenticated-rate-limit-for-oauth-applications
+     * for details.
+     *
+     * @param Client $client the client to authenticate
+     * @return bool successful?
+     */
+    private function authenticateClientAsApplication(Client $client) : bool
+    {
+        // TODO: Implement this. Use github_site_id/github_site_secret from
+        // configuration.
+        // https://github.com/librecores/librecores-web/issues/447
+        return true;
     }
 }

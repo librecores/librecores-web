@@ -63,7 +63,18 @@ class UpdateGitHubMetadataConsumer extends AbstractProjectUpdateConsumer
     {
         try {
             $this->logger->info("Enriching project: {$project->getFqname()} with GitHub metadata");
-            $client = $this->getGithubClient($project);
+
+            // GraphQL (GitHub APIv4) queries must use an authenticated client,
+            // we cannot authenticate as application.
+            // TODO: Implement fallback with GitHub v3 REST API.
+            // https://github.com/librecores/librecores-web/issues/446
+            $client = $this->getAuthenticatedGithubClient($project);
+            if ($client === null) {
+                $this->logger->warning("Unable to get authenticated GitHub client. Unable to ".
+                                       "update GitHub meta data for {$project->getFqname()}.");
+                return true;
+
+            }
 
             $repoUrl = $project->getSourceRepo()->getUrl();
 
@@ -179,10 +190,10 @@ QUERY;
      *
      * @param Project $project
      *
-     * @return Client
-     *
+     * @return Client|null An authenticated Client, or null if authentication
+     *                     failed.
      */
-    private function getGithubClient(Project $project): Client
+    private function getAuthenticatedGithubClient(Project $project): ?Client
     {
 
         $user = $project->getParentUser();
