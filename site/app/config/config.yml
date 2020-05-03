@@ -2,7 +2,6 @@ imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
     - { resource: services.yml }
-    - { resource: packages/webpack_encore.yml }
     - { resource: packages/algolia_search.yml }
     - { resource: packages/doctrine_migrations.yml }
     - { resource: packages/doctrine.yml }
@@ -10,5 +9,7 @@ imports:
     - { resource: packages/framework.yml }
     - { resource: packages/hwi_oauth.yml }
     - { resource: packages/old_sound_rabbit_mq.yml }
+    - { resource: packages/stof_doctrine_extensions.yml }
     - { resource: packages/swiftmailer.yml }
     - { resource: packages/twig.yml }
+    - { resource: packages/webpack_encore.yml }

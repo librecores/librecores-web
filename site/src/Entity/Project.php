@@ -21,7 +21,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  *         columns={"name", "parentUser_id", "parentOrganization_id"})
  * })
  * @ORM\Entity
- * @ORM\HasLifecycleCallbacks
  *
  * @UniqueEntity(
  *     fields={"parentUser", "parentOrganization", "name"},
@@ -237,8 +236,7 @@ class Project
      *
      * @var DateTime date/time in UTC
      *
-     * @see __construct()
-     *
+     * @Gedmo\Timestampable(on="create")
      * @ORM\Column(type="datetime")
      */
     private $dateAdded;
@@ -249,11 +247,9 @@ class Project
      *
      * This field is updated automatically when saving this entity.
      *
-     * @see __construct()
-     * @see updateDateLastModified()
-     *
      * @var DateTime date/time in UTC
      *
+     * @Gedmo\Timestampable(on="update")
      * @ORM\Column(type="datetime")
      */
     private $dateLastModified;
@@ -338,9 +334,6 @@ class Project
      */
     public function __construct()
     {
-        // record the date/time of the project creation
-        $this->setDateAdded(new DateTime());
-        $this->setDateLastModified(new DateTime());
         $this->classifications = new ArrayCollection();
     }
 
@@ -385,19 +378,6 @@ class Project
         }
 
         return $categoryLevels;
-    }
-
-    /**
-     * Update $dateLastModified
-     *
-     * This is called automatically by Doctrine.
-     *
-     * @ORM\PrePersist()
-     * @ORM\PreUpdate()
-     */
-    public function updateDateLastModified()
-    {
-        $this->setDateLastModified(new DateTime());
     }
 
     /**
