@@ -96,9 +96,15 @@ In this case you can manually run the consumer to see the log messages.
 .. code-block:: bash
 
   # on staging/production
-  sudo systemctl stop librecores-rabbitmq.service
+  # for the git repository crawler
+  sudo systemctl stop lc-rmqc-update_project_info.service
   SYMFONY_ENV=prod SYMFONY_DEBUG=0 sudo -E -u www-data -- /usr/bin/php /var/www/lc/site/bin/console rabbitmq:consumer -vvv -w -l 256 -m 1 update_project_info
-  sudo systemctl start librecores-rabbitmq.service
+  sudo systemctl start lc-rmqc-update_project_info.service
+
+  # for the github metadata service
+  sudo systemctl stop lc-rmqc-update_github_metadata.service
+  SYMFONY_ENV=prod SYMFONY_DEBUG=0 sudo -E -u www-data -- /usr/bin/php /var/www/lc/site/bin/console rabbitmq:consumer -vvv -w -l 256 -m 1 update_github_metadata
+  sudo systemctl start lc-rmqc-update_github_metadata.service
 
 Clean the Symfony caches
 ------------------------
