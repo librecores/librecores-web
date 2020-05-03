@@ -49,6 +49,19 @@ class GitRepoCrawler extends AbstractRepoCrawler
     private const TIMEOUT_GIT_LOG = 5 * 60;
 
     /**
+     * "cloc" timeout in seconds.
+     *
+     * cloc uses an internal timeout mechanism based on the file size it
+     * processes, which is more adaptive than the timeout we specify here. We
+     * therefore use a very generous timeout as safety net.
+     *
+     * @internal
+     *
+     * @var int
+     */
+    private const TIMEOUT_CLOC = 10 * 60;
+
+    /**
      * Case-insensitive basenames without file extensions of files used for the
      * full-text of the license in a repository.
      *
@@ -324,6 +337,7 @@ class GitRepoCrawler extends AbstractRepoCrawler
             $repoDir,
         ];
         $process = $this->processCreator->createProcess($cmd);
+        $process->setTimeout(static::TIMEOUT_CLOC);
 
         $this->mustExecuteProcess($process);
         $result = $process->getOutput();
