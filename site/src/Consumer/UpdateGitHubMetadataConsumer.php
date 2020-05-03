@@ -29,65 +29,57 @@ class UpdateGitHubMetadataConsumer extends AbstractProjectUpdateConsumer
     private $githubApiService;
 
     /**
-     * @var EntityManagerInterface
-     */
-    private $entityManager;
-
-    /**
      * UpdateGithubMetadataConsumer constructor.
      *
      * @param ProjectRepository      $repository
-     * @param GitHubApiService       $githubApiService
      * @param EntityManagerInterface $entityManager
      * @param LoggerInterface        $logger
+     * @param GitHubApiService       $githubApiService
      */
     public function __construct(
         ProjectRepository $repository,
-        GitHubApiService $githubApiService,
         EntityManagerInterface $entityManager,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        GitHubApiService $githubApiService
     ) {
-        parent::__construct($repository, $logger);
+        parent::__construct($repository, $entityManager, $logger);
         $this->githubApiService = $githubApiService;
-        $this->entityManager = $entityManager;
     }
 
     /**
      * Extract and update Github specific metrics
      *
-     * @param Project $project
-     *
      * @return bool
      */
-    protected function processProject(Project $project) : bool
+    protected function processProject() : bool
     {
         try {
-            $this->logger->info("Enriching project: {$project->getFqname()} with GitHub metadata");
+            $this->logger->info("Enriching project: {$this->getProject()->getFqname()} with GitHub metadata");
 
             // GraphQL (GitHub APIv4) queries must use an authenticated client,
             // we cannot authenticate as application.
             // TODO: Implement fallback with GitHub v3 REST API.
             // https://github.com/librecores/librecores-web/issues/446
-            $client = $this->getAuthenticatedGithubClient($project);
+            $client = $this->getAuthenticatedGithubClient($this->getProject());
             if ($client === null) {
                 $this->logger->warning("Unable to get authenticated GitHub client. Unable to ".
-                                       "update GitHub meta data for {$project->getFqname()}.");
-                return true;
+                                       "update GitHub meta data for {$this->getProject()->getFqname()}.");
+                return self::PROCESSING_SUCCESSFUL;
 
             }
 
-            $repoUrl = $project->getSourceRepo()->getUrl();
+            $repoUrl = $this->getProject()->getSourceRepo()->getUrl();
 
             $isGithubRepo = GitHubApiService::isGitHubRepoUrl($repoUrl);
 
             if (!$isGithubRepo) {
                 // skip processing
                 $this->logger->info(
-                    "Skipped project {$project->getFqname()}"
+                    "Skipped project {$this->getProject()->getFqname()}"
                     ."as it is not a GitHub repo"
                 );
 
-                return true;
+                return self::PROCESSING_SUCCESSFUL;
             }
 
             $repoInfo = GitHubApiService::parseGitHubRepoUrl($repoUrl);
@@ -95,31 +87,30 @@ class UpdateGitHubMetadataConsumer extends AbstractProjectUpdateConsumer
             $repo = $repoInfo['repository'];
             $data = $this->fetchGithubMetadata($client, $user, $repo);
 
-            $project->setForks($data['forks']['totalCount']);
+            $this->getProject()->setForks($data['forks']['totalCount']);
 
             if ($data['hasIssuesEnabled']) {
-                $project->setOpenIssues($data['issues']['totalCount']);
+                $this->getProject()->setOpenIssues($data['issues']['totalCount']);
             }
 
-            $project->setOpenPullRequests($data['pullRequests']['totalCount']);
-            $project->setStars($data['stargazers']['totalCount']);
-            $project->setWatchers($data['watchers']['totalCount']);
+            $this->getProject()->setOpenPullRequests($data['pullRequests']['totalCount']);
+            $this->getProject()->setStars($data['stargazers']['totalCount']);
+            $this->getProject()->setWatchers($data['watchers']['totalCount']);
 
             $dateLastActivity = new DateTime($data['updatedAt']);
-            $project->setDateLastActivityOccurred($dateLastActivity);
+            $this->getProject()->setDateLastActivityOccurred($dateLastActivity);
 
-            $this->entityManager->persist($project);
+            $this->entityManager->persist($this->getProject());
             $this->entityManager->flush();
             $this->logger->info('Fetched GitHub metrics successfully');
         } catch (Exception $ex) {
             // Report this error and do not requeue
             $this->logger->error(
-                'Unable to fetch data from Github: '
-                .$ex->getMessage()
+                'Unable to fetch data from Github: '.$ex->getMessage()
             );
         }
 
-        return true;
+        return self::PROCESSING_SUCCESSFUL;
     }
 
     /**
@@ -188,7 +179,7 @@ QUERY;
      * Get a GitHub client with permissions for the user associated with the
      * current SourceRepo
      *
-     * @param Project $project
+     * @param Project $this->getProject()
      *
      * @return Client|null An authenticated Client, or null if authentication
      *                     failed.
@@ -196,10 +187,10 @@ QUERY;
     private function getAuthenticatedGithubClient(Project $project): ?Client
     {
 
-        $user = $project->getParentUser();
+        $user = $this->getProject()->getParentUser();
 
         if (null === $user) {
-            $user = $project->getParentOrganization()->getCreator();
+            $user = $this->getProject()->getParentOrganization()->getCreator();
         }
 
         return $this->githubApiService->getAuthenticatedClientForUser($user);

@@ -6,6 +6,7 @@ use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use InvalidArgumentException;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -203,6 +204,14 @@ class Project
     private $licenseTextAutoUpdate = true;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime", nullable=true)
+     * @Gedmo\Timestampable(on="change", field={"licenseText"})
+     */
+    private $licenseTextLastUpdate;
+
+    /**
      * Project description in HTML
      *
      * @var string
@@ -223,13 +232,12 @@ class Project
     private $descriptionTextAutoUpdate = true;
 
     /**
-     * The project's data is currently being processed
+     * @var \DateTime
      *
-     * @var bool
-     *
-     * @ORM\Column(type="boolean", options={"default" : false})
+     * @ORM\Column(type="datetime", nullable=true)
+     * @Gedmo\Timestampable(on="change", field={"descriptionText"})
      */
-    private $inProcessing = false;
+    private $descriptionTextLastUpdate;
 
     /**
      * The date when this project was added to LibreCores
@@ -744,25 +752,18 @@ class Project
     /**
      * Get inProcessing
      *
+     * @deprecated Use descriptionTextLastUpdate/licenseTextLastUpdate instead.
+     *
      * @return boolean
      */
     public function isInProcessing()
     {
-        return $this->inProcessing;
-    }
+        @trigger_error('Project::isInProcessing() is deprecated, use '.
+            'descriptionTextLastUpdate/licenseTextLastUpdate instead.',
+            E_USER_DEPRECATED);
 
-    /**
-     * Set inProcessing
-     *
-     * @param boolean $inProcessing
-     *
-     * @return Project
-     */
-    public function setInProcessing($inProcessing)
-    {
-        $this->inProcessing = $inProcessing;
-
-        return $this;
+        return $this->licenseTextLastUpdate === NULL
+            && $this->descriptionTextLastUpdate === NULL;
     }
 
     /**

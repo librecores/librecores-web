@@ -9,6 +9,8 @@ use Exception;
 use OldSound\RabbitMqBundle\RabbitMq\ConsumerInterface;
 use PhpAmqpLib\Message\AMQPMessage;
 use Psr\Log\LoggerInterface;
+use App\Exception\ProjectNotFoundException;
+use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * Base class for project crawlers
@@ -17,6 +19,20 @@ use Psr\Log\LoggerInterface;
  */
 abstract class AbstractProjectUpdateConsumer implements ConsumerInterface
 {
+    /**
+     * Processing successful, don't requeue this project.
+     */
+    public const PROCESSING_SUCCESSFUL = true;
+
+    /**
+     * Processing failed, do requeue this project.
+     */
+    public const PROCESSING_FAILED_REQUEUE = false;
+
+    /**
+     * @var EntityManagerInterface
+     */
+    protected $entityManager;
 
     /**
      * @var LoggerInterface
@@ -29,17 +45,58 @@ abstract class AbstractProjectUpdateConsumer implements ConsumerInterface
     protected $repository;
 
     /**
+     * Project ID
+     *
+     * @var int|null
+     */
+    private $projectId;
+
+    /**
+     * @var Project|null
+     */
+    private $project;
+
+    /**
      * AbstractProjectCrawlerConsumer constructor.
      *
-     * @param ProjectRepository $repository
-     * @param LoggerInterface   $logger
+     * @param ProjectRepository      $repository
+     * @param EntityManagerInterface $entityManager
+     * @param LoggerInterface        $logger
      */
     public function __construct(
         ProjectRepository $repository,
+        EntityManagerInterface $entityManager,
         LoggerInterface $logger
     ) {
-        $this->logger = $logger;
         $this->repository = $repository;
+        $this->entityManager = $entityManager;
+        $this->logger = $logger;
+    }
+
+    /**
+     * Get the project to be processed
+     *
+     * @throws ProjectNotFoundException
+     */
+    public function getProject() : Project
+    {
+        if ($this->project) {
+            return $project;
+        }
+        if ($this->projectId === null) {
+            return null;
+        }
+
+        $project = $this->repository->find($this->projectId);
+        if ($project === null) {
+            throw ProjectNotFoundException::fromProjectId($this->projectId);
+        }
+        return $project;
+    }
+
+    private function decodeAmqpMessage(AMQPMessage $msg)
+    {
+        $this->projectId = (int) unserialize($msg->body);
     }
 
     /**
@@ -53,43 +110,67 @@ abstract class AbstractProjectUpdateConsumer implements ConsumerInterface
         // unhandled exception within a consumer, as this essentially kills our
         // RabbitMQ consumer daemon and ends all processing tasks.
         try {
-            $projectId = (int) unserialize($msg->body);
-            /** @var Project $project */
-            $project = $this->repository->find($projectId);
-
-            if (!$project) {
-                // this should not happen in production
-                // but happens in dev if for some reason we clear the projects
-                // table
-                $this->logger->error(
-                    "Unable to update project with ID $projectId: project does "
-                    ."not exist."
-                );
-
-                return true; // don't requeue
-            }
-
-            return $this->processProject($project);
-        } catch (Exception $e) {
-            // We got an unexpected Exception. We assume this is a one-off event
-            // and just log it, but otherwise keep the consumer running for the
-            // next requests.
+            $this->decodeAmqpMessage($msg);
+            return $this->processProjectInTransaction();
+        } catch (ProjectNotFoundException $e) {
+            // This should not happen in production, but happens in dev if for
+            // some reason we clear the projects table.
             $this->logger->error(
-                "Processing of repository resulted in an ".get_class($e)
+                "Unable to update project with ID {$this->projectId}:"
+                ."project does not exist."
             );
-            $this->logger->error('Message: '.$e->getMessage());
-            $this->logger->error('Trace: '.$e->getTraceAsString());
 
-            return false;
+            return self::PROCESSING_SUCCESSFUL;
+        } catch (Exception $e) {
+            $this->logException($e);
+            return self::PROCESSING_FAILED_REQUEUE;
+        }
+    }
+
+    /**
+     * Log an exception
+     *
+     * We assume exceptions are an one-off event and log it, but otherwise keep
+     * the consumer running for the next requests.
+     */
+    private function logException(Exception $e)
+    {
+        $this->logger->error(
+            "Processing of repository resulted in an ".get_class($e)
+        );
+        $this->logger->error('Message: '.$e->getMessage());
+        $this->logger->error('Trace: '.$e->getTraceAsString());
+    }
+
+    /**
+     * Call processProject() in a DB transaction
+     *
+     * This ensures that all project update steps are done in a single database
+     * transaction, or rolled back if they cannot be completed in entirely.
+     *
+     * Roughly EntityManager::transactional() but with more explicit return
+     * value handling.
+     */
+    private function processProjectInTransaction(): bool
+    {
+        $this->entityManager->beginTransaction();
+        try {
+            $rv = $this->processProject();
+            $this->entityManager->flush();
+            $this->entityManager->commit();
+            return $rv;
+        } catch (Exception $e) {
+            // Roll back any database changes.
+            $this->entityManager->rollBack();
+            $this->entityManager->close();
+            throw $e;
         }
     }
 
     /**
      * Process a project
      *
-     * @param Project $project
-     *
      * @return bool true when successfully processed and false to retry
      */
-    abstract protected function processProject(Project $project): bool;
+    abstract protected function processProject(): bool;
 }
