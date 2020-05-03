@@ -8,7 +8,7 @@ use App\Util\MarkupToHtmlConverter;
 use App\Util\ProcessCreator;
 use DateTime;
 use DateTimeZone;
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use App\Service\ProjectMetricsProvider;
 use App\Entity\Commit;
@@ -136,9 +136,9 @@ class GitRepoCrawler extends AbstractRepoCrawler
     private $projectMetricsProvider;
 
     /**
-     * @var ObjectManager
+     * @var EntityManagerInterface
      */
-    private $manager;
+    private $entityManager;
 
     /**
      * @var ContributorRepository
@@ -158,7 +158,7 @@ class GitRepoCrawler extends AbstractRepoCrawler
         ProcessCreator $processCreator,
         CommitRepository $commitRepository,
         ContributorRepository $contributorRepository,
-        ObjectManager $manager,
+        EntityManagerInterface $entityManager,
         LoggerInterface $logger,
         ProjectMetricsProvider $projectMetricsProvider,
         Filesystem $filesystem
@@ -167,7 +167,7 @@ class GitRepoCrawler extends AbstractRepoCrawler
         $this->processCreator = $processCreator;
         $this->commitRepository = $commitRepository;
         $this->contributorRepository = $contributorRepository;
-        $this->manager = $manager;
+        $this->entityManager = $entityManager;
         $this->logger = $logger;
         $this->projectMetricsProvider = $projectMetricsProvider;
         $this->filesystem = $filesystem;
@@ -220,11 +220,10 @@ class GitRepoCrawler extends AbstractRepoCrawler
 
         $this->updateReleases($repoDir, $project);
 
-
-        $this->manager->persist($repo);
+        $this->entityManager->persist($repo);
 
         // we need a explicit flush here because we query commit data later
-        $this->manager->flush();
+        $this->entityManager->flush();
 
         $latestCommit = $this->commitRepository->getLatestCommit($project->getSourceRepo());
 
@@ -237,7 +236,7 @@ class GitRepoCrawler extends AbstractRepoCrawler
         $qualityScore = $projectMetrics * 100;
         $project->setQualityScore($qualityScore);
 
-        $this->manager->persist($project);
+        $this->entityManager->persist($project);
 
         $this->logger->debug('Cleaning up repo clone directory '. $repoDir);
 
@@ -365,7 +364,7 @@ class GitRepoCrawler extends AbstractRepoCrawler
         }
 
         $repo->setSourceStats($sourceStats);
-        $this->manager->persist($repo);
+        $this->entityManager->persist($repo);
     }
 
     /**
@@ -508,7 +507,7 @@ class GitRepoCrawler extends AbstractRepoCrawler
         }
 
         $project->setReleases($releases);
-        $this->manager->persist($project);
+        $this->entityManager->persist($project);
 
         $count = count($releases);
         $this->logger->debug("Fetched $count releases from $repoDir");
@@ -597,7 +596,7 @@ class GitRepoCrawler extends AbstractRepoCrawler
                     }
                     $i++;   // skip the next line
                 }
-                $this->manager->persist($commit);
+                $this->entityManager->persist($commit);
                 $commits[] = $commit;
             }
         }
