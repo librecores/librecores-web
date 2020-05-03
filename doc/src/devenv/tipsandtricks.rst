@@ -15,20 +15,12 @@ Connect to the VM
   host$> cd vagrant
   host$> vagrant ssh
 
-Rebuild ORM (Doctrine) Entity
------------------------------
+Update the database after changes to entries
+--------------------------------------------
 
 .. code-block:: bash
 
   vm$> cd /var/www/lc/site
-
-  # for only one class
-  vm$> ./bin/console doctrine:generate:entities LibrecoresProjectRepoBundle:Project
-
-  # for all classes
-  vm$> ./bin/console doctrine:generate:entities LibrecoresProjectRepoBundle
-
-  # finally, update the MySQL DB
   vm$> ./bin/console doctrine:schema:update --force
 
 Access the MySQL database
