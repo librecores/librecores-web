@@ -294,11 +294,9 @@ class GitRepoCrawler extends AbstractRepoCrawler
             '--shortstat',
         ];
         if (null !== $sinceCommitId) {
-            $cmd[] = $sinceCommitId;
-            $cmd[] = '...';
+            $this->logger->debug("Getting all commits since $sinceCommitId");
+            $cmd[] = $sinceCommitId.'...';
         }
-
-        $this->logger->debug("Fetching commits in $repoDir");
 
         $process = $this->processCreator->createProcess($cmd, $repoDir);
         $process->setTimeout(static::TIMEOUT_GIT_LOG);
