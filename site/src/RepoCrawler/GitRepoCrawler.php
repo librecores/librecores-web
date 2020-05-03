@@ -253,24 +253,20 @@ class GitRepoCrawler extends AbstractRepoCrawler
         $code = $process->getExitCode();
 
         if (0 === $code) {
-            $value = true;    // commit exists in default branch
+            $this->logger->debug("Commit $commitId exists in the default branch of $repoDir");
+            return true;
+        } else if (1 === $code || 128 === $code) {
+            $this->logger->debug("Commit $commitId does not exist in $repoDir");
+            return false;
         } else {
-            if (1 === $code || 128 === $code) {
-                $value = false;    // commit does not exist in repository or branch
-            } else {
-                throw new RuntimeException(
-                    sprintf(
-                        "Unable to fetch commits from %s: %s",
-                        $repoDir,
-                        $process->getErrorOutput()
-                    )
-                );
-            }
+            throw new RuntimeException(
+                sprintf(
+                    "Unable to fetch commits from %s: %s",
+                    $repoDir,
+                    $process->getErrorOutput()
+                )
+            );
         }
-
-        $this->logger->debug("Checked commits in $repoDir");
-
-        return $value;
     }
 
     /**
