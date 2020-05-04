@@ -23,6 +23,7 @@ use Doctrine\ORM\NonUniqueResultException;
 use Exception;
 use FOS\UserBundle\Model\UserManagerInterface;
 use Github\Exception\ErrorException;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -461,13 +462,22 @@ class ProjectController extends AbstractController
         $parentName,
         $projectName,
         ProjectRepository $repository,
-        QueueDispatcherService $queueDispatcherService
+        QueueDispatcherService $queueDispatcherService,
+        LoggerInterface $logger
     ) {
-        if ($ghEvent = $req->headers->has('X-GitHub-Event')) {
+        if ($req->headers->has('X-GitHub-Event')) {
+            $ghEvent = $req->headers->get('X-GitHub-Event');
+            $logger->info("Got GitHub $ghEvent webhook for $parentName/$projectName");
+            $logger->debug("Request: ".$req);
             if ($ghEvent !== 'push') {
                 // We only react to push events, all other events signal any
                 // change we are interested in.
-                return new Response();
+                $logger->info("Ignoring GitHub $ghEvent webhook, only reacting to push hooks.");
+                return new Response(
+                    "$ghEvent hook ignored, only reacting to push hooks.",
+                    200,
+                    ['Content-Type' => 'text/plain']
+                );
             }
             // XXX: In the future, this could be extended to use information
             // contained in the notification directly.
