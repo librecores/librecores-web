@@ -10,6 +10,9 @@ doctrine:
         default_table_options:
             charset: utf8mb4
             collate: utf8mb4_unicode_520_ci
+        types:
+            # Override the "datetime" type to always use UTC timestamps.
+            datetime: App\DoctrineExtensions\DBAL\Types\UTCDateTimeType
 
     orm:
         auto_generate_proxy_classes: "%kernel.debug%"
