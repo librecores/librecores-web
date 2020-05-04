@@ -801,20 +801,6 @@ class Project
     }
 
     /**
-     * Set dateAdded
-     *
-     * @param DateTime $dateAdded
-     *
-     * @return Project
-     */
-    public function setDateAdded($dateAdded)
-    {
-        $this->dateAdded = $dateAdded;
-
-        return $this;
-    }
-
-    /**
      * Get dateLastModified
      *
      * @return DateTime
