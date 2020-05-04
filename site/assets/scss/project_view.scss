@@ -1,2 +1,6 @@
 /* Project View */
 @import "~chartist/dist/scss/chartist.scss";
+
+#README img, #LICENSE img {
+  max-width:100%;
+}
