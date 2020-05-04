@@ -621,10 +621,6 @@ QUERY;
         }
 
         $p->setStatus(Project::STATUS_ASSIGNED);
-
-        // Mark the project as "in processing". This shows the wait page
-        // until the update task has been ran from the RabbitMQ queue
-        $p->setInProcessing(true);
     }
 
     /**
