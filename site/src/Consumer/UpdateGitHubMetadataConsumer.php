@@ -12,6 +12,7 @@ use Exception;
 use Github\Client;
 use Github\Exception\ErrorException;
 use Psr\Log\LoggerInterface;
+use OldSound\RabbitMqBundle\RabbitMq\ConsumerInterface;
 
 /**
  * Enrich metadata from GitHub
@@ -64,8 +65,7 @@ class UpdateGitHubMetadataConsumer extends AbstractProjectUpdateConsumer
             if ($client === null) {
                 $this->logger->warning("Unable to get authenticated GitHub client. Unable to ".
                                        "update GitHub meta data for {$this->getProject()->getFqname()}.");
-                return self::PROCESSING_SUCCESSFUL;
-
+                return ConsumerInterface::MSG_REJECT;
             }
 
             $repoUrl = $this->getProject()->getSourceRepo()->getUrl();
@@ -79,7 +79,7 @@ class UpdateGitHubMetadataConsumer extends AbstractProjectUpdateConsumer
                     ."as it is not a GitHub repo"
                 );
 
-                return self::PROCESSING_SUCCESSFUL;
+                return ConsumerInterface::MSG_ACK;
             }
 
             $repoInfo = GitHubApiService::parseGitHubRepoUrl($repoUrl);
@@ -108,9 +108,10 @@ class UpdateGitHubMetadataConsumer extends AbstractProjectUpdateConsumer
             $this->logger->error(
                 'Unable to fetch data from Github: '.$ex->getMessage()
             );
+            return ConsumerInterface::MSG_REJECT;
         }
 
-        return self::PROCESSING_SUCCESSFUL;
+        return ConsumerInterface::MSG_ACK;
     }
 
     /**

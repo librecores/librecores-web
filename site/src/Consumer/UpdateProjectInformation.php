@@ -8,6 +8,7 @@ use App\Repository\ProjectRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Psr\Log\LoggerInterface;
+use OldSound\RabbitMqBundle\RabbitMq\ConsumerInterface;
 
 /**
  * Extract and update a project's information with data from a source repository
@@ -56,7 +57,7 @@ class UpdateProjectInformation extends AbstractProjectUpdateConsumer
                 .": no valid source repository associated."
             );
 
-            return self::PROCESSING_SUCCESSFUL;
+            return ConsumerInterface::MSG_REJECT;
         }
 
         // do the actual work: extract data from the repository
@@ -68,6 +69,6 @@ class UpdateProjectInformation extends AbstractProjectUpdateConsumer
         // persist all changes made to to DB
         $this->entityManager->flush();
 
-        return self::PROCESSING_SUCCESSFUL;
+        return ConsumerInterface::MSG_ACK;
     }
 }

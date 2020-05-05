@@ -20,16 +20,6 @@ use Doctrine\ORM\EntityManagerInterface;
 abstract class AbstractProjectUpdateConsumer implements ConsumerInterface
 {
     /**
-     * Processing successful, don't requeue this project.
-     */
-    public const PROCESSING_SUCCESSFUL = true;
-
-    /**
-     * Processing failed, do requeue this project.
-     */
-    public const PROCESSING_FAILED_REQUEUE = false;
-
-    /**
      * @var EntityManagerInterface
      */
     protected $entityManager;
@@ -120,10 +110,10 @@ abstract class AbstractProjectUpdateConsumer implements ConsumerInterface
                 ."project does not exist."
             );
 
-            return self::PROCESSING_SUCCESSFUL;
+            return ConsumerInterface::MSG_REJECT;
         } catch (Exception $e) {
             $this->logException($e);
-            return self::PROCESSING_FAILED_REQUEUE;
+            return ConsumerInterface::MSG_REJECT_REQUEUE;
         }
     }
 
