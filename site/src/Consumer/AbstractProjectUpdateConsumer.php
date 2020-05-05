@@ -113,7 +113,8 @@ abstract class AbstractProjectUpdateConsumer implements ConsumerInterface
             return ConsumerInterface::MSG_REJECT;
         } catch (Exception $e) {
             $this->logException($e);
-            return ConsumerInterface::MSG_REJECT_REQUEUE;
+            $this->exitRestartConsumer();
+            return ConsumerInterface::MSG_REJECT_REQUEUE; // never reached.
         }
     }
 
@@ -130,6 +131,22 @@ abstract class AbstractProjectUpdateConsumer implements ConsumerInterface
         );
         $this->logger->error('Message: '.$e->getMessage());
         $this->logger->error('Trace: '.$e->getTraceAsString());
+    }
+
+    /**
+     * Restart the consumer process
+     *
+     * This relies on a daemon manager (e.g. systemd) respawning the process.
+     */
+    private function exitRestartConsumer()
+    {
+        // It seems that the "clean" way of restarting the consumer process
+        // is hard/broken/undocumented, so we'll rely on the rough and simple
+        // approach here.
+        // https://github.com/php-amqplib/RabbitMqBundle/issues/337
+        // https://github.com/php-amqplib/RabbitMqBundle/issues/180
+        $this->logger->warning("Exiting consumer");
+        exit(0);
     }
 
     /**
