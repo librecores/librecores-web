@@ -192,55 +192,61 @@ class GitRepoCrawler extends AbstractRepoCrawler
 
         $lastCommit = $this->commitRepository->getLatestCommit($repo);
 
-        $repoDir = $this->cloneRepo($repo);
+        try {
+            $repoDir = $this->cloneRepo($repo);
 
-        // determine if our latest commit exists and fetch new commits since
-        // what we have on DB
-        if ($lastCommit && $this->commitExists($repoDir, $lastCommit->getCommitId())) {
-            $commitCount = $this->updateCommits($repoDir, $repo, $lastCommit->getCommitId());
-        } else {
-            // there has been a history rewrite
-            // we drop everything and persist all commits to the DB
-            // XXX: Find a way to find the common ancestor and do partial rewrites
-            $this->commitRepository->removeAllCommits($repo);
-            $repo->getCommits()->clear();
-            $commitCount = $this->updateCommits($repoDir, $repo);
+            // determine if our latest commit exists and fetch new commits since
+            // what we have on DB
+            if ($lastCommit && $this->commitExists($repoDir, $lastCommit->getCommitId())) {
+                $commitCount = $this->updateCommits($repoDir, $repo, $lastCommit->getCommitId());
+            } else {
+                // there has been a history rewrite
+                // we drop everything and persist all commits to the DB
+                // XXX: Find a way to find the common ancestor and do partial rewrites
+                $this->commitRepository->removeAllCommits($repo);
+                $repo->getCommits()->clear();
+                $commitCount = $this->updateCommits($repoDir, $repo);
+            }
+
+            if ($commitCount > 0) {
+                $this->countLinesOfCode($repoDir, $repo);
+            }
+
+            if ($project->getDescriptionTextAutoUpdate()) {
+                $project->setDescriptionText($this->getDescriptionSafeHtml($repoDir));
+            }
+            if ($project->getLicenseTextAutoUpdate()) {
+                $project->setLicenseText($this->getLicenseTextSafeHtml($repoDir));
+            }
+
+            $this->updateReleases($repoDir, $project);
+
+            $this->entityManager->persist($repo);
+
+            // we need a explicit flush here because we query commit data later
+            $this->entityManager->flush();
+
+            $latestCommit = $this->commitRepository->getLatestCommit($project->getSourceRepo());
+
+            if ($latestCommit) {
+                $project->setDateLastActivityOccurred($latestCommit->getDateCommitted());
+            }
+
+            // Retrieve the code quality score for the project and persist it in the database
+            $projectMetrics = $this->projectMetricsProvider->getCodeQualityScore($project);
+            $qualityScore = $projectMetrics * 100;
+            $project->setQualityScore($qualityScore);
+
+            $this->entityManager->persist($project);
+        } finally {
+            $this->logger->debug('Cleaning up repo clone directory '. $repoDir);
+            try {
+                $this->filesystem->remove($repoDir);
+            } catch (IOException $e) {
+                // Ignore.
+                $this->logger->warning("Unable to remove directory $repoDir");
+            };
         }
-
-        if ($commitCount > 0) {
-            $this->countLinesOfCode($repoDir, $repo);
-        }
-
-        if ($project->getDescriptionTextAutoUpdate()) {
-            $project->setDescriptionText($this->getDescriptionSafeHtml($repoDir));
-        }
-        if ($project->getLicenseTextAutoUpdate()) {
-            $project->setLicenseText($this->getLicenseTextSafeHtml($repoDir));
-        }
-
-        $this->updateReleases($repoDir, $project);
-
-        $this->entityManager->persist($repo);
-
-        // we need a explicit flush here because we query commit data later
-        $this->entityManager->flush();
-
-        $latestCommit = $this->commitRepository->getLatestCommit($project->getSourceRepo());
-
-        if ($latestCommit) {
-            $project->setDateLastActivityOccurred($latestCommit->getDateCommitted());
-        }
-
-        // Retrieve the code quality score for the project and persist it in the database
-        $projectMetrics = $this->projectMetricsProvider->getCodeQualityScore($project);
-        $qualityScore = $projectMetrics * 100;
-        $project->setQualityScore($qualityScore);
-
-        $this->entityManager->persist($project);
-
-        $this->logger->debug('Cleaning up repo clone directory '. $repoDir);
-
-        $this->filesystem->remove($repoDir);
 
         return true;
     }
