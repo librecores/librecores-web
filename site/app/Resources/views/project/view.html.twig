@@ -1,7 +1,7 @@
 {% extends 'layout.html.twig' %}
 
 {% block title %}
-{{ project.displayName }} @ LibreCores
+{{ project.displayName }} @ LibreCores: {% if project.tagline %}{{ project.tagline }}{% endif %}
 {% endblock %}
 
 {% block pagepath %}Home &raquo; Projects &raquo; {{ project.displayName }}{% endblock %}
