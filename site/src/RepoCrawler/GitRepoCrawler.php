@@ -395,15 +395,7 @@ class GitRepoCrawler extends AbstractRepoCrawler
 
         $this->logger->debug('Using file '.$descriptionFile.' as description.');
 
-        try {
-            $sanitizedHtml = $this->getMarkupConverter($repo)->convertFile($descriptionFile);
-        } catch (Exception $e) {
-            $this->logger->error(
-                "Unable to convert $descriptionFile to HTML for description text: {$e->getMessage()}"
-            );
-
-            return null;
-        }
+        $sanitizedHtml = $this->getMarkupConverter($repo)->convertFile($descriptionFile);
 
         return $sanitizedHtml;
     }
@@ -438,15 +430,7 @@ class GitRepoCrawler extends AbstractRepoCrawler
 
         $this->logger->debug("Using file $licenseFile as license text.");
 
-        try {
-            $sanitizedHtml = $this->getMarkupConverter($repo)->convertFile($licenseFile);
-        } catch (Exception $e) {
-            $this->logger->error(
-                "Unable to convert $licenseFile to HTML for license text: {$e->getMessage()}"
-            );
-
-            return null;
-        }
+        $sanitizedHtml = $this->getMarkupConverter($repo)->convertFile($licenseFile);
 
         return $sanitizedHtml;
     }
