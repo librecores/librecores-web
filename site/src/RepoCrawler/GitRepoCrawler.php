@@ -227,9 +227,8 @@ class GitRepoCrawler extends AbstractRepoCrawler
             $this->entityManager->flush();
 
             $latestCommit = $this->commitRepository->getLatestCommit($project->getSourceRepo());
-
             if ($latestCommit) {
-                $project->setDateLastActivityOccurred($latestCommit->getDateCommitted());
+                $project->recordActivity($latestCommit->getDateCommitted());
             }
 
             // Retrieve the code quality score for the project and persist it in the database

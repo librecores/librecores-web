@@ -849,6 +849,19 @@ class Project
     }
 
     /**
+     * Record an activity
+     *
+     * Commits, discussions in issue trackers, releases, pull requests
+     * are treated as activity.
+     */
+    public function recordActivity(DateTime $date)
+    {
+        if ($this->dateLastActivityOccurred < $date) {
+            $this->dateLastActivityOccurred = $date;
+        }
+    }
+
+    /**
      * Set dateLastActivityOccurred
      *
      * @param DateTime $date

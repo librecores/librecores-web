@@ -97,8 +97,7 @@ class UpdateGitHubMetadataConsumer extends AbstractProjectUpdateConsumer
             $this->getProject()->setStars($data['stargazers']['totalCount']);
             $this->getProject()->setWatchers($data['watchers']['totalCount']);
 
-            $dateLastActivity = new DateTime($data['updatedAt']);
-            $this->getProject()->setDateLastActivityOccurred($dateLastActivity);
+            $this->getProject()->recordActivity(new DateTime($data['updatedAt']));
 
             $this->entityManager->persist($this->getProject());
             $this->entityManager->flush();
