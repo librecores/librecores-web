@@ -3,6 +3,7 @@
 namespace App\Util;
 
 use \HTMLPurifier;
+use \HTMLPurifier_Config;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
 use Symfony\Component\Process\Exception\ProcessFailedException;
@@ -33,14 +34,11 @@ class MarkupToHtmlConverter
     const GITHUB_MARKUP_PROCESS_TIMEOUT = 3; // seconds
 
     private $logger;
-    private $htmlPurifier;
 
     public function __construct(
-        LoggerInterface $logger,
-        \HTMLPurifier $htmlPurifier
+        LoggerInterface $logger
     ) {
         $this->logger = $logger;
-        $this->htmlPurifier = $htmlPurifier;
     }
 
     /**
@@ -133,9 +131,15 @@ class MarkupToHtmlConverter
         return $this->markupFileToUnsafeHtmlWithGhMarkup($markupInputFile);
     }
 
-    protected function sanitizeHtml($htmlInput)
+    /**
+     * Sanitize HTML using HTMLPurifier
+     *
+     * @see getHtmlPurifierConfig()
+     */
+    protected function sanitizeHtml($htmlInput) : string
     {
-        return $this->htmlPurifier->purify($htmlInput);
+        $htmlPurifier = new \HTMLPurifier($this->getHtmlPurifierConfig());
+        return $htmlPurifier->purify($htmlInput);
     }
 
     /**
@@ -178,5 +182,54 @@ class MarkupToHtmlConverter
         }
 
         return $output;
+    }
+
+
+    /**
+     * Get the HTML purifier configuration
+     */
+    protected function getHtmlPurifierConfig() : \HTMLPurifier_Config
+    {
+        $elements = array(
+            'p',
+            'br',
+            'small',
+            'strong', 'b',
+            'em', 'i',
+            'strike',
+            'sub', 'sup',
+            'ins', 'del',
+            'ol', 'ul', 'li',
+            'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+            'dl', 'dd', 'dt',
+            'pre', 'code', 'samp', 'kbd',
+            'q', 'blockquote', 'abbr', 'cite',
+            'table', 'thead', 'tbody', 'th', 'tr', 'td',
+            'a', 'span',
+            'img',
+            'details', 'summary',
+        );
+
+        $attributes = array(
+            'img.src', 'img.title', 'img.alt', 'img.width', 'img.height', 'img.style',
+            'a.href', 'a.target', 'a.rel', 'a.id',
+            'td.colspan', 'td.rowspan', 'th.colspan', 'th.rowspan',
+            '*.class', 'details.open'
+        );
+
+        $config = \HTMLPurifier_Config::createDefault();
+        $config->set('HTML.AllowedElements', implode(',', $elements));
+        $config->set('HTML.AllowedAttributes', implode(',', $attributes));
+        $config->set('Attr.EnableID', true);
+        $config->set('Attr.AllowedFrameTargets', ['_blank']);
+
+        // add custom HTML tag definitions
+        $def = $config->getHTMLDefinition(true);
+        $def->addElement('details', 'Block', 'Flow', 'Common', array(
+          'open' => 'Bool#open',
+        ));
+        $def->addElement('summary', 'Inline', 'Inline', 'Common');
+
+        return $config;
     }
 }

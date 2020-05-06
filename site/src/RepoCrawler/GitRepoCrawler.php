@@ -111,11 +111,6 @@ class GitRepoCrawler extends AbstractRepoCrawler
     ];
 
     /**
-     * @var MarkupToHtmlConverter
-     */
-    private $markupConverter;
-
-    /**
      * @var LoggerInterface
      */
     private $logger;
@@ -154,7 +149,6 @@ class GitRepoCrawler extends AbstractRepoCrawler
      * @inheritDoc
      */
     public function __construct(
-        MarkupToHtmlConverter $markupConverter,
         ProcessCreator $processCreator,
         CommitRepository $commitRepository,
         ContributorRepository $contributorRepository,
@@ -163,7 +157,6 @@ class GitRepoCrawler extends AbstractRepoCrawler
         ProjectMetricsProvider $projectMetricsProvider,
         Filesystem $filesystem
     ) {
-        $this->markupConverter = $markupConverter;
         $this->processCreator = $processCreator;
         $this->commitRepository = $commitRepository;
         $this->contributorRepository = $contributorRepository;
@@ -213,10 +206,10 @@ class GitRepoCrawler extends AbstractRepoCrawler
             }
 
             if ($project->getDescriptionTextAutoUpdate()) {
-                $project->setDescriptionText($this->getDescriptionSafeHtml($repoDir));
+                $project->setDescriptionText($this->getDescriptionSafeHtml($repoDir, $repo));
             }
             if ($project->getLicenseTextAutoUpdate()) {
-                $project->setLicenseText($this->getLicenseTextSafeHtml($repoDir));
+                $project->setLicenseText($this->getLicenseTextSafeHtml($repoDir, $repo));
             }
 
             $this->updateReleases($repoDir, $project);
@@ -381,10 +374,11 @@ class GitRepoCrawler extends AbstractRepoCrawler
      * script tags, etc.
      *
      * @param string $repoDir
+     * @param SourceRepo $repo
      *
      * @return string|null the repository description, or null if none was found
      */
-    protected function getDescriptionSafeHtml(string $repoDir): ?string
+    protected function getDescriptionSafeHtml(string $repoDir, SourceRepo $repo): ?string
     {
         $descriptionFile = FileUtil::findFile(
             $repoDir,
@@ -402,11 +396,10 @@ class GitRepoCrawler extends AbstractRepoCrawler
         $this->logger->debug('Using file '.$descriptionFile.' as description.');
 
         try {
-            $sanitizedHtml = $this->markupConverter->convertFile($descriptionFile);
+            $sanitizedHtml = $this->getMarkupConverter($repo)->convertFile($descriptionFile);
         } catch (Exception $e) {
             $this->logger->error(
-                "Unable to convert $descriptionFile to HTML ".
-                "for description text."
+                "Unable to convert $descriptionFile to HTML for description text: {$e->getMessage()}"
             );
 
             return null;
@@ -424,10 +417,11 @@ class GitRepoCrawler extends AbstractRepoCrawler
      * script tags, etc.
      *
      * @param string $repoDir
+     * @param SourceRepo $repo
      *
      * @return string|null the license text, or null if none was found
      */
-    protected function getLicenseTextSafeHtml(string $repoDir): ?string
+    protected function getLicenseTextSafeHtml(string $repoDir, SourceRepo $repo): ?string
     {
         $licenseFile = FileUtil::findFile(
             $repoDir,
@@ -445,10 +439,10 @@ class GitRepoCrawler extends AbstractRepoCrawler
         $this->logger->debug("Using file $licenseFile as license text.");
 
         try {
-            $sanitizedHtml = $this->markupConverter->convertFile($licenseFile);
+            $sanitizedHtml = $this->getMarkupConverter($repo)->convertFile($licenseFile);
         } catch (Exception $e) {
             $this->logger->error(
-                "Unable to convert $licenseFile to HTML for license text."
+                "Unable to convert $licenseFile to HTML for license text: {$e->getMessage()}"
             );
 
             return null;
@@ -634,5 +628,13 @@ class GitRepoCrawler extends AbstractRepoCrawler
         $this->logger->debug('Executing '.$process->getCommandLine().' in '.$process->getWorkingDirectory());
         $process->mustRun();
         $this->logger->debug('Process exited with status '.$process->getExitCode());
+    }
+
+    /**
+     * Get a markup convert for a given repository
+     */
+    private function getMarkupConverter(SourceRepo $repo)
+    {
+        return new MarkupToHtmlConverter($this->logger);
     }
 }
