@@ -28,7 +28,7 @@ class PlanetController extends Controller
      */
     private function processAtomFeed()
     {
-        $atomFeed = $this->get('kernel')->getRootDir().'/../web/planet/atom.xml';
+        $atomFeed = $this->get('kernel')->getProjectDir().'/web/planet/atom.xml';
 
         $feed = new \SimplePie();
         $feed->set_cache_duration(3600);

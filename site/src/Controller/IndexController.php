@@ -57,7 +57,7 @@ class IndexController extends Controller
      */
     public function pageAction($page = "home")
     {
-        $siteContentRoot = $this->get('kernel')->getRootDir().'/../sitecontent';
+        $siteContentRoot = $this->get('kernel')->getProjectDir().'/sitecontent';
 
         // $page can contain anything, sanitize it by stripping all unknown
         // characters out
@@ -102,7 +102,7 @@ class IndexController extends Controller
      */
     private function getBlogPosts()
     {
-        $blogUrl = $this->get('kernel')->getRootDir().'/../web/planet/atom.xml';
+        $blogUrl = $this->get('kernel')->getProjectDir().'/web/planet/atom.xml';
 
         $feed = new SimplePie();
         $feed->set_cache_duration(3600);
