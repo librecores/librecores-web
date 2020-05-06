@@ -406,7 +406,7 @@ class GitRepoCrawler extends AbstractRepoCrawler
         } catch (Exception $e) {
             $this->logger->error(
                 "Unable to convert $descriptionFile to HTML ".
-                "for license text."
+                "for description text."
             );
 
             return null;
