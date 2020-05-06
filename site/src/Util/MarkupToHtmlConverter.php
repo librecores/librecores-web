@@ -33,9 +33,18 @@ class MarkupToHtmlConverter
      */
     const GITHUB_MARKUP_PROCESS_TIMEOUT = 3; // seconds
 
+    private $cacheDir;
     private $logger;
 
-    public function __construct(LoggerInterface $logger) {
+    /**
+     * Default constructor
+     *
+     * @param string $cacheDir cache directory to be used by the converter.
+     *                         The directory must exist.
+     * @param LoggerInterface $logger
+     */
+    public function __construct($cacheDir, LoggerInterface $logger) {
+        $this->cacheDir = $cacheDir;
         $this->logger = $logger;
     }
 
@@ -87,12 +96,12 @@ class MarkupToHtmlConverter
     protected function markupToUnsafeHtml($markupInput)
     {
         // write $markupInput into temporary file
-        $tmpFilename = tempnam(sys_get_temp_dir(), 'lc-markup-conv-');
+        $tmpFilename = tempnam($this->cacheDir, 'lc-markup-conv-');
         if ($tmpFilename === false) {
             throw new RuntimeException(
                 sprintf(
                     'Unable to create temporary file in %s.',
-                    sys_get_temp_dir()
+                    $this->cacheDir
                 )
             );
         }
@@ -217,6 +226,7 @@ class MarkupToHtmlConverter
 
         $config = \HTMLPurifier_Config::createDefault();
         $config->autoFinalize = false;
+        $config->set('Cache.SerializerPath', $this->cacheDir);
         $config->set('HTML.AllowedElements', implode(',', $elements));
         $config->set('HTML.AllowedAttributes', implode(',', $attributes));
         $config->set('Attr.EnableID', true);

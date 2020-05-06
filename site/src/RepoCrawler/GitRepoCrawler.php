@@ -23,6 +23,7 @@ use Psr\Log\LoggerInterface;
 use RuntimeException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\Process;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Crawl and extract metadata from a remote git repository
@@ -148,6 +149,11 @@ class GitRepoCrawler extends AbstractRepoCrawler
     private $filesystem;
 
     /**
+     * @var ContainerInterface
+     */
+    private $container;
+
+    /**
      * @inheritDoc
      */
     public function __construct(
@@ -157,7 +163,8 @@ class GitRepoCrawler extends AbstractRepoCrawler
         EntityManagerInterface $entityManager,
         LoggerInterface $logger,
         ProjectMetricsProvider $projectMetricsProvider,
-        Filesystem $filesystem
+        Filesystem $filesystem,
+        ContainerInterface $container
     ) {
         $this->processCreator = $processCreator;
         $this->commitRepository = $commitRepository;
@@ -166,6 +173,7 @@ class GitRepoCrawler extends AbstractRepoCrawler
         $this->logger = $logger;
         $this->projectMetricsProvider = $projectMetricsProvider;
         $this->filesystem = $filesystem;
+        $this->container = $container;
     }
 
     /**
@@ -621,15 +629,21 @@ class GitRepoCrawler extends AbstractRepoCrawler
      */
     private function getMarkupConverter(SourceRepo $repo)
     {
+        // Prepare cache directory.
+        $cacheDir = $this->container->get('kernel')->getCacheDir().'/lc-markdowntohtml';
+        $this->filesystem->mkdir($cacheDir);
+
+        // Get the right converter based on the type of repository.
         if (GitHubApiService::isGitHubRepoUrl($repo->getUrl())) {
             $ghinfo = GitHubApiService::parseGitHubRepoUrl($repo->geturl());
             return new GithubMarkupToHtmlConverter(
                 $ghinfo['user'],
                 $ghinfo['repository'],
+                $cacheDir,
                 $this->logger
             );
         } else {
-            return new MarkupToHtmlConverter($this->logger);
+            return new MarkupToHtmlConverter($cacheDir, $this->logger);
         }
     }
 }

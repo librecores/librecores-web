@@ -1,7 +1,6 @@
 services:
     librecores.util.githubapiservice: '@App\Service\GitHub\GitHubApiService'
     librecores.util.queuedispatcherservice: '@App\Service\QueueDispatcherService'
-    librecores.util.markuptohtmlconverter:  '@App\Util\MarkupToHtmlConverter'
     app.form.type.project: '@App\Form\Type\ProjectType'
     app.form.type.organization: '@App\Form\Type\OrganizationType'
     librecores.form_extention.icon: '@App\Form\Extension\ButtonTypeIconExtension'

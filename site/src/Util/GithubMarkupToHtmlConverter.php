@@ -29,14 +29,20 @@ class GithubMarkupToHtmlConverter extends MarkupToHtmlConverter
      *
      * @param string $ghOwner owner (user or organization) of the GH repository
      * @param string $ghRepo GitHub repository name
+     * @param string $cacheDir cache directory to be used by the converter.
+     *                         The directory must exist.
+     * @param LoggerInterface $logger
      */
-    public function __construct($ghOwner, $ghRepo, LoggerInterface $logger)
+    public function __construct($ghOwner, $ghRepo, $cacheDir, LoggerInterface $logger)
     {
-        parent::__construct($logger);
+        parent::__construct($cacheDir, $logger);
         $this->ghOwner = $ghOwner;
         $this->ghRepo = $ghRepo;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     protected function getHtmlPurifierConfig() : \HTMLPurifier_Config
     {
         $config = parent::getHtmlPurifierConfig();
