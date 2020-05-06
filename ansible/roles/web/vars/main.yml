@@ -42,5 +42,7 @@ rabbitmq_consumers:
     type: multiple
 
 # Options passed to the RabbitMQ consumer services
-# Consume 250 messages per run, allow up to 256 MB of memory for this process
-rabbitmq_consumer_options: -vv --memory-limit 256 --messages 250
+# Consume 1 message per run, allow up to 256 MB of memory for this process
+# Consuming more than one message improves performance, but can lead to
+# hard-to-debug caching problems around Doctrine.
+rabbitmq_consumer_options: -vv --memory-limit 256 --messages 1
