@@ -41,27 +41,12 @@ services:
         # thinks it can be translated -- but we don't have any translations available, therefore the autowire is set to
         # false
 
-    App\Util\MarkupToHtmlConverter:
-        arguments:
-            - '@logger'
-            - '@exercise_html_purifier.default'
-
     App\Util\ProcessCreator: ~
 
     # Forms
     App\Form\Extension\ButtonTypeIconExtension:
         tags:
             - { name: form.type_extension, extended_type: Symfony\Component\Form\Extension\Core\Type\ButtonType }
-
-    App\Form\Type\PurifiedTextareaType:
-        arguments:
-            - '@Exercise\HTMLPurifierBundle\Form\HTMLPurifierTransformer'
-        tags:
-            - { name: form.type, alias: purified_textarea }
-
-    Exercise\HTMLPurifierBundle\Form\HTMLPurifierTransformer:
-        arguments:
-            - '@exercise_html_purifier.default'
 
     App\EventListener\OAuthRegistrationListener:
         arguments:

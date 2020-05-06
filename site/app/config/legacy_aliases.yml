@@ -5,8 +5,6 @@ services:
     app.form.type.project: '@App\Form\Type\ProjectType'
     app.form.type.organization: '@App\Form\Type\OrganizationType'
     librecores.form_extention.icon: '@App\Form\Extension\ButtonTypeIconExtension'
-    librecores.form.type.purified_textarea: '@App\Form\Type\PurifiedTextareaType'
-    librecores.form.transformer.html_purifier: '@Exercise\HTMLPurifierBundle\Form\HTMLPurifierTransformer'
     validator.user_org_name: '@App\Validator\Constraints\UserOrgNameValidator'
     librecores_user_manager: '@App\Security\UserManager'
     librecores_user_provider: '@App\Security\Core\User\LibreCoresUserProvider'

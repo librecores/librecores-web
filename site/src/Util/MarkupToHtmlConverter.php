@@ -2,7 +2,7 @@
 
 namespace App\Util;
 
-use HTMLPurifier;
+use \HTMLPurifier;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
 use Symfony\Component\Process\Exception\ProcessFailedException;
@@ -37,7 +37,7 @@ class MarkupToHtmlConverter
 
     public function __construct(
         LoggerInterface $logger,
-        HTMLPurifier $htmlPurifier
+        \HTMLPurifier $htmlPurifier
     ) {
         $this->logger = $logger;
         $this->htmlPurifier = $htmlPurifier;

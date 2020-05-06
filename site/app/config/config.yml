@@ -5,6 +5,7 @@ imports:
     - { resource: packages/algolia_search.yml }
     - { resource: packages/doctrine_migrations.yml }
     - { resource: packages/doctrine.yml }
+    - { resource: packages/exercise_html_purifier.yml }
     - { resource: packages/fos_user.yml }
     - { resource: packages/framework.yml }
     - { resource: packages/hwi_oauth.yml }
