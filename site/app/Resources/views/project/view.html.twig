@@ -122,13 +122,13 @@
             <ul class="fa-ul">
               <li>
                 <i class="fa-li fa fa-plus-circle" aria-hidden="true"></i>
-                <span>Registered {{ project.dateAdded | time_diff }}</span>
+                <span>Registered on LibreCores {{ project.dateAdded | time_diff }}</span>
               </li>
 
               {% if metadata.firstCommit %}
                 <li>
                   <i class="fa-li fa fa-bookmark" aria-hidden="true"></i>
-                  <span>Started {{ metadata.firstCommit.dateCommitted | time_diff }}</span>
+                  <span>Project started {{ metadata.firstCommit.dateCommitted | time_diff }}</span>
                 </li>
               {% endif %}
 
@@ -275,7 +275,7 @@
 
       {% if project.dateLastActivityOccurred %}
         <i class="fa fa-refresh" aria-hidden="true"></i>
-        <span>Last updated {{ project.dateLastActivityOccurred | time_diff }}</span>
+        <span>Last activity {{ project.dateLastActivityOccurred | time_diff }}</span>
         <br/>
       {% endif %}
 
@@ -288,7 +288,7 @@
       {% if project.sourceRepo.sourceStats.available %}
         {%  if project.sourceRepo.sourceStats.languageStats is not empty %}
           <i class="fa fa-code" aria-hidden="true"></i>
-          Language: {{ project.sourceRepo.sourceStats.mostUsedLanguage }}
+          Primary language: {{ project.sourceRepo.sourceStats.mostUsedLanguage }}
           <br/>
         {%  endif %}
         {#<p>
@@ -345,11 +345,11 @@
         <div class="activity-graph ct-major-twelfth">
           {{  metadata.activityGraph | join(',')  }}
         </div>
-        <p>Activity in last 1 year</p>
+        <p>activity over the last year</p>
       </div>
       {% endif %}
       <p class="librecores-project-disclaimer">
-        Updated {{ project.dateLastModified | time_diff }}<br />
+        LibreCores data updated {{ project.dateLastModified | time_diff }}<br />
         {# * Estimated as per the <a href="https://en.wikipedia.org/wiki/COCOMO">COCOMO model</a> for embedded projects. #}
       </p>
     </div>
