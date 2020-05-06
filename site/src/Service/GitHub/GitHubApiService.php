@@ -100,6 +100,7 @@ class GitHubApiService
                 'repository' => $matches[2],
             ];
         }
+        throw \InvalidArgumentException("$url is not a GitHub URL.");
     }
 
     /**

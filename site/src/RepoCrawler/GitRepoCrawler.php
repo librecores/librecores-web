@@ -4,6 +4,8 @@ namespace App\RepoCrawler;
 
 use App\Entity\Project;
 use App\Util\FileUtil;
+use App\Service\GitHub\GitHubApiService;
+use App\Util\GithubMarkupToHtmlConverter;
 use App\Util\MarkupToHtmlConverter;
 use App\Util\ProcessCreator;
 use DateTime;
@@ -619,6 +621,15 @@ class GitRepoCrawler extends AbstractRepoCrawler
      */
     private function getMarkupConverter(SourceRepo $repo)
     {
-        return new MarkupToHtmlConverter($this->logger);
+        if (GitHubApiService::isGitHubRepoUrl($repo->getUrl())) {
+            $ghinfo = GitHubApiService::parseGitHubRepoUrl($repo->geturl());
+            return new GithubMarkupToHtmlConverter(
+                $ghinfo['user'],
+                $ghinfo['repository'],
+                $this->logger
+            );
+        } else {
+            return new MarkupToHtmlConverter($this->logger);
+        }
     }
 }

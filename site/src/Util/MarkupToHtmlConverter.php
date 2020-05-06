@@ -35,9 +35,7 @@ class MarkupToHtmlConverter
 
     private $logger;
 
-    public function __construct(
-        LoggerInterface $logger
-    ) {
+    public function __construct(LoggerInterface $logger) {
         $this->logger = $logger;
     }
 
@@ -218,10 +216,13 @@ class MarkupToHtmlConverter
         );
 
         $config = \HTMLPurifier_Config::createDefault();
+        $config->autoFinalize = false;
         $config->set('HTML.AllowedElements', implode(',', $elements));
         $config->set('HTML.AllowedAttributes', implode(',', $attributes));
         $config->set('Attr.EnableID', true);
         $config->set('Attr.AllowedFrameTargets', ['_blank']);
+        $config->set('HTML.Nofollow', true);
+        $config->set('HTML.TargetNoopener', true);
 
         // add custom HTML tag definitions
         $def = $config->getHTMLDefinition(true);
