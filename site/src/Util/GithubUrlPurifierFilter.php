@@ -47,7 +47,7 @@ class GithubUrlPurifierFilter extends \HTMLPurifier_URIFilter
     private function getImgBaseUri() : \HTMLPurifier_URI
     {
         return new \HTMLPurifier_URI('https', null, 'raw.github.com',
-            null, $this->ghOwner.'/'.$this->ghRepo.'/HEAD/', null, null);
+            null, '/'.$this->ghOwner.'/'.$this->ghRepo.'/HEAD/', null, null);
     }
 
     /**
@@ -56,7 +56,7 @@ class GithubUrlPurifierFilter extends \HTMLPurifier_URIFilter
     private function getContentBaseUri() : \HTMLPurifier_URI
     {
         return new \HTMLPurifier_URI('https', null, 'github.com', null,
-            $this->ghOwner.'/'.$this->ghRepo.'/blob/HEAD/', null, null);
+            '/'.$this->ghOwner.'/'.$this->ghRepo.'/blob/HEAD/', null, null);
     }
 
     /**
