@@ -111,7 +111,7 @@ class GithubUrlPurifierFilter extends \HTMLPurifier_URIFilter
         }
         if ($uri->path === '') {
             $uri->path = $base->path;
-        } elseif ($uri->path[0] !== '/') {
+        } else {
             // relative path, needs more complicated processing
             $stack = explode('/', $uri->path);
             $new_stack = array_merge($basePathStack, $stack);
@@ -120,9 +120,6 @@ class GithubUrlPurifierFilter extends \HTMLPurifier_URIFilter
             }
             $new_stack = $this->_collapseStack($new_stack);
             $uri->path = implode('/', $new_stack);
-        } else {
-            // absolute path, but still we should collapse
-            $uri->path = implode('/', $this->_collapseStack(explode('/', $uri->path)));
         }
         // re-combine
         $uri->scheme = $base->scheme;
