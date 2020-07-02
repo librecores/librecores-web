@@ -96,8 +96,10 @@ Encore
 
 const config = Encore.getWebpackConfig();
 
+// Poll for changes only if running under a VM
+const shouldPoll = process.env.ENCORE_ON_LOCAL !== 'true';
 config.watchOptions = {
-    poll: true,
+    poll: shouldPoll,
 };
 
 module.exports = config;

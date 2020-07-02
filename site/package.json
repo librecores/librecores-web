@@ -24,6 +24,7 @@
   },
   "scripts": {
     "dev-server": "encore dev-server --public librecores.devel:8080 --port 8080 --host 0.0.0.0 --disable-host-check",
+    "dev-server:local": "ENCORE_ON_LOCAL=true encore dev-server --hot",
     "dev": "encore dev",
     "watch": "encore dev --watch",
     "build": "encore production"

@@ -338,11 +338,21 @@ class Project
     private $qualityScore;
 
     /**
+     * @var ProjectPreferences
+     *
+     * @ORM\OneToOne(targetEntity="App\Entity\ProjectPreferences",
+     *     inversedBy="project", cascade={"persist", "remove"})
+     */
+    private $preferences;
+
+
+    /**
      * Constructor
      */
     public function __construct()
     {
         $this->classifications = new ArrayCollection();
+        $this->preferences = new ProjectPreferences($this);
     }
 
     /**
@@ -1131,5 +1141,21 @@ class Project
     public function setQualityScore($qualityScore)
     {
         $this->qualityScore = $qualityScore;
+    }
+
+    /**
+     * @return ProjectPreferences
+     */
+    public function getPreferences(): ProjectPreferences
+    {
+        return $this->preferences;
+    }
+
+    /**
+     * @param ProjectPreferences $preferences
+     */
+    public function setPreferences(ProjectPreferences $preferences): void
+    {
+        $this->preferences = $preferences;
     }
 }

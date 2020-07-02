@@ -22,6 +22,15 @@ Build frontend files
   # Build in development mode and auto-refresh on changes
   vm$> yarn watch
 
+.. note::
+  To improve performance of :code:`yarn install`, perform :code:`yarn install`
+  outside the VM, inside the site folder. You need NodeJS and Yarn installed on
+  the host system for this to work.
+
+.. note::
+  For assets auto-reload and HMR, run :code:`yarn dev-server:local` outside the VM.
+  This will allow webpack to watch changes efficiently and compile them faster.
+
 Install and update dependencies
 --------------------------------
 
