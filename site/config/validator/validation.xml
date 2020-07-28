@@ -1,0 +1,28 @@
+<?xml version="1.0" ?>
+<!--
+Extensions to the validation rules defined within FOSUserBundle.
+
+The validation rules in this file are used *in addition* the ones provided
+by FOSUserBundle.
+-->
+<constraint-mapping xmlns="http://symfony.com/schema/dic/constraint-mapping"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/constraint-mapping
+        http://symfony.com/schema/dic/constraint-mapping/constraint-mapping-1.0.xsd">
+
+    <class name="FOS\UserBundle\Model\User">
+
+        <property name="username">
+            <constraint name="App\Validator\Constraints\UserOrgName">
+                <option name="groups">
+                    <value>Registration</value>
+                    <value>Profile</value>
+                </option>
+                <option name="payload">
+                    <value key="type">user</value>
+                </option>
+            </constraint>
+        </property>
+    </class>
+
+</constraint-mapping>

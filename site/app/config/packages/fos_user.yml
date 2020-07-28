@@ -15,3 +15,12 @@ fos_user:
                 sender_name:    'LibreCores'
             enabled:    "%user_email_confirmation_enabled%"
             template:   'FOSUserBundle:Registration:email.html.twig'
+        form:
+            # Default validation groups; change to override validation rules,
+            # currently we only extend them.
+            validation_groups: [Registration, Default]
+    profile:
+        form:
+            # Default validation groups; change to override validation rules,
+            # currently we only extend them.
+            validation_groups: [Profile, Default]
