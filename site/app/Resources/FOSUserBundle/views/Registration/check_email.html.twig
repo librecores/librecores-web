@@ -4,7 +4,7 @@
 
 {% block fos_user_content %}
   <div class="mt-offset text-center">
-    <img class="img-responsive img-main" src="{{ asset('img/mailbox.svg') }}">
+    <img class="img-responsive img-main" src="{{ asset('build/images/mailbox.svg') }}">
     <p>{{ 'registration.check_email'|trans({'%email%': user.email}) }}</p>
     <p>If you do not receive the activation email, you can request to resend it <a href="{{ path('librecores_user_resend_confirmation') }}">here</a>.</p>
   </div>
