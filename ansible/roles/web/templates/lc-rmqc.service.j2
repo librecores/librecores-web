@@ -30,6 +30,14 @@ ExecStart=/usr/bin/php /var/www/lc/site/bin/console rabbitmq:multiple-consumer -
 {% endif %}
 
 Restart=always
+
+# The message processing can take only a second or so in some cases, make sure
+# we still restart the daemon in that case.
+# TODO: systemd < 232 needs the version without "Sec". Remove the outdated
+# version once we have a sufficiently new systemd.
+StartLimitInterval=0
+StartLimitIntervalSec=0
+
 User={{ web_user }}
 
 [Install]
