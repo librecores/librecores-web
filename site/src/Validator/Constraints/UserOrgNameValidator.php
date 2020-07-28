@@ -8,6 +8,7 @@ use App\Repository\UserRepository;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 /**
  * Validate a user or organization name
@@ -201,7 +202,11 @@ class UserOrgNameValidator extends ConstraintValidator
          * a route pattern in the RESERVED_NAMES array.
          */
 
-        $route = $this->router->match('/'.$value)['_route'];
+        try {
+            $route = $this->router->match('/'.$value)['_route'];
+        } catch (ResourceNotFoundException $e) {
+            $route = null;
+        }
 
         return ($route !== null && !in_array($route, self::EXCLUDE_ROUTE_CHECK));
     }
