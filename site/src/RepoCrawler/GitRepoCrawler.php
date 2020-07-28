@@ -195,6 +195,7 @@ class GitRepoCrawler extends AbstractRepoCrawler
 
         $lastCommit = $this->commitRepository->getLatestCommit($repo);
 
+        $repoDir = null;
         try {
             $repoDir = $this->cloneRepo($repo);
 
@@ -241,13 +242,15 @@ class GitRepoCrawler extends AbstractRepoCrawler
 
             $this->entityManager->persist($project);
         } finally {
-            $this->logger->debug('Cleaning up repo clone directory '. $repoDir);
-            try {
-                $this->filesystem->remove($repoDir);
-            } catch (IOException $e) {
-                // Ignore.
-                $this->logger->warning("Unable to remove directory $repoDir");
-            };
+            if ($repoDir != null) {
+                $this->logger->debug('Cleaning up repo clone directory '. $repoDir);
+                try {
+                    $this->filesystem->remove($repoDir);
+                } catch (IOException $e) {
+                    // Ignore.
+                    $this->logger->warning("Unable to remove directory $repoDir");
+                }
+            }
         }
 
         return true;
