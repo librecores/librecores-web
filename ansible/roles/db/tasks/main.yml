@@ -23,6 +23,14 @@
 - name: Add apparmor configuration override for MySQL
   copy: src=../files/apparmor-usr.sbin.mysqld dest=/etc/apparmor.d/local/usr.sbin.mysqld
 
+# Some queries (e.g. inserting project statistics in JSON form) are rather
+# large.
+- name: Allow MySQL queries up to 128M
+  lineinfile:
+    path: /etc/mysql/mysql.conf.d/mysqld.cnf
+    regexp: '^max_allowed_packet\s*='
+    line: max_allowed_packet = 128M
+
 - name: Reload apparmor to pick up changes
   service: name=apparmor state=reloaded
 
