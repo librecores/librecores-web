@@ -73,6 +73,11 @@
     src: nginx/snippet-librecores.conf.tpl
     dest: /etc/nginx/snippets/{{ librecores_domain }}.conf
 
+# logrotate for librecores nginx logs
+- name: Install logrotate for nginx logs of librecores
+  copy:
+    src: logrotate-librecores
+    dest: /etc/logrotate.d/nginx-librecores
 
 # nginx SSL configuration
 - name: Create Diffie-Hellman Group (may take a while)
