@@ -21,7 +21,9 @@
   when: not data_mysql_stat.stat.exists
 
 - name: Add apparmor configuration override for MySQL
-  copy: src=../files/apparmor-usr.sbin.mysqld dest=/etc/apparmor.d/local/usr.sbin.mysqld
+  copy:
+    src: apparmor-usr.sbin.mysqld
+    dest: /etc/apparmor.d/local/usr.sbin.mysqld
 
 # Some queries (e.g. inserting project statistics in JSON form) are rather
 # large.

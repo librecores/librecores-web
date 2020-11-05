@@ -58,15 +58,21 @@
 
 # nginx (web server)
 - name: Ensure nginx log directory exists
-  file: dest=/var/log/nginx/librecores state=directory
+  file:
+    state: directory
+    path: /var/log/nginx/librecores
 
 - name: Change default nginx site
-  template: src=nginx/librecores.tpl dest=/etc/nginx/sites-available/default
+  template:
+    src: nginx/librecores.tpl
+    dest: /etc/nginx/sites-available/default
   notify: restart nginx
 
 - name: Install librecores snippet into nginx
-  template: src=nginx/snippet-librecores.conf.tpl dest=/etc/nginx/snippets/{{ librecores_domain }}.conf
-  notify: restart nginx
+  template:
+    src: nginx/snippet-librecores.conf.tpl
+    dest: /etc/nginx/snippets/{{ librecores_domain }}.conf
+
 
 # nginx SSL configuration
 - name: Create Diffie-Hellman Group (may take a while)
