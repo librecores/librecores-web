@@ -126,18 +126,18 @@
 - name: Create frontend configuration (part II, move to destination)
   command: mv /tmp/frontend-config.json /var/www/lc/site/assets/js/frontend-config.json
 
-- name: "Create composer configuration directory for user {{ web_user }}"
+- name: Create composer configuration directory for user web-deploy
   file:
-    path: "{{ web_user_home }}/.config/composer"
+    path: /home/web-deploy/.config/composer
     state: directory
     recurse: yes
-    owner: "{{ web_user }}"
+    owner: web-deploy
 
-- name: Copy composer configuration for deployment user
+- name: Copy composer configuration for web deployment user
   copy:
     src: roles/web/templates/composer-config.json
-    dest: "{{ web_user_home }}/.config/composer/config.json"
-    owner: "{{ web_user }}"
+    dest: /home/web-deploy/.config/composer/config.json
+    owner: web-deploy
     mode: 0644
 
 # We need to do that before running "composer up" to avoid potential errors
@@ -149,12 +149,16 @@
   when: env.SYMFONY_ENV == 'prod'
 
 - name: Install PHP dependencies through composer (development)
+  become: true
+  become_user: web-deploy
   command: composer install
   args:
     chdir: /var/www/lc/site
   when: env.SYMFONY_ENV == 'dev'
 
 - name: Install PHP dependencies through composer (production)
+  become: true
+  become_user: web-deploy
   command: composer install --no-dev --optimize-autoloader
   environment: "{{ env }}"
   args:
@@ -162,12 +166,16 @@
   when: env.SYMFONY_ENV == 'prod'
 
 - name: Install frontend dependencies through yarn (can take multiple minutes)
+  become: true
+  become_user: web-deploy
   command: yarn install --frozen-lockfile
   environment: "{{ env }}"
   args:
     chdir: /var/www/lc/site
 
 - name: Build frontend code through webpack (production)
+  become: true
+  become_user: web-deploy
   command: yarn build
   environment: "{{ env }}"
   args:
@@ -175,6 +183,8 @@
   when: env.NODE_ENV == 'production'
 
 - name: Build frontend code through webpack (development)
+  become: true
+  become_user: web-deploy
   command: yarn dev
   environment: "{{ env }}"
   args:
@@ -182,6 +192,8 @@
   when: env.NODE_ENV != 'production'
 
 - name: Clear symfony cache (production)
+  become: true
+  become_user: "{{ web_user }}"
   command: php bin/console cache:clear
   environment: "{{ env }}"
   args:
