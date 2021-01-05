@@ -15,6 +15,8 @@
     },
     "require": {
         "php": "7.4.*",
+        "ext-ctype": "*",
+        "ext-iconv": "*",
         "symfony/symfony": "~3.4.0",
         "symfony/console": "~3.4.0",
         "symfony/process": "~3.4.0",
@@ -53,17 +55,13 @@
         "stof/doctrine-extensions-bundle": "^1.3"
     },
     "scripts": {
+        "auto-scripts": [
+        ],
         "post-install-cmd": [
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::removeSymfonyStandardFiles"
+            "@auto-scripts"
         ],
         "post-update-cmd": [
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::removeSymfonyStandardFiles"
+            "@auto-scripts"
         ]
     },
     "extra": {
