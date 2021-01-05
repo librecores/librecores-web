@@ -89,6 +89,7 @@
     depth: "1"
     version: "{{ src_version }}"
     key_file: /src-librecores-web.key
+    force: yes # overwrite local changes in /var/www/lc
   when: not is_vagrant_environment
 
 - name: "Delete deployment key again (non-development only)"
