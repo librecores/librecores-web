@@ -1,6 +1,6 @@
 - name: Install cloc
   get_url:
-    url: https://github.com/AlDanial/cloc/releases/download/1.84/cloc-1.84.pl
+    url: https://github.com/AlDanial/cloc/releases/download/1.88/cloc-1.88.pl
     dest: /usr/local/bin/cloc
     mode: 0755
-    checksum: sha256:a54e28d17f1097267663a46f1afaabc0b6127a8e3869dd6e557e334e9c5b5f74
+    checksum: sha256:2c833258be31a5350fc95b50d11054a0de3c12027e527dde542fbfad70306909.
