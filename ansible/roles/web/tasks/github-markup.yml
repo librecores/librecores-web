@@ -19,7 +19,9 @@
     state: present
 
 - name: Get Gemfile for github-markup dependencies
-  template: src=github-markup/Gemfile dest=/tmp/github-markup-gemfile
+  template:
+    src: github-markup/Gemfile
+    dest: /tmp/github-markup-gemfile
 
 - name: Install github-markup dependencies
   command: bundle install --gemfile /tmp/github-markup-gemfile

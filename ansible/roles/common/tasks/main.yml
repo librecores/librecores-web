@@ -2,7 +2,8 @@
 # Common plays to be run on all nodes.
 
 - name: check if we are running in the development environment
-  stat: path=/vagrant
+  stat:
+    path: /vagrant
   register: vagrant_dir
 
 - set_fact: is_vagrant_environment={{ vagrant_dir.stat.exists }}
@@ -16,22 +17,32 @@
 - set_fact: web_user_home="{{ web_user_home_raw.stdout }}"
 
 - name: Set unattended upgrade configuration
-  copy: src=50unattended-upgrades dest=/etc/apt/apt.conf.d/50unattended-upgrades
+  copy:
+    src: 50unattended-upgrades
+    dest: /etc/apt/apt.conf.d/50unattended-upgrades
 
 - name: Update apt cache
-  apt:  update_cache=yes
+  apt:
+    update_cache: yes
 
 - name: Install ntp
-  apt: pkg=ntp state=present
+  apt:
+    pkg: ntp
+    state: present
   tags: ntp
 
 - name: Configure ntp file
-  template: src=ntp.conf dest=/etc/ntp.conf
+  template:
+    src: ntp.conf
+    dest: /etc/ntp.conf
   tags: ntp
   notify: restart ntp
 
 - name: Start the ntp service
-  service: name=ntp state=started enabled=yes
+  service:
+    name: ntp
+    state: started
+    enabled: yes
   tags: ntp
 
 - name: Install common system packages
@@ -47,25 +58,33 @@
     state: present
 
 # the data partition is on EBS in production/staging
-- name: Ensure data directory
-  file: path=/data state=directory
+- name: Ensure data directory exists
+  file:
+    path: /data
+    state: directory
 
 # get source code (on non-development machines only)
 - name: Send deployment SSH key to remote machine (non-development only)
-  copy: dest=/src-librecores-web.key
-        content="{{ src_deployment_key }}"
-        mode=0400
+  copy:
+    dest: /src-librecores-web.key
+    content: "{{ src_deployment_key }}"
+    mode: 0400
   when: not is_vagrant_environment
 
 - name: "Setup source repository (non-development only)"
-  git: repo="{{ src_repo_url }}"
-       dest=/var/www/lc
-       accept_hostkey=yes
-       key_file=/src-librecores-web.key
-       depth=1
-       version="{{ src_version }}"
+  become: true
+  become_user: web-deploy
+  git:
+    repo: "{{ src_repo_url }}"
+    dest: /var/www/lc
+    accept_hostkey: yes
+    depth: "1"
+    version: "{{ src_version }}"
+    key_file: /src-librecores-web.key
   when: not is_vagrant_environment
 
 - name: "Delete deployment key again (non-development only)"
-  file: path=/src-librecores-web.key state=absent
+  file:
+    path: /src-librecores-web.key
+    state: absent
   when: not is_vagrant_environment

@@ -2,8 +2,12 @@
 # Install nginx web server
 - name: Install nginx
   become: true
-  apt:  pkg=nginx state=present
+  apt:
+    pkg: nginx
+    state: present
 
 - name: Add gzip compression config
-  template: src=nginx/conf-gzip.conf.tpl dest=/etc/nginx/conf.d/conf-gzip.conf
+  template:
+    src: nginx/conf-gzip.conf.tpl
+    dest: /etc/nginx/conf.d/conf-gzip.conf
   notify: restart nginx

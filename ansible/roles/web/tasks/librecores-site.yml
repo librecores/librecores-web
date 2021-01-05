@@ -2,7 +2,9 @@
 # general site
 # SSL certificates
 - name: Ensure HTTP-accessible directory for letsencrypt cert renewal exists
-  file: dest=/var/www/letsencrypt/.well-known state=directory
+  file:
+    dest: /var/www/letsencrypt/.well-known
+    state: directory
   when: use_https
 
 - name: Obtain initial SSL certificate from Let's Encrypt
@@ -101,19 +103,25 @@
 # is not possible. See https://github.com/ansible/ansible/issues/7372
 
 - name: Create Symfony environment shell file (part I, populate template in temp folder)
-  template: src=symfony-env.sh.j2 dest=/tmp/symfony-env.sh
+  template:
+    src: symfony-env.sh.j2
+    dest: /tmp/symfony-env.sh
 
 - name: Create Symfony environment shell file (part II, move to destination)
   command: mv /tmp/symfony-env.sh /var/www/lc/site/app/config/symfony-env.sh
 
 - name: Create Symfony configuration (part I, populate template in temp folder)
-  template: src=parameters.yml.j2 dest=/tmp/parameters.yml
+  template:
+    src: parameters.yml.j2
+    dest: /tmp/parameters.yml
 
 - name: Create symfony configuration (part II, move to destination)
   command: mv /tmp/parameters.yml /var/www/lc/site/app/config/parameters.yml
 
 - name: Create frontend configuration (part I, populate template in temp folder)
-  template: src=frontend-config.json.j2 dest=/tmp/frontend-config.json
+  template:
+    src: frontend-config.json.j2
+    dest: /tmp/frontend-config.json
 
 - name: Create frontend configuration (part II, move to destination)
   command: mv /tmp/frontend-config.json /var/www/lc/site/assets/js/frontend-config.json
@@ -233,11 +241,13 @@
 
 - name: Update planet every 30 minutes through cronjob
   cron:
-    minute="*/30" hour="*" weekday="*"
-    name="Update Planet LibreCores"
-    cron_file="librecores-planet-update"
-    user="{{ web_user }}"
-    job="/var/www/lc/planet/generate.sh"
+    minute: "*/30"
+    hour: "*"
+    weekday: "*"
+    name: "Update Planet LibreCores"
+    cron_file: "librecores-planet-update"
+    user: "{{ web_user }}"
+    job: "/var/www/lc/planet/generate.sh"
 
 - name: Ensure directory permissions of planet cache directories
   command: chown -R {{ web_user }} /var/www/lc/planet/cache
