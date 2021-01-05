@@ -191,6 +191,17 @@
     chdir: /var/www/lc/site
   when: env.NODE_ENV != 'production'
 
+# run this last to ensure all deployment-created directories are covered
+- name: Ensure directory permissions of Symfony log and cache directories
+  file:
+    path: "/var/www/lc/site/var/{{ item }}"
+    owner: "{{ web_user }}"
+    recurse: yes
+  with_items:
+    - logs
+    - cache
+  when: not is_vagrant_environment
+
 - name: Clear symfony cache (production)
   become: true
   become_user: "{{ web_user }}"
@@ -225,17 +236,6 @@
 - name: Reload systemd to pick up changes in unit files
   command: systemctl daemon-reload
 
-# run this last to ensure all deployment-created directories are covered
-- name: Ensure directory permissions of Symfony log and cache directories
-  file:
-    path: "/var/www/lc/site/var/{{ item }}"
-    owner: "{{ web_user }}"
-    recurse: yes
-  with_items:
-    - logs
-    - cache
-  when: not is_vagrant_environment
-
 # The services need to pick up the code changes by being restarted.
 # Thanks to RabbitMQ we don't loose any messages in this case.
 - name: Ensure RabbitMQ consumer services are restarted and enabled at boot
@@ -261,20 +261,28 @@
     user: "{{ web_user }}"
     job: "/var/www/lc/planet/generate.sh"
 
-- name: Ensure directory permissions of planet cache directories
-  command: chown -R {{ web_user }} /var/www/lc/planet/cache
-  when: not is_vagrant_environment
-
-- name: Ensure directory permissions of web-accessible planet output directory
-  command: chown -R {{ web_user }} /var/www/lc/site/web/planet
+- name: Ensure directory permissions of planet directories
+  file:
+    path: "{{ item }}"
+    owner: "{{ web_user }}"
+    recurse: yes
+  with_items:
+    - /var/www/lc/site/web/planet
+    - /var/www/lc/planet/cache
   when: not is_vagrant_environment
 
 
 - name: ensure nginx is running (and enable it at boot)
-  service: name=nginx state=started enabled=yes
+  service:
+    name: nginx
+    state: started
+    enabled: yes
 
 - name: ensure certbot.timer is running (and enable it at boot)
-  service: name=certbot.timer state=started enabled=yes
+  service:
+    name: certbot.timer
+    state: started
+    enabled: yes
   when: use_https
 
 - name: Restart all services (we need them from now on)
