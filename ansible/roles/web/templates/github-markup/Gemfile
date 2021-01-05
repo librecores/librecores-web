@@ -19,3 +19,7 @@ gem "wikicloth", "=0.8.3"
 gem "twitter-text", "~> 1.14"
 gem "asciidoctor", "~> 2.0.5"
 gem "rake"
+
+# nokogiri 1.11 dropped Ruby 2.3 support, which is used on Ubuntu 16.04. Remove
+# this constraint once we move to a newer Ubuntu version.
+gem "nokogiri", "<1.11.0"
