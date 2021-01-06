@@ -1,11 +1,11 @@
 {
   "devDependencies": {},
   "dependencies": {
-    "@symfony/webpack-encore": "^0.27.0",
+    "@symfony/webpack-encore": "^0.33.0",
     "algoliasearch": "4.1.0",
     "autocomplete.js": "0.37.1",
     "autoprefixer": "^9.6.0",
-    "bootstrap": "4.4.1",
+    "bootstrap": "^4.5.3",
     "bootstrap-select": "^1.13",
     "chartist": "^0.11.0",
     "cookieconsent": "^3.1.1",
@@ -15,11 +15,12 @@
     "js-yaml-loader": "^1.2.0",
     "kuende-livestamp": "^1.1.2",
     "moment": "^2.24.0",
-    "node-sass": "^4.12.0",
     "path": "^0.12.7",
     "popper.js": "^1.15.0",
-    "postcss-loader": "^3.0.0",
-    "sass-loader": "^7.1.0",
+    "postcss": "^8.2.2",
+    "postcss-loader": "^4.0.0",
+    "sass": "^1.32.0",
+    "sass-loader": "^10.1.0",
     "trumbowyg": "^2.18.0"
   },
   "scripts": {
