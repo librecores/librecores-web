@@ -37,8 +37,7 @@
         "hwi/oauth-bundle": "~0.5",
         "friendsofsymfony/user-bundle": "~2.0",
         "sensio/generator-bundle": "~3.1.0",
-        "leafo/scssphp": "^0.6.6",
-        "patchwork/jsqueeze": "^2.0",
+        "scssphp/scssphp": "^1.3",
         "exercise/htmlpurifier-bundle": "^3.0",
         "doctrine/doctrine-migrations-bundle": "^1.0",
         "knplabs/github-api": "^2.10",
@@ -51,7 +50,7 @@
         "spatie/yaml-front-matter": "^2.0",
         "ext-json": "*",
         "symfony/webpack-encore-bundle": "^1.6",
-        "mgilet/notification-bundle": "^3.1",
+        "mgilet/notification-bundle": "3.1",
         "stof/doctrine-extensions-bundle": "^1.3"
     },
     "scripts": {
