@@ -363,6 +363,7 @@ class GitRepoCrawler extends AbstractRepoCrawler
 
         unset($cloc['header'], $cloc['SUM']);
 
+        $languageStats = [];
         foreach ($cloc as $lang => $value) {
             $languageStat = new LanguageStat();
 
@@ -371,9 +372,9 @@ class GitRepoCrawler extends AbstractRepoCrawler
                 ->setLinesOfCode($value['code'])
                 ->setCommentLineCount($value['comment'])
                 ->setBlankLineCount($value['blank']);
-            $sourceStats->addLanguageStat($languageStat);
+            $languageStats[] = $languageStat;
         }
-
+        $sourceStats->setLanguageStats($languageStats);
         $repo->setSourceStats($sourceStats);
         $this->entityManager->persist($repo);
     }
