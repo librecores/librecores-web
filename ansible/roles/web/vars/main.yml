@@ -28,6 +28,10 @@ php_extensions_pecl: []
 # PHP FPM socket (for web servers)
 php_fpm_sock: "/var/run/php/php{{ php_version }}-fpm.sock"
 
+# Version of composer to install
+# See https://getcomposer.org/download/ for available versions
+composer_version: "2.0.8"
+
 # Major version of nodejs to be used
 nodejs_major_version: 10
 
