@@ -32,3 +32,9 @@ Everybody has questions. Let's find answers!
   You can connect either with a IRC client like [Hexchat](https://hexchat.github.io/),
   or use a [web interface](https://webchat.freenode.net/#fossi) to connect 
   directly from your browser.
+
+## Commercial Support
+
+Above channels are also great ways to get involved with professionals that provide commercial support. If you are looking for consultants and contractors, the following resources are useful too:
+
+* [Directory of FPGA Consultants](http://fpgacpu.ca/directory.html)
