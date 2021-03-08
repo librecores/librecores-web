@@ -16,7 +16,7 @@
     state: present
     update_cache: yes
   with_items:
-    - 'deb https://dl.bintray.com/rabbitmq-erlang/debian xenial erlang-21.x'
+    - 'deb https://dl.bintray.com/rabbitmq-erlang/debian xenial erlang-23.x'
     - 'deb https://dl.bintray.com/rabbitmq/debian xenial main'
 
 - name: Use Erlang packages from RabbitMQ, not from Ubuntu
