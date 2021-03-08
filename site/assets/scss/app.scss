@@ -122,7 +122,6 @@ h1 a:hover, h1 a:active {
   background-color: #fff;
   box-shadow: 0 0 3px rgba(153, 153, 153, 0.75);
 
-  color: #777;
   border-bottom: 1px solid #cccccc;
 
   /* remember to adjust body padding-top as well */
@@ -140,23 +139,12 @@ h1 a:hover, h1 a:active {
   background-size: 30px 30px;
 }
 
-.librecores-nav .nav > li a {
-  color: #777;
-}
-
-.librecores-nav .nav > li.nav-item > a:focus,
-.librecores-nav .nav > li.nav-item > a:hover {
-  background-color: #fff;
-  color: $brand-primary;
-}
-
 .navbar-toggle {
   border-color: #AAAAAA;
 }
 .navbar-toggle .icon-bar {
   background-color: #AAAAAA;
 }
-
 
 .wordmark {
   color: #666666;
@@ -1003,10 +991,6 @@ a.classifiation-tag:hover {
 .notification-list-content:hover, .notification-list-title:hover, .notification-list-content:active, .notification-list-title:active {
   background-color: #fff;
   color: #212529;
-}
-
-.dropdown-item:active {
-  background-color: #f8f9fa;
 }
 
 .notification-list-title > span {
