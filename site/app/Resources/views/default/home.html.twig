@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}LibreCores &middot; Free and Open Source Digital Hardware{% endblock %}
+{% block title %}LibreCores &middot; Free and Open Source Silicon{% endblock %}
 
 {% block stylesheets %}
   {{ parent() }}
@@ -13,7 +13,7 @@
   <div class="librecores-home-banner">
     <div class="container-lg">
       <div class="row librecores-home-banner-wordmark"><div class="col-12">LibreCores</div></div>
-      <div class="row librecores-home-banner-claim"><div class="col-12">We drive Free and Open Digital Hardware.</div></div>
+      <div class="row librecores-home-banner-claim"><div class="col-12">We drive Free and Open Source Silicon.</div></div>
 
       <div class="row">
         <div class="col-12">
@@ -26,7 +26,7 @@
               <span class="input-group-append">
                 <button class="btn btn-danger" type="submit">
                 <span class="fa fa-search" aria-hidden="true"></span>
-                <span class="d-none d-md-inline">Find IP Project</span></button>
+                <span class="d-none d-md-inline">Find FOSSi Project</span></button>
               </span>
             </div>
           </form>
@@ -45,7 +45,7 @@
           <div class="librecores-home-showcase-desc">
             You're not alone.
             Meet other developers, engage and tackle your challenges together.
-            Join the mailing list, hop on to IRC, or read blogs.
+            Join the mailing list, hop on to chat, or read blogs.
 
             <a class="librecores-home-showcase-btn"
                 href="{{ path('librecores_site_page', {'page': 'community-hub'}) }}">
@@ -58,7 +58,7 @@
           <div class="librecores-home-showcase-keyword">code</div>
           <div class="librecores-home-showcase-desc">
             Express your ideas in code.
-            Create new digital hardware designs and improve existing ones.
+            Create new Free and Open Source Silicon and improve existing ones.
             Open them up for the world to see.
 
             <a class="librecores-home-showcase-btn"
@@ -73,7 +73,7 @@
             <div class="librecores-home-showcase-desc-middle-claim">LibreCores is sharing</div>
             Share IP cores.
             Share knowledge.
-            Share the fun of free and open digital hardware design.
+            Share the fun of Free and Open Source Silicon.
           </div>
         </div>
         <div class="col-sm-2 position-inherit">
@@ -123,7 +123,7 @@
           <i class="fa fa-code fa-3x" aria-hidden="true"></i>
         </div>
         <div class="col-xs-12 col-offset-fa-3x position-inherit">
-          Express your ideas in code. Create new digital hardware designs and improve existing ones. Open them up for the world to see.
+          Express your ideas in code. Create new Free and Open Source Silicon and improve existing ones. Open them up for the world to see.
           <a class="librecores-home-showcase-link-xs" href="{{ path('librecores_project_repo_project_new') }}">
             » Add a project
           </a>
@@ -134,7 +134,7 @@
           <i class="fa fa-share-alt fa-3x" aria-hidden="true"></i>
         </div>
         <div class="col-xs-12 col-offset-fa-3x position-inherit">
-            Share IP cores. Share knowledge. Share the fun of free and open digital hardware design.
+            Share IP cores. Share knowledge. Share the fun of Free and Open Source Silicon design.
             <a class="librecores-home-showcase-link-xs" href="{{ path('librecores_project_repo_project_new') }}">
               » Add a project
             </a>
@@ -173,17 +173,12 @@
   <div class="row">
     <div class="col-sm-6">
       <h2>What is LibreCores?</h2>
-      <p>Digital devices (or commonly "chips") are the basic building
-      blocks of electronic systems. Such devices are for
-      application-specific devices like a USB controller. But also
-      programmable "System-on-Chip" are found in embedded
-      systems. Both tastes of a chip are composed of basic building
-      blocks, so called IP (Intellectual Property) cores.
+      <p>Chips are the building blocks of electronic systems.
+      And an IP block is the building block of a chip.
 
-      A "LibreCore" is such an IP core that is created and
-      distributed in the open source spirit. And LibreCores.org is
-      like a good neighborhood pub, a place to meet the community
-      and &mdash;most importantly&mdash; find such cores.</p>
+      To find free and open source IP blocks to integrate into their designs developers go to LibreCores.
+      And they stay, because LibreCores is like a good neighborhood pub.
+      A place to meet the community, have a chat, and learn.</p>
       <p><a class="btn btn-outline-secondary" href="{{ path('librecores_site_page', {'page': 'about'}) }}">Learn more about LibreCores &raquo;</a></p>
     </div>
     <div class="col-sm-6">
@@ -202,7 +197,7 @@
   <div class="row">
     <div class="col-sm-6">
       <h2>Feel the pulse</h2>
-      <p>What's going on in the digital hardware design community?
+      <p>What's going on in the Free and Open Source Silicon community?
       <a href="{{ path('librecores_planet_homepage') }}">Planet Librecores</a> collects blog posts from different
       community members. Subscribe to it in your feed reader,
       or <a href="{{ path('librecores_planet_homepage') }}">read it online</a>.</p>
