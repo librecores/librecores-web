@@ -15,6 +15,7 @@ php_extensions_packaged:
   - mbstring
   - zip
   - intl
+  - gd
 
 # Development extensions installed through OS packages
 # Like php_extensions_packaged, but only available during development

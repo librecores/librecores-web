@@ -85,6 +85,14 @@ librecores_project_repo_project_status:
     path: /{parentName}/{projectName}/crawl_status
     controller: App\Controller\ProjectController::crawlStatusAction
 
+librecores_project_repo_project_badges:
+    path:     /{parentName}/{projectName}/badges
+    controller: App\Controller\ProjectController::badgesAction
+
+librecores_project_repo_badge_svg:
+    path: /{parentName}/{projectName}/badge.svg
+    controller: App\Controller\ProjectController::badgeActionSvg
+
 
 # Organization routes
 

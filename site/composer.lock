@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "96bb855f07aace122166a10236e5bec8",
+    "content-hash": "5f217e0ab302038039e4bd8bceed9995",
     "packages": [
         {
             "name": "algolia/algoliasearch-client-php",
@@ -131,6 +131,77 @@
                 "source": "https://github.com/algolia/search-bundle/tree/master"
             },
             "time": "2018-12-11T10:46:35+00:00"
+        },
+        {
+            "name": "badges/poser",
+            "version": "v1.4.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/badges/poser.git",
+                "reference": "4281890cbd58e0ea29c6550c4a4aaa16a15b3ce0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/badges/poser/zipball/4281890cbd58e0ea29c6550c4a4aaa16a15b3ce0",
+                "reference": "4281890cbd58e0ea29c6550c4a4aaa16a15b3ce0",
+                "shasum": ""
+            },
+            "require": {
+                "ext-gd": "*",
+                "php": ">=5.3",
+                "symfony/console": "~2.0|~3.0|~4.0"
+            },
+            "require-dev": {
+                "behat/behat": "^3.4",
+                "coduo/phpspec-data-provider-extension": "^1.0",
+                "friendsofphp/php-cs-fixer": "@stable",
+                "phpspec/phpspec": "^2.5"
+            },
+            "bin": [
+                "bin/poser"
+            ],
+            "type": "lib",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.4.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "PUGX\\Poser\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Giulio De Donato",
+                    "email": "liuggio@gmail.com"
+                },
+                {
+                    "name": "PUGX Community",
+                    "homepage": "https://github.com/PUGX/badge-poser/contributors"
+                },
+                {
+                    "name": "Shields Community",
+                    "homepage": "https://github.com/badges/poser/contributors"
+                }
+            ],
+            "description": "Poser, add badges on your readme..",
+            "homepage": "https://github.com/PUGX",
+            "keywords": [
+                "badge",
+                "composer",
+                "packagist",
+                "pin"
+            ],
+            "support": {
+                "issues": "https://github.com/badges/poser/issues",
+                "source": "https://github.com/badges/poser/tree/v1.4.1"
+            },
+            "time": "2020-06-11T16:17:31+00:00"
         },
         {
             "name": "beberlei/doctrineextensions",

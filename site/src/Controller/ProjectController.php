@@ -34,6 +34,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Url;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use PUGX\Poser\Render\SvgRender;
+use PUGX\Poser\Render\SvgFlatRender;
+use PUGX\Poser\Render\SvgFlatSquareRender;
+use PUGX\Poser\Poser;
 
 /**
  * Class ProjectController
@@ -805,5 +810,89 @@ QUERY;
         }
 
         return true;
+    }
+    /**
+     * Display the project badges page
+     *
+     * @param Request           $request
+     * @param string            $parentName  URL component: name of the parent
+     *                                       (user or organization)
+     * @param string            $projectName URL component: name of the project
+     *
+     * @param ProjectRepository $repository
+     *
+     * @return Response
+     */
+    public function badgesAction(
+        Request $request,
+        $parentName,
+        $projectName,
+        ProjectRepository $repository
+    ) {
+        $p = $this->getProject($parentName, $projectName, $repository);
+
+        // check permissions
+        $this->denyAccessUnlessGranted('edit', $p);
+
+
+        $badgeUrl = $this->generateUrl(
+            'librecores_project_repo_project_view',
+            [
+                'parentName' => $p->getParentName(),
+                'projectName' => $p->getName(),
+            ],
+            UrlGeneratorInterface::ABSOLUTE_URL
+        );
+        $badgeSvgUrl = $this->generateUrl(
+            'librecores_project_repo_badge_svg',
+            [
+                'parentName' => $p->getParentName(),
+                'projectName' => $p->getName(),
+                'style' => 'flat',
+            ],
+            UrlGeneratorInterface::ABSOLUTE_URL
+        );
+        return $this->render(
+            'project/badges.html.twig',
+            [
+                'project' => $p,
+                'badgeUrl' => $badgeUrl,
+                'badgeSvgUrl' => $badgeSvgUrl,
+            ]
+        );
+    }
+
+    /**
+     * Produce a project badge (to include in a GitHub README, etc.) in SVG
+     *
+     * @param string            $parentName  URL component: name of the parent
+     *                                       (user or organization)
+     * @param string            $projectName URL component: name of the project
+     * @return Response
+     */
+    public function badgeActionSvg(
+        Request $request,
+        $parentName,
+        $projectName
+    ) {
+        $librecoresGreen = '3fb0ac';
+        $defaultStyle = 'flat';
+
+        // TODO: Take the "easy and efficient" route for now and simply use the
+        // parentName/projectName from the query parameters.
+        $text = "$parentName/$projectName";
+
+        $style = $request->query->get('style', $defaultStyle);
+        if (!in_array($style, ['flat', 'flat-square', 'plastic'])) {
+            $style = $defaultStyle;
+        }
+
+        $poser = new Poser([new SvgFlatRender(), new SvgFlatSquareRender(), new SvgRender()]);
+        $renderedSvg = $poser->generate('LibreCores', $text, $librecoresGreen, $style);
+
+        $response = new Response();
+        $response->headers->set('Content-Type', 'image/svg+xml');
+        $response->setContent($renderedSvg);
+        return $response;
     }
 }
