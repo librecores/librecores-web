@@ -37,8 +37,8 @@ platforms, just to name a few benefits.
 While LibreCores.org will be the community hub to publish your work or
 find cores, we will not be a hosting site. There are free services
 that can do this way better! Most known is
-[Github](http://www.github.com), but also
-[BitBucket](http://www.bitbucket.org) has quite a use base. It is good
+[Github](https://www.github.com), but also
+[BitBucket](https://www.bitbucket.org) has quite a use base. It is good
 to search around the platforms to learn about the benefits of the
 platforms. Just to give you an idea about what you do there:
 
@@ -158,7 +158,7 @@ that you should consider using:
    clause, the
    [Apache license](https://opensource.org/licenses/Apache-2.0) is the
    choice in the software world and there is an adoption for hardware
-   as the [Solderpad license](http://solderpad.org/licenses/).
+   as the [Solderpad license](https://solderpad.org/licenses/).
 
  * The most popular *weak copyleft* license in the software world is
    the [LGPL](https://opensource.org/licenses/lgpl-license). The
@@ -168,7 +168,7 @@ that you should consider using:
    level.
 
  * For *strong copyleft* licenses the
-   [GPL](http://opensource.org/licenses/gpl-license) is very popular
+   [GPL](https://opensource.org/licenses/gpl-license) is very popular
    in the software world. While the 2nd version of it caused many
    discussions around applying it to hardware, GPLv3 actually is
    written in a hardware-friendly language. Nevertheless, there is an
