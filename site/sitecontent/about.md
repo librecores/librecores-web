@@ -34,7 +34,7 @@ We want LibreCores to be a place where the community can truly feel at home!
 - **Workflow integration.** Finding an IP core on LibreCores is just the first step of using it as part of an own project. Currently, making use of a core  involves in many cases copying the source code into the custom project. This process is tedious and makes updating a core to the latest upstream version hard.
 
   With LibreCores we want to explore different options to make this workflow more streamlined. One example is the integration of the LibreCores project repository with the [fusesoc](https://github.com/olofk/fusesoc) package manager.
-- **LibreCores CI.** ContinuousIntegration of projects is a de-facto standard approach to improving project quality and contributor experience.
+- **LibreCores CI.** Continuous Integration of projects is a de-facto standard approach to improving project quality and contributor experience.
 There are many services providing free CI hosting for open-source software projects,
 but they lack some features required for hardware projects (EDA tools, running tests on hardware, etc.).
 
