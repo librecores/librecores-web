@@ -14,7 +14,7 @@
     "jquery": "^3.4.1",
     "js-yaml-loader": "^1.2.0",
     "kuende-livestamp": "^1.1.2",
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "path": "^0.12.7",
     "popper.js": "^1.15.0",
     "postcss": "^8.2.2",
